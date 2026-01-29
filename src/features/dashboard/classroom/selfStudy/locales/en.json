@@ -1,0 +1,61 @@
+{
+    "title": "Self Study Content",
+    "description": "Track your learning journey and complete your sessions step by step.",
+    "terms": {
+        "firstTerm": "First Term",
+        "secondTerm": "Second Term",
+        "summerTerm": "Summer Term"
+    },
+    "course": {
+        "unifiedCourse": "Unified Course for This Term",
+        "courseDescription": "This is the official course for your grade this term. When you complete it, you will automatically move to the next course.",
+        "online": "Online",
+        "offline": "Offline"
+    },
+    "sessions": {
+        "title": "Course Sessions",
+        "onlineSession": "Online Session",
+        "offlineSession": "Offline Session",
+        "atTrainingCenter": "At Training Center"
+    },
+    "status": {
+        "completed": "Completed",
+        "start": "Start",
+        "locked": "Locked"
+    },
+    "lesson": {
+        "title": "Lesson",
+        "missionPath": "Your Mission Path",
+        "done": "Done",
+        "quiz": "Quiz",
+        "videoLocked": "This video is locked",
+        "tabs": {
+            "about": "About",
+            "assignments": "Assignments",
+            "quiz": "Lesson Quiz",
+            "materials": "Materials"
+        },
+        "questionOf": "Question {{current}} of {{total}}",
+        "submitAnswer": "Submit Answer",
+        "quizPassed": "Awesome Job!",
+        "quizPassedDescription": "You've mastered this video. Ready for the next one?",
+        "quizFailed": "Try Again",
+        "quizFailedDescription": "Watch the video again and try the quiz once more.",
+        "continueLearning": "Continue Learning",
+        "takeQuiz": "Take Quiz",
+        "questions": "Questions",
+        "retryQuiz": "Retry Quiz",
+        "nextVideo": "Next Video",
+        "attemptsRemaining": "{{count}} attempt(s) remaining",
+        "noAttemptsLeft": "No attempts remaining. Please rewatch the video.",
+        "close": "Close",
+        "finishVideoFirst": "Finish watching the video first to unlock the quiz",
+        "passQuizToUnlock": "Pass the previous quiz to unlock this video",
+        "attemptsExhausted": "Attempts Exhausted",
+        "comeBackTomorrow": "You have used all 3 attempts for this quiz. Your attempts will reset tomorrow. Please come back then to try again.",
+        "understood": "Understood",
+        "noAssignments": "No assignments available for this lesson.",
+        "noLessonQuiz": "No lesson quiz available.",
+        "noMaterials": "No materials available for this lesson."
+    }
+}

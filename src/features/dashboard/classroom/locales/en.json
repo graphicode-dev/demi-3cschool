@@ -1,0 +1,9 @@
+{
+    "nav": {
+        "profile": "Profile",
+        "chat": "Chat",
+        "certificates": "Certificates",
+        "reports": "Reports"
+    },
+    "title": "Classroom"
+}

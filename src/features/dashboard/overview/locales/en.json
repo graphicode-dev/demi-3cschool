@@ -1,0 +1,85 @@
+{
+    "overview": {
+        "breadcrumb": "Dashboard",
+        "title": "Dashboard Overview",
+        "description": "Monitor curriculum progress and system activity",
+        "stats": {
+            "totalPrograms": "Total Programs",
+            "totalLevels": "Total Levels",
+            "totalLessons": "Total Lessons",
+            "activeStudents": "Active Students"
+        },
+        "quickActions": {
+            "title": "Quick Actions",
+            "editCurriculum": {
+                "title": "Edit Curriculum",
+                "description": "Manage programs, levels, and learning paths",
+                "action": "Get Started"
+            },
+            "addNewLesson": {
+                "title": "Add New Lesson",
+                "description": "Create engaging content for students",
+                "action": "Get Started"
+            },
+            "contentLibrary": {
+                "title": "Content Library",
+                "description": "Browse and manage all learning materials",
+                "action": "Get Started"
+            }
+        },
+        "charts": {
+            "valueLabel": "Value",
+            "curriculumGrowth": {
+                "title": "Curriculum Growth"
+            },
+            "studentDistribution": {
+                "title": "Student Distribution",
+                "standard": "Standard",
+                "professional": "Professional"
+            }
+        },
+        "months": {
+            "jan": "Jan",
+            "feb": "Feb",
+            "mar": "Mar",
+            "apr": "Apr",
+            "may": "May",
+            "jun": "Jun",
+            "jul": "Jul",
+            "aug": "Aug",
+            "sep": "Sep",
+            "oct": "Oct",
+            "nov": "Nov",
+            "dec": "Dec"
+        },
+        "recentActivity": {
+            "title": "Recent Activity",
+            "items": {
+                "lessonPublished": {
+                    "title": "Lesson Published",
+                    "description": "Python Fundamentals - Variables and Data Types",
+                    "time": "2 hours ago",
+                    "author": "by Sarah Ahmed"
+                },
+                "levelUpdated": {
+                    "title": "Level Updated",
+                    "description": "Machine Learning for Kids - Level 1",
+                    "time": "5 hours ago",
+                    "author": "by Ahmed Khalil"
+                },
+                "contentAdded": {
+                    "title": "Content Added",
+                    "description": "New video: Introduction to HTML",
+                    "time": "1 day ago",
+                    "author": "by Mohamed Hassan"
+                },
+                "trackCreated": {
+                    "title": "Track Created",
+                    "description": "Mobile App Development Track",
+                    "time": "2 days ago",
+                    "author": "by Fatima Ali"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,41 @@
+{
+    "designSystem": {
+        "table": {
+            "search": "بحث...",
+            "clearSearch": "مسح البحث",
+            "removeFilter": "إزالة الفلتر",
+            "advancedFilters": "فلاتر متقدمة",
+            "showHideColumns": "إظهار/إخفاء الأعمدة",
+            "columnVisibility": "إظهار الأعمدة",
+            "filters": "الفلاتر",
+            "groupBy": "تجميع حسب",
+            "clearAllGroups": "مسح كل المجموعات",
+            "close": "إغلاق",
+            "filter": "فلتر",
+            "showing": "عرض",
+            "to": "إلى",
+            "of": "من",
+            "results": "نتائج",
+            "previousPage": "الصفحة السابقة",
+            "nextPage": "الصفحة التالية",
+            "activeFilters": "الفلاتر النشطة:",
+            "clearAll": "مسح الكل",
+            "noValueNeeded": "(لا حاجة لقيمة)",
+            "select": "اختر...",
+            "min": "الحد الأدنى",
+            "max": "الحد الأقصى",
+            "enterNumber": "أدخل رقم",
+            "yes": "نعم",
+            "no": "لا",
+            "enterValue": "أدخل قيمة",
+            "filterMetadataNotAvailable": "بيانات الفلتر غير متاحة. يرجى المحاولة لاحقاً.",
+            "addAnotherFilter": "إضافة فلتر آخر",
+            "cancel": "إلغاء",
+            "applyFilters": "تطبيق الفلاتر",
+            "selected": "محدد",
+            "record": "سجل",
+            "records": "سجلات",
+            "ungrouped": "غير مجمع"
+        }
+    }
+}

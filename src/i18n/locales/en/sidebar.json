@@ -1,0 +1,15 @@
+{
+    "sidebar": {
+        "dashboard": "Dashboard",
+        "sections": {
+            "curriculumManagement": "Curriculum Management",
+            "groupsManagement": "Groups Management",
+            "salesAnalysis": "Sales & Subscription ",
+            "account": "Account",
+            "ticketsManagement": "Tickets Management"
+        }
+    },
+    "navbar": {
+        "search": "Search"
+    }
+}

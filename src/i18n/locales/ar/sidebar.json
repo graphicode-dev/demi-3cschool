@@ -1,0 +1,15 @@
+{
+    "sidebar": {
+        "dashboard": "لوحة التحكم",
+        "sections": {
+            "curriculumManagement": "إدارة المناهج",
+            "groupsManagement": "إدارة المجموعات",
+            "salesAnalysis": "تحليل المبيعات والاشتراكات",
+            "settings": "الإعدادات",
+            "ticketsManagement": "إدارة التذاكر"
+        }
+    },
+    "navbar": {
+        "search": "بحث"
+    }
+}

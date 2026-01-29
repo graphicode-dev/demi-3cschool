@@ -1,0 +1,13 @@
+{
+    "common": {
+        "dashboard": "لوحة التحكم"
+    },
+    "navbar": {
+        "notification": "الإشعارات",
+        "viewAllNotifications": "عرض جميع الإشعارات",
+        "editProfile": "تعديل الملف الشخصي",
+        "accountSettings": "إعدادات الحساب",
+        "support": "الدعم",
+        "signOut": "تسجيل الخروج"
+    }
+}

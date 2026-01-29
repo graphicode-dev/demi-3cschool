@@ -1,0 +1,10 @@
+{
+    "nav": {
+        "profile": "Profile",
+        "chat": "Chat",
+        "certificates": "Certificates",
+        "reports": "Reports",
+        "settings": "Settings"
+    },
+    "title": "Admin"
+}

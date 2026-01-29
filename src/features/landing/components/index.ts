@@ -1,0 +1,9 @@
+export { default as LandingNavbar } from "./landing-navbar";
+export { default as HeroSection } from "./hero-section";
+export { default as InitiativeSection } from "./Initiative-section";
+export { default as VideoSection } from "./video-section";
+export { default as HowItWorksSection } from "./works-section";
+export { default as LearningModeSection } from "./learninng-section";
+export { default as WhoCanJoinSection } from "./join-section";
+export { default as FAQSection } from "./FAQ-section";
+export { default as LandingFooter } from "./landing-footer";

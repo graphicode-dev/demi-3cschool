@@ -1,0 +1,85 @@
+{
+    "overview": {
+        "breadcrumb": "لوحة التحكم",
+        "title": "نظرة عامة على لوحة التحكم",
+        "description": "مراقبة تقدم المنهج ونشاط النظام",
+        "stats": {
+            "totalPrograms": "إجمالي البرامج",
+            "totalLevels": "إجمالي المستويات",
+            "totalLessons": "إجمالي الدروس",
+            "activeStudents": "الطلاب النشطون"
+        },
+        "quickActions": {
+            "title": "إجراءات سريعة",
+            "editCurriculum": {
+                "title": "تعديل المنهج",
+                "description": "إدارة البرامج والمستويات ومسارات التعلم",
+                "action": "ابدأ الآن"
+            },
+            "addNewLesson": {
+                "title": "إضافة درس جديد",
+                "description": "إنشاء محتوى جذاب للطلاب",
+                "action": "ابدأ الآن"
+            },
+            "contentLibrary": {
+                "title": "مكتبة المحتوى",
+                "description": "تصفح وإدارة جميع مواد التعلم",
+                "action": "ابدأ الآن"
+            }
+        },
+        "charts": {
+            "valueLabel": "القيمة",
+            "curriculumGrowth": {
+                "title": "نمو المنهج"
+            },
+            "studentDistribution": {
+                "title": "توزيع الطلاب",
+                "standard": "عادي",
+                "professional": "محترف"
+            }
+        },
+        "months": {
+            "jan": "يناير",
+            "feb": "فبراير",
+            "mar": "مارس",
+            "apr": "أبريل",
+            "may": "مايو",
+            "jun": "يونيو",
+            "jul": "يوليو",
+            "aug": "أغسطس",
+            "sep": "سبتمبر",
+            "oct": "أكتوبر",
+            "nov": "نوفمبر",
+            "dec": "ديسمبر"
+        },
+        "recentActivity": {
+            "title": "النشاط الأخير",
+            "items": {
+                "lessonPublished": {
+                    "title": "تم نشر درس",
+                    "description": "أساسيات بايثون - المتغيرات وأنواع البيانات",
+                    "time": "منذ ساعتين",
+                    "author": "بواسطة سارة أحمد"
+                },
+                "levelUpdated": {
+                    "title": "تم تحديث المستوى",
+                    "description": "تعلم الآلة للأطفال - المستوى 1",
+                    "time": "منذ 5 ساعات",
+                    "author": "بواسطة أحمد خليل"
+                },
+                "contentAdded": {
+                    "title": "تمت إضافة محتوى",
+                    "description": "فيديو جديد: مقدمة في HTML",
+                    "time": "منذ يوم واحد",
+                    "author": "بواسطة محمد حسن"
+                },
+                "trackCreated": {
+                    "title": "تم إنشاء مسار",
+                    "description": "مسار تطوير تطبيقات الجوال",
+                    "time": "منذ يومين",
+                    "author": "بواسطة فاطمة علي"
+                }
+            }
+        }
+    }
+}

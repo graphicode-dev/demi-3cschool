@@ -1,0 +1,61 @@
+{
+    "title": "محتوى الدراسة الذاتية",
+    "description": "تتبع رحلة تعلمك وأكمل جلساتك خطوة بخطوة.",
+    "terms": {
+        "firstTerm": "الفصل الأول",
+        "secondTerm": "الفصل الثاني",
+        "summerTerm": "الفصل الصيفي"
+    },
+    "course": {
+        "unifiedCourse": "المقرر الموحد لهذا الفصل",
+        "courseDescription": "هذا هو المقرر الرسمي لصفك هذا الفصل. عند إكماله، ستنتقل تلقائياً إلى المقرر التالي.",
+        "online": "أونلاين",
+        "offline": "حضوري"
+    },
+    "sessions": {
+        "title": "جلسات المقرر",
+        "onlineSession": "جلسة أونلاين",
+        "offlineSession": "جلسة حضورية",
+        "atTrainingCenter": "في مركز التدريب"
+    },
+    "status": {
+        "completed": "مكتمل",
+        "start": "ابدأ",
+        "locked": "مقفل"
+    },
+    "lesson": {
+        "title": "الدرس",
+        "missionPath": "مسار مهمتك",
+        "done": "تم",
+        "quiz": "اختبار",
+        "videoLocked": "هذا الفيديو مقفل",
+        "tabs": {
+            "about": "حول",
+            "assignments": "الواجبات",
+            "quiz": "اختبار الدرس",
+            "materials": "المواد"
+        },
+        "questionOf": "السؤال {{current}} من {{total}}",
+        "submitAnswer": "إرسال الإجابة",
+        "quizPassed": "عمل رائع!",
+        "quizPassedDescription": "لقد أتقنت هذا الفيديو. هل أنت مستعد للتالي؟",
+        "quizFailed": "حاول مرة أخرى",
+        "quizFailedDescription": "شاهد الفيديو مرة أخرى وحاول الاختبار مجدداً.",
+        "continueLearning": "استمر في التعلم",
+        "takeQuiz": "ابدأ الاختبار",
+        "questions": "أسئلة",
+        "retryQuiz": "أعد الاختبار",
+        "nextVideo": "الفيديو التالي",
+        "attemptsRemaining": "{{count}} محاولة متبقية",
+        "noAttemptsLeft": "لا توجد محاولات متبقية. يرجى إعادة مشاهدة الفيديو.",
+        "close": "إغلاق",
+        "finishVideoFirst": "أكمل مشاهدة الفيديو أولاً لفتح الاختبار",
+        "passQuizToUnlock": "اجتز الاختبار السابق لفتح هذا الفيديو",
+        "attemptsExhausted": "انتهت المحاولات",
+        "comeBackTomorrow": "لقد استخدمت جميع المحاولات الثلاث لهذا الاختبار. ستتم إعادة تعيين محاولاتك غداً. يرجى العودة حينها للمحاولة مرة أخرى.",
+        "understood": "مفهوم",
+        "noAssignments": "لا توجد واجبات متاحة لهذا الدرس.",
+        "noLessonQuiz": "لا يوجد اختبار متاح للدرس.",
+        "noMaterials": "لا توجد مواد متاحة لهذا الدرس."
+    }
+}

@@ -1,0 +1,41 @@
+{
+    "designSystem": {
+        "table": {
+            "search": "Search...",
+            "clearSearch": "Clear search",
+            "removeFilter": "Remove filter",
+            "advancedFilters": "Advanced Filters",
+            "showHideColumns": "Show/Hide Columns",
+            "columnVisibility": "Column Visibility",
+            "filters": "Filters",
+            "groupBy": "Group by",
+            "clearAllGroups": "Clear all groups",
+            "close": "Close",
+            "filter": "Filter",
+            "showing": "Showing",
+            "to": "to",
+            "of": "of",
+            "results": "results",
+            "previousPage": "Previous page",
+            "nextPage": "Next page",
+            "activeFilters": "Active Filters:",
+            "clearAll": "Clear all",
+            "noValueNeeded": "(no value needed)",
+            "select": "Select...",
+            "min": "Min",
+            "max": "Max",
+            "enterNumber": "Enter number",
+            "yes": "Yes",
+            "no": "No",
+            "enterValue": "Enter value",
+            "filterMetadataNotAvailable": "Filter metadata is not available. Please try again later.",
+            "addAnotherFilter": "Add Another Filter",
+            "cancel": "Cancel",
+            "applyFilters": "Apply Filters",
+            "selected": "selected",
+            "record": "record",
+            "records": "records",
+            "ungrouped": "Ungrouped"
+        }
+    }
+}

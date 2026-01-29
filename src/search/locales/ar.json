@@ -1,0 +1,28 @@
+{
+    "search": {
+        "placeholder": "البحث في الصفحات، الدورات، المجموعات...",
+        "recent": "عمليات البحث الأخيرة",
+        "results": "نتائج",
+        "hint": "ابدأ الكتابة للبحث...",
+        "noResults": "لم يتم العثور على نتائج لـ",
+        "error": "فشل البحث",
+        "navigate": "التنقل",
+        "select": "اختيار",
+        "close": "إغلاق",
+        "clearAll": "مسح الكل",
+        "delete": "حذف",
+        "deleteHint": "حذف",
+        "categories": {
+            "pages": "الصفحات",
+            "courses": "الدورات",
+            "levels": "المستويات",
+            "lessons": "الدروس",
+            "groups": "المجموعات",
+            "students": "الطلاب",
+            "instructors": "المدربين",
+            "priceLists": "قوائم الأسعار",
+            "coupons": "القسائم",
+            "tickets": "التذاكر"
+        }
+    }
+}

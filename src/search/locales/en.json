@@ -1,0 +1,28 @@
+{
+    "search": {
+        "placeholder": "Search pages, courses, groups...",
+        "recent": "Recent Searches",
+        "results": "results",
+        "hint": "Start typing to search...",
+        "noResults": "No results found for",
+        "error": "Search failed",
+        "navigate": "Navigate",
+        "select": "Select",
+        "close": "Close",
+        "clearAll": "Clear All",
+        "delete": "Delete",
+        "deleteHint": "Delete",
+        "categories": {
+            "pages": "Pages",
+            "courses": "Courses",
+            "levels": "Levels",
+            "lessons": "Lessons",
+            "groups": "Groups",
+            "students": "Students",
+            "instructors": "Instructors",
+            "priceLists": "Price Lists",
+            "coupons": "Coupons",
+            "tickets": "Tickets"
+        }
+    }
+}

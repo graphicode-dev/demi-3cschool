@@ -1,0 +1,172 @@
+{
+    "nav": {
+        "home": "Home",
+        "about": "About",
+        "howItWorks": "How It Works",
+        "faq": "FAQ",
+        "contact": "Contact",
+        "login": "Login"
+    },
+    "hero": {
+        "title1": "Egyptian ",
+        "future": "Marvels",
+        "title2": " ـ  Where the Digital ",
+        "level": "Future",
+        "title3": " Makers Begin",
+        "description": "An educational initiative aimed at providing specialized programs in teaching programming and artificial intelligence to children aged 6 to 18 in an interactive and certified approach that keeps pace with the needs of the digital age.",
+        "terms": "Terms",
+        "termsCount": "2",
+        "live": "Live",
+        "sessions": "Sessions",
+        "free": "Free",
+        "education": "Education",
+        "applyNow": "Apply Now",
+        "learnMore": "Learn More",
+        "noExperience": "No Experience Needed!",
+        "startFromZero": "Start from zero"
+    },
+    "initiative": {
+        "title": "What Is This Initiative?",
+        "description": "In partnership with 3C, the initiative offers comprehensive educational programs, based on internationally accredited curricula.",
+        "feature1": {
+            "title": "Building Digital Skills",
+            "description": "Introducing students from grades 4 to 6 to the basics of information technology in a fun and engaging way."
+        },
+        "feature2": {
+            "title": "Building Personal and Creative Skills",
+            "description": "Developing students' life and creative skills in an interactive learning environment."
+        },
+        "feature3": {
+            "title": "Hands-On Partnerships",
+            "description": "Providing hands-on learning opportunities in collaboration with local and international companies."
+        }
+    },
+    "video": {
+        "title1": "Just a",
+        "titleHighlight": "Few Minutes…",
+        "title2": "A Big Step Toward Your Child's Future",
+        "description": "A short introductory video explaining the initiative's goals, registration process, and the learning journey for children.",
+        "duration": "2:30 min",
+        "caption": "Watch how simple and fun getting started can be",
+        "cta": "Watch & Get Started"
+    },
+    "howItWorks": {
+        "title": "Learning Methodology",
+        "description": "Your programming journey is divided into two terms, each packed with interactive learning.",
+        "term1": {
+            "title": "Term 1",
+            "subtitle": "Fundamentals of Programming Learning",
+            "step1": "Live online coding sessions with expert instructors",
+            "step2": "Learn coding basics step by step in a fun way",
+            "step3": "Interactive homework and engaging quizzes",
+            "step4": "Access to recorded sessions anytime",
+            "step5": "Build a simple coding project",
+            "badge": "Step 1 of 2"
+        },
+        "term2": {
+            "title": "Term 2",
+            "subtitle": "Practical Programming & Project Building",
+            "step1": "Advanced live coding sessions",
+            "step2": "Work on real coding projects",
+            "step3": "Develop a complete final project",
+            "step4": "Access to recorded sessions anytime",
+            "step5": "Final assessment and certificate of completion",
+            "badge": "Step 2 of 2"
+        }
+    },
+    "learningMode": {
+        "title": "A Complete Learning Experience",
+        "description": "A blended learning journey combining on-site and online classes with interactive, monitored learning.",
+        "online": {
+            "title": "Online Learning",
+            "subtitle": "Learn from anywhere",
+            "feature1": "Live interactive classes",
+            "feature2": "Direct communication with the instructor",
+            "feature3": "Online assignments & session recordings",
+            "feature4": "Continuous progress monitoring"
+        },
+        "offline": {
+            "title": "On-Site Learning",
+            "subtitle": "In-person experience",
+            "feature1": "Live, face-to-face instruction",
+            "feature2": "Collaborative group activities",
+            "feature3": "Hands-on training with expert guidance",
+            "feature4": "Safe, structured environment"
+        }
+    },
+    "whoCanJoin": {
+        "title": "Who Can Join?",
+        "description": "This program is specially designed for students in these grades",
+        "noExperience": "No previous coding experience needed!",
+        "grade4": {
+            "title": "Grade 4",
+            "description": "Perfect age to start your coding adventure!"
+        },
+        "grade5": {
+            "title": "Grade 5",
+            "description": "Build on your skills and create amazing projects!"
+        },
+        "grade6": {
+            "title": "Grade 6",
+            "description": "Become a confident young programmer!"
+        },
+        "note": "Students must be currently enrolled in grades 4, 5, or 6 to participate"
+    },
+    "faq": {
+        "title": "Frequently Asked Questions",
+        "description": "Everything parents and students want to know",
+        "q1": {
+            "question": "Is there any registration or enrollment fee for the scholarship?",
+            "answer": "Absolutely! This program is designed specifically for students with no prior coding experience. We start from the very basics and build up gradually. Our instructors are trained to work with young learners and make coding fun and accessible."
+        },
+        "q2": {
+            "question": "Who is eligible to apply for the scholarship?",
+            "answer": "The scholarship is available to primary school students according to the grades and eligibility criteria specified by the initiative."
+        },
+        "q3": {
+            "question": "Is the scholarship available in all governorates?",
+            "answer": "Yes, there is a friendly final exam at the end of each term. The exams are designed to be fun and encourage learning, not stress. They help students demonstrate what they've learned and build confidence in their coding skills."
+        },
+        "q4": {
+            "question": "What is the annual study duration of the scholarship?",
+            "answer": "Yes! Upon successfully completing the program and passing the final exams, students receive an official certificate from the Ministry of Communications and 3C Coding School. This certificate recognizes their achievement and coding skills."
+        },
+        "q5": {
+            "question": "What are the communication channels with the initiative's specialists?",
+            "answer": "Parents are welcome to observe online sessions! We encourage parental involvement, especially for younger students. This helps parents understand what their children are learning and support them at home."
+        },
+        "q6": {
+            "question": "Is a certificate awarded after program completion?",
+            "answer": "Parents are welcome to observe online sessions! We encourage parental involvement, especially for younger students. This helps parents understand what their children are learning and support them at home."
+        },
+        "q7": {
+            "question": "Can more than one child from the same family apply?",
+            "answer": "Parents are welcome to observe online sessions! We encourage parental involvement, especially for younger students. This helps parents understand what their children are learning and support them at home."
+        },
+        "q8": {
+            "question": "How can parents monitor student progress during the program?",
+            "answer": "Parents are welcome to observe online sessions! We encourage parental involvement, especially for younger students. This helps parents understand what their children are learning and support them at home."
+        },
+        "stillHaveQuestions": "Still have questions?",
+        "supportTeam": "Our support team is here to help you",
+        "contactSupport": "Contact Support"
+    },
+    "footer": {
+        "ministryDesc": "Empowering the next generation with digital skills and knowledge for a better future.",
+        "schoolDesc": "Leading coding education for children with innovative teaching methods and expert instructors.",
+        "quickLinks": "Quick Links",
+        "aboutInitiative": "About the Initiative",
+        "learningMethodology": "Learning Methodology",
+        "whoCanJoin": "Who Can Join",
+        "faq": "FAQ",
+        "contactUs": "Contact Us",
+        "privacyPolicy": "Privacy Policy",
+        "termsOfService": "Terms of Service",
+        "followUs": "Follow Us",
+        "copyright": "‎ {{year}} Ministry of Communications & 3C Coding School. All rights reserved.",
+        "accessibility": "Accessibility",
+        "email": "info@3cschool.net",
+        "phone": "+20 10 23168167",
+        "howItWorks": "How It Works"
+    }
+}
