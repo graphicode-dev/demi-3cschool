@@ -1,0 +1,47 @@
+{
+    "title": "My Virtual Sessions",
+    "description": "Join live virtual sessions and interact with teachers in real-time",
+    "terms": {
+        "first": "First Term",
+        "second": "Second Term",
+        "summer": "Summer Term"
+    },
+    "status": {
+        "live": "Live",
+        "upcoming": "UPCOMING",
+        "completed": "COMPLETED"
+    },
+    "sections": {
+        "currentLive": "Current live Sessions",
+        "upcoming": "Upcoming Sessions",
+        "completed": "Completed Sessions"
+    },
+    "session": {
+        "liveNow": "Live Now",
+        "joinSession": "Join Session",
+        "sessionInfo": "Session Info",
+        "viewRecording": "View Recording",
+        "viewAllHistory": "View All History"
+    },
+    "modal": {
+        "classSchedule": "Class Schedule",
+        "date": "DATE",
+        "time": "TIME",
+        "duration": "DURATION",
+        "timezone": "TIMEZONE",
+        "today": "Today",
+        "yourInstructor": "Your Instructor",
+        "whatYouLearn": "What we'll learn",
+        "remindMe": "Remind Me"
+    },
+    "recording": {
+        "backToVirtualSessions": "Back to Virtual Sessions",
+        "lessonSummary": "Lesson Summary",
+        "completedSession": "Completed Session",
+        "finishedWatching": "Finished watching the recording?",
+        "keepMomentum": "Great Job! Now Keep The Momentum Going By Watching The Short Lesson Videos.",
+        "watchLessonVideos": "Watch Lesson Videos",
+        "goToLessonVideos": "Go To The Lesson Videos In",
+        "selfStudyContent": "Self Study Content"
+    }
+}

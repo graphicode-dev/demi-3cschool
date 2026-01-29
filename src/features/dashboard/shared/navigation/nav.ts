@@ -8,6 +8,7 @@ import type { NavItem } from "@/navigation/nav.types";
 import { User, MessageSquare, Award, FileText, Ticket } from "lucide-react";
 import { ticketsPaths } from "../ticketsManagement/navigation/paths";
 import { supportPermissions } from "@/auth";
+import { getDashboardBasePath } from "./paths";
 
 const { ticket } = supportPermissions;
 
@@ -17,7 +18,7 @@ const { ticket } = supportPermissions;
 export const createSharedNavItems = (
     section: "admin" | "classroom"
 ): NavItem[] => {
-    const basePath = `/dashboard/${section}`;
+    const basePath = `${getDashboardBasePath()}`;
 
     return [
         {

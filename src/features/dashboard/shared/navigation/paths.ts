@@ -5,6 +5,8 @@
  */
 
 import { authStore } from "@/auth/auth.store";
+import { CLASSROOM_PATH } from "../../classroom/navigation/constant";
+import { ADMIN_PATH } from "../../admin/navigation/constant";
 
 export type DashboardSection = "admin" | "classroom";
 
@@ -26,7 +28,11 @@ export const getDashboardSection = (): DashboardSection => {
  */
 export const getDashboardBasePath = (): string => {
     const section = getDashboardSection();
-    return `/dashboard/${section}`;
+    // Classroom uses /classroom, admin uses /admin
+    if (section === "classroom") {
+        return CLASSROOM_PATH;
+    }
+    return ADMIN_PATH;
 };
 
 /**
@@ -38,49 +44,46 @@ export const sharedPaths = {
     certificates: () => `${getDashboardBasePath()}/certificates`,
     reports: () => `${getDashboardBasePath()}/reports`,
     ticketsManagement: {
-        root: () => `/dashboard/tickets-management`,
-        overview: () => `/dashboard/tickets-management/overview`,
-        teamStructure: () => `/dashboard/tickets-management/team-structure`,
-        manageTeam: () => `/dashboard/tickets-management/team-structure/manage`,
+        root: () => `${getDashboardBasePath()}/tickets-management`,
+        overview: () => `${getDashboardBasePath()}/tickets-management/overview`,
+        teamStructure: () => `${getDashboardBasePath()}/tickets-management/team-structure`,
+        manageTeam: () => `${getDashboardBasePath()}/tickets-management/team-structure/manage`,
         addLead: () =>
-            `/dashboard/tickets-management/team-structure/manage/lead/add`,
+            `${getDashboardBasePath()}/tickets-management/team-structure/manage/lead/add`,
         editLead: (id: string) =>
-            `/dashboard/tickets-management/team-structure/manage/lead/${id}/edit`,
+            `${getDashboardBasePath()}/tickets-management/team-structure/manage/lead/${id}/edit`,
         changeLeadBlock: (id: string) =>
-            `/dashboard/tickets-management/team-structure/manage/lead/${id}/change-block`,
+            `${getDashboardBasePath()}/tickets-management/team-structure/manage/lead/${id}/change-block`,
         convertLeadToAgent: (id: string) =>
-            `/dashboard/tickets-management/team-structure/manage/lead/${id}/convert`,
+            `${getDashboardBasePath()}/tickets-management/team-structure/manage/lead/${id}/convert`,
         addAgent: () =>
-            `/dashboard/tickets-management/team-structure/manage/agent/add`,
+            `${getDashboardBasePath()}/tickets-management/team-structure/manage/agent/add`,
         editAgent: (id: string) =>
-            `/dashboard/tickets-management/team-structure/manage/agent/${id}/edit`,
+            `${getDashboardBasePath()}/tickets-management/team-structure/manage/agent/${id}/edit`,
         promoteAgentToLead: (id: string) =>
-            `/dashboard/tickets-management/team-structure/manage/agent/${id}/promote`,
-        tickets: () => `/dashboard/tickets-management/tickets`,
-        distribution: () => `/dashboard/tickets-management/distribution`,
-        performance: () => `/dashboard/tickets-management/performance`,
+            `${getDashboardBasePath()}/tickets-management/team-structure/manage/agent/${id}/promote`,
+        tickets: () => `${getDashboardBasePath()}/tickets-management/tickets`,
+        distribution: () => `${getDashboardBasePath()}/tickets-management/distribution`,
+        performance: () => `${getDashboardBasePath()}/tickets-management/performance`,
     },
 } as const;
 
 /**
  * Static paths for specific sections (when you need to link to a specific section)
  */
-export const classroomBasePath = "/dashboard/classroom";
-export const adminBasePath = "/dashboard/admin";
-
 export const staticPaths = {
     classroom: {
-        profile: () => `${classroomBasePath}/profile`,
-        chat: () => `${classroomBasePath}/chat`,
-        certificates: () => `${classroomBasePath}/certificates`,
-        reports: () => `${classroomBasePath}/reports`,
+        profile: () => `${CLASSROOM_PATH}/profile`,
+        chat: () => `${CLASSROOM_PATH}/chat`,
+        certificates: () => `${CLASSROOM_PATH}/certificates`,
+        reports: () => `${CLASSROOM_PATH}/reports`,
     },
     admin: {
-        profile: () => `${adminBasePath}/profile`,
-        chat: () => `${adminBasePath}/chat`,
-        certificates: () => `${adminBasePath}/certificates`,
-        reports: () => `${adminBasePath}/reports`,
-        settings: () => `${adminBasePath}/settings`,
+        profile: () => `${ADMIN_PATH}/profile`,
+        chat: () => `${ADMIN_PATH}/chat`,
+        certificates: () => `${ADMIN_PATH}/certificates`,
+        reports: () => `${ADMIN_PATH}/reports`,
+        settings: () => `${ADMIN_PATH}/settings`,
     },
 } as const;
 

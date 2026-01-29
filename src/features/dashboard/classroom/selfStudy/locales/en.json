@@ -21,7 +21,8 @@
     "status": {
         "completed": "Completed",
         "start": "Start",
-        "locked": "Locked"
+        "locked": "Locked",
+        "review": "Review"
     },
     "lesson": {
         "title": "Lesson",

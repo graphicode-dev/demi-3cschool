@@ -9,12 +9,14 @@ import { useTheme } from "@/shared/context/ThemeContext";
 import { useNavItems, type NavItem } from "@/navigation";
 import { ChevronDown, LayoutDashboard } from "lucide-react";
 import { paths } from "@/router";
+import { authStore } from "@/auth";
 
 const Sidebar: React.FC = () => {
     const { t } = useTranslation("sidebar");
     const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
     const { theme } = useTheme();
     const location = useLocation();
+    const { user } = authStore();
 
     const { sections } = useNavItems();
 
@@ -381,16 +383,41 @@ const Sidebar: React.FC = () => {
                 </Link>
             </div>
 
-            <Link
-                to={paths.dashboard.root.list()}
-                className={`flex items-center gap-3 mb-10 px-3 py-2 rounded-lg transition-colors ${
-                    location.pathname === paths.dashboard.root.list()
-                        ? "bg-brand-50 dark:bg-brand-500/10"
-                        : "hover:bg-gray-100 dark:hover:bg-gray-800"
-                }`}
-            >
-                {isExpanded || isHovered || isMobileOpen ? (
-                    <>
+            {user?.role?.name === "admin" && (
+                <Link
+                    to={paths.dashboard.root.list()}
+                    className={`flex items-center gap-3 mb-10 px-3 py-2 rounded-lg transition-colors ${
+                        location.pathname === paths.dashboard.root.list()
+                            ? "bg-brand-50 dark:bg-brand-500/10"
+                            : "hover:bg-gray-100 dark:hover:bg-gray-800"
+                    }`}
+                >
+                    {isExpanded || isHovered || isMobileOpen ? (
+                        <>
+                            <LayoutDashboard
+                                className={`${
+                                    location.pathname ===
+                                    paths.dashboard.root.list()
+                                        ? "text-brand-500"
+                                        : "text-gray-800 dark:text-gray-200"
+                                }`}
+                            />
+                            <h2
+                                className={`flex ${
+                                    location.pathname ===
+                                    paths.dashboard.root.list()
+                                        ? "text-brand-500"
+                                        : "text-gray-800 dark:text-gray-200"
+                                } ${
+                                    !isExpanded && !isHovered
+                                        ? "lg:justify-center"
+                                        : "justify-start"
+                                }`}
+                            >
+                                {t("sidebar.dashboard")}
+                            </h2>
+                        </>
+                    ) : (
                         <LayoutDashboard
                             className={`${
                                 location.pathname ===
@@ -399,31 +426,9 @@ const Sidebar: React.FC = () => {
                                     : "text-gray-800 dark:text-gray-200"
                             }`}
                         />
-                        <h2
-                            className={`flex ${
-                                location.pathname ===
-                                paths.dashboard.root.list()
-                                    ? "text-brand-500"
-                                    : "text-gray-800 dark:text-gray-200"
-                            } ${
-                                !isExpanded && !isHovered
-                                    ? "lg:justify-center"
-                                    : "justify-start"
-                            }`}
-                        >
-                            {t("sidebar.dashboard")}
-                        </h2>
-                    </>
-                ) : (
-                    <LayoutDashboard
-                        className={`${
-                            location.pathname === paths.dashboard.root.list()
-                                ? "text-brand-500"
-                                : "text-gray-800 dark:text-gray-200"
-                        }`}
-                    />
-                )}
-            </Link>
+                    )}
+                </Link>
+            )}
 
             <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
                 <nav className="mb-6">

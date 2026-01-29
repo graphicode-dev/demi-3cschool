@@ -12,7 +12,6 @@ import "./i18n";
 import "@/router";
 import ErrorBoundaryClass from "./shared/observability/ErrorBoundary.tsx";
 import { LoadingState } from "./design-system/index.ts";
-import { AcceptanceExamGuard } from "./features/dashboard/shared/acceptanceTest/provider/acceptance-examguard.tsx";
 
 // Get routes grouped by layout type
 const routesByLayout = routeRegistry.getRoutesByLayout();
@@ -37,11 +36,7 @@ const router = createBrowserRouter([
             },
             // Dashboard routes (authenticated)
             {
-                element: (
-                    <AcceptanceExamGuard>
-                        <DashboardLayout />
-                    </AcceptanceExamGuard>
-                ),
+                element: <DashboardLayout />,
                 children: routesByLayout.dashboard,
             },
             // Routes without layout wrapper

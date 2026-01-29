@@ -1,0 +1,1 @@
+export { AcceptanceExamRouteGuard } from "./AcceptanceExamRouteGuard";

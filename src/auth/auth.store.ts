@@ -50,10 +50,13 @@ export const authStore = create<AuthStoreState>()(
             partialize: (state) => ({
                 user: state.user,
                 isAuthenticated: state.isAuthenticated,
-                // Don't persist authStep - let it default to Login
-                // authStep: state.authStep, // Remove this
             }),
             onRehydrateStorage: () => (state) => {
+                console.log("Auth Store Rehydrated - user:", state?.user);
+                console.log(
+                    "Auth Store Rehydrated - userInformation:",
+                    state?.user?.userInformation
+                );
                 state?.setHasHydrated(true);
             },
         }

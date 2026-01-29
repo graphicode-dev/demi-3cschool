@@ -6,7 +6,9 @@
             "groupsManagement": "Groups Management",
             "salesAnalysis": "Sales & Subscription ",
             "account": "Account",
-            "ticketsManagement": "Tickets Management"
+            "ticketsManagement": "Tickets Management",
+            "classroom": "Classroom",
+            "admin": "Admin"
         }
     },
     "navbar": {

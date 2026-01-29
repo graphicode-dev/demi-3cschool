@@ -5,14 +5,15 @@
  */
 
 import { registerFeaturePaths } from "@/router/paths.registry";
+import { ADMIN_PATH } from "./constant";
 
 export const adminPaths = {
-    root: () => "/dashboard/admin",
-    profile: () => "/dashboard/admin/profile",
-    chat: () => "/dashboard/admin/chat",
-    certificates: () => "/dashboard/admin/certificates",
-    reports: () => "/dashboard/admin/reports",
-    settings: () => "/dashboard/admin/settings",
+    root: () => ADMIN_PATH,
+    profile: () => `${ADMIN_PATH}/profile`,
+    chat: () => `${ADMIN_PATH}/chat`,
+    certificates: () => `${ADMIN_PATH}/certificates`,
+    reports: () => `${ADMIN_PATH}/reports`,
+    settings: () => `${ADMIN_PATH}/settings`,
 } as const;
 
 export const adminManagementPaths = registerFeaturePaths("admin", {

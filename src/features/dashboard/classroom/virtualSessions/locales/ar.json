@@ -1,0 +1,47 @@
+{
+    "title": "جلساتي الافتراضية",
+    "description": "انضم إلى الجلسات الافتراضية المباشرة وتفاعل مع المعلمين في الوقت الفعلي",
+    "terms": {
+        "first": "الفصل الأول",
+        "second": "الفصل الثاني",
+        "summer": "الفصل الصيفي"
+    },
+    "status": {
+        "live": "مباشر",
+        "upcoming": "قادم",
+        "completed": "مكتمل"
+    },
+    "sections": {
+        "currentLive": "الجلسات المباشرة الحالية",
+        "upcoming": "الجلسات القادمة",
+        "completed": "الجلسات المكتملة"
+    },
+    "session": {
+        "liveNow": "مباشر الآن",
+        "joinSession": "انضم للجلسة",
+        "sessionInfo": "معلومات الجلسة",
+        "viewRecording": "مشاهدة التسجيل",
+        "viewAllHistory": "عرض كل السجل"
+    },
+    "modal": {
+        "classSchedule": "جدول الحصة",
+        "date": "التاريخ",
+        "time": "الوقت",
+        "duration": "المدة",
+        "timezone": "المنطقة الزمنية",
+        "today": "اليوم",
+        "yourInstructor": "معلمك",
+        "whatYouLearn": "ماذا سنتعلم",
+        "remindMe": "ذكرني"
+    },
+    "recording": {
+        "backToVirtualSessions": "العودة للجلسات الافتراضية",
+        "lessonSummary": "ملخص الدرس",
+        "completedSession": "جلسة مكتملة",
+        "finishedWatching": "انتهيت من مشاهدة التسجيل؟",
+        "keepMomentum": "عمل رائع! الآن حافظ على الزخم بمشاهدة فيديوهات الدروس القصيرة.",
+        "watchLessonVideos": "شاهد فيديوهات الدروس",
+        "goToLessonVideos": "اذهب إلى فيديوهات الدروس في",
+        "selfStudyContent": "محتوى الدراسة الذاتية"
+    }
+}

@@ -9,6 +9,8 @@ import type { FeatureNavModule } from "@/navigation/nav.types";
 import { classroomSharedNavItems } from "@/features/dashboard/shared/navigation";
 import { selfStudyNavItem } from "../selfStudy/navigation";
 import { physicalSessionsNavItem } from "../physicalSessions/navigation";
+import { virtualSessionsNavItem } from "../virtualSessions/navigation";
+import { acceptanceTestNavItem } from "../acceptanceTest/navigation";
 
 export const classroomNav: FeatureNavModule = {
     featureId: "classroom",
@@ -16,8 +18,10 @@ export const classroomNav: FeatureNavModule = {
     order: 20,
     items: [
         ...classroomSharedNavItems,
+        acceptanceTestNavItem,
         selfStudyNavItem,
         physicalSessionsNavItem,
+        virtualSessionsNavItem,
     ],
 };
 

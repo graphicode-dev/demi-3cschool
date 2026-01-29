@@ -99,15 +99,13 @@ export function SessionItem({ session, onStart }: SessionItemProps) {
             {/* Right Section - Status */}
             <div className="flex items-center gap-2">
                 {isCompleted && (
-                    <>
-                        <Check
-                            className="size-4 text-success-500"
-                            strokeWidth={3}
-                        />
-                        <span className="text-sm font-semibold text-success-500">
-                            {t("status.completed")}
-                        </span>
-                    </>
+                    <button
+                        onClick={() => onStart?.(session.id)}
+                        className="flex items-center gap-1.5 bg-success-100 hover:bg-success-200 dark:bg-success-500/20 dark:hover:bg-success-500/30 text-success-600 dark:text-success-400 px-4 py-2 rounded-lg font-semibold text-sm transition-colors"
+                    >
+                        <Check className="size-4" strokeWidth={3} />
+                        {t("status.review")}
+                    </button>
                 )}
 
                 {isCurrent && (

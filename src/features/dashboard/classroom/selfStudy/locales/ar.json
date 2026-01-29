@@ -21,7 +21,8 @@
     "status": {
         "completed": "مكتمل",
         "start": "ابدأ",
-        "locked": "مقفل"
+        "locked": "مقفل",
+        "review": "مراجعة"
     },
     "lesson": {
         "title": "الدرس",

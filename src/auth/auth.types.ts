@@ -8,7 +8,7 @@ import * as React from "react";
 import { UseMutationResult } from "@tanstack/react-query";
 import { NavigateFunction } from "react-router-dom";
 import { Governorate, Toast, Grade } from "@/shared/types";
-import { AcceptanceExamStatus } from "@/features/dashboard/shared/acceptanceTest/types";
+import { AcceptanceExamStatus } from "@/features/dashboard/classroom/acceptanceTest/types";
 
 // ============================================================================
 // Auth Types

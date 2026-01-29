@@ -6,7 +6,9 @@
             "groupsManagement": "إدارة المجموعات",
             "salesAnalysis": "تحليل المبيعات والاشتراكات",
             "settings": "الإعدادات",
-            "ticketsManagement": "إدارة التذاكر"
+            "ticketsManagement": "إدارة التذاكر",
+            "classroom": "الفصل الدراسي",
+            "admin": "الادارة"
         }
     },
     "navbar": {

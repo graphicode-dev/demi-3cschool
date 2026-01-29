@@ -9,7 +9,7 @@
  */
 
 import { useEffect } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { authStore } from "@/auth/auth.store";
 import { paths } from "@/router/paths";
 import { Loading } from "@/shared/components/ui/Loading";
@@ -20,6 +20,8 @@ import Backdrop from "@/shared/components/dashboard/Backdrop";
 import { Breadcrumb, ConfirmDialogProvider } from "@/design-system";
 import { SearchProvider, SearchModal } from "@/search";
 import "@/search/init";
+import { CLASSROOM_PATH } from "@/features/dashboard/classroom/navigation/constant";
+import { ADMIN_PATH } from "@/features/dashboard/admin/navigation/constant";
 
 const LayoutContent: React.FC = () => {
     const { isExpanded, isHovered, isMobileOpen } = useSidebar();
@@ -47,9 +49,14 @@ const LayoutContent: React.FC = () => {
 
 export const DashboardLayout = () => {
     const navigate = useNavigate();
+    const location = useLocation();
 
     const isAuthenticated = authStore((state) => state.isAuthenticated);
     const hasHydrated = authStore((state) => state._hasHydrated);
+    const user = authStore((state) => state.user);
+
+    const userRole = user?.role?.name?.toLowerCase();
+    const isAdmin = userRole === "admin" || userRole === "super_admin";
 
     useEffect(() => {
         // Wait for store to hydrate before checking auth
@@ -57,6 +64,25 @@ export const DashboardLayout = () => {
             navigate(paths.auth.login());
         }
     }, [isAuthenticated, hasHydrated, navigate]);
+
+    useEffect(() => {
+        // Role-based route protection
+        if (!hasHydrated || !isAuthenticated || !user) return;
+
+        const { pathname } = location;
+
+        // Admin trying to access classroom routes -> redirect to admin
+        if (isAdmin && pathname.startsWith(CLASSROOM_PATH)) {
+            navigate(`${ADMIN_PATH}/profile`, { replace: true });
+            return;
+        }
+
+        // Student/Teacher trying to access admin routes -> redirect to classroom
+        if (!isAdmin && pathname.startsWith(ADMIN_PATH)) {
+            navigate(`${CLASSROOM_PATH}/profile`, { replace: true });
+            return;
+        }
+    }, [hasHydrated, isAuthenticated, user, isAdmin, location, navigate]);
 
     // Show loading while store is hydrating
     if (!hasHydrated) {

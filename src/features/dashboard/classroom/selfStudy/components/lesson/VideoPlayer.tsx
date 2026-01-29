@@ -207,8 +207,8 @@ export const VideoPlayer = memo(function VideoPlayer({
                 title="video-player"
             />
             {!isReady && (
-                <div className="absolute inset-0 flex items-center justify-center bg-gray-700">
-                    <div className="bg-brand-500 rounded-full p-4">
+                <div className="absolute inset-0 flex items-center justify-center bg-gray-700 pointer-events-none">
+                    <div className="bg-brand-500 rounded-full p-4 animate-pulse">
                         <Play
                             className="size-8 text-white"
                             fill="currentColor"

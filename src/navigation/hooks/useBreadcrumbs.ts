@@ -21,6 +21,8 @@ import { useTranslation } from "react-i18next";
 import { navRegistry } from "../navRegistry";
 import type { NavItem } from "../nav.types";
 import { paths } from "@/router";
+import { CLASSROOM_PATH } from "@/features/dashboard/classroom/navigation/constant";
+import { ADMIN_PATH } from "@/features/dashboard/admin/navigation/constant";
 
 export interface BreadcrumbItem {
     path: string;
@@ -49,6 +51,18 @@ const DEFAULT_DASHBOARD = {
     path: paths.dashboard.root.list(),
     label: "Dashboard",
     labelKey: "overview:overview.breadcrumb",
+};
+
+const CLASSROOM_ROOT = {
+    path: CLASSROOM_PATH,
+    label: "Classroom",
+    labelKey: "sidebar:sidebar.sections.classroom",
+};
+
+const ADMIN_ROOT = {
+    path: ADMIN_PATH,
+    label: "Admin",
+    labelKey: "sidebar:sidebar.sections.admin",
 };
 
 /**
@@ -140,15 +154,26 @@ export const useBreadcrumbs = (
     const breadcrumbs = useMemo(() => {
         const crumbs: BreadcrumbItem[] = [];
 
-        // Skip if on dashboard root
-        if (pathname === dashboardConfig.path) {
+        // Determine which section we're in: classroom, admin, or dashboard
+        const isClassroomRoute = pathname.startsWith(CLASSROOM_PATH);
+        const isAdminRoute = pathname.startsWith(ADMIN_PATH);
+
+        let rootConfig = dashboardConfig;
+        if (isClassroomRoute) {
+            rootConfig = CLASSROOM_ROOT;
+        } else if (isAdminRoute) {
+            rootConfig = ADMIN_ROOT;
+        }
+
+        // Skip if on root
+        if (pathname === rootConfig.path) {
             return [
                 {
-                    path: dashboardConfig.path,
-                    label: dashboardConfig.labelKey
-                        ? t(dashboardConfig.labelKey, dashboardConfig.label)
-                        : dashboardConfig.label,
-                    labelKey: dashboardConfig.labelKey,
+                    path: rootConfig.path,
+                    label: rootConfig.labelKey
+                        ? t(rootConfig.labelKey, rootConfig.label)
+                        : rootConfig.label,
+                    labelKey: rootConfig.labelKey,
                     isActive: true,
                 },
             ];
@@ -167,8 +192,18 @@ export const useBreadcrumbs = (
         for (const segment of segments) {
             currentPath += "/" + segment;
 
-            // Skip dashboard segment (added separately)
+            // Skip dashboard segment (added separately for admin routes)
             if (segment === "dashboard") {
+                continue;
+            }
+
+            // Skip classroom segment (added separately as root)
+            if (segment === "classroom") {
+                continue;
+            }
+
+            // Skip admin segment (added separately as root)
+            if (segment === "admin") {
                 continue;
             }
 
@@ -219,16 +254,16 @@ export const useBreadcrumbs = (
             });
         }
 
-        // Add dashboard at the beginning if enabled
+        // Add root (Dashboard or Classroom) at the beginning if enabled
         if (includeDashboard) {
-            const dashboardLabel = dashboardConfig.labelKey
-                ? t(dashboardConfig.labelKey, dashboardConfig.label)
-                : dashboardConfig.label;
+            const rootLabel = rootConfig.labelKey
+                ? t(rootConfig.labelKey, rootConfig.label)
+                : rootConfig.label;
 
             crumbs.unshift({
-                path: dashboardConfig.path,
-                label: dashboardLabel,
-                labelKey: dashboardConfig.labelKey,
+                path: rootConfig.path,
+                label: rootLabel,
+                labelKey: rootConfig.labelKey,
                 isActive: false,
             });
         }

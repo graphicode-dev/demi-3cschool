@@ -3,6 +3,7 @@
  *
  * Returns filtered navigation items based on current user's role and permissions.
  * Uses the existing usePermissions hook for permission checking.
+ * Also filters based on acceptance exam status for students.
  *
  * @example
  * ```tsx
@@ -21,6 +22,7 @@ import { usePermissions } from "@/auth/usePermissions";
 import { authStore } from "@/auth/auth.store";
 import type { Permission } from "@/auth/auth.types";
 import type { NavItem, NavSectionConfig, NavFilterOptions } from "../nav.types";
+import type { AcceptanceExamStatus } from "@/features/dashboard/classroom/acceptanceTest/types";
 
 interface UseNavItemsReturn {
     /**
@@ -92,26 +94,78 @@ export const useNavItems = (
         return "Classroom";
     }, []);
 
+    // Get acceptance exam status for students
+    // TEMPORARY: Bypassed until backend is ready - uncomment when ready
+    const acceptanceExamStatus = useMemo(() => {
+        // TODO: Uncomment when backend is ready
+        // const user = authStore.getState().user;
+        // const userRole = user?.role?.name?.toLowerCase();
+        // // Only students have acceptance exam requirement
+        // if (userRole !== "student") {
+        //     return "accepted" as AcceptanceExamStatus; // Non-students bypass
+        // }
+        // return (
+        //     (user?.userInformation?.acceptanceExam as AcceptanceExamStatus) ||
+        //     "pending"
+        // );
+        return "accepted" as AcceptanceExamStatus; // TEMPORARY: Bypass
+    }, []);
+
+    // Check if student needs to complete acceptance exam
+    const needsAcceptanceExam = acceptanceExamStatus !== "accepted";
+
     const sections = useMemo(() => {
         const allSections = navRegistry.getSectionsWithItems(filterOptions);
-        // Filter out the opposite dashboard section
-        // Admin users don't see Classroom, Classroom users don't see Admin
-        return allSections.filter((section) => {
-            if (
-                section.id === "Classroom" &&
-                userDashboardSection === "Admin"
-            ) {
-                return false;
-            }
-            if (
-                section.id === "Admin" &&
-                userDashboardSection === "Classroom"
-            ) {
-                return false;
-            }
-            return true;
-        });
-    }, [filterOptions, userDashboardSection]);
+
+        // Filter sections based on role and acceptance exam status
+        return allSections
+            .filter((section) => {
+                // Filter out the opposite dashboard section
+                if (
+                    section.id === "Classroom" &&
+                    userDashboardSection === "Admin"
+                ) {
+                    return false;
+                }
+                if (
+                    section.id === "Admin" &&
+                    userDashboardSection === "Classroom"
+                ) {
+                    return false;
+                }
+                return true;
+            })
+            .map((section) => {
+                // If student needs acceptance exam, filter items in Classroom section
+                if (needsAcceptanceExam && section.id === "Classroom") {
+                    // Only show acceptanceTest and profile items
+                    const allowedKeys = [
+                        "acceptanceTest",
+                        "profile",
+                        "tickets-management",
+                    ];
+                    return {
+                        ...section,
+                        items: section.items.filter((item) =>
+                            allowedKeys.includes(item.key)
+                        ),
+                    };
+                }
+
+                // If student has passed acceptance exam, hide acceptanceTest item
+                if (!needsAcceptanceExam && section.id === "Classroom") {
+                    return {
+                        ...section,
+                        items: section.items.filter(
+                            (item) => item.key !== "acceptanceTest"
+                        ),
+                    };
+                }
+
+                return section;
+            })
+            .filter((section) => section.items.length > 0); // Remove empty sections
+    }, [filterOptions, userDashboardSection, needsAcceptanceExam]);
 
     const flatItems = useMemo(
         () => navRegistry.getFlatList(filterOptions),

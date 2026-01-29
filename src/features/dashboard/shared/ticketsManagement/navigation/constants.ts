@@ -4,4 +4,6 @@
  * Shared constants to avoid circular dependencies.
  */
 
-export const TICKETS_BASE_PATH = "/dashboard/tickets-management";
+import { getDashboardBasePath } from "../../navigation";
+
+export const TICKETS_BASE_PATH = `${getDashboardBasePath()}/tickets-management`;

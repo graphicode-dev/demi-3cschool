@@ -5,13 +5,15 @@
  */
 
 import { registerFeaturePaths } from "@/router/paths.registry";
+import { CLASSROOM_PATH } from "./constant";
 
 export const classroomPaths = {
-    root: () => "/dashboard/classroom",
-    profile: () => "/dashboard/classroom/profile",
-    chat: () => "/dashboard/classroom/chat",
-    certificates: () => "/dashboard/classroom/certificates",
-    reports: () => "/dashboard/classroom/reports",
+    root: () => CLASSROOM_PATH,
+    profile: () => `${CLASSROOM_PATH}/profile`,
+    chat: () => `${CLASSROOM_PATH}/chat`,
+    certificates: () => `${CLASSROOM_PATH}/certificates`,
+    reports: () => `${CLASSROOM_PATH}/reports`,
+    acceptanceTest: () => `${CLASSROOM_PATH}/acceptance-exam`,
 } as const;
 
 export const classroomManagementPaths = registerFeaturePaths("classroom", {
@@ -20,6 +22,7 @@ export const classroomManagementPaths = registerFeaturePaths("classroom", {
     chat: classroomPaths.chat,
     certificates: classroomPaths.certificates,
     reports: classroomPaths.reports,
+    acceptanceTest: classroomPaths.acceptanceTest,
 });
 
 export type ClassroomPaths = typeof classroomPaths;

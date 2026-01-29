@@ -33,10 +33,10 @@ export { featurePaths, registerFeaturePaths, type FeaturePaths };
 // Import feature paths - they self-register via registerFeaturePaths
 import { authPaths } from "@/features/auth/navigation/paths";
 import { sitePaths } from "@/features/landing/navigation/paths";
-import { overviewPaths } from "@/features/dashboard/overview/navigation";
 import { classroomPaths } from "@/features/dashboard/classroom/navigation/paths";
 import { adminPaths } from "@/features/dashboard/admin/navigation/paths";
 import { sharedPaths } from "@/features/dashboard/shared/navigation/paths";
+import { overviewPaths } from "@/features/dashboard/admin/overview/navigation";
 
 // ============================================================================
 // Path Builder Factory

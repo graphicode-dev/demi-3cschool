@@ -1,0 +1,61 @@
+{
+    "signOut": "Sign Out",
+    "nav": {
+        "exam": "Acceptance Exam"
+    },
+    "exam": {
+        "title": "Acceptance Exam",
+        "description": "Complete this exam to gain access to the learning platform. Read the instructions carefully before starting.",
+        "startExam": "Start Exam",
+        "starting": "Starting...",
+        "importantInstructions": "Important Instructions",
+        "instruction1": "Once you start the exam, the timer will begin counting down.",
+        "instruction2": "You cannot pause or restart the exam once started.",
+        "instruction3": "Make sure you have a stable internet connection.",
+        "instruction4": "Answer all questions before submitting.",
+        "questionOf": "Question {{current}} of {{total}}",
+        "questionsAnswered": "{{answered}} of {{total}} questions answered",
+        "points": "{{count}} pts",
+        "previous": "Previous",
+        "next": "Next",
+        "submitExam": "Submit Exam",
+        "submitTitle": "Submit Exam",
+        "submitConfirmation": "Are you sure you want to submit your exam?",
+        "unansweredWarning": "You have {{count}} unanswered questions. Are you sure you want to submit?",
+        "cancel": "Cancel",
+        "submit": "Submit",
+        "submitAnyway": "Submit Anyway",
+        "startFailed": "Failed to Start",
+        "failedToStart": "Failed to start the exam. Please try again.",
+        "examSubmitted": "Exam Submitted",
+        "waitingForResult": "Your exam has been submitted. Please wait for the results.",
+        "submissionFailed": "Submission Failed",
+        "failedToSubmit": "Failed to submit the exam. Please try again.",
+        "failedToLoad": "Failed to Load",
+        "unknownError": "An unknown error occurred.",
+        "noQuestions": "No questions found for this exam.",
+        "error": "Error",
+        "noExamAvailable": "No Exam Available",
+        "noExamForGrade": "There is no acceptance exam available for your grade level at this time.",
+        "selectExam": "Select an Exam",
+        "minutes": "minutes",
+        "questionsLabel": "questions",
+        "noQuestionsWarning": "No questions",
+        "cannotStartNoQuestions": "This exam has no questions and cannot be started.",
+        "timeUp": "Time's Up!",
+        "timeUpMessage": "Your exam time has ended. Please submit your answers now.",
+        "examDetails": "Exam Details"
+    },
+    "waiting": {
+        "title": "Awaiting Results",
+        "description": "Your acceptance exam has been submitted successfully. Our team is reviewing your answers.",
+        "processing": "Processing your results...",
+        "checkBack": "Please check back later or wait for an email notification with your results."
+    },
+    "rejected": {
+        "title": "Application Not Accepted",
+        "description": "Unfortunately, your acceptance exam results did not meet the required criteria.",
+        "message": "Your application has not been accepted at this time.",
+        "contact": "If you have any questions, please contact our support team."
+    }
+}

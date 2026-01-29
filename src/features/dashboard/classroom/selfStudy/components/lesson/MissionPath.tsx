@@ -52,7 +52,7 @@ export function MissionPath({
                             onClick={() => handleVideoClick(video)}
                             disabled={isLocked}
                             className={`
-                                flex items-center justify-between p-3 rounded-xl transition-all w-full
+                                flex items-center justify-between p-3 rounded-xl transition-all w-full min-h-[72px]
                                 ${isCurrent ? "bg-brand-50 dark:bg-brand-500/10 border border-brand-500" : ""}
                                 ${isCompleted && !isCurrent ? "bg-gray-100/50 dark:bg-gray-800/50" : ""}
                                 ${isLocked ? "bg-gray-100/50 dark:bg-gray-800/50 cursor-not-allowed" : "cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"}
@@ -86,10 +86,10 @@ export function MissionPath({
                                 </div>
 
                                 {/* Video Info */}
-                                <div className="flex flex-col items-start">
+                                <div className="flex flex-col items-start max-w-[120px]">
                                     <span
                                         className={`
-                                            text-xs font-bold
+                                            text-xs font-bold text-start line-clamp-2
                                             ${isCompleted ? "text-gray-500 dark:text-gray-400" : ""}
                                             ${isCurrent ? "text-gray-900 dark:text-white" : ""}
                                             ${isLocked ? "text-gray-400 dark:text-gray-500" : ""}
