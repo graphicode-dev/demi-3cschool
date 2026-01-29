@@ -14,6 +14,9 @@ import { selfStudyRoutes } from "../selfStudy/navigation";
 import { physicalSessionsRoutes } from "../physicalSessions/navigation";
 import { virtualSessionsRoutes } from "../virtualSessions/navigation";
 import { acceptanceTestRoutes } from "../acceptanceTest/navigation";
+import { projectsRoutes } from "../projects/navigation";
+import { finalExamsRoutes } from "../finalExams/navigation";
+import { myScheduleRoutes } from "../mySchedule/navigation";
 import { classroomPaths } from "./paths";
 import { CLASSROOM_PATH } from "./constant";
 
@@ -42,6 +45,12 @@ export const classroomRouteModule: FeatureRouteModule = {
             ...virtualSessionsRoutes,
             // Acceptance Test feature
             ...acceptanceTestRoutes,
+            // Projects feature
+            ...projectsRoutes,
+            // Final Exams feature
+            ...finalExamsRoutes,
+            // My Schedule feature
+            ...myScheduleRoutes,
         ],
     },
 };

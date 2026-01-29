@@ -1,0 +1,12 @@
+{
+    "title": "My Schedule",
+    "description": "See your classes and their times.",
+    "mySchedule": "My schedule",
+    "allSessions": "All Sessions",
+    "online": "Online",
+    "offline": "Offline",
+    "week": "Week",
+    "onlineSession": "Online Session",
+    "offlineCenter": "Offline (Center)",
+    "cancelled": "Cancelled"
+}

@@ -1,0 +1,10 @@
+{
+    "title": "Projects",
+    "description": "Choose your lesson and manage your homework.",
+    "chooseLesson": "Choose Lesson",
+    "allLessons": "All Lessons",
+    "viewHomework": "View Homework",
+    "history": "History",
+    "submitHomework": "Submit Homework",
+    "noProjects": "No projects available for this lesson."
+}

@@ -1,0 +1,14 @@
+{
+    "title": "Final Exams",
+    "description": "Complete your exams for this term",
+    "minutes": "Minutes",
+    "questions": "Questions",
+    "takenOn": "Taken On",
+    "opens": "Opens",
+    "finishedExam": "You finished this exam",
+    "oneAttemptOnly": "Important: One attempt only!",
+    "notAvailable": "Not available yet",
+    "viewResults": "View Results",
+    "startExam": "Start Exam",
+    "locked": "Locked"
+}

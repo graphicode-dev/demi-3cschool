@@ -11,6 +11,9 @@ import { selfStudyNavItem } from "../selfStudy/navigation";
 import { physicalSessionsNavItem } from "../physicalSessions/navigation";
 import { virtualSessionsNavItem } from "../virtualSessions/navigation";
 import { acceptanceTestNavItem } from "../acceptanceTest/navigation";
+import { projectsNavItem } from "../projects/navigation";
+import { finalExamsNavItem } from "../finalExams/navigation";
+import { myScheduleNavItem } from "../mySchedule/navigation";
 
 export const classroomNav: FeatureNavModule = {
     featureId: "classroom",
@@ -22,6 +25,9 @@ export const classroomNav: FeatureNavModule = {
         selfStudyNavItem,
         physicalSessionsNavItem,
         virtualSessionsNavItem,
+        projectsNavItem,
+        finalExamsNavItem,
+        myScheduleNavItem,
     ],
 };
 

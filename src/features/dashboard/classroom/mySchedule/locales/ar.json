@@ -1,0 +1,12 @@
+{
+    "title": "جدولي",
+    "description": "اطلع على حصصك ومواعيدها.",
+    "mySchedule": "جدولي",
+    "allSessions": "جميع الجلسات",
+    "online": "أونلاين",
+    "offline": "حضوري",
+    "week": "أسبوع",
+    "onlineSession": "جلسة أونلاين",
+    "offlineCenter": "حضوري (المركز)",
+    "cancelled": "ملغي"
+}
