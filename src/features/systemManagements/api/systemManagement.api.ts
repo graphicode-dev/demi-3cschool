@@ -1,0 +1,76 @@
+/**
+ * System Managements Feature - API Functions
+ *
+ * Raw API functions for system managements domain.
+ * These are pure functions that make HTTP requests.
+ * They are used by query and mutation hooks.
+ *
+ * @example
+ * ```ts
+ * // In a query hook
+ * const { data } = useQuery({
+ *     queryKey: studentKeys.list(params),
+ *     queryFn: ({ signal }) => studentsApi.getList(params, signal),
+ * });
+ * ```
+ */
+
+import { api } from "@/shared/api/client";
+import { ApiResponse } from "@/shared/api";
+import { PaginatedStudentData, Student, StudentListParams } from "../types";
+
+// ============================================================================
+// Students API
+// ============================================================================
+
+const STUDENTS_BASE_URL = "/system-managements/students";
+
+/**
+ * Students API functions
+ */
+export const studentsApi = {
+    /**
+     * Get list of all students (paginated when page param is provided)
+     */
+    getList: async (
+        params?: StudentListParams,
+        signal?: AbortSignal
+    ): Promise<Student[] | PaginatedStudentData> => {
+        const response = await api.get<
+            ApiResponse<Student[] | PaginatedStudentData>
+        >(STUDENTS_BASE_URL, {
+            params: params as Record<string, unknown>,
+            signal,
+        });
+
+        if (response.error) {
+            throw response.error;
+        }
+
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
+        }
+
+        return response.data.data;
+    },
+
+    /**
+     * Get single student by ID
+     */
+    getById: async (id: number, signal?: AbortSignal): Promise<Student> => {
+        const response = await api.get<ApiResponse<Student>>(
+            `${STUDENTS_BASE_URL}/${id}`,
+            { signal }
+        );
+
+        if (response.error) {
+            throw response.error;
+        }
+
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
+        }
+
+        return response.data.data;
+    },
+};

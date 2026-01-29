@@ -1,0 +1,48 @@
+{
+    "groupsAnalytics": {
+        "title": "Groups Analytics",
+        "subtitle": "Manage group analytics, Attendance and Performance tracking program",
+        "tabs": {
+            "standard": "Standard Learning",
+            "professional": "Professional Learning"
+        },
+        "search": {
+            "placeholder": "Search groups by name, track, or level..."
+        },
+        "filters": {
+            "allTracks": "All Tracks",
+            "allLevels": "All Levels",
+            "allStatus": "All Status"
+        },
+        "stats": {
+            "totalGroups": "Total Groups",
+            "activeGroups": "Active Groups",
+            "totalStudents": "Total Students",
+            "completedGroups": "Completed"
+        },
+        "charts": {
+            "groupStatus": "Group Status Distribution",
+            "studentsPerTrack": "Students per Track",
+            "studentGrowth": "Student Growth Over Time"
+        },
+        "status": {
+            "active": "Active",
+            "inactive": "Inactive",
+            "completed": "Completed"
+        },
+        "trackOverview": {
+            "title": "Track Overview - Professional Learning",
+            "groups": "Groups",
+            "students": "Students",
+            "avgProgress": "Avg Progress"
+        },
+        "trackCard": {
+            "groups": "Groups",
+            "students": "Students",
+            "avgProgress": "Avg Progress"
+        },
+        "actions": {
+            "createNew": "Create New Group"
+        }
+    }
+}

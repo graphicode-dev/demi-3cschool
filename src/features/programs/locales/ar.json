@@ -1,0 +1,19 @@
+{
+    "programs": {
+        "breadcrumb": "البرامج",
+        "title": "البرامج",
+        "description": "إدارة برامجك التعليمية والمناهج الدراسية",
+        "breadcrumbs": {
+            "curriculumManagement": "إدارة المناهج",
+            "programs": "البرامج"
+        },
+        "card": {
+            "active": "نشط",
+            "inactive": "غير نشط",
+            "updatedAgo": "تم التحديث منذ {{time}}",
+            "learningPaths": "مسارات التعلم",
+            "totalLevels": "إجمالي المستويات",
+            "totalLessons": "إجمالي الدروس"
+        }
+    }
+}

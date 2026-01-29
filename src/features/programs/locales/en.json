@@ -1,0 +1,19 @@
+{
+    "programs": {
+        "breadcrumb": "Programs",
+        "title": "Programs",
+        "description": "Manage your educational programs and curricula",
+        "breadcrumbs": {
+            "curriculumManagement": "Curriculum Management",
+            "programs": "Programs"
+        },
+        "card": {
+            "active": "Active",
+            "inactive": "Inactive",
+            "updatedAgo": "Updated {{time}} ago",
+            "learningPaths": "Learning Paths",
+            "totalLevels": "Total Levels",
+            "totalLessons": "Total Lessons"
+        }
+    }
+}
