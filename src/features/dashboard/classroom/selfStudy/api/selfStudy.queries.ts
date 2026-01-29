@@ -4,12 +4,14 @@ import {
     selfStudyLessonApi,
     selfStudyVideoProgressApi,
     selfStudyQuizApi,
-    type UpdateVideoProgressPayload,
-    type MarkVideoCompletePayload,
-    type SubmitQuizAnswerPayload,
-    type CompleteQuizPayload,
 } from "./selfStudy.api";
 import { selfStudyKeys } from "./selfStudy.keys";
+import {
+    CompleteQuizPayload,
+    MarkVideoCompletePayload,
+    SubmitQuizAnswerPayload,
+    UpdateVideoProgressPayload,
+} from "../types";
 
 // ============================================
 // Content Queries

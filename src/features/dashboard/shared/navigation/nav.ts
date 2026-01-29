@@ -26,7 +26,6 @@ export const createSharedNavItems = (
             label: "Profile",
             href: `${basePath}/profile`,
             icon: User,
-            order: 0,
         },
         {
             key: "chat",
@@ -34,7 +33,6 @@ export const createSharedNavItems = (
             label: "Chat",
             href: `${basePath}/chat`,
             icon: MessageSquare,
-            order: 1,
         },
         {
             key: "certificates",
@@ -42,7 +40,6 @@ export const createSharedNavItems = (
             label: "Certificates",
             href: `${basePath}/certificates`,
             icon: Award,
-            order: 2,
         },
         {
             key: "reports",
@@ -50,7 +47,6 @@ export const createSharedNavItems = (
             label: "Reports",
             href: `${basePath}/reports`,
             icon: FileText,
-            order: 3,
         },
         {
             key: "tickets-management",
@@ -58,7 +54,6 @@ export const createSharedNavItems = (
             label: "Tickets Management",
             href: ticketsPaths.overview(),
             icon: Ticket,
-            order: 4,
             permissions: [ticket.viewAny],
             children: [
                 {

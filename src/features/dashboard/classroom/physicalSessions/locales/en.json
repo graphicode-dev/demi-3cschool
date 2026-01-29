@@ -1,0 +1,22 @@
+{
+    "title": "Physical Sessions",
+    "description": "Join hands-on workshops and in-person learning experiences",
+    "atTheCenter": "At the Center",
+    "terms": {
+        "first": "First Term",
+        "second": "Second Term",
+        "summer": "Summer Term"
+    },
+    "status": {
+        "completed": "Completed",
+        "upcoming": "UPCOMING",
+        "nextUp": "NEXT UP",
+        "locked": "Locked"
+    },
+    "summerCamp": {
+        "title": "Summer Camp Mode!",
+        "description": "Get ready! All {{count}} sessions in summer are face-to-face at the center.",
+        "yourProgress": "Your Progress",
+        "completed": "{{completed}}/{{total}} Completed"
+    }
+}

@@ -14,7 +14,7 @@ export const selfStudyNavItem: NavItem = {
     label: "Self Study",
     href: selfStudy.main(),
     icon: BookOpen,
-    order: 10,
+    order: 0,
 };
 
 export default selfStudyNavItem;

@@ -10,6 +10,7 @@
 import type { FeatureRouteModule } from "@/router/routes.types";
 import { classroomSharedRoutes } from "@/features/dashboard/shared/navigation";
 import { selfStudyRoutes } from "../selfStudy/navigation";
+import { physicalSessionsRoutes } from "../physicalSessions/navigation";
 
 /**
  * Classroom Route Module
@@ -25,6 +26,8 @@ export const classroomRouteModule: FeatureRouteModule = {
             ...classroomSharedRoutes,
             // Self Study feature
             ...selfStudyRoutes,
+            // Physical Sessions feature
+            ...physicalSessionsRoutes,
         ],
     },
 };

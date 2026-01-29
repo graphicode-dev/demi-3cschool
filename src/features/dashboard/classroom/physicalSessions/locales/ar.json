@@ -1,0 +1,22 @@
+{
+    "title": "الجلسات الحضورية",
+    "description": "انضم إلى ورش العمل العملية وتجارب التعلم الشخصية",
+    "atTheCenter": "في المركز",
+    "terms": {
+        "first": "الفصل الأول",
+        "second": "الفصل الثاني",
+        "summer": "الفصل الصيفي"
+    },
+    "status": {
+        "completed": "مكتمل",
+        "upcoming": "قادم",
+        "nextUp": "التالي",
+        "locked": "مقفل"
+    },
+    "summerCamp": {
+        "title": "وضع المعسكر الصيفي!",
+        "description": "استعد! جميع الجلسات الـ {{count}} في الصيف حضورية في المركز.",
+        "yourProgress": "تقدمك",
+        "completed": "{{completed}}/{{total}} مكتمل"
+    }
+}
