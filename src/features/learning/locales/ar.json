@@ -1,0 +1,252 @@
+{
+    "learning": {
+        "title": "التعلم",
+        "standard": {
+            "title": "التعلم الأساسي",
+            "courses": "الدورات",
+            "levels": "المستويات",
+            "lessons": "الدروس"
+        },
+        "professional": {
+            "title": "التعلم المهني",
+            "courses": "الدورات",
+            "levels": "المستويات",
+            "lessons": "الدروس"
+        }
+    },
+    "courses": {
+        "breadcrumb": "الدورات",
+        "title": "الدورات",
+        "description": "إدارة الدورات ومحتوياتها",
+        "entity": "الدورة",
+        "fields": {
+            "title": "عنوان الدورة",
+            "titlePlaceholder": "مثال: البرمجة المتقدمة",
+            "term": "الفصل",
+            "termPlaceholder": "اختر الفصل",
+            "grade": "الصف",
+            "gradePlaceholder": "اختر الصف",
+            "slug": "الرابط المختصر",
+            "slugPlaceholder": "مثال: advanced-programming",
+            "description": "الوصف",
+            "descriptionPlaceholder": "أدخل وصف الدورة...",
+            "image": "صورة الدورة",
+            "isActive": "حالة التفعيل",
+            "setActive": "تعيين كدورة نشطة"
+        },
+        "columns": {
+            "title": "عنوان الدورة",
+            "term": "الفصل",
+            "grade": "الصف",
+            "slug": "الرابط المختصر",
+            "status": "الحالة",
+            "created": "تاريخ الإنشاء"
+        },
+        "cards": {
+            "total": "إجمالي الدورات",
+            "active": "الدورات النشطة",
+            "inactive": "الدورات غير النشطة"
+        },
+        "list": "قائمة الدورات",
+        "form": {
+            "create": {
+                "title": "إنشاء دورة جديدة",
+                "description": "إضافة دورة جديدة إلى النظام"
+            },
+            "edit": {
+                "title": "تعديل الدورة",
+                "description": "تحديث معلومات الدورة"
+            },
+            "view": {
+                "title": "تفاصيل الدورة",
+                "idLabel": "معرف الدورة"
+            }
+        },
+        "actions": {
+            "add": "إضافة دورة جديدة",
+            "view": "عرض الدورة",
+            "edit": "تعديل الدورة",
+            "delete": "حذف الدورة"
+        },
+        "messages": {
+            "createSuccess": "تم إنشاء الدورة بنجاح",
+            "createError": "فشل في إنشاء الدورة",
+            "updateSuccess": "تم تحديث الدورة بنجاح",
+            "updateError": "فشل في تحديث الدورة",
+            "deleteSuccess": "تم حذف الدورة بنجاح",
+            "deleteError": "فشل في حذف الدورة",
+            "deleteConfirm": "هل أنت متأكد من حذف هذه الدورة لا يمكن التراجع عن هذا الإجراء.",
+            "deleteConfirmNamed": "هل أنت متأكد من حذف \"{{name}}\" لا يمكن التراجع عن هذا الإجراء.",
+            "failedToLoad": "فشل في تحميل الدورات",
+            "errorHelp": "يرجى التحقق من اتصالك والمحاولة مرة أخرى.",
+            "notAvailable": "غير متوفر",
+            "noImage": "لا توجد صورة"
+        },
+        "validation": {
+            "titleMin": "يجب أن يكون العنوان 3 أحرف على الأقل",
+            "termRequired": "الفصل مطلوب",
+            "slugRequired": "الرابط المختصر مطلوب",
+            "descriptionRequired": "الوصف مطلوب"
+        }
+    },
+    "lessons": {
+        "addItem": "إضافة عنصر",
+        "itemSingular": "عنصر",
+        "itemPlural": "عناصر",
+        "durationUnit": "دقيقة",
+        "status": {
+            "active": "نشط",
+            "draft": "مسودة"
+        },
+        "fields": {
+            "title": "العنوان",
+            "titlePlaceholder": "أدخل العنوان...",
+            "description": "الوصف",
+            "descriptionPlaceholder": "قدم وصفاً موجزاً...",
+            "duration": "المدة (بالدقائق)",
+            "provider": "مزود الفيديو",
+            "videoRefAr": "مرجع الفيديو (عربي)",
+            "videoRefEn": "مرجع الفيديو (إنجليزي)",
+            "active": "نشط",
+            "videoPreview": "معاينة الفيديو",
+            "arabicVideo": "الفيديو العربي",
+            "englishVideo": "الفيديو الإنجليزي",
+            "clickToPreview": "انقر للمعاينة",
+            "noVideoUploaded": "لم يتم رفع فيديو",
+            "addVideoUrl": "أضف رابط فيديو للمعاينة"
+        },
+        "videos": {
+            "listTitle": "قائمة الفيديوهات",
+            "editor": {
+                "title": "محرر الفيديو",
+                "subtitle": "تكوين تفاصيل المحتوى والإعدادات"
+            },
+            "toast": {
+                "createSuccess": "تم إنشاء الفيديو",
+                "createSuccessMessage": "تم إنشاء الفيديو بنجاح",
+                "updateSuccess": "تم تحديث الفيديو",
+                "updateSuccessMessage": "تم تحديث الفيديو بنجاح",
+                "deleteSuccess": "تم حذف الفيديو",
+                "deleteSuccessMessage": "تم حذف الفيديو بنجاح",
+                "error": "خطأ",
+                "errorMessage": "فشل في حفظ الفيديو",
+                "deleteErrorMessage": "فشل في حذف الفيديو"
+            },
+            "deleteDialog": {
+                "title": "حذف الفيديو",
+                "message": "هل أنت متأكد من حذف هذا الفيديو؟ لا يمكن التراجع عن هذا الإجراء."
+            }
+        },
+        "quizzes": {
+            "listTitle": "قائمة الاختبارات",
+            "titlePlaceholder": "أدخل عنوان الاختبار...",
+            "instructions": "الوصف / التعليمات",
+            "instructionsPlaceholder": "قدم تعليمات الاختبار...",
+            "timeLimit": "الحد الزمني (بالدقائق)",
+            "passingScore": "درجة النجاح (%)",
+            "attemptsAllowed": "المحاولات المسموحة",
+            "questions": "أسئلة الاختبار",
+            "addQuestion": "إضافة سؤال",
+            "noQuestions": "لا توجد أسئلة بعد. انقر على 'إضافة سؤال' لإنشاء واحد.",
+            "questionEditorPlaceholder": "سيتم تنفيذ محرر الأسئلة مع تكامل API",
+            "newQuestion": "سؤال جديد",
+            "points": "نقاط",
+            "questionTypes": {
+                "singleChoice": "اختيار واحد",
+                "multipleChoice": "اختيار متعدد",
+                "trueFalse": "صح/خطأ"
+            },
+            "editor": {
+                "title": "محرر الاختبار",
+                "subtitle": "تكوين تفاصيل المحتوى والإعدادات"
+            },
+            "toast": {
+                "createSuccess": "تم إنشاء الاختبار",
+                "createSuccessMessage": "تم إنشاء الاختبار بنجاح",
+                "updateSuccess": "تم تحديث الاختبار",
+                "updateSuccessMessage": "تم تحديث الاختبار بنجاح",
+                "deleteSuccess": "تم حذف الاختبار",
+                "deleteSuccessMessage": "تم حذف الاختبار بنجاح",
+                "error": "خطأ",
+                "errorMessage": "فشل في حفظ الاختبار",
+                "deleteErrorMessage": "فشل في حذف الاختبار"
+            },
+            "deleteDialog": {
+                "title": "حذف الاختبار",
+                "message": "هل أنت متأكد من حذف هذا الاختبار؟ لا يمكن التراجع عن هذا الإجراء."
+            }
+        },
+        "assignments": {
+            "listTitle": "قائمة الواجبات",
+            "titlePlaceholder": "أدخل عنوان الواجب...",
+            "filePreview": "معاينة الملف",
+            "uploadFile": "انقر لرفع ملف",
+            "changeFile": "تغيير الملف",
+            "removeFile": "إزالة الملف",
+            "downloadLink": "رابط التحميل",
+            "downloadFile": "تحميل الملف",
+            "editor": {
+                "title": "محرر الواجب",
+                "subtitle": "تكوين تفاصيل المحتوى والإعدادات"
+            },
+            "toast": {
+                "createSuccess": "تم إنشاء الواجب",
+                "createSuccessMessage": "تم إنشاء الواجب بنجاح",
+                "updateSuccess": "تم تحديث الواجب",
+                "updateSuccessMessage": "تم تحديث الواجب بنجاح",
+                "deleteSuccess": "تم حذف الواجب",
+                "deleteSuccessMessage": "تم حذف الواجب بنجاح",
+                "error": "خطأ",
+                "errorMessage": "فشل في حفظ الواجب",
+                "deleteErrorMessage": "فشل في حذف الواجب"
+            },
+            "deleteDialog": {
+                "title": "حذف الواجب",
+                "message": "هل أنت متأكد من حذف هذا الواجب؟ لا يمكن التراجع عن هذا الإجراء."
+            }
+        },
+        "materials": {
+            "listTitle": "قائمة المواد",
+            "titlePlaceholder": "أدخل عنوان المادة...",
+            "filePreview": "معاينة الملف",
+            "uploadFile": "انقر لرفع ملف",
+            "changeFile": "تغيير الملف",
+            "removeFile": "إزالة الملف",
+            "downloadLink": "رابط التحميل",
+            "downloadFile": "تحميل الملف",
+            "editor": {
+                "title": "محرر المادة",
+                "subtitle": "تكوين تفاصيل المحتوى والإعدادات"
+            },
+            "toast": {
+                "createSuccess": "تم إنشاء المادة",
+                "createSuccessMessage": "تم إنشاء المادة بنجاح",
+                "updateSuccess": "تم تحديث المادة",
+                "updateSuccessMessage": "تم تحديث المادة بنجاح",
+                "deleteSuccess": "تم حذف المادة",
+                "deleteSuccessMessage": "تم حذف المادة بنجاح",
+                "error": "خطأ",
+                "errorMessage": "فشل في حفظ المادة",
+                "deleteErrorMessage": "فشل في حذف المادة"
+            },
+            "deleteDialog": {
+                "title": "حذف المادة",
+                "message": "هل أنت متأكد من حذف هذه المادة؟ لا يمكن التراجع عن هذا الإجراء."
+            }
+        },
+        "tabs": {
+            "videos": "الفيديوهات",
+            "quizzes": "الاختبارات",
+            "assignments": "الواجبات",
+            "materials": "المواد"
+        },
+        "emptyState": {
+            "title": "اختر عنصراً",
+            "description": "اختر عنصراً من القائمة للتعديل أو إنشاء عنصر جديد"
+        },
+        "empty": {
+            "title": "لم يتم تحديد محتوى",
+            "description": "اختر عنصر محتوى من القائمة أو أضف محتوى جديد للبدء"
+        }
+    }
+}
