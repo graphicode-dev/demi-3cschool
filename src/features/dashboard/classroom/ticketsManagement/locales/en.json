@@ -1,0 +1,452 @@
+{
+    "nav": {
+        "title": "Tickets Management",
+        "overview": "Overview",
+        "teamStructure": "Team Structure",
+        "tickets": "Tickets",
+        "distribution": "Distribution",
+        "performance": "Performance"
+    },
+    "overview": {
+        "pageTitle": "Overview",
+        "pageSubtitle": "Quick system monitoring at a glance",
+        "stats": {
+            "totalTicketsToday": "Total Tickets Today",
+            "newTicketsToday": "New Tickets Today",
+            "openTickets": "Open Tickets",
+            "resolvedTickets": "Resolved Tickets",
+            "activeAgents": "Active Agents",
+            "fromYesterday": "from yesterday",
+            "online": "online"
+        },
+        "status": {
+            "open": "Open",
+            "inProgress": "In Progress",
+            "resolved": "Resolved",
+            "closed": "Closed"
+        },
+        "charts": {
+            "ticketStatusDistribution": "Ticket Status Distribution",
+            "workloadByBlock": "Workload by Block",
+            "weeklyTicketTrend": "Weekly Ticket Trend"
+        },
+        "days": {
+            "mon": "Mon",
+            "tue": "Tue",
+            "wed": "Wed",
+            "thu": "Thu",
+            "fri": "Fri",
+            "sat": "Sat",
+            "sun": "Sun"
+        },
+        "systemHealth": {
+            "title": "System Health",
+            "responseTime": "Response Time",
+            "resolutionRate": "Resolution Rate",
+            "queueLength": "Queue Length",
+            "agentAvailability": "Agent Availability",
+            "statusValues": {
+                "excellent": "Excellent",
+                "good": "Good",
+                "moderate": "Moderate",
+                "high": "High",
+                "low": "Low",
+                "critical": "Critical"
+            }
+        },
+        "blocks": {
+            "mainCampus": "Main Campus",
+            "mediaDepartment": "Media Department",
+            "careerServices": "Career Services",
+            "generalHelpdesk": "General Helpdesk",
+            "dataScience": "Data Science",
+            "mobileDevelopment": "Mobile Development",
+            "generalInquiries": "General Inquiries"
+        },
+        "quickNav": {
+            "title": "Quick Navigation",
+            "teamStructure": "Team Structure",
+            "teamStructureDesc": "View team hierarchy",
+            "tickets": "Tickets",
+            "ticketsDesc": "Manage support tickets",
+            "distribution": "Distribution",
+            "distributionDesc": "Workload assignment",
+            "performance": "Performance",
+            "performanceDesc": "Analytics & reports"
+        }
+    },
+    "teamStructure": {
+        "pageTitle": "Team Structure",
+        "pageSubtitle": "Understand team hierarchy and organization",
+        "manageTeam": "Manage Team",
+        "stats": {
+            "totalBlocks": "Total Blocks",
+            "blockLeads": "Block Leads",
+            "totalAgents": "Total Agents"
+        },
+        "status": {
+            "available": "Available",
+            "busy": "Busy",
+            "offline": "Offline"
+        },
+        "role": {
+            "lead": "Lead",
+            "agent": "Agent"
+        },
+        "ledBy": "Led by",
+        "agents": "agents",
+        "available": "available",
+        "tickets": "tickets",
+        "activeTickets": "active tickets",
+        "noBlocks": "No blocks found"
+    },
+    "manageTeam": {
+        "pageTitle": "Manage Team",
+        "pageSubtitle": "Add, remove and organize leads and agents",
+        "back": "Back",
+        "teamLeads": "Team Leads",
+        "teamAgents": "Team Agents",
+        "addLeadBtn": "Add Lead",
+        "addAgentsBtn": "Add Agents",
+        "searchAgents": "Search Agents...",
+        "assignedBlock": "Assigned Block",
+        "table": {
+            "id": "ID",
+            "agentName": "Agent Name",
+            "blockAssignment": "Block Assignment",
+            "managedBy": "Managed By",
+            "availability": "Availability",
+            "action": "Action"
+        },
+        "leadCard": {
+            "assignedBlock": "Assigned Block"
+        },
+        "addLead": {
+            "pageTitle": "Add Lead",
+            "pageSubtitle": "Assign a new lead to a support block",
+            "selectUser": "Select User",
+            "searchPlaceholder": "Search user by name or email...",
+            "searchHint": "Search for registered staff members to promote.",
+            "assignedBlock": "Assigned Block",
+            "blockPlaceholder": "Choose support block...",
+            "initialStatus": "Initial Status",
+            "statusHint": "Leads are responsible for managing agents and tickets within their assigned block.",
+            "cancel": "Cancel",
+            "submit": "Add Lead"
+        },
+        "editLead": {
+            "pageTitle": "Edit Lead",
+            "pageTitleWithName": "Edit Lead: {{name}}",
+            "pageSubtitle": "Update lead information and assignment",
+            "userInformation": "User Information",
+            "assignedBlock": "Assigned Block",
+            "status": "Status",
+            "cancel": "Cancel",
+            "submit": "Save Changes"
+        },
+        "changeBlock": {
+            "pageTitle": "Change Block",
+            "pageSubtitleWithName": "Assign {{name}} to a different block",
+            "warningTitle": "Operational Warning",
+            "warningMessage": "Changing the block will move all <strong>assigned agents</strong> currently under this lead to the new block automatically.",
+            "currentBlock": "Current Block",
+            "selectNewBlock": "Select New Block",
+            "cancel": "Cancel",
+            "submit": "Confirm Changes"
+        },
+        "convertLead": {
+            "pageTitle": "Convert Lead to Agent",
+            "pageSubtitle": "Downgrade user role to support agent",
+            "warningMessage": "This action will remove the lead role and convert <strong>{{name}}</strong> into a support agent. All previous administrative permissions will be revoked.",
+            "selectBlock": "Select Block",
+            "assignToLead": "Assign to Lead",
+            "leadPlaceholder": "Choose Lead",
+            "cancel": "Cancel",
+            "submit": "Convert"
+        },
+        "removeLead": {
+            "title": "Remove Lead",
+            "message": "Are You Sure You Want To Remove <strong>{{name}}</strong> From The Support Team? This Action Is Permanent And Will Revoke All Access.",
+            "warningTitle": "Operational Requirement",
+            "warningMessage": "This lead currently has assigned agents. You must reassign them before removal.",
+            "reassignPlaceholder": "Assign agents to another lead...",
+            "cancel": "Cancel",
+            "submit": "Reassign & Remove"
+        },
+        "actions": {
+            "edit": "Edit",
+            "changeBlock": "Change Block",
+            "convertToAgent": "Convert to Agent",
+            "promoteToLead": "Promote to Lead",
+            "remove": "Remove"
+        },
+        "addAgent": {
+            "pageTitle": "Add Agent",
+            "pageSubtitle": "Assign agent to block and lead",
+            "selectUser": "Select User",
+            "searchPlaceholder": "Search user by name or email...",
+            "block": "Block",
+            "blockPlaceholder": "Select block...",
+            "assignedLead": "Assigned Lead",
+            "leadPlaceholder": "Select lead...",
+            "leadHint": "Agents will receive tickets under the selected lead.",
+            "initialStatus": "Initial Status",
+            "cancel": "Cancel",
+            "submit": "Add Agent",
+            "successMessage": "Agent added successfully"
+        },
+        "editAgent": {
+            "pageTitle": "Update Assignment",
+            "pageTitleWithName": "Update Assignment: {{name}}",
+            "pageSubtitle": "Move agent to a different block and lead",
+            "currentPlacement": "Current Placement",
+            "selectUser": "Select User",
+            "newBlock": "New Block",
+            "assignedToLead": "Assigned To Lead",
+            "status": "Status",
+            "cancel": "Cancel",
+            "submit": "Save Changes",
+            "successMessage": "Agent assignment updated successfully"
+        },
+        "promoteAgent": {
+            "pageTitle": "Promote Agent to Lead",
+            "pageSubtitleWithName": "Upgrade {{name}} to team lead role",
+            "readyTitle": "Ready for Responsibility",
+            "readyMessage": "By promoting <strong>{{name}}</strong>, they will gain management access to assigned blocks, manage sub-agents, and handle escalated tickets.",
+            "assignedLeadBlock": "Assigned Lead Block",
+            "cancel": "Cancel",
+            "submit": "Promote to lead",
+            "successMessage": "Agent promoted to lead successfully"
+        },
+        "removeAgent": {
+            "title": "Remove Agent",
+            "message": "Are You Sure You Want To Remove <strong>{{name}}</strong> From The Support Team? This Action Is Permanent And Will Revoke All Access.",
+            "cancel": "Cancel",
+            "submit": "Confirm"
+        }
+    },
+    "tickets": {
+        "pageTitle": "Tickets",
+        "pageSubtitle": "Manage and resolve support tickets",
+        "status": {
+            "open": "Open",
+            "inProgress": "In Progress",
+            "resolved": "Resolved",
+            "closed": "Closed"
+        },
+        "priority": {
+            "low": "Low",
+            "medium": "Medium",
+            "high": "High",
+            "urgent": "Urgent"
+        },
+        "requesterType": {
+            "student": "Student",
+            "instructor": "Instructor",
+            "parent": "Parent"
+        },
+        "filters": {
+            "searchPlaceholder": "Search by ticket ID, student name, or subject...",
+            "allStatus": "All Status",
+            "allAgents": "All Agents",
+            "allBlocks": "All Blocks",
+            "allPriority": "All Priority"
+        },
+        "list": {
+            "title": "Tickets",
+            "empty": "No tickets found"
+        },
+        "emptyState": {
+            "title": "Select a ticket",
+            "description": "Choose a ticket from the list to view details"
+        },
+        "tabs": {
+            "conversation": "Conversation",
+            "details": "Details",
+            "internalNotes": "Internal notes"
+        },
+        "conversation": {
+            "placeholder": "Type your message...",
+            "customerService": "Customer Service"
+        },
+        "details": {
+            "requesterInfo": "Requester Information",
+            "email": "Email",
+            "block": "Block",
+            "ticketInfo": "Ticket Information",
+            "category": "Category",
+            "created": "Created",
+            "lastUpdated": "Last Updated",
+            "manageTicket": "Manage Ticket",
+            "status": "Status",
+            "priority": "Priority",
+            "assignedAgent": "Assigned Agent",
+            "unassigned": "Unassigned"
+        },
+        "internalNotes": {
+            "warning": "Internal notes are only visible to customer service and operations team",
+            "empty": "No internal notes yet",
+            "placeholder": "Add an internal note...",
+            "addNote": "+ Add Note"
+        }
+    },
+    "distribution": {
+        "pageTitle": "Distribution",
+        "pageSubtitle": "Workload organization and balancing",
+        "stats": {
+            "totalActiveTickets": "Total Active Tickets",
+            "availableAgents": "Available Agents",
+            "avgTicketsPerAgent": "Avg Tickets/Agent"
+        },
+        "method": {
+            "title": "Distribution Method",
+            "loadBalancing": "Load Balancing",
+            "roundRobin": "Round Robin",
+            "manual": "Manual",
+            "active": "Active",
+            "queued": "Queued",
+            "loadBalance": "Load Balance"
+        },
+        "charts": {
+            "ticketsPerBlock": "Tickets per Block",
+            "ticketsPerAgent": "Tickets per Agent"
+        },
+        "blockOverview": {
+            "title": "Block Workload Overview",
+            "tickets": "Tickets",
+            "agents": "Agents",
+            "utilization": "Utilization",
+            "status": {
+                "low": "Low",
+                "medium": "Medium",
+                "high": "High"
+            }
+        },
+        "agentIndicators": {
+            "title": "Agent Workload Indicators",
+            "low": "Low",
+            "medium": "Medium",
+            "high": "High"
+        },
+        "alert": {
+            "title": "High Workload Alert",
+            "description": "Some agents are approaching maximum capacity. Consider redistributing tickets or adjusting assignments."
+        }
+    },
+    "performance": {
+        "pageTitle": "Performance",
+        "pageSubtitle": "Analytics and monitoring for decision-making",
+        "filter": {
+            "weekly": "Weekly",
+            "monthly": "Monthly"
+        },
+        "stats": {
+            "avgResponseTime": "Avg Response Time",
+            "resolutionRate": "Resolution Rate",
+            "topPerformer": "Top Performer",
+            "needsAttention": "Needs Attention",
+            "review": "Review"
+        },
+        "charts": {
+            "weeklyTrend": "Weekly Ticket Trend",
+            "opened": "Opened",
+            "resolved": "Resolved",
+            "resolutionRateByAgent": "Resolution Rate by Agent"
+        },
+        "table": {
+            "title": "Agent Performance Table",
+            "agent": "Agent",
+            "assigned": "Assigned",
+            "closed": "Closed",
+            "avgResponse": "Avg Response",
+            "resolutionRate": "Resolution Rate",
+            "rating": "Rating",
+            "rating.good": "Good",
+            "rating.average": "Average",
+            "rating.excellent": "Excellent"
+        },
+        "summary": {
+            "title": "Period Summary",
+            "totalAssigned": "Total Tickets Assigned",
+            "totalClosed": "Total Tickets Closed",
+            "closureRate": "Overall Closure Rate"
+        },
+        "topPerformers": {
+            "title": "Top Performers"
+        }
+    },
+    "common": {
+        "loading": "Loading...",
+        "cancel": "Cancel",
+        "save": "Save",
+        "delete": "Delete",
+        "edit": "Edit",
+        "view": "View",
+        "search": "Search...",
+        "filter": "Filter",
+        "noData": "No data available"
+    },
+    "supportHelp": {
+        "pageTitle": "Support & Help",
+        "pageSubtitle": "Need help? Ask our support team.",
+        "searchPlaceholder": "Search your problem...",
+        "status": {
+            "open": "Open",
+            "inProgress": "In Progress",
+            "resolved": "Resolved",
+            "closed": "Closed"
+        },
+        "filters": {
+            "allTickets": "All Tickets",
+            "resolved": "Resolved",
+            "inProgress": "In Progress",
+            "closed": "Closed"
+        },
+        "tickets": {
+            "title": "Tickets",
+            "empty": "No tickets found"
+        },
+        "emptyState": {
+            "title": "Select a ticket",
+            "description": "Choose a ticket from the list to view details"
+        },
+        "tabs": {
+            "conversation": "Conversation",
+            "details": "Details"
+        },
+        "conversation": {
+            "placeholder": "Type your message...",
+            "supportTeam": "Support Team"
+        },
+        "details": {
+            "ticketInfo": "Ticket Info",
+            "status": "Status",
+            "createdOn": "Created On",
+            "category": "Category"
+        },
+        "progress": {
+            "inProgress": "In Progress",
+            "inProgressDesc": "We are working on it",
+            "resolved": "Resolved",
+            "resolvedDesc": "Your problem is fixed",
+            "closed": "Closed",
+            "closedDesc": "The ticket is finished"
+        },
+        "createTicket": {
+            "button": "New Ticket",
+            "pageTitle": "Need Help?",
+            "pageSubtitle": "Tell us what problem you have, and we will fix it.",
+            "whatProblem": "What is the problem?",
+            "subjectPlaceholder": "Example: My lesson is not opening",
+            "tellMore": "Tell us more",
+            "descriptionPlaceholder": "Type here...",
+            "descriptionHint": "You can write what happened or what you need help with.",
+            "picture": "Picture (Optional)",
+            "clickToAdd": "Click to add a picture",
+            "pictureHint": "You can add a picture if it helps us understand.",
+            "infoBanner": "Don't worry! Your ticket will be reviewed by our support team soon.",
+            "submit": "Send My Problem",
+            "cancel": "Cancel and go back"
+        }
+    }
+}
