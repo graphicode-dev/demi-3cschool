@@ -1,0 +1,35 @@
+{
+    "nav": {
+        "resources": "Resources"
+    },
+    "resources": {
+        "pageTitle": "Learning Resources",
+        "pageSubtitle": "Find activities and materials for your sessions.",
+        "resourceCount": "Resources",
+        "noSessions": "No sessions available",
+        "sessionNotFound": "Session not found",
+        "types": {
+            "file": "FILE",
+            "video": "VIDEO",
+            "image": "IMAGE",
+            "audio": "AUDIO"
+        },
+        "filters": {
+            "all": "All",
+            "videos": "Videos",
+            "files": "Files",
+            "images": "Images",
+            "audio": "Audio"
+        },
+        "actions": {
+            "view": "View",
+            "download": "Download",
+            "back": "Back",
+            "backToSessions": "Back to sessions"
+        },
+        "emptyState": {
+            "title": "No resources found",
+            "description": "No {{type}} found in this folder."
+        }
+    }
+}

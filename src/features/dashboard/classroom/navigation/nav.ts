@@ -15,6 +15,7 @@ import { projectsNavItem } from "../projects/navigation";
 import { finalExamsNavItem } from "../finalExams/navigation";
 import { myScheduleNavItem } from "../mySchedule/navigation";
 import { supportHelpNavItem } from "../ticketsManagement/pages/supportHelp/navigation";
+import { resourcesNavItem } from "../resources/navigation";
 
 export const classroomNav: FeatureNavModule = {
     featureId: "classroom",
@@ -31,6 +32,7 @@ export const classroomNav: FeatureNavModule = {
         finalExamsNavItem,
         myScheduleNavItem,
         supportHelpNavItem,
+        resourcesNavItem,
     ],
 };
 

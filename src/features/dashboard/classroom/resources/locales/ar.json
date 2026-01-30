@@ -1,0 +1,35 @@
+{
+    "nav": {
+        "resources": "الموارد"
+    },
+    "resources": {
+        "pageTitle": "موارد التعلم",
+        "pageSubtitle": "ابحث عن الأنشطة والمواد لجلساتك.",
+        "resourceCount": "موارد",
+        "noSessions": "لا توجد جلسات متاحة",
+        "sessionNotFound": "الجلسة غير موجودة",
+        "types": {
+            "file": "ملف",
+            "video": "فيديو",
+            "image": "صورة",
+            "audio": "صوت"
+        },
+        "filters": {
+            "all": "الكل",
+            "videos": "فيديوهات",
+            "files": "ملفات",
+            "images": "صور",
+            "audio": "صوت"
+        },
+        "actions": {
+            "view": "عرض",
+            "download": "تحميل",
+            "back": "رجوع",
+            "backToSessions": "العودة إلى الجلسات"
+        },
+        "emptyState": {
+            "title": "لا توجد موارد",
+            "description": "لا يوجد {{type}} في هذا المجلد."
+        }
+    }
+}
