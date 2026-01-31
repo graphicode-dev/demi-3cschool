@@ -68,12 +68,6 @@ export const groupsPaths = {
         id: string | number = ":id"
     ) =>
         `${BasePath}/grades/${gradeId}/levels/${levelId}/regular/${id}/sessions`,
-    semiPrivateList: () => `${BasePath}/semi-private`,
-    semiPrivateCreate: () => `${BasePath}/semi-private/create`,
-    semiPrivateView: () => `${BasePath}/semi-private/view/:id`,
-    privateList: () => `${BasePath}/private`,
-    privateCreate: () => `${BasePath}/private/create`,
-    privateView: () => `${BasePath}/private/view/:id`,
     sessionsList: () => `${BasePath}/sessions`,
 } as const;
 
@@ -91,12 +85,6 @@ export const groupsManagementPaths = registerFeaturePaths("groupsManagement", {
     regularAttendance: groupsPaths.regularAttendance,
     regularInstructor: groupsPaths.regularInstructor,
     regularSessions: groupsPaths.regularSessions,
-    semiPrivateList: groupsPaths.semiPrivateList,
-    semiPrivateCreate: groupsPaths.semiPrivateCreate,
-    semiPrivateView: groupsPaths.semiPrivateView,
-    privateList: groupsPaths.privateList,
-    privateCreate: groupsPaths.privateCreate,
-    privateView: groupsPaths.privateView,
     sessionsList: groupsPaths.sessionsList,
 });
 

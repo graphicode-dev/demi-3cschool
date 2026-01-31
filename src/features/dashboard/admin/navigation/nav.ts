@@ -73,40 +73,9 @@ export const adminNav: FeatureNavModule = {
             key: "groups",
             labelKey: "groupsManagement:groups.title",
             label: "Groups Management",
-            href: groupsPaths.regularList(),
+            href: groupsPaths.gradesList(),
             order: 5,
             permissions: [group.viewAny],
-            children: [
-                {
-                    key: "regular-groups",
-                    labelKey: "groupsManagement:groups.regularListBreadcrumb",
-                    label: "Regular Groups",
-                    href: groupsPaths.regularList(),
-                    permissions: [group.viewAny],
-                },
-                {
-                    key: "semi-private-groups",
-                    labelKey:
-                        "groupsManagement:groups.semiPrivateListBreadcrumb",
-                    label: "Semi Private Groups",
-                    href: groupsPaths.semiPrivateList(),
-                    permissions: [group.viewAny],
-                },
-                {
-                    key: "private-groups",
-                    labelKey: "groupsManagement:groups.privateListBreadcrumb",
-                    label: "Private Groups",
-                    href: groupsPaths.privateList(),
-                    permissions: [group.viewAny],
-                },
-                {
-                    key: "sessions-groups",
-                    labelKey: "groupsManagement:groups.sessionsListBreadcrumb",
-                    label: "Sessions Groups",
-                    href: groupsPaths.sessionsList(),
-                    permissions: [groupSession.viewAny],
-                },
-            ],
         },
         // Sales Subscription
         {

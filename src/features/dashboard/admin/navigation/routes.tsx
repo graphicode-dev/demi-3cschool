@@ -132,72 +132,99 @@ const programsRoutes: RouteConfig[] = [
 ];
 
 // ============================================================================
-// Groups Management Routes
+// Groups Management Routes (New Grade/Level Structure)
 // ============================================================================
 
 const groupsManagementRoutes: RouteConfig[] = [
+    // Redirect /groups to /groups/grades
     {
         path: "groups",
-        element: <Navigate to="groups/regular" replace />,
+        element: <Navigate to="groups/grades" replace />,
     },
+    // Grades List
     {
-        path: "groups/regular",
+        path: "groups/grades",
+        lazy: () =>
+            import("@/features/dashboard/admin/groupsManagement/pages/grades/GradesList"),
+        permissions: [group.viewAny],
+        meta: { titleKey: "groupsManagement:groups.grades.title" },
+        handle: { crumb: "groupsManagement:groups.grades.title" },
+    },
+    // Levels List for a Grade
+    {
+        path: "groups/grades/:gradeId/levels",
+        lazy: () =>
+            import("@/features/dashboard/admin/groupsManagement/pages/grades/LevelsList"),
+        permissions: [group.viewAny],
+        meta: { titleKey: "groupsManagement:groups.levels.title" },
+        handle: { crumb: "groupsManagement:groups.levels.title" },
+    },
+    // Groups List for a Level
+    {
+        path: "groups/grades/:gradeId/levels/:levelId/regular",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/list"),
         permissions: [group.viewAny],
         meta: { titleKey: "groupsManagement:groups.regularListBreadcrumb" },
         handle: { crumb: "groupsManagement:groups.regularListBreadcrumb" },
     },
+    // Create Group for a Level
     {
-        path: "groups/regular/create",
+        path: "groups/grades/:gradeId/levels/:levelId/regular/create",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/create"),
         permissions: [group.create],
         meta: { titleKey: "groupsManagement:groups.form.create.title" },
         handle: { crumb: "groupsManagement:groups.form.create.title" },
     },
+    // View Group
     {
-        path: "groups/regular/view/:id",
+        path: "groups/grades/:gradeId/levels/:levelId/regular/view/:id",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/view"),
         permissions: [group.view],
         meta: { titleKey: "groupsManagement:groups.form.view.title" },
         handle: { crumb: "groupsManagement:groups.form.view.title" },
     },
+    // Edit Group
     {
-        path: "groups/regular/edit/:id",
+        path: "groups/grades/:gradeId/levels/:levelId/regular/edit/:id",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/edit"),
         permissions: [group.update],
         meta: { titleKey: "groupsManagement:groups.edit.title" },
         handle: { crumb: "groupsManagement:groups.edit.title" },
     },
+    // Assign Students to Group
     {
-        path: "groups/regular/:id/assign",
+        path: "groups/grades/:gradeId/levels/:levelId/regular/:id/assign",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/assign"),
         permissions: [group.update],
         meta: { titleKey: "groupsManagement:groups.assignStudent.title" },
         handle: { crumb: "groupsManagement:groups.assignStudent.title" },
     },
+    // Group Attendance
     {
-        path: "groups/regular/:id/attendance",
+        path: "groups/grades/:gradeId/levels/:levelId/regular/:id/attendance",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/attendance"),
         permissions: [studentAttendance.viewAny],
         meta: { titleKey: "groupsManagement:groups.attendance.title" },
         handle: { crumb: "groupsManagement:groups.attendance.title" },
     },
+    // Group Instructor
     {
-        path: "groups/regular/:id/instructor",
+        path: "groups/grades/:gradeId/levels/:levelId/regular/:id/instructor",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/instructor"),
         permissions: [group.update],
         meta: { titleKey: "groupsManagement:groups.instructor.title" },
         handle: { crumb: "groupsManagement:groups.instructor.title" },
     },
+    // Group Sessions
     {
-        path: "groups/regular/:id/sessions",
+        path: "groups/grades/:gradeId/levels/:levelId/regular/:id/sessions",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/sessions"),
         permissions: [groupSession.viewAny],
