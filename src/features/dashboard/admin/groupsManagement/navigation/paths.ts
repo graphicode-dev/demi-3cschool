@@ -15,10 +15,6 @@
  */
 
 import { registerFeaturePaths } from "@/router/paths.registry";
-import {
-    eligibleStudents,
-    eligibleStudentsPaths,
-} from "../pages/EligibleStudents/navigation";
 
 // ============================================================================
 // Groups Paths
@@ -27,20 +23,51 @@ import {
 const BasePath = "/admin/groups";
 
 export const groupsPaths = {
-    regularList: () => `${BasePath}/regular`,
-    regularCreate: () => `${BasePath}/regular/create`,
-    regularView: (id: string | number = ":id") =>
-        `${BasePath}/regular/view/${id}`,
-    regularEdit: (id: string | number = ":id") =>
-        `${BasePath}/regular/edit/${id}`,
-    regularAssign: (id: string | number = ":id") =>
-        `${BasePath}/regular/${id}/assign`,
-    regularAttendance: (id: string | number = ":id") =>
-        `${BasePath}/regular/${id}/attendance`,
-    regularInstructor: (id: string | number = ":id") =>
-        `${BasePath}/regular/${id}/instructor`,
-    regularSessions: (id: string | number = ":id") =>
-        `${BasePath}/regular/${id}/sessions`,
+    // New Grade/Level structure
+    gradesList: () => `${BasePath}/grades`,
+    levelsList: (gradeId: string | number = ":gradeId") =>
+        `${BasePath}/grades/${gradeId}/levels`,
+    regularList: (
+        gradeId: string | number = ":gradeId",
+        levelId: string | number = ":levelId"
+    ) => `${BasePath}/grades/${gradeId}/levels/${levelId}/regular`,
+    regularCreate: (
+        gradeId: string | number = ":gradeId",
+        levelId: string | number = ":levelId"
+    ) => `${BasePath}/grades/${gradeId}/levels/${levelId}/regular/create`,
+    regularView: (
+        gradeId: string | number = ":gradeId",
+        levelId: string | number = ":levelId",
+        id: string | number = ":id"
+    ) => `${BasePath}/grades/${gradeId}/levels/${levelId}/regular/view/${id}`,
+    regularEdit: (
+        gradeId: string | number = ":gradeId",
+        levelId: string | number = ":levelId",
+        id: string | number = ":id"
+    ) => `${BasePath}/grades/${gradeId}/levels/${levelId}/regular/edit/${id}`,
+    regularAssign: (
+        gradeId: string | number = ":gradeId",
+        levelId: string | number = ":levelId",
+        id: string | number = ":id"
+    ) => `${BasePath}/grades/${gradeId}/levels/${levelId}/regular/${id}/assign`,
+    regularAttendance: (
+        gradeId: string | number = ":gradeId",
+        levelId: string | number = ":levelId",
+        id: string | number = ":id"
+    ) =>
+        `${BasePath}/grades/${gradeId}/levels/${levelId}/regular/${id}/attendance`,
+    regularInstructor: (
+        gradeId: string | number = ":gradeId",
+        levelId: string | number = ":levelId",
+        id: string | number = ":id"
+    ) =>
+        `${BasePath}/grades/${gradeId}/levels/${levelId}/regular/${id}/instructor`,
+    regularSessions: (
+        gradeId: string | number = ":gradeId",
+        levelId: string | number = ":levelId",
+        id: string | number = ":id"
+    ) =>
+        `${BasePath}/grades/${gradeId}/levels/${levelId}/regular/${id}/sessions`,
     semiPrivateList: () => `${BasePath}/semi-private`,
     semiPrivateCreate: () => `${BasePath}/semi-private/create`,
     semiPrivateView: () => `${BasePath}/semi-private/view/:id`,
@@ -48,7 +75,6 @@ export const groupsPaths = {
     privateCreate: () => `${BasePath}/private/create`,
     privateView: () => `${BasePath}/private/view/:id`,
     sessionsList: () => `${BasePath}/sessions`,
-    eligibleStudents,
 } as const;
 
 // ============================================================================
@@ -72,7 +98,6 @@ export const groupsManagementPaths = registerFeaturePaths("groupsManagement", {
     privateCreate: groupsPaths.privateCreate,
     privateView: groupsPaths.privateView,
     sessionsList: groupsPaths.sessionsList,
-    ...eligibleStudentsPaths,
 });
 
 // ============================================================================

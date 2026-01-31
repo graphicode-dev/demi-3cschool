@@ -1,11 +1,11 @@
 import { useMemo, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { DynamicTable } from "@/design-system/components/table";
 import type { TableColumn, TableData } from "@/shared/types";
-import { StatCard } from "../../components";
-import { groupsPaths } from "../../navigation/paths";
-import { useGroupsList, type Group, type PaginatedData } from "../../api";
+import { StatCard } from "../components";
+import { groupsPaths } from "../navigation/paths";
+import { useGroupsByLevel, type Group, type PaginatedData } from "../api";
 import PageWrapper from "@/design-system/components/PageWrapper";
 
 const TotalGroupsIcon = () => (
@@ -99,9 +99,18 @@ const transformGroupToTableData = (group: Group): TableData => ({
 function RegularGroupsPage() {
     const { t } = useTranslation("groupsManagement");
     const navigate = useNavigate();
+    const { gradeId, levelId } = useParams<{
+        gradeId: string;
+        levelId: string;
+    }>();
     const [currentPage, setCurrentPage] = useState(1);
 
-    const { data, isLoading, isError } = useGroupsList({
+    // Build base path from URL params
+    const basePath = `/admin/groups/grades/${gradeId}/levels/${levelId}`;
+
+    // Fetch groups by level ID
+    const { data, isLoading, isError } = useGroupsByLevel({
+        levelId: levelId || "",
         groupType: "regular",
         page: currentPage,
     });
@@ -110,7 +119,9 @@ function RegularGroupsPage() {
     const isPaginated = data && "items" in data;
     const groups = isPaginated
         ? (data as PaginatedData<Group>).items
-        : ((data as Group[] | undefined) ?? []);
+        : Array.isArray(data)
+          ? data
+          : [];
     const paginationInfo = isPaginated ? (data as PaginatedData<Group>) : null;
 
     // Transform groups to table data
@@ -135,9 +146,9 @@ function RegularGroupsPage() {
 
     const handleRowClick = useCallback(
         (rowId: string) => {
-            navigate(groupsPaths.regularView(rowId));
+            navigate(`${basePath}/regular/view/${rowId}`);
         },
-        [navigate]
+        [navigate, basePath]
     );
 
     const columns: TableColumn[] = useMemo(
@@ -200,17 +211,18 @@ function RegularGroupsPage() {
         [t]
     );
 
+    // Get level title from first group
+    const levelTitle = groups[0]?.level?.title || `Level ${levelId}`;
+
     return (
         <PageWrapper
             pageHeaderProps={{
                 title: t("groups.regularListBreadcrumb", "Regular Groups"),
-                subtitle: t(
-                    "groups.subtitle",
-                    "Manage Enrollments and schedules"
-                ),
+                subtitle: levelTitle,
+                backButton: true,
                 actions: (
                     <Link
-                        to={groupsPaths.regularCreate()}
+                        to={`${basePath}/regular/create`}
                         className="inline-flex items-center gap-2 px-4 py-2.5 bg-brand-500 text-white text-sm font-medium rounded-lg hover:bg-brand-600 transition-colors"
                     >
                         <svg

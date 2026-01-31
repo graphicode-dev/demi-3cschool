@@ -32,7 +32,6 @@ import { purchaseRoutes } from "../sales_subscription/pages/purchases/navigation
 import { couponsRoutes } from "../sales_subscription/pages/coupons/navigation";
 import { priceListsRoutes } from "../sales_subscription/pages/pricelists/navigation";
 import { subscriptionRoutes } from "../sales_subscription/pages/installments/navigation/routes";
-import { eligibleStudentsRoutes } from "../groupsManagement/pages/EligibleStudents/navigation";
 
 const { course, level, lesson } = learningPermissions;
 const { group, groupSession, studentAttendance } = groupsPermissions;
@@ -144,7 +143,7 @@ const groupsManagementRoutes: RouteConfig[] = [
     {
         path: "groups/regular",
         lazy: () =>
-            import("@/features/dashboard/admin/groupsManagement/pages/RegularGroups/list"),
+            import("@/features/dashboard/admin/groupsManagement/pages/list"),
         permissions: [group.viewAny],
         meta: { titleKey: "groupsManagement:groups.regularListBreadcrumb" },
         handle: { crumb: "groupsManagement:groups.regularListBreadcrumb" },
@@ -152,7 +151,7 @@ const groupsManagementRoutes: RouteConfig[] = [
     {
         path: "groups/regular/create",
         lazy: () =>
-            import("@/features/dashboard/admin/groupsManagement/pages/RegularGroups/create"),
+            import("@/features/dashboard/admin/groupsManagement/pages/create"),
         permissions: [group.create],
         meta: { titleKey: "groupsManagement:groups.form.create.title" },
         handle: { crumb: "groupsManagement:groups.form.create.title" },
@@ -160,7 +159,7 @@ const groupsManagementRoutes: RouteConfig[] = [
     {
         path: "groups/regular/view/:id",
         lazy: () =>
-            import("@/features/dashboard/admin/groupsManagement/pages/RegularGroups/view"),
+            import("@/features/dashboard/admin/groupsManagement/pages/view"),
         permissions: [group.view],
         meta: { titleKey: "groupsManagement:groups.form.view.title" },
         handle: { crumb: "groupsManagement:groups.form.view.title" },
@@ -168,7 +167,7 @@ const groupsManagementRoutes: RouteConfig[] = [
     {
         path: "groups/regular/edit/:id",
         lazy: () =>
-            import("@/features/dashboard/admin/groupsManagement/pages/RegularGroups/edit"),
+            import("@/features/dashboard/admin/groupsManagement/pages/edit"),
         permissions: [group.update],
         meta: { titleKey: "groupsManagement:groups.edit.title" },
         handle: { crumb: "groupsManagement:groups.edit.title" },
@@ -176,7 +175,7 @@ const groupsManagementRoutes: RouteConfig[] = [
     {
         path: "groups/regular/:id/assign",
         lazy: () =>
-            import("@/features/dashboard/admin/groupsManagement/pages/RegularGroups/assign"),
+            import("@/features/dashboard/admin/groupsManagement/pages/assign"),
         permissions: [group.update],
         meta: { titleKey: "groupsManagement:groups.assignStudent.title" },
         handle: { crumb: "groupsManagement:groups.assignStudent.title" },
@@ -184,7 +183,7 @@ const groupsManagementRoutes: RouteConfig[] = [
     {
         path: "groups/regular/:id/attendance",
         lazy: () =>
-            import("@/features/dashboard/admin/groupsManagement/pages/RegularGroups/attendance"),
+            import("@/features/dashboard/admin/groupsManagement/pages/attendance"),
         permissions: [studentAttendance.viewAny],
         meta: { titleKey: "groupsManagement:groups.attendance.title" },
         handle: { crumb: "groupsManagement:groups.attendance.title" },
@@ -192,7 +191,7 @@ const groupsManagementRoutes: RouteConfig[] = [
     {
         path: "groups/regular/:id/instructor",
         lazy: () =>
-            import("@/features/dashboard/admin/groupsManagement/pages/RegularGroups/instructor"),
+            import("@/features/dashboard/admin/groupsManagement/pages/instructor"),
         permissions: [group.update],
         meta: { titleKey: "groupsManagement:groups.instructor.title" },
         handle: { crumb: "groupsManagement:groups.instructor.title" },
@@ -200,40 +199,11 @@ const groupsManagementRoutes: RouteConfig[] = [
     {
         path: "groups/regular/:id/sessions",
         lazy: () =>
-            import("@/features/dashboard/admin/groupsManagement/pages/RegularGroups/sessions"),
+            import("@/features/dashboard/admin/groupsManagement/pages/sessions"),
         permissions: [groupSession.viewAny],
         meta: { titleKey: "groupsManagement:groups.sessions.title" },
         handle: { crumb: "groupsManagement:groups.sessions.title" },
     },
-    {
-        path: "groups/semi-private",
-        lazy: () =>
-            import("@/features/dashboard/admin/groupsManagement/pages/SemiPrivateGroups/list"),
-        permissions: [group.viewAny],
-        meta: { titleKey: "groupsManagement:groups.semiPrivateListBreadcrumb" },
-        handle: { crumb: "groupsManagement:groups.semiPrivateListBreadcrumb" },
-    },
-    {
-        path: "groups/private",
-        lazy: () =>
-            import("@/features/dashboard/admin/groupsManagement/pages/PrivateGroups/list"),
-        permissions: [group.viewAny],
-        meta: { titleKey: "groupsManagement:groups.privateListBreadcrumb" },
-        handle: { crumb: "groupsManagement:groups.privateListBreadcrumb" },
-    },
-    {
-        path: "groups/sessions",
-        lazy: () =>
-            import("@/features/dashboard/admin/groupsManagement/pages/SessionsGroups/list"),
-        permissions: [groupSession.viewAny],
-        meta: { titleKey: "groupsManagement:groups.sessionsListBreadcrumb" },
-        handle: { crumb: "groupsManagement:groups.sessionsListBreadcrumb" },
-    },
-    // Eligible Students routes (prefixed with groups/)
-    ...eligibleStudentsRoutes.map((route) => ({
-        ...route,
-        path: route.path ? `groups/${route.path}` : undefined,
-    })),
 ];
 
 // ============================================================================

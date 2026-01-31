@@ -5,16 +5,16 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Form } from "@/design-system/components/form";
-import { FormSection } from "../../components";
-import { groupsPaths } from "../../navigation/paths";
-import { useGroup, useUpdateGroup } from "../../api";
+import { FormSection } from "../components";
+import { groupsPaths } from "../navigation/paths";
+import { useGroup, useUpdateGroup } from "../api";
 import { useMutationHandler } from "@/shared/api";
 
 import type {
     Group,
     GroupUpdatePayload,
     GroupSchedulePayload,
-} from "../../types/groups.types";
+} from "../types/groups.types";
 import { ProgramsCurriculum } from "@/features/dashboard/admin/learning/types";
 import { useCoursesList } from "@/features/dashboard/admin/learning/pages/courses";
 import { useLevelsByCourse } from "@/features/dashboard/admin/learning/pages/levels";

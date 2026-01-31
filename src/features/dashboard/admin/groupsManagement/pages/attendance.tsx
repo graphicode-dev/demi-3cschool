@@ -8,20 +8,20 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { EmptyState } from "@/design-system/components/EmptyState";
-import { AttendanceSummaryCards } from "../../components/AttendanceSummaryCards";
-import { CurrentSessionDetails } from "../../components/CurrentSessionDetails";
-import { StudentAttendanceTable } from "../../components/StudentAttendanceTable";
+import { AttendanceSummaryCards } from "../components/AttendanceSummaryCards";
+import { CurrentSessionDetails } from "../components/CurrentSessionDetails";
+import { StudentAttendanceTable } from "../components/StudentAttendanceTable";
 import type {
     AttendanceStatus,
     AttendanceSummary,
     CurrentSession,
     StudentAttendance,
-} from "../../types/attendance.types";
+} from "../types/attendance.types";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useTranslation } from "react-i18next";
 
 export const AttendancePage = () => {
-    const {t} = useTranslation()
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([]);
 
@@ -94,13 +94,15 @@ export const AttendancePage = () => {
 
     return (
         <PageWrapper
-        pageHeaderProps={{
-            title:t("groups.attendance.title","Regular Group Attendance"),
-                subtitle:t("groups.attendance.subtitle","Track and manage student attendance for the Regular group"),
-                backButton:true
-        }}
+            pageHeaderProps={{
+                title: t("groups.attendance.title", "Regular Group Attendance"),
+                subtitle: t(
+                    "groups.attendance.subtitle",
+                    "Track and manage student attendance for the Regular group"
+                ),
+                backButton: true,
+            }}
         >
-
             <div className="space-y-6">
                 {/* Attendance Summary Cards */}
                 <AttendanceSummaryCards

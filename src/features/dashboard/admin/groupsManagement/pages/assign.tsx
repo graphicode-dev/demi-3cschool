@@ -3,11 +3,11 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { Search, Filter } from "lucide-react";
 import { ErrorState, LoadingState } from "@/design-system";
-import { StudentSelectCard } from "../../components";
+import { StudentSelectCard } from "../components";
 import {
     useAssignStudentMutation,
     useGetGroupStudentsQuery,
-} from "../../api/assignStudent";
+} from "../api/assignStudent";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useMutationHandler } from "@/shared/api";
 

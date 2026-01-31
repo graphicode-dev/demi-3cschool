@@ -1,6 +1,6 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -10,45 +10,24 @@ import {
     FormSection,
     GroupSummary,
     SimilarGroupsModal,
-} from "../../components";
-import { groupsPaths } from "../../navigation/paths";
+} from "../components";
 import {
     useCreateGroup,
     useGroupRecommendations,
     type GroupRecommendPayload,
     type GroupRecommendation,
-} from "../../api";
-import { ProgramsCurriculum } from "@/features/dashboard/admin/learning/types";
-import { useCoursesList } from "@/features/dashboard/admin/learning/pages/courses";
-import { useLevelsByCourse } from "@/features/dashboard/admin/learning/pages/levels";
+} from "../api";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useMutationHandler } from "@/shared/api";
 
-const groupFormSchema = z
-    .object({
-        groupName: z.string().min(1, "Group name is required").max(255),
-        programId: z.string().optional(), // Only used for fetching courses, not sent to API
-        courseId: z.string().min(1, "Course is required"),
-        levelId: z.string().min(1, "Level is required"),
-        days: z.string().min(1, "Day is required"),
-        startTime: z.string().min(1, "Start time is required"),
-        endTime: z.string().min(1, "End time is required"),
-        ageGroupId: z.string().min(1, "Age group is required"),
-        capacity: z.string().min(1, "Capacity is required"),
-        courseTitle: z.string().optional(),
-        levelTitle: z.string().optional(),
-    })
-    .refine(
-        (data) => {
-            // If courseId is selected, programId should have been selected to enable it
-            // But we don't want to block submission if courseId is valid
-            return true; // Always pass validation, programId is just for UI logic
-        },
-        {
-            message: "Program must be selected to choose a course",
-            path: ["programId"],
-        }
-    );
+const groupFormSchema = z.object({
+    groupName: z.string().min(1, "Group name is required").max(255),
+    days: z.string().min(1, "Day is required"),
+    startTime: z.string().min(1, "Start time is required"),
+    endTime: z.string().min(1, "End time is required"),
+    ageGroupId: z.string().min(1, "Age group is required"),
+    capacity: z.string().min(1, "Capacity is required"),
+});
 
 type GroupFormData = z.infer<typeof groupFormSchema>;
 
@@ -57,11 +36,6 @@ const STEPS = [
         id: "basic",
         labelKey: "groups.form.steps.basic",
         label: "Basic Information",
-    },
-    {
-        id: "program",
-        labelKey: "groups.form.steps.program",
-        label: "Program & Course",
     },
     {
         id: "schedule",
@@ -102,11 +76,6 @@ const transformRecommendationToRecommendedGroup = (
         : "-",
 });
 
-const MOCK_PROGRAMS = [
-    { value: "standard", label: "Standard Learning" },
-    { value: "professional", label: "Professional Learning" },
-];
-
 const MOCK_AGE_GROUPS = [
     { value: "1", label: "6-8 years" },
     { value: "2", label: "9-12 years" },
@@ -127,9 +96,16 @@ const DAYS_OPTIONS = [
 export default function RegularGroupCreate() {
     const { t } = useTranslation("groupsManagement");
     const navigate = useNavigate();
+    const { gradeId, levelId } = useParams<{
+        gradeId: string;
+        levelId: string;
+    }>();
     const [currentStep, setCurrentStep] = useState(0);
     const [isSimilarGroupsModalOpen, setIsSimilarGroupsModalOpen] =
         useState(false);
+
+    // Build base path from URL params
+    const basePath = `/admin/groups/grades/${gradeId}/levels/${levelId}`;
 
     const { mutateAsync, isPending } = useCreateGroup();
     const { execute } = useMutationHandler();
@@ -150,16 +126,11 @@ export default function RegularGroupCreate() {
         shouldUnregister: false,
         defaultValues: {
             groupName: "",
-            programId: "",
-            courseId: "",
-            levelId: "",
             days: "",
             startTime: "",
             endTime: "",
             ageGroupId: "",
             capacity: "10",
-            courseTitle: "",
-            levelTitle: "",
         },
     });
 
@@ -173,119 +144,38 @@ export default function RegularGroupCreate() {
     const stepFields: Record<number, (keyof GroupFormData)[]> = useMemo(
         () => ({
             0: ["groupName"],
-            1: ["programId", "courseId", "levelId"],
-            2: ["days", "startTime", "endTime"],
-            3: ["ageGroupId"],
-            4: ["capacity"],
-            5: [], // Confirmation step has no new fields
+            1: ["days", "startTime", "endTime"],
+            2: ["ageGroupId"],
+            3: ["capacity"],
+            4: [], // Confirmation step has no new fields
         }),
         []
     );
 
     // Use getValues for accessing form values without reactivity warnings
     const formValues = getValues();
-    const programId = watch("programId");
-    const courseId = watch("courseId");
 
-    const prevProgramId = useRef<string | undefined>(programId);
-    const prevCourseId = useRef<string | undefined>(courseId);
+    const getLabel = (
+        options: { value: string; label: string }[],
+        value: string
+    ) => {
+        const found = options.find((opt) => opt.value === value);
+        return found?.label || "";
+    };
 
-    useEffect(() => {
-        // ignore empty transient values during unmount / rerender
-        if (!programId) return;
-
-        if (prevProgramId.current !== programId) {
-            setValue("courseId", "", {
-                shouldDirty: true,
-                shouldValidate: true,
-            });
-            setValue("levelId", "", {
-                shouldDirty: true,
-                shouldValidate: true,
-            });
-            prevProgramId.current = programId;
-        }
-    }, [programId, setValue]);
-
-    useEffect(() => {
-        if (!courseId) return;
-
-        if (prevCourseId.current !== courseId) {
-            setValue("levelId", "", {
-                shouldDirty: true,
-                shouldValidate: true,
-            });
-            prevCourseId.current = courseId;
-        }
-    }, [courseId, setValue]);
-
-    // Use stable values that won't disappear
-    const selectedProgramId: ProgramsCurriculum | undefined =
-        programId && (programId === "standard" || programId === "professional")
-            ? (programId as ProgramsCurriculum)
-            : undefined;
-
-    const {
-        data: coursesData,
-        isLoading: isLoadingCourses,
-        error: coursesError,
-    } = useCoursesList(
-        selectedProgramId
-            ? { programs_curriculum: selectedProgramId }
-            : undefined,
-        {
-            enabled: !!selectedProgramId,
-        }
-    );
-
-    const courses = useMemo(() => {
-        if (!coursesData) {
-            return [];
-        }
-        // If it's a paginated response with items
-        if ("items" in coursesData && Array.isArray(coursesData.items)) {
-            return coursesData.items;
-        }
-        // If the response is directly an array
-        if (Array.isArray(coursesData)) {
-            return coursesData;
-        }
-        return [];
-    }, [coursesData]);
-
-    const selectedCourseId = courseId || formValues.courseId;
-
-    const {
-        data: levelsData,
-        isLoading: isLoadingLevels,
-        error: levelsError,
-    } = useLevelsByCourse({
-        courseId: selectedCourseId,
-    });
-
-    const levels = useMemo(() => {
-        if (!levelsData) return [];
-        if ("items" in levelsData && Array.isArray(levelsData.items)) {
-            return levelsData.items;
-        }
-        if (Array.isArray(levelsData)) {
-            return levelsData;
-        }
-        return [];
-    }, [levelsData]);
-
+    // Recommendation payload using levelId from URL
     const recommendationPayload: GroupRecommendPayload | null = useMemo(() => {
-        if (formValues.courseId && formValues.levelId && formValues.capacity) {
+        if (levelId && formValues.capacity) {
             return {
-                course_id: formValues.courseId,
-                level_id: formValues.levelId,
+                course_id: "", // Not needed when we have levelId
+                level_id: levelId,
                 group_type: "regular",
                 capacity: parseInt(formValues.capacity, 10),
                 limit: 10,
             };
         }
         return null;
-    }, [formValues]);
+    }, [levelId, formValues.capacity]);
 
     const { data: recommendationsData } = useGroupRecommendations(
         recommendationPayload
@@ -299,50 +189,12 @@ export default function RegularGroupCreate() {
         [recommendationsData]
     );
 
-    const getLabel = (
-        options: { value: string; label: string }[],
-        value: string
-    ) => {
-        const found = options.find((opt) => opt.value === value);
-        return found?.label || "";
-    };
-
-    const courseOptions = useMemo(() => {
-        if (!Array.isArray(courses)) {
-            return [];
-        }
-        const options = courses.map(
-            (course: { id: string; title: string }) => ({
-                value: String(course.id),
-                label: course.title,
-            })
-        );
-        return options;
-    }, [courses, coursesData]);
-
-    const levelOptions = useMemo(() => {
-        if (!Array.isArray(levels)) {
-            return [];
-        }
-        const options = levels.map((level: { id: string; title: string }) => ({
-            value: String(level.id),
-            label: level.title,
-        }));
-        return options;
-    }, [levels, levelsData]);
-
     const summaryData = useMemo(() => {
-        const courseLabel =
-            formValues.courseTitle ||
-            getLabel(courseOptions, formValues.courseId);
-        const levelLabel =
-            formValues.levelTitle || getLabel(levelOptions, formValues.levelId);
-
         return {
             groupName: formValues.groupName,
             program: "Standard Learning",
-            course: courseLabel,
-            level: levelLabel,
+            course: "",
+            level: `Level ${levelId}`,
             days: formValues.days
                 ? [getLabel(DAYS_OPTIONS, formValues.days)]
                 : [],
@@ -353,15 +205,13 @@ export default function RegularGroupCreate() {
             locationType: "Online",
             groupType: "General",
         };
-    }, [formValues, courseOptions, levelOptions]);
+    }, [formValues, levelId]);
 
     const handleNext = async () => {
         const fields = stepFields[currentStep];
         const isValid = await trigger(fields);
 
         if (isValid && currentStep < STEPS.length - 1) {
-            console.log("=== Form Values Changed ===");
-            console.log("watch() values:", formValues);
             setCurrentStep((prev) => prev + 1);
         }
     };
@@ -370,14 +220,14 @@ export default function RegularGroupCreate() {
         if (currentStep > 0) {
             setCurrentStep((prev) => prev - 1);
         } else {
-            navigate(groupsPaths.regularList());
+            navigate(`${basePath}/regular`);
         }
     };
 
     const onSubmit = (data: GroupFormData) => {
         const payload = {
-            course_id: data.courseId,
-            level_id: data.levelId,
+            course_id: "", // Will be derived from level on backend
+            level_id: levelId || "",
             name: data.groupName,
             maxCapacity: parseInt(data.capacity, 10),
             groupType: "regular" as const,
@@ -397,7 +247,7 @@ export default function RegularGroupCreate() {
                 "groups.messages.createSuccess",
                 "Group created successfully"
             ),
-            onSuccess: () => navigate(groupsPaths.regularList()),
+            onSuccess: () => navigate(`${basePath}/regular`),
             setError,
             fieldMapping: {
                 name: "groupName",
@@ -448,180 +298,6 @@ export default function RegularGroupCreate() {
                 );
 
             case 1:
-                return (
-                    <FormSection
-                        title={t(
-                            "groups.form.sections.programCourse",
-                            "Program & Course"
-                        )}
-                    >
-                        <div className="space-y-6">
-                            {/* Program Dropdown - Using Controller */}
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                    {t(
-                                        "groups.form.fields.program.label",
-                                        "Program"
-                                    )}
-                                    <span className="text-red-500 ml-1">*</span>
-                                </label>
-                                <Controller
-                                    name="programId"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <select
-                                            {...field}
-                                            value={field.value || ""}
-                                            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-500 focus:border-transparent"
-                                            onChange={(e) => {
-                                                console.log(e.target.value);
-                                                field.onChange(e.target.value);
-                                            }}
-                                        >
-                                            <option value="">
-                                                {t(
-                                                    "groups.form.fields.program.placeholder",
-                                                    "Select Program"
-                                                )}
-                                            </option>
-                                            {MOCK_PROGRAMS.map((program) => (
-                                                <option
-                                                    key={program.value}
-                                                    value={program.value}
-                                                >
-                                                    {program.label}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    )}
-                                />
-                                {errors.programId && (
-                                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-                                        {errors.programId.message}
-                                    </p>
-                                )}
-                            </div>
-
-                            {/* Course Dropdown - Using Controller */}
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                    {t(
-                                        "groups.form.fields.course.label",
-                                        "Course"
-                                    )}
-                                    <span className="text-red-500 ml-1">*</span>
-                                </label>
-                                <Controller
-                                    name="courseId"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <select
-                                            {...field}
-                                            value={field.value || ""}
-                                            disabled={
-                                                !formValues.programId ||
-                                                courseOptions.length === 0
-                                            }
-                                            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
-                                            onChange={(e) => {
-                                                const id = e.target.value;
-                                                field.onChange(id);
-
-                                                const label =
-                                                    courseOptions.find(
-                                                        (o) => o.value === id
-                                                    )?.label ?? "";
-                                                setValue("courseTitle", label, {
-                                                    shouldDirty: true,
-                                                });
-                                            }}
-                                        >
-                                            <option value="">
-                                                {t(
-                                                    "groups.form.fields.course.placeholder",
-                                                    "Select Course"
-                                                )}
-                                            </option>
-                                            {courseOptions.map((course) => (
-                                                <option
-                                                    key={course.value}
-                                                    value={course.value}
-                                                >
-                                                    {course.label}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    )}
-                                />
-                                {errors.courseId && (
-                                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-                                        {errors.courseId.message}
-                                    </p>
-                                )}
-                            </div>
-
-                            {/* Level Dropdown - Using Controller */}
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                    {t(
-                                        "groups.form.fields.level.label",
-                                        "Level"
-                                    )}
-                                    <span className="text-red-500 ml-1">*</span>
-                                </label>
-                                <Controller
-                                    name="levelId"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <select
-                                            {...field}
-                                            value={field.value || ""}
-                                            disabled={
-                                                !formValues.courseId ||
-                                                levelOptions.length === 0
-                                            }
-                                            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
-                                            onChange={(e) => {
-                                                const id = e.target.value;
-                                                field.onChange(id);
-
-                                                const label =
-                                                    levelOptions.find(
-                                                        (o) => o.value === id
-                                                    )?.label ?? "";
-                                                setValue("levelTitle", label, {
-                                                    shouldDirty: true,
-                                                });
-                                            }}
-                                        >
-                                            <option value="">
-                                                {t(
-                                                    "groups.form.fields.level.placeholder",
-                                                    "Select Level"
-                                                )}
-                                            </option>
-                                            {levelOptions.map((level) => (
-                                                <option
-                                                    key={level.value}
-                                                    value={level.value}
-                                                >
-                                                    {level.label}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    )}
-                                />
-                                {errors.levelId && (
-                                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-                                        {errors.levelId.message}
-                                    </p>
-                                )}
-                            </div>
-                        </div>
-                    </FormSection>
-                );
-
-            case 2:
                 return (
                     <FormSection
                         title={t("groups.form.sections.schedule", "Schedule")}
@@ -707,7 +383,7 @@ export default function RegularGroupCreate() {
                     </FormSection>
                 );
 
-            case 3:
+            case 2:
                 return (
                     <FormSection
                         title={t("groups.form.sections.ageGroup", "Age Group")}
@@ -755,7 +431,7 @@ export default function RegularGroupCreate() {
                     </FormSection>
                 );
 
-            case 4:
+            case 3:
                 return (
                     <FormSection
                         title={t("groups.form.sections.capacity", "Capacity")}
@@ -783,7 +459,7 @@ export default function RegularGroupCreate() {
                     </FormSection>
                 );
 
-            case 5:
+            case 4:
                 return (
                     <GroupSummary
                         data={summaryData}

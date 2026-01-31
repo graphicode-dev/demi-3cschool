@@ -182,6 +182,15 @@ export interface GroupsListParams {
     page?: number;
 }
 
+/**
+ * List query parameters for groups by level
+ */
+export interface GroupsByLevelParams {
+    levelId: string;
+    groupType?: GroupType;
+    page?: number;
+}
+
 // ============================================================================
 // Payload Types
 // ============================================================================

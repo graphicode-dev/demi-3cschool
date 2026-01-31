@@ -59,13 +59,6 @@ export const groupsManagementNav: FeatureNavModule = {
                     href: groupsPaths.sessionsList(),
                     permissions: [groupSession.viewAny],
                 },
-                {
-                    key: "eligible-students",
-                    labelKey: "groupsManagement:eligibleStudents.title",
-                    label: "Eligible Students",
-                    href: groupsPaths.eligibleStudents.list(),
-                    permissions: [eligibleStudentsPermissions.viewAny],
-                },
             ],
         },
     ],

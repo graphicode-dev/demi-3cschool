@@ -33,6 +33,7 @@ import { groupsApi } from "./groups.api";
 import type {
     Group,
     GroupsListParams,
+    GroupsByLevelParams,
     GroupsMetadata,
     GroupRecommendPayload,
     GroupRecommendationsData,
@@ -229,6 +230,33 @@ export function useGroupRecommendations(
         queryKey: groupKeys.recommend(payload!),
         queryFn: ({ signal }) => groupsApi.getRecommendations(payload!, signal),
         enabled: !!payload,
+        ...options,
+    });
+}
+
+// ============================================================================
+// By Level Queries
+// ============================================================================
+
+/**
+ * Hook to fetch groups by level ID
+ *
+ * @param params - Query parameters including levelId
+ * @param options - Additional query options
+ *
+ * @example
+ * ```tsx
+ * const { data, isLoading } = useGroupsByLevel({ levelId: '123' });
+ * ```
+ */
+export function useGroupsByLevel(
+    params: GroupsByLevelParams,
+    options?: Partial<UseQueryOptions<Group[] | PaginatedData<Group>, Error>>
+) {
+    return useQuery({
+        queryKey: groupKeys.byLevel(params),
+        queryFn: ({ signal }) => groupsApi.getByLevel(params, signal),
+        enabled: !!params.levelId,
         ...options,
     });
 }

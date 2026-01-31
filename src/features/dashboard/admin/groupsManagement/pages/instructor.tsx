@@ -6,14 +6,14 @@
  */
 
 import { useNavigate } from "react-router-dom";
-import { InstructorSummaryCards } from "../../components/InstructorSummaryCards";
-import { PrimaryTeacherCard } from "../../components/PrimaryTeacherCard";
-import { InstructorSessionsTable } from "../../components/InstructorSessionsTable";
+import { InstructorSummaryCards } from "../components/InstructorSummaryCards";
+import { PrimaryTeacherCard } from "../components/PrimaryTeacherCard";
+import { InstructorSessionsTable } from "../components/InstructorSessionsTable";
 import type {
     Instructor,
     InstructorSummary,
     InstructorSession,
-} from "../../types/instructor.types";
+} from "../types/instructor.types";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useTranslation } from "react-i18next";
 

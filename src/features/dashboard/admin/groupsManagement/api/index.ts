@@ -28,6 +28,7 @@ export type {
     LocationType,
     DayOfWeek,
     GroupsListParams,
+    GroupsByLevelParams,
     GroupCreatePayload,
     GroupUpdatePayload,
     GroupsMetadata,
@@ -87,6 +88,7 @@ export {
     useGroupsInfinite,
     useGroup,
     useGroupRecommendations,
+    useGroupsByLevel,
 } from "./groups.queries";
 
 export {

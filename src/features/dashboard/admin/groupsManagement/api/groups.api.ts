@@ -19,6 +19,7 @@ import { api } from "@/shared/api/client";
 import type {
     Group,
     GroupsListParams,
+    GroupsByLevelParams,
     GroupCreatePayload,
     GroupUpdatePayload,
     GroupsMetadata,
@@ -145,6 +146,29 @@ export const groupsApi = {
         if (response.error) {
             throw response.error;
         }
+    },
+
+    /**
+     * Get groups by level ID
+     */
+    getByLevel: async (
+        params: GroupsByLevelParams,
+        signal?: AbortSignal
+    ): Promise<Group[] | PaginatedData<Group>> => {
+        const { levelId, groupType = "regular", page } = params;
+
+        const response = await api.get<
+            ListResponse<Group> | PaginatedResponse<Group>
+        >(`${BASE_URL}/level/${levelId}`, {
+            params: { group_type: groupType, ...(page ? { page } : {}) },
+            signal,
+        });
+
+        if (response.error) {
+            throw response.error;
+        }
+
+        return response.data!.data;
     },
 
     /**

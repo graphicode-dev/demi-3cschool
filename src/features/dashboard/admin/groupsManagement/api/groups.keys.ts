@@ -19,6 +19,7 @@
 
 import type {
     GroupsListParams,
+    GroupsByLevelParams,
     GroupRecommendPayload,
 } from "../types/groups.types";
 
@@ -93,6 +94,17 @@ export const groupKeys = {
      */
     recommend: (params: GroupRecommendPayload) =>
         [...groupKeys.recommendations(), params] as const,
+
+    /**
+     * Key for all byLevel queries
+     */
+    byLevels: () => [...groupKeys.all, "byLevel"] as const,
+
+    /**
+     * Key for specific byLevel query
+     */
+    byLevel: (params: GroupsByLevelParams) =>
+        [...groupKeys.byLevels(), params.levelId, params] as const,
 };
 
 /**
@@ -108,4 +120,6 @@ export type GroupQueryKey =
     | ReturnType<typeof groupKeys.details>
     | ReturnType<typeof groupKeys.detail>
     | ReturnType<typeof groupKeys.recommendations>
-    | ReturnType<typeof groupKeys.recommend>;
+    | ReturnType<typeof groupKeys.recommend>
+    | ReturnType<typeof groupKeys.byLevels>
+    | ReturnType<typeof groupKeys.byLevel>;

@@ -15,16 +15,16 @@ import {
     Lock,
     UserPlus,
 } from "lucide-react";
-import { LearningCard } from "../../components/LearningCard";
-import { StudentListItem } from "../../components/StudentListItem";
-import { MOCK_INSTRUCTOR } from "../../mockData";
+import { LearningCard } from "../components/LearningCard";
+import { StudentListItem } from "../components/StudentListItem";
+import { MOCK_INSTRUCTOR } from "../mockData";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { paths } from "@/router";
-import { useGroup } from "../../api";
+import { useGroup } from "../api";
 import {
     useGetGroupStudentsQuery,
     useRemoveStudentMutation,
-} from "../../api/assignStudent";
+} from "../api/assignStudent";
 import { ConfirmDialog, ErrorState, LoadingState } from "@/design-system";
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
