@@ -60,7 +60,7 @@ export function EditLeadPage() {
                     name: lead.name,
                 }),
                 subtitle: t("manageTeam.editLead.pageSubtitle"),
-                backHref: paths.dashboard.ticketsManagement.manageTeam(),
+                backHref: paths.dashboard.admin.ticketsManagement.manageTeam(),
                 backButton: true,
             }}
         >

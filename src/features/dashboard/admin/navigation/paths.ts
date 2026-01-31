@@ -6,6 +6,7 @@
 
 import { registerFeaturePaths } from "@/router/paths.registry";
 import { ADMIN_PATH } from "./constant";
+import { ticketsManagementPaths } from "../ticketsManagement/navigation/paths";
 
 export const adminPaths = {
     root: () => ADMIN_PATH,
@@ -14,6 +15,7 @@ export const adminPaths = {
     certificates: () => `${ADMIN_PATH}/certificates`,
     reports: () => `${ADMIN_PATH}/reports`,
     settings: () => `${ADMIN_PATH}/settings`,
+    ticketsManagement: ticketsManagementPaths,
 } as const;
 
 export const adminManagementPaths = registerFeaturePaths("admin", {

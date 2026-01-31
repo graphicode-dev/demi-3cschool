@@ -58,7 +58,7 @@ export function AddLeadPage() {
             pageHeaderProps={{
                 title: t("manageTeam.addLead.pageTitle"),
                 subtitle: t("manageTeam.addLead.pageSubtitle"),
-                backHref: paths.dashboard.ticketsManagement.manageTeam(),
+                backHref: paths.dashboard.admin.ticketsManagement.manageTeam(),
                 backButton: true,
             }}
         >

@@ -61,7 +61,7 @@ export function ChangeBlockPage() {
                 subtitle: t("manageTeam.changeBlock.pageSubtitleWithName", {
                     name: lead.name,
                 }),
-                backHref: paths.dashboard.ticketsManagement.manageTeam(),
+                backHref: paths.dashboard.admin.ticketsManagement.manageTeam(),
                 backButton: true,
             }}
         >

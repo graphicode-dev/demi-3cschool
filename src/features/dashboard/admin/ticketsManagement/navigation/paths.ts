@@ -13,17 +13,20 @@
  */
 
 import { registerFeaturePaths } from "@/router/paths.registry";
-import { overview, overviewPaths } from "../pages/overview/navigation";
+import { overview, overviewPaths } from "../pages/overview/navigation/paths";
 import {
     teamStructure,
     teamStructurePaths,
-} from "../pages/teamStructure/navigation";
-import { tickets, ticketsPagePaths } from "../pages/tickets/navigation";
+} from "../pages/teamStructure/navigation/paths";
+import { tickets, ticketsPagePaths } from "../pages/tickets/navigation/paths";
 import {
     distribution,
     distributionPaths,
-} from "../pages/distribution/navigation";
-import { performance, performancePaths } from "../pages/performance/navigation";
+} from "../pages/distribution/navigation/paths";
+import {
+    performance,
+    performancePaths,
+} from "../pages/performance/navigation/paths";
 import { TICKETS_BASE_PATH } from "./constants";
 
 // ============================================================================

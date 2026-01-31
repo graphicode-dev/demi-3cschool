@@ -70,7 +70,7 @@ export function AddAgentPage() {
             pageHeaderProps={{
                 title: t("manageTeam.addAgent.pageTitle"),
                 subtitle: t("manageTeam.addAgent.pageSubtitle"),
-                backHref: paths.dashboard.ticketsManagement.manageTeam(),
+                backHref: paths.dashboard.admin.ticketsManagement.manageTeam(),
                 backButton: true,
             }}
         >

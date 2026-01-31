@@ -89,7 +89,6 @@ export const paths = {
         classroom: classroomPaths,
         admin: adminPaths,
         salesSubscription: salesSubscriptionPaths,
-        ticketsManagement: sharedPaths.ticketsManagement,
     },
 
     // ========================================================================
