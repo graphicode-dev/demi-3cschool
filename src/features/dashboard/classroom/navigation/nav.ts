@@ -14,11 +14,14 @@ import { acceptanceTestNavItem } from "../acceptanceTest/navigation";
 import { projectsNavItem } from "../projects/navigation";
 import { finalExamsNavItem } from "../finalExams/navigation";
 import { myScheduleNavItem } from "../mySchedule/navigation";
+import { supportHelpNavItem } from "../ticketsManagement/pages/supportHelp/navigation";
+import { resourcesNavItem } from "../resources/navigation";
 
 export const classroomNav: FeatureNavModule = {
     featureId: "classroom",
     section: "Classroom",
     order: 20,
+
     items: [
         ...classroomSharedNavItems,
         acceptanceTestNavItem,
@@ -28,6 +31,8 @@ export const classroomNav: FeatureNavModule = {
         projectsNavItem,
         finalExamsNavItem,
         myScheduleNavItem,
+        supportHelpNavItem,
+        resourcesNavItem,
     ],
 };
 

@@ -17,6 +17,8 @@ import { acceptanceTestRoutes } from "../acceptanceTest/navigation";
 import { projectsRoutes } from "../projects/navigation";
 import { finalExamsRoutes } from "../finalExams/navigation";
 import { myScheduleRoutes } from "../mySchedule/navigation";
+import { supportHelpRoutes } from "../ticketsManagement/pages/supportHelp/navigation";
+import { resourcesRoutes } from "../resources/navigation";
 import { classroomPaths } from "./paths";
 import { CLASSROOM_PATH } from "./constant";
 
@@ -51,6 +53,10 @@ export const classroomRouteModule: FeatureRouteModule = {
             ...finalExamsRoutes,
             // My Schedule feature
             ...myScheduleRoutes,
+            // Support Help feature (student-facing)
+            ...supportHelpRoutes,
+            // Learning Resources feature
+            ...resourcesRoutes,
         ],
     },
 };

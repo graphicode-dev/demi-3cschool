@@ -7,8 +7,7 @@
 
 import type { NavItem } from "@/navigation/nav.types";
 import { User, MessageSquare, Award, FileText, Ticket } from "lucide-react";
-import { ticketsPaths } from "../ticketsManagement/navigation/paths";
-import { supportPermissions, accountPermissions } from "@/auth";
+import { accountPermissions, supportPermissions } from "@/auth";
 import { getDashboardBasePath } from "./paths";
 
 const { ticket } = supportPermissions;
@@ -53,51 +52,6 @@ export const createSharedNavItems = (
             href: `${basePath}/reports`,
             icon: FileText,
             permissions: [report.viewAny],
-        },
-        {
-            key: "tickets-management",
-            labelKey: "sidebar.sections.ticketsManagement",
-            label: "Tickets Management",
-            href: ticketsPaths.overview(),
-            icon: Ticket,
-            permissions: [ticket.viewAny],
-            children: [
-                {
-                    key: "overview",
-                    label: "Overview",
-                    labelKey: "ticketsManagement:nav.overview",
-                    href: ticketsPaths.overview(),
-                    permissions: [ticket.viewAny],
-                },
-                {
-                    key: "team-structure",
-                    label: "Team Structure",
-                    labelKey: "ticketsManagement:nav.teamStructure",
-                    href: ticketsPaths.teamStructure(),
-                    permissions: [ticket.viewAny],
-                },
-                {
-                    key: "tickets",
-                    label: "Tickets",
-                    labelKey: "ticketsManagement:nav.tickets",
-                    href: ticketsPaths.tickets(),
-                    permissions: [ticket.viewAny],
-                },
-                {
-                    key: "distribution",
-                    label: "Distribution",
-                    labelKey: "ticketsManagement:nav.distribution",
-                    href: ticketsPaths.distribution(),
-                    permissions: [ticket.viewAny],
-                },
-                {
-                    key: "performance",
-                    label: "Performance",
-                    labelKey: "ticketsManagement:nav.performance",
-                    href: ticketsPaths.performance(),
-                    permissions: [ticket.viewAny],
-                },
-            ],
         },
     ];
 };

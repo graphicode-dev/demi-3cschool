@@ -1,0 +1,48 @@
+{
+    "groupsAnalytics": {
+        "title": "تحليلات المجموعات",
+        "subtitle": "إدارة تحليلات المجموعات والحضور وتتبع أداء البرنامج",
+        "tabs": {
+            "standard": "التعلم القياسي",
+            "professional": "التعلم المهني"
+        },
+        "search": {
+            "placeholder": "البحث عن المجموعات بالاسم أو المسار أو المستوى..."
+        },
+        "filters": {
+            "allTracks": "جميع المسارات",
+            "allLevels": "جميع المستويات",
+            "allStatus": "جميع الحالات"
+        },
+        "stats": {
+            "totalGroups": "إجمالي المجموعات",
+            "activeGroups": "المجموعات النشطة",
+            "totalStudents": "إجمالي الطلاب",
+            "completedGroups": "مكتملة"
+        },
+        "charts": {
+            "groupStatus": "توزيع حالة المجموعات",
+            "studentsPerTrack": "الطلاب لكل مسار",
+            "studentGrowth": "نمو الطلاب عبر الوقت"
+        },
+        "status": {
+            "active": "نشط",
+            "inactive": "غير نشط",
+            "completed": "مكتمل"
+        },
+        "trackOverview": {
+            "title": "نظرة عامة على المسار - التعلم المهني",
+            "groups": "المجموعات",
+            "students": "الطلاب",
+            "avgProgress": "متوسط التقدم"
+        },
+        "trackCard": {
+            "groups": "المجموعات",
+            "students": "الطلاب",
+            "avgProgress": "متوسط التقدم"
+        },
+        "actions": {
+            "createNew": "إنشاء مجموعة جديدة"
+        }
+    }
+}

@@ -1,0 +1,241 @@
+﻿{
+    "groups": {
+        "title": "Groups Management",
+        "regularListBreadcrumb": "Regular Groups",
+        "semiPrivateListBreadcrumb": "Semi Private Groups",
+        "privateListBreadcrumb": "Private Groups",
+        "sessionsListBreadcrumb": "Sessions Groups",
+        "subtitle": "Manage Enrollments and schedules",
+        "actions": {
+            "createNew": "Create New Group"
+        },
+        "stats": {
+            "totalGroups": "Total Groups",
+            "activeGroups": "Active Groups",
+            "inactiveGroups": "Inactive Groups"
+        },
+        "table": {
+            "title": "Class Name",
+            "groupName": "Group Name",
+            "ageGroup": "Age Group",
+            "courseName": "Course Name",
+            "levelName": "Level Name",
+            "teacher": "Teacher",
+            "capacity": "Capacity",
+            "students": "Students",
+            "byGettingGroup": "By Getting Group"
+        },
+        "form": {
+            "create": {
+                "title": "Create New Group",
+                "subtitle": "Set up a new group for students"
+            },
+            "steps": {
+                "basic": "Basic Information",
+                "program": "Program & Course",
+                "schedule": "Schedule",
+                "ageGroup": "Age Group",
+                "capacity": "Capacity",
+                "confirmation": "Confirmation"
+            },
+            "sections": {
+                "basicInfo": "Basic Information",
+                "programCourse": "Program & Course",
+                "schedule": "Schedule",
+                "ageGroup": "Age Group",
+                "capacity": "Capacity",
+                "summary": "Group Summary",
+                "groupInformation": "Group Information",
+                "scheduleLocation": "Schedule & Location"
+            },
+            "fields": {
+                "groupName": {
+                    "label": "Group Name",
+                    "placeholder": "e.g., Python Beginners A"
+                },
+                "program": {
+                    "label": "Program",
+                    "placeholder": "Select Program"
+                },
+                "course": {
+                    "label": "Course",
+                    "placeholder": "Select Course"
+                },
+                "level": {
+                    "label": "Level",
+                    "placeholder": "Select Level"
+                },
+                "days": {
+                    "label": "Days",
+                    "placeholder": "Select Days"
+                },
+                "startTime": {
+                    "label": "Start Time",
+                    "placeholder": "e.g., 10:00 AM"
+                },
+                "endTime": {
+                    "label": "End Time",
+                    "placeholder": "e.g., 12:00 PM"
+                },
+                "ageGroup": {
+                    "label": "Age Group",
+                    "placeholder": "Select Age Group"
+                },
+                "capacity": {
+                    "label": "Maximum Capacity",
+                    "placeholder": "Enter maximum capacity"
+                }
+            },
+            "days": {
+                "sunday": "Sunday",
+                "monday": "Monday",
+                "tuesday": "Tuesday",
+                "wednesday": "Wednesday",
+                "thursday": "Thursday",
+                "friday": "Friday",
+                "saturday": "Saturday"
+            },
+            "actions": {
+                "create": "Create Group",
+                "edit": "Edit Group",
+                "confirm": "Confirm Group"
+            },
+            "summary": {
+                "maxStudents": "max students",
+                "students": "students",
+                "times": "Times",
+                "notSet": "Not set",
+                "notSelected": "Not selected",
+                "general": "General",
+                "online": "Online",
+                "noSchedule": "No schedule set"
+            },
+            "similarGroups": {
+                "button": "Similar Groups",
+                "title": "Similar Groups",
+                "matchYourCriteria": "groups match your criteria",
+                "recommendedGroup": "Recommended group"
+            },
+            "recommended": {
+                "title": "Recommended group",
+                "expand": "Expand",
+                "viewDetails": "View Details"
+            }
+        },
+        "view": {
+            "backToGroups": "Back to Groups",
+            "student": "Student",
+            "instructors": "Instructors",
+            "startLearning": "Start Learning",
+            "editGroup": "Edit Group",
+            "assignStudent": "Assign Student",
+            "aboutThisGroup": "About this Group",
+            "aboutDescription": "This group is part of the course curriculum with scheduled sessions and dedicated instructors.",
+            "schedule": "Schedule",
+            "dayPerWeek": "day/week",
+            "time": "Time",
+            "duration": "Duration",
+            "quizzes": "Quizzes",
+            "quizzesDesc": "Test your knowledge with course quizzes",
+            "viewQuizzes": "View Quizzes",
+            "assignments": "Assignments",
+            "assignmentsDesc": "Complete assignments for this group",
+            "viewAssignments": "View Assignments",
+            "materials": "Materials",
+            "materialsDesc": "Access course materials and resources",
+            "viewMaterials": "View Materials",
+            "sessions": "Sessions",
+            "sessionsDesc": "Manage scheduled sessions for this group",
+            "manageSessions": "Manage Sessions",
+            "attendances": "Attendances",
+            "attendancesDesc": "Manage attendance for this group",
+            "manageAttendances": "Manage Attendances",
+            "instructorsDesc": "{{name}}, {{role}}",
+            "viewAllTeachers": "View All Teachers",
+            "manage": "Manage",
+            "enrollmentStatus": "Enrollment Status",
+            "studentsEnrolled": "Students Enrolled",
+            "full": "Full",
+            "spotsLeft": "spots left",
+            "enrolledStudents": "Enrolled Students",
+            "active": "Active",
+            "inactive": "Inactive",
+            "enrolled": "Enrolled",
+            "removeStudent": "Remove student"
+        },
+        "assignStudent": {
+            "title": "Assign Student to Group",
+            "subtitle": "Select a student to assign to this group",
+            "searchPlaceholder": "Search students by name...",
+            "select": "Select",
+            "age": "Age",
+            "noResults": "No students found",
+            "noResultsDescription": "Try adjusting your search or filter criteria",
+            "allCourses": "All Courses",
+            "allDays": "All Days",
+            "allTimeSlots": "All Time Slot"
+        },
+        "edit": {
+            "title": "Edit Group",
+            "subtitle": "Update group details and settings",
+            "saveChanges": "Save Changes",
+            "sections": {
+                "studentDetails": "Student Details",
+                "locationCapacity": "Location & Capacity"
+            },
+            "fields": {
+                "ageGroup": {
+                    "hint": "Select one or more age groups for this class"
+                },
+                "groupType": {
+                    "label": "Group Type",
+                    "general": "General",
+                    "semiPrivate": "Semi-Private",
+                    "private": "Private"
+                },
+                "locationType": {
+                    "label": "Location Type",
+                    "placeholder": "Select Location Type",
+                    "hint": "All groups are conducted online"
+                },
+                "maxCapacity": {
+                    "label": "Maximum Capacity"
+                },
+                "days": {
+                    "hint": "Select one or more days per week"
+                },
+                "timeForEachDay": {
+                    "label": "Time for Each Day"
+                }
+            }
+        }
+    },
+    "eligibleStudents": {
+        "title": "Eligible students",
+        "subtitle": "Students who still have available group slots and can be assigned to a group",
+        "listTitle": "Eligible Students List",
+        "searchPlaceholder": "Search...",
+        "noStudents": "No eligible students found",
+        "table": {
+            "id": "ID",
+            "studentName": "Student Name",
+            "age": "Age",
+            "program": "Program",
+            "courseTrack": "Course/Track",
+            "level": "Level",
+            "groupType": "Group Type",
+            "registration": "Registration",
+            "action": "Action"
+        },
+        "actions": {
+            "assignToGroup": "Assign to group"
+        },
+        "errors": {
+            "loadFailed": "Failed to load students"
+        }
+    },
+    "common": {
+        "back": "Back",
+        "next": "Next"
+    }
+}

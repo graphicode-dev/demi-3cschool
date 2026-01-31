@@ -1,0 +1,241 @@
+﻿{
+    "groups": {
+        "title": "إدارة المجموعات",
+        "regularListBreadcrumb": "المجموعات العادية",
+        "semiPrivateListBreadcrumb": "المجموعات شبه الخاصة",
+        "privateListBreadcrumb": "المجموعات الخاصة",
+        "sessionsListBreadcrumb": "مجموعات الجلسات",
+        "subtitle": "إدارة التسجيلات والجداول",
+        "actions": {
+            "createNew": "إنشاء مجموعة جديدة"
+        },
+        "stats": {
+            "totalGroups": "إجمالي المجموعات",
+            "activeGroups": "المجموعات النشطة",
+            "inactiveGroups": "المجموعات غير النشطة"
+        },
+        "table": {
+            "title": "اسم الفصل",
+            "groupName": "اسم المجموعة",
+            "ageGroup": "الفئة العمرية",
+            "courseName": "اسم الدورة",
+            "levelName": "اسم المستوى",
+            "teacher": "المعلم",
+            "capacity": "السعة",
+            "students": "الطلاب",
+            "byGettingGroup": "بحسب المجموعة"
+        },
+        "form": {
+            "create": {
+                "title": "إنشاء مجموعة جديدة",
+                "subtitle": "إعداد مجموعة جديدة للطلاب"
+            },
+            "steps": {
+                "basic": "المعلومات الأساسية",
+                "program": "البرنامج والدورة",
+                "schedule": "الجدول",
+                "ageGroup": "الفئة العمرية",
+                "capacity": "السعة",
+                "confirmation": "التأكيد"
+            },
+            "sections": {
+                "basicInfo": "المعلومات الأساسية",
+                "programCourse": "البرنامج والدورة",
+                "schedule": "الجدول",
+                "ageGroup": "الفئة العمرية",
+                "capacity": "السعة",
+                "summary": "ملخص المجموعة",
+                "groupInformation": "معلومات المجموعة",
+                "scheduleLocation": "الجدول والموقع"
+            },
+            "fields": {
+                "groupName": {
+                    "label": "اسم المجموعة",
+                    "placeholder": "مثال: مبتدئي بايثون أ"
+                },
+                "program": {
+                    "label": "البرنامج",
+                    "placeholder": "اختر البرنامج"
+                },
+                "course": {
+                    "label": "الدورة",
+                    "placeholder": "اختر الدورة"
+                },
+                "level": {
+                    "label": "المستوى",
+                    "placeholder": "اختر المستوى"
+                },
+                "days": {
+                    "label": "الأيام",
+                    "placeholder": "اختر الأيام"
+                },
+                "startTime": {
+                    "label": "وقت البدء",
+                    "placeholder": "مثال: 10:00 صباحاً"
+                },
+                "endTime": {
+                    "label": "وقت الانتهاء",
+                    "placeholder": "مثال: 12:00 ظهراً"
+                },
+                "ageGroup": {
+                    "label": "الفئة العمرية",
+                    "placeholder": "اختر الفئة العمرية"
+                },
+                "capacity": {
+                    "label": "السعة القصوى",
+                    "placeholder": "أدخل السعة القصوى"
+                }
+            },
+            "days": {
+                "sunday": "الأحد",
+                "monday": "الاثنين",
+                "tuesday": "الثلاثاء",
+                "wednesday": "الأربعاء",
+                "thursday": "الخميس",
+                "friday": "الجمعة",
+                "saturday": "السبت"
+            },
+            "actions": {
+                "create": "إنشاء المجموعة",
+                "edit": "تعديل المجموعة",
+                "confirm": "تأكيد المجموعة"
+            },
+            "summary": {
+                "maxStudents": "الحد الأقصى للطلاب",
+                "students": "طلاب",
+                "times": "الأوقات",
+                "notSet": "غير محدد",
+                "notSelected": "غير محدد",
+                "general": "عام",
+                "online": "عبر الإنترنت",
+                "noSchedule": "لم يتم تحديد جدول"
+            },
+            "similarGroups": {
+                "button": "مجموعات مشابهة",
+                "title": "مجموعات مشابهة",
+                "matchYourCriteria": "مجموعات تطابق معاييرك",
+                "recommendedGroup": "مجموعة موصى بها"
+            },
+            "recommended": {
+                "title": "المجموعات المقترحة",
+                "expand": "توسيع",
+                "viewDetails": "عرض التفاصيل"
+            }
+        },
+        "view": {
+            "backToGroups": "العودة إلى المجموعات",
+            "student": "طالب",
+            "instructors": "المدربون",
+            "startLearning": "ابدأ التعلم",
+            "editGroup": "تعديل المجموعة",
+            "assignStudent": "تعيين طالب",
+            "aboutThisGroup": "حول هذه المجموعة",
+            "aboutDescription": "هذه المجموعة جزء من منهج الدورة مع جلسات مجدولة ومدربين مخصصين.",
+            "schedule": "الجدول",
+            "dayPerWeek": "يوم/أسبوع",
+            "time": "الوقت",
+            "duration": "المدة",
+            "quizzes": "الاختبارات",
+            "quizzesDesc": "اختبر معرفتك باختبارات الدورة",
+            "viewQuizzes": "عرض الاختبارات",
+            "assignments": "الواجبات",
+            "assignmentsDesc": "أكمل الواجبات لهذه المجموعة",
+            "viewAssignments": "عرض الواجبات",
+            "materials": "المواد",
+            "materialsDesc": "الوصول إلى مواد الدورة والموارد",
+            "viewMaterials": "عرض المواد",
+            "sessions": "الجلسات",
+            "sessionsDesc": "إدارة الجلسات المجدولة لهذه المجموعة",
+            "manageSessions": "إدارة الجلسات",
+            "attendances": "الحضور",
+            "attendancesDesc": "إدارة الحضور لهذه المجموعة",
+            "manageAttendances": "إدارة الحضور",
+            "instructorsDesc": "{{name}}، {{role}}",
+            "viewAllTeachers": "عرض جميع المعلمين",
+            "manage": "إدارة",
+            "enrollmentStatus": "حالة التسجيل",
+            "studentsEnrolled": "الطلاب المسجلون",
+            "full": "ممتلئ",
+            "spotsLeft": "أماكن متبقية",
+            "enrolledStudents": "الطلاب المسجلون",
+            "active": "نشط",
+            "inactive": "غير نشط",
+            "enrolled": "مسجل",
+            "removeStudent": "إزالة الطالب"
+        },
+        "assignStudent": {
+            "title": "تعيين طالب للمجموعة",
+            "subtitle": "اختر طالباً لتعيينه في هذه المجموعة",
+            "searchPlaceholder": "البحث عن الطلاب بالاسم...",
+            "select": "اختيار",
+            "age": "العمر",
+            "noResults": "لم يتم العثور على طلاب",
+            "noResultsDescription": "حاول تعديل معايير البحث أو التصفية",
+            "allCourses": "جميع الدورات",
+            "allDays": "جميع الأيام",
+            "allTimeSlots": "جميع الأوقات"
+        },
+        "edit": {
+            "title": "تعديل المجموعة",
+            "subtitle": "تحديث تفاصيل وإعدادات المجموعة",
+            "saveChanges": "حفظ التغييرات",
+            "sections": {
+                "studentDetails": "تفاصيل الطالب",
+                "locationCapacity": "الموقع والسعة"
+            },
+            "fields": {
+                "ageGroup": {
+                    "hint": "اختر فئة عمرية واحدة أو أكثر لهذا الفصل"
+                },
+                "groupType": {
+                    "label": "نوع المجموعة",
+                    "general": "عام",
+                    "semiPrivate": "شبه خاص",
+                    "private": "خاص"
+                },
+                "locationType": {
+                    "label": "نوع الموقع",
+                    "placeholder": "اختر نوع الموقع",
+                    "hint": "جميع المجموعات تُعقد عبر الإنترنت"
+                },
+                "maxCapacity": {
+                    "label": "السعة القصوى"
+                },
+                "days": {
+                    "hint": "اختر يوماً واحداً أو أكثر في الأسبوع"
+                },
+                "timeForEachDay": {
+                    "label": "الوقت لكل يوم"
+                }
+            }
+        }
+    },
+    "eligibleStudents": {
+        "title": "الطلاب المؤهلون",
+        "subtitle": "الطلاب الذين لا يزال لديهم أماكن متاحة في المجموعات ويمكن تعيينهم لمجموعة",
+        "listTitle": "قائمة الطلاب المؤهلين",
+        "searchPlaceholder": "بحث...",
+        "noStudents": "لم يتم العثور على طلاب مؤهلين",
+        "table": {
+            "id": "المعرف",
+            "studentName": "اسم الطالب",
+            "age": "العمر",
+            "program": "البرنامج",
+            "courseTrack": "الدورة/المسار",
+            "level": "المستوى",
+            "groupType": "نوع المجموعة",
+            "registration": "التسجيل",
+            "action": "الإجراء"
+        },
+        "actions": {
+            "assignToGroup": "تعيين لمجموعة"
+        },
+        "errors": {
+            "loadFailed": "فشل تحميل الطلاب"
+        }
+    },
+    "common": {
+        "back": "رجوع",
+        "next": "التالي"
+    }
+}

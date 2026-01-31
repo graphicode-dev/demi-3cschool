@@ -8,6 +8,7 @@
 import type { FeatureNavModule } from "@/navigation/nav.types";
 import { Settings } from "lucide-react";
 import { adminSharedNavItems } from "@/features/dashboard/shared/navigation";
+import { ticketsManagementNavItem } from "../ticketsManagement/navigation/nav";
 
 export const adminNav: FeatureNavModule = {
     featureId: "admin",
@@ -16,6 +17,7 @@ export const adminNav: FeatureNavModule = {
     items: [
         // Shared features (profile, chat, certificates, reports)
         ...adminSharedNavItems,
+        ticketsManagementNavItem,
         // Admin-only features
         {
             key: "settings",

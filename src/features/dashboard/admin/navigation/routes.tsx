@@ -12,6 +12,7 @@ import { Navigate } from "react-router-dom";
 import type { FeatureRouteModule } from "@/router/routes.types";
 import { adminSharedRoutes } from "@/features/dashboard/shared/navigation";
 import { settingsRoutes } from "../settings/navigation";
+import { ticketsManagementRoutes } from "../ticketsManagement/navigation";
 
 /**
  * Admin Route Module
@@ -32,6 +33,8 @@ export const adminRouteModule: FeatureRouteModule = {
             ...adminSharedRoutes,
             // Admin-only features
             ...settingsRoutes,
+            // Tickets Management feature
+            ...ticketsManagementRoutes,
         ],
     },
 };

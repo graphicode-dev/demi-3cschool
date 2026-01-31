@@ -1,0 +1,493 @@
+{
+    "salesAnalysis": {
+        "title": "تحليل المبيعات"
+    },
+    "coupons": {
+        "title": "الكوبونات",
+        "subtitle": "إدارة كوبونات الخصم",
+        "stats": {
+            "activeCoupons": "الكوبونات النشطة",
+            "totalUsages": "إجمالي الاستخدامات",
+            "expiredCoupons": "الكوبونات المنتهية",
+            "totalRevenue": "إجمالي الإيرادات",
+            "thisMonth": "هذا الشهر",
+            "currentlyActive": "نشط حالياً",
+            "activeStudents": "الطلاب النشطون"
+        },
+        "table": {
+            "title": "إدارة الكوبونات",
+            "couponId": "رقم الكوبون",
+            "levelId": "رقم المستوى",
+            "createdAt": "تاريخ الإنشاء",
+            "updatedAt": "تاريخ التحديث",
+            "usages": "الاستخدامات",
+            "actions": "الإجراءات"
+        },
+        "actions": {
+            "createNew": "إنشاء كوبون جديد",
+            "view": "عرض",
+            "edit": "تعديل الكوبون",
+            "delete": "حذف الكوبون",
+            "viewUsages": "عرض الاستخدامات"
+        },
+        "empty": {
+            "title": "لا توجد كوبونات",
+            "description": "ابدأ بإنشاء أول كوبون"
+        },
+        "delete": {
+            "title": "حذف الكوبون",
+            "message": "هل أنت متأكد من حذف هذا الكوبون؟ لا يمكن التراجع عن هذا الإجراء.",
+            "success": "تم حذف الكوبون بنجاح"
+        },
+        "create": {
+            "subtitle": "املأ التفاصيل أدناه لإنشاء كوبون جديد وتقديم خصومات حصرية للمستخدمين."
+        },
+        "edit": {
+            "subtitle": "قم بتحديث تفاصيل الكوبون أدناه."
+        },
+        "form": {
+            "title": "كوبون جديد",
+            "editTitle": "تعديل الكوبون",
+            "submit": "+ إنشاء كوبون",
+            "update": "تحديث الكوبون",
+            "fields": {
+                "code": {
+                    "label": "رمز الكوبون",
+                    "placeholder": "مثال: SUMMER2026"
+                },
+                "levels": {
+                    "label": "اختر المستوى",
+                    "placeholder": "يمكنك اختيار مستوى واحد أو عدة مستويات أو تحديد الكل."
+                },
+                "discountValue": {
+                    "label": "قيمة الكوبون",
+                    "placeholder": "6"
+                },
+                "minPurchaseAmount": {
+                    "label": "الحد الأدنى للشراء",
+                    "placeholder": "مثال: 100"
+                },
+                "validFrom": {
+                    "label": "صالح من",
+                    "placeholder": "يوم/شهر/سنة"
+                },
+                "validUntil": {
+                    "label": "صالح حتى",
+                    "placeholder": "يوم/شهر/سنة"
+                },
+                "isActive": {
+                    "label": "نشط"
+                },
+                "status": {
+                    "label": "الحالة"
+                }
+            }
+        },
+        "detail": {
+            "title": "تفاصيل الكوبون",
+            "subtitle": "عرض وتعديل تفاصيل الكوبون المحدد أدناه.",
+            "notFound": "الكوبون غير موجود",
+            "sectionTitle": "تفاصيل الكوبون",
+            "couponId": "رقم الكوبون",
+            "levelId": "رقم المستوى",
+            "createdAt": "تاريخ الإنشاء",
+            "updatedAt": "تاريخ التحديث",
+            "minPurchaseAmount": "الحد الأدنى للشراء",
+            "minPurchaseAmountTooltip": "الحد الأدنى لمبلغ الطلب المطلوب لاستخدام هذا الكوبون",
+            "maxDiscountAmount": "الحد الأقصى للخصم",
+            "maxDiscountAmountTooltip": "الحد الأقصى للخصم الذي يمكن تطبيقه",
+            "usageLimit": "حد الاستخدام",
+            "usageLimitTooltip": "إجمالي عدد مرات استخدام هذا الكوبون",
+            "usageLimitPerUser": "حد الاستخدام لكل مستخدم",
+            "usageLimitPerUserTooltip": "عدد المرات التي يمكن لكل مستخدم استخدام هذا الكوبون",
+            "validFrom": "صالح من",
+            "validUntil": "صالح حتى",
+            "firstPurchaseOnly": "الشراء الأول فقط",
+            "firstPurchaseOnlyTooltip": "إذا تم تفعيله، يمكن للمشترين لأول مرة فقط استخدام هذا الكوبون",
+            "status": "الحالة",
+            "discountType": "نوع الخصم",
+            "discountValue": "قيمة الخصم"
+        },
+        "usages": {
+            "title": "تفاصيل استخدام الكوبون",
+            "subtitle": "عرض تفاصيل كيفية استخدام هذا الكوبون من قبل المستخدمين المختلفين.",
+            "infoTitle": "معلومات الكوبون",
+            "discount": "الخصم",
+            "statsTitle": "معلومات الاستخدام",
+            "totalUses": "إجمالي الاستخدامات",
+            "remainingUses": "الاستخدامات المتبقية",
+            "usersTitle": "المستخدمون الذين استخدموا الكوبون",
+            "empty": "لا توجد سجلات استخدام",
+            "table": {
+                "id": "الرقم",
+                "userName": "اسم المستخدم",
+                "usageDate": "تاريخ الاستخدام",
+                "usageCount": "عدد الاستخدامات"
+            }
+        }
+    },
+    "priceLists": {
+        "title": "قوائم أسعار المستويات",
+        "subtitle": "إدارة قوائم أسعار المستويات",
+        "filters": {
+            "title": "تصفية حسب المستويات",
+            "description": "اختر مستوى واحد أو أكثر لتصفية قوائم الأسعار أدناه."
+        },
+        "table": {
+            "level": "المستوى",
+            "program": "البرنامج",
+            "price": "السعر",
+            "maxInstallments": "أقصى عدد من الأقساط",
+            "validity": "الصلاحية",
+            "actions": "الإجراءات",
+            "pricingPlans": "خطط التسعير",
+            "addNewLevel": "إضافة مستوى جديد",
+            "validUntil": "صالح حتى: {date}",
+            "active": "نشط",
+            "inactive": "غير نشط"
+        },
+        "actions": {
+            "viewDetails": "عرض التفاصيل",
+            "edit": "تحرير",
+            "delete": "حذف",
+            "createPriceList": "إنشاء قائمة أسعار",
+            "addNewLevel": "إضافة مستوى جديد",
+            "saveLevel": "حفظ المستوى",
+            "saveChange": "حفظ التغيير",
+            "back": "رجوع"
+        },
+        "emptyState": {
+            "title": "لم يتم العثور على قائمة أسعار المستويات",
+            "message": "ابدأ بإنشاء قائمة الأسعار الأولى الخاصة بك.",
+            "createPriceList": "إنشاء قائمة أسعار"
+        },
+        "deleteDialog": {
+            "title": "حذف قائمة الأسعار",
+            "message": "هل أنت متأكد من أنك تريد حذف قائمة الأسعار هذه؟ لا يمكن التراجع عن هذا الإجراء."
+        },
+        "form": {
+            "basicInformation": "المعلومات الأساسية",
+            "pricingDetails": "تفاصيل التسعير",
+            "validityPeriod": "فترة الصلاحية",
+            "settings": "الإعدادات",
+            "selectProgram": "اختر البرنامج",
+            "chooseProgram": "اختر برنامجًا",
+            "selectLevel": "اختر المستوى",
+            "chooseLevel": "اختر مستوى تعلم",
+            "name": "الاسم",
+            "namePlaceholder": "مثال: بايثون متقدم",
+            "description": "الوصف",
+            "descriptionOptional": "الوصف (اختياري)",
+            "descriptionPlaceholder": "أضف وصفًا تفصيليًا لخطة التسعير هذه..",
+            "originalPrice": "السعر الأصلي",
+            "currentPrice": "السعر",
+            "maxInstallments": "أقصى عدد من الأقساط",
+            "validFrom": "صالح من",
+            "validUntil": "صالح حتى",
+            "setAsDefault": "تعيين كخطة افتراضية",
+            "defaultPlanDescription": "اجعل هذا خيار التسعير الافتراضي للمستوى المحدد",
+            "activeStatus": "الحالة النشطة",
+            "activeStatusDescription": "تمكين أو تعطيل خطة التسعير هذه",
+            "originalPriceDescription": "السعر الأصلي قبل الخصم",
+            "currentPriceDescription": "السعر الذي سيدفعه الطلاب",
+            "maxInstallmentsDescription": "عدد أقساط الدفع",
+            "validFromDescription": "تاريخ البدء لخطة التسعير هذه",
+            "validUntilDescription": "تاريخ الانتهاء لخطة التسعير هذه",
+            "levelDescription": "اختر مستوى التعلم الذي تنطبق عليه خطة التسعير هذه.",
+            "descriptionHelper": "صف ما يجعل هذه الخطة فريدة أو خاصة"
+        },
+        "validation": {
+            "programRequired": "البرنامج مطلوب",
+            "levelRequired": "المستوى مطلوب",
+            "nameRequired": "الاسم مطلوب",
+            "originalPriceRequired": "السعر الأصلي مطلوب",
+            "originalPricePositive": "يجب أن يكون السعر الأصلي موجبًا",
+            "priceRequired": "السعر مطلوب",
+            "pricePositive": "يجب أن يكون السعر موجبًا",
+            "maxInstallmentsRequired": "أقصى عدد من الأقساط مطلوب",
+            "minInstallments": "مطلوب قسط واحد على الأقل",
+            "validFromRequired": "تاريخ الصلاحية من مطلوب",
+            "validUntilRequired": "تاريخ الصلاحية حتى مطلوب",
+            "validUntilAfterValidFrom": "يجب أن يكون تاريخ الصلاحية حتى بعد تاريخ الصلاحية من",
+            "priceGreaterThanOriginal": "لا يمكن أن يكون السعر أكبر من السعر الأصلي"
+        },
+        "detail": {
+            "basicInformation": "المعلومات الأساسية",
+            "pricingDetails": "تفاصيل التسعير",
+            "validityPeriod": "فترة الصلاحية",
+            "timestamps": "الطوابع الزمنية",
+            "program": "البرنامج",
+            "level": "المستوى",
+            "name": "الاسم",
+            "description": "الوصف",
+            "status": "الحالة",
+            "defaultPlan": "الخطة الافتراضية",
+            "originalPrice": "السعر الأصلي",
+            "currentPrice": "السعر الحالي",
+            "discount": "الخصم",
+            "maxInstallments": "أقصى عدد من الأقساط",
+            "validFrom": "صالح من",
+            "validUntil": "صالح حتى",
+            "created": "تم الإنشاء",
+            "lastUpdated": "آخر تحديث",
+            "default": "افتراضي",
+            "regular": "عادي",
+            "priceListDetails": "تفاصيل وتكوين قائمة الأسعار"
+        },
+        "create": {
+            "title": "إضافة مستوى جديد",
+            "subtitle": "أدخل تفاصيل المستوى وحدد سعرًا مخصصًا."
+        },
+        "edit": {
+            "title": "تحرير المستوى",
+            "subtitle": "تحديث معلومات المستوى وتعديل تفاصيل التسعير الخاصة به."
+        }
+    },
+    "purchases": {
+        "title": "المشتريات",
+        "subtitle": "عرض سجل المشتريات",
+        "pageTitle": "مشتريات الطلاب",
+        "pageSubtitle": "إدارة فواتير الطلاب وتتبع المدفوعات",
+        "invoicesTitle": "فواتير الطلاب",
+        "stats": {
+            "totalInvoices": "إجمالي الفواتير",
+            "totalRevenue": "إجمالي الإيرادات",
+            "pendingPayments": "المدفوعات المعلقة",
+            "paidInvoices": "الفواتير المدفوعة",
+            "thisMonth": "هذا الشهر"
+        },
+        "table": {
+            "studentName": "اسم الطالب",
+            "programType": "نوع البرنامج",
+            "courseLevel": "الدورة والمستوى",
+            "groupType": "نوع المجموعة",
+            "total": "الإجمالي",
+            "installments": "أقساط",
+            "status": "الحالة",
+            "created": "تاريخ الإنشاء",
+            "action": "الإجراء"
+        },
+        "status": {
+            "paid": "مدفوع",
+            "unpaid": "غير مدفوع"
+        },
+        "programType": {
+            "standard": "قياسي",
+            "professional": "احترافي"
+        },
+        "groupType": {
+            "regular": "عادي",
+            "semiPrivate": "شبه خاص",
+            "private": "خاص"
+        },
+        "actions": {
+            "createInvoice": "إنشاء فاتورة",
+            "view": "عرض",
+            "edit": "تعديل",
+            "delete": "حذف"
+        },
+        "empty": {
+            "title": "لا توجد فواتير",
+            "description": "ابدأ بإنشاء أول فاتورة"
+        },
+        "delete": {
+            "title": "حذف الفاتورة",
+            "message": "هل أنت متأكد من حذف هذه الفاتورة؟ لا يمكن التراجع عن هذا الإجراء.",
+            "success": "تم حذف الفاتورة بنجاح"
+        },
+        "wizard": {
+            "title": "إنشاء فاتورة طالب",
+            "subtitle": "الخطوة {{current}} من {{total}}",
+            "previous": "السابق",
+            "next": "التالي",
+            "createInvoice": "إنشاء فاتورة",
+            "steps": {
+                "student": {
+                    "stepTitle": "معلومات الطالب",
+                    "title": "اختر الطالب",
+                    "searchLabel": "البحث عن طالب",
+                    "placeholder": "ابحث أو اختر طالبًا",
+                    "studentInfo": "معلومات الطالب",
+                    "name": "الاسم",
+                    "studentId": "رقم الطالب",
+                    "grade": "الصف",
+                    "parentContact": "تواصل ولي الأمر"
+                },
+                "learningType": {
+                    "stepTitle": "نوع التعلم"
+                },
+                "courseLevel": {
+                    "stepTitle": "الدورة والمستوى",
+                    "title": "اختر الدورة والمستوى",
+                    "course": "الدورة",
+                    "coursePlaceholder": "اختر دورة",
+                    "level": "المستوى",
+                    "levelPlaceholder": "اختر مستوى"
+                },
+                "groupSelection": {
+                    "stepTitle": "اختيار المجموعة"
+                },
+                "pricingPlan": {
+                    "stepTitle": "خطة التسعير"
+                },
+                "promoCode": {
+                    "stepTitle": "الرمز الترويجي",
+                    "title": "تطبيق رمز ترويجي",
+                    "haveCode": "هل لديك رمز ترويجي؟",
+                    "placeholder": "أدخل الرمز الترويجي",
+                    "apply": "تطبيق",
+                    "enterCode": "يرجى إدخال رمز",
+                    "invalidCode": "رمز ترويجي غير صالح",
+                    "errorValidating": "خطأ في التحقق من الرمز",
+                    "applied": "تم تطبيق الرمز الترويجي!",
+                    "youSaved": "لقد وفرت"
+                },
+                "confirmation": {
+                    "stepTitle": "التأكيد",
+                    "title": "مراجعة وتأكيد",
+                    "student": "الطالب",
+                    "programType": "نوع البرنامج",
+                    "course": "الدورة",
+                    "level": "المستوى",
+                    "groupType": "نوع المجموعة",
+                    "pricingPlan": "خطة التسعير",
+                    "subtotal": "المجموع الفرعي",
+                    "discount": "الخصم",
+                    "finalTotal": "الإجمالي النهائي",
+                    "note": "ملاحظة:",
+                    "noteText": "بمجرد الإنشاء، سيتم إرسال الفاتورة إلى البريد الإلكتروني المسجل للطالب وستكون متاحة في النظام."
+                }
+            },
+            "programTypes": {
+                "standard": "التعلم القياسي",
+                "standardDesc": "منهج عادي مع المفاهيم الأساسية",
+                "professional": "التعلم الاحترافي",
+                "professionalDesc": "منهج متقدم مع مشاريع صناعية"
+            },
+            "groupTypes": {
+                "regular": "عادي",
+                "regularDesc": "حتى 15 طالبًا",
+                "semiPrivate": "شبه خاص",
+                "semiPrivateDesc": "3-5 طلاب",
+                "private": "خاص",
+                "privateDesc": "1-2 طالب"
+            },
+            "preview": {
+                "title": "معاينة الفاتورة",
+                "subtitle": "ملخص فوري",
+                "student": "الطالب",
+                "programType": "نوع البرنامج",
+                "courseLevel": "الدورة والمستوى",
+                "groupType": "نوع المجموعة",
+                "pricingPlan": "خطة التسعير",
+                "subtotal": "المجموع الفرعي",
+                "discount": "الخصم",
+                "total": "الإجمالي",
+                "installmentPlan": "خطة التقسيط",
+                "paymentsOf": "دفعات بقيمة"
+            }
+        }
+    },
+    "installments": {
+        "title": "الأقساط",
+        "pageTitle": "إدارة الأقساط",
+        "pageSubtitle": "تتبع وإدارة أقساط الطلاب",
+        "tableTitle": "أقساط الطلاب",
+        "stats": {
+            "totalInstallments": "إجمالي الأقساط",
+            "pendingInstallments": "قيد الانتظار",
+            "overdueInstallments": "متأخرة",
+            "paidThisMonth": "مدفوعة هذا الشهر",
+            "thisMonth": "هذا الشهر"
+        },
+        "table": {
+            "studentName": "اسم الطالب",
+            "invoice": "الفاتورة",
+            "installmentNumber": "رقم القسط",
+            "dueDate": "تاريخ الاستحقاق",
+            "status": "الحالة",
+            "action": "الإجراء"
+        },
+        "status": {
+            "paid": "مدفوع",
+            "pending": "قيد الانتظار",
+            "overdue": "متأخر"
+        },
+        "actions": {
+            "payNow": "ادفع الآن",
+            "view": "عرض"
+        },
+        "empty": {
+            "title": "لا توجد أقساط",
+            "message": "لا توجد أقساط للعرض"
+        },
+        "error": {
+            "loadFailed": "فشل تحميل بيانات الأقساط",
+            "notFound": "القسط غير موجود"
+        },
+        "paymentMethods": {
+            "creditCard": "بطاقة ائتمان",
+            "bankTransfer": "تحويل بنكي",
+            "cash": "نقدي",
+            "check": "شيك"
+        },
+        "pay": {
+            "pageTitle": "دفع القسط",
+            "pageSubtitle": "تسجيل وتأكيد دفع قسط الطالب",
+            "studentInfo": "معلومات الطالب",
+            "invoiceNumber": "رقم الفاتورة",
+            "course": "الدورة",
+            "contact": "التواصل",
+            "installmentDetails": "تفاصيل القسط",
+            "installmentNumber": "رقم القسط",
+            "of": "من",
+            "installmentAmount": "مبلغ القسط",
+            "dueDate": "تاريخ الاستحقاق",
+            "currentStatus": "الحالة الحالية",
+            "totalCourseFee": "إجمالي رسوم الدورة",
+            "totalPaidInstallments": "إجمالي المدفوع",
+            "installmentsLabel": "أقساط",
+            "remainingBalance": "الرصيد المتبقي",
+            "paymentDetails": "تفاصيل الدفع",
+            "paymentType": "نوع الدفع",
+            "fullPayment": "دفع كامل",
+            "fullPaymentDesc": "دفع المبلغ الكامل",
+            "partialPayment": "دفع جزئي",
+            "partialPaymentDesc": "دفع مبلغ مخصص",
+            "paidAmount": "المبلغ المدفوع",
+            "remainingAmount": "المبلغ المتبقي",
+            "paymentMethod": "طريقة الدفع",
+            "selectMethod": "اختر طريقة الدفع",
+            "paymentDate": "تاريخ الدفع",
+            "notes": "ملاحظات (اختياري)",
+            "notesPlaceholder": "أضف أي ملاحظات إضافية حول هذا الدفع...",
+            "confirmationWarning": "تأكيد الدفع",
+            "confirmationWarningText": "يرجى التحقق من جميع تفاصيل الدفع قبل التأكيد. بمجرد التأكيد، سيتم إنشاء سجل دفع وإرساله إلى بريد الطالب الإلكتروني.",
+            "confirmPayment": "تأكيد الدفع",
+            "totalPayment": "إجمالي الدفع",
+            "paymentSummary": "ملخص الدفع",
+            "totalPaidToDate": "إجمالي المدفوع حتى الآن",
+            "afterPaymentBalance": "الرصيد بعد الدفع",
+            "paymentStatus": "حالة الدفع",
+            "paymentHistory": "سجل الدفعات",
+            "installment": "دفع القسط",
+            "noPaymentHistory": "لا يوجد سجل دفعات بعد",
+            "confirmTitle": "تأكيد الدفع",
+            "confirmDescription": "هل أنت متأكد من تسجيل هذا الدفع؟ لا يمكن التراجع عن هذا الإجراء.",
+            "confirm": "تأكيد"
+        }
+    },
+    "common": {
+        "loading": "جاري التحميل...",
+        "cancel": "إلغاء",
+        "active": "نشط",
+        "inactive": "غير نشط",
+        "yes": "نعم",
+        "no": "لا",
+        "unlimited": "غير محدود",
+        "search": "بحث...",
+        "filter": "تصفية",
+        "selectAll": "تحديد الكل",
+        "noData": "لا توجد بيانات"
+    }
+}
