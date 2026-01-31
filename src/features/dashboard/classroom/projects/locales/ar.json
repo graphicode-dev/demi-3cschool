@@ -4,7 +4,42 @@
     "chooseLesson": "اختر الدرس",
     "allLessons": "جميع الدروس",
     "viewHomework": "عرض الواجب",
-    "history": "السجل",
     "submitHomework": "تسليم الواجب",
-    "noProjects": "لا توجد مشاريع متاحة لهذا الدرس."
+    "results": "النتائج",
+    "noProjects": "لا توجد مشاريع متاحة لهذا الدرس.",
+    "projectNotFound": "المشروع غير موجود.",
+    "back": "رجوع",
+    "status": {
+        "new": "جديد",
+        "underReview": "قيد المراجعة",
+        "reviewed": "تمت المراجعة"
+    },
+    "homeworkFile": {
+        "title": "ملف الواجب",
+        "description": "راجع الواجب أدناه قبل البدء في عملك.",
+        "download": "تحميل",
+        "previewPlaceholder": "ستظهر معاينة الملف هنا"
+    },
+    "result": {
+        "title": "نتيجة الواجب",
+        "description": "راجع حالة واجبك وملاحظات المعلم أدناه.",
+        "waitingForTeacher": "في انتظار المعلم",
+        "underReview": "قيد المراجعة",
+        "underReviewDescription": "معلمك يراجع واجبك حالياً. تحقق لاحقاً!",
+        "greatJob": "أحسنت!",
+        "reviewedDescription": "تمت مراجعة واجبك.",
+        "points": "النقاط",
+        "teacherFeedback": "ملاحظات المعلم",
+        "encouragement": "لا تقلق — لقد بذلت قصارى جهدك!"
+    },
+    "submit": {
+        "title": "تسليم الواجب",
+        "description": "ارفع ملفاتك وسلم عملك",
+        "contentLabel": "محتوى الواجب (اختياري)",
+        "contentPlaceholder": "اكتب محتوى تقييمك هنا...",
+        "uploadLabel": "رفع الملفات",
+        "dropzone": "اسحب ملفك هنا أو انقر للتصفح",
+        "supportedFormats": "المدعوم: PDF, JPG, PNG",
+        "button": "تسليم الواجب"
+    }
 }

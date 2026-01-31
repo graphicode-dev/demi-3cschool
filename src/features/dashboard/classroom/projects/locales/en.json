@@ -2,9 +2,44 @@
     "title": "Projects",
     "description": "Choose your lesson and manage your homework.",
     "chooseLesson": "Choose Lesson",
-    "allLessons": "All Lessons",
+    "allLessons": "All Lesson",
     "viewHomework": "View Homework",
-    "history": "History",
     "submitHomework": "Submit Homework",
-    "noProjects": "No projects available for this lesson."
+    "results": "Results",
+    "noProjects": "No projects available for this lesson.",
+    "projectNotFound": "Project not found.",
+    "back": "Back",
+    "status": {
+        "new": "New",
+        "underReview": "Under Review",
+        "reviewed": "Reviewed"
+    },
+    "homeworkFile": {
+        "title": "Homework File",
+        "description": "Review the homework below before starting your work.",
+        "download": "Download",
+        "previewPlaceholder": "File preview will appear here"
+    },
+    "result": {
+        "title": "Homework Result",
+        "description": "Review your homework status and teacher feedback below.",
+        "waitingForTeacher": "Waiting for Teacher",
+        "underReview": "Under Review",
+        "underReviewDescription": "Your teacher is currently reviewing your homework. Check back later!",
+        "greatJob": "Great Job!",
+        "reviewedDescription": "Your homework has been reviewed.",
+        "points": "Points",
+        "teacherFeedback": "Teacher Feedback",
+        "encouragement": "Don't worry — you did your best!"
+    },
+    "submit": {
+        "title": "Submit Assignment",
+        "description": "Upload your files and submit your work",
+        "contentLabel": "Assignment Content (Optional)",
+        "contentPlaceholder": "Write your assessment content here...",
+        "uploadLabel": "Upload Files",
+        "dropzone": "Drop your file here or click to browse",
+        "supportedFormats": "Supported: PDF, JPG, PNG",
+        "button": "Submit Homework"
+    }
 }

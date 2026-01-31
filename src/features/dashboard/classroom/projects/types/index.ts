@@ -1,13 +1,24 @@
+export type ProjectStatus = "new" | "under_review" | "reviewed";
+
 export interface Project {
     id: number;
     lessonId: number;
     lessonTitle: string;
+    lessonOrder: number;
     title: string;
     description: string;
-    status: "pending" | "submitted" | "graded";
+    status: ProjectStatus;
     submissionDate?: string;
     grade?: number;
+    maxGrade?: number;
     feedback?: string;
+    homeworkFile?: {
+        name: string;
+        type: string;
+        size: string;
+        url: string;
+        previewUrl?: string;
+    };
 }
 
 export interface Lesson {

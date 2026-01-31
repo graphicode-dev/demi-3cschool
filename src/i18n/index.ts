@@ -13,14 +13,14 @@ const globalLocales = import.meta.glob<LocaleModule>("./locales/*/*.json", {
     eager: true,
 });
 
-// Feature locales: src/features/*/locales/{lang}.json, src/features/dashboard/*/locales/{lang}.json, src/features/dashboard/shared/*/locales/{lang}.json, and src/features/dashboard/classroom/*/locales/{lang}.json
+// Feature locales: src/features/*/locales/{lang}.json, src/features/dashboard/*/locales/{lang}.json, src/features/dashboard/shared/*/locales/{lang}.json, src/features/dashboard/classroom/*/locales/{lang}.json, and src/features/dashboard/admin/*/locales/{lang}.json
 const featureLocales = import.meta.glob<LocaleModule>(
     [
         "../features/*/locales/*.json",
         "../features/dashboard/*/locales/*.json",
         "../features/dashboard/shared/*/locales/*.json",
         "../features/dashboard/classroom/*/locales/*.json",
-
+        "../features/dashboard/admin/*/locales/*.json",
     ],
     { eager: true }
 );
@@ -73,11 +73,11 @@ Object.entries(globalLocales).forEach(([path, module]) => {
     }
 });
 
-// Process feature locales: ../features/{feature}/locales/{lang}.json or ../features/dashboard/{feature}/locales/{lang}.json or ../features/dashboard/shared/{feature}/locales/{lang}.json or ../features/dashboard/classroom/{feature}/locales/{lang}.json → resources.{lang}.{feature}
+// Process feature locales: ../features/{feature}/locales/{lang}.json or ../features/dashboard/{feature}/locales/{lang}.json or ../features/dashboard/shared/{feature}/locales/{lang}.json or ../features/dashboard/classroom/{feature}/locales/{lang}.json or ../features/dashboard/admin/{feature}/locales/{lang}.json → resources.{lang}.{feature}
 Object.entries(featureLocales).forEach(([path, module]) => {
-    // Extract: ../features/{feature}/locales/{lang}.json or ../features/dashboard/{feature}/locales/{lang}.json or ../features/dashboard/shared/{feature}/locales/{lang}.json or ../features/dashboard/classroom/{feature}/locales/{lang}.json
+    // Extract: ../features/{feature}/locales/{lang}.json or ../features/dashboard/{feature}/locales/{lang}.json or ../features/dashboard/shared/{feature}/locales/{lang}.json or ../features/dashboard/classroom/{feature}/locales/{lang}.json or ../features/dashboard/admin/{feature}/locales/{lang}.json
     const match = path.match(
-        /\.\.\/features\/(?:dashboard\/)?(?:shared\/|classroom\/)?([^/]+)\/locales\/(\w+)\.json$/
+        /\.\.\/features\/(?:dashboard\/)?(?:shared\/|classroom\/|admin\/)?([^/]+)\/locales\/(\w+)\.json$/
     );
     if (match) {
         const [, feature, lang] = match;
