@@ -10,6 +10,8 @@
  *     useStudentsList,
  *     useStudent,
  *     studentKeys,
+ *     useGrades,
+ *     gradeKeys,
  * } from '@/features/systemManagements/api';
  * ```
  *
@@ -25,11 +27,23 @@ export type {
     StudentListResponse,
 } from "../types";
 
+// Types - Grade
+export type { Grade, GradesResponse } from "../types";
+
 // Query Keys
-export { studentKeys, type StudentQueryKey } from "./systemManagement.keys";
+export {
+    studentKeys,
+    type StudentQueryKey,
+    gradeKeys,
+    type GradeQueryKey,
+} from "./systemManagement.keys";
 
 // API Functions
-export { studentsApi } from "./systemManagement.api";
+export { studentsApi, gradesApi } from "./systemManagement.api";
 
 // Query Hooks
-export { useStudentsList, useStudent } from "./systemManagement.queries";
+export {
+    useStudentsList,
+    useStudent,
+    useGrades,
+} from "./systemManagement.queries";

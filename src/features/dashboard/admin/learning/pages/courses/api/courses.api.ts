@@ -147,6 +147,7 @@ export const coursesApi = {
             title: payload.title,
             description: payload.description,
             slug: payload.slug,
+            gradeId: payload.gradeId,
             isActive: payload.isActive ? 1 : 0,
             image: payload.image,
         });

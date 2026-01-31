@@ -19,9 +19,14 @@ import {
     keepPreviousData,
     type UseQueryOptions,
 } from "@tanstack/react-query";
-import { PaginatedStudentData, Student, StudentListParams } from "../types";
-import { studentKeys } from "./systemManagement.keys";
-import { studentsApi } from "./systemManagement.api";
+import {
+    PaginatedStudentData,
+    Student,
+    StudentListParams,
+    Grade,
+} from "../types";
+import { studentKeys, gradeKeys } from "./systemManagement.keys";
+import { studentsApi, gradesApi } from "./systemManagement.api";
 
 // ============================================================================
 // Student List Queries
@@ -76,6 +81,29 @@ export function useStudent(
         queryFn: ({ signal }) => studentsApi.getById(id, signal),
         staleTime: 1000 * 60 * 5, // 5 minutes
         enabled: !!id,
+        ...options,
+    });
+}
+
+// ============================================================================
+// Grade Queries
+// ============================================================================
+
+/**
+ * Hook to fetch list of all grades
+ *
+ * @param options - Additional query options
+ *
+ * @example
+ * ```tsx
+ * const { data: grades } = useGrades();
+ * ```
+ */
+export function useGrades(options?: Partial<UseQueryOptions<Grade[], Error>>) {
+    return useQuery({
+        queryKey: gradeKeys.list(),
+        queryFn: ({ signal }) => gradesApi.getList(signal),
+        staleTime: 1000 * 60 * 10, // 10 minutes - grades don't change often
         ...options,
     });
 }

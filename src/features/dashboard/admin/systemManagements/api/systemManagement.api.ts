@@ -17,7 +17,12 @@
 
 import { api } from "@/shared/api/client";
 import { ApiResponse } from "@/shared/api";
-import { PaginatedStudentData, Student, StudentListParams } from "../types";
+import {
+    PaginatedStudentData,
+    Student,
+    StudentListParams,
+    Grade,
+} from "../types";
 
 // ============================================================================
 // Students API
@@ -62,6 +67,36 @@ export const studentsApi = {
             `${STUDENTS_BASE_URL}/${id}`,
             { signal }
         );
+
+        if (response.error) {
+            throw response.error;
+        }
+
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
+        }
+
+        return response.data.data;
+    },
+};
+
+// ============================================================================
+// Grades API
+// ============================================================================
+
+const GRADES_BASE_URL = "/system-managements/grades";
+
+/**
+ * Grades API functions
+ */
+export const gradesApi = {
+    /**
+     * Get list of all grades
+     */
+    getList: async (signal?: AbortSignal): Promise<Grade[]> => {
+        const response = await api.get<ApiResponse<Grade[]>>(GRADES_BASE_URL, {
+            signal,
+        });
 
         if (response.error) {
             throw response.error;

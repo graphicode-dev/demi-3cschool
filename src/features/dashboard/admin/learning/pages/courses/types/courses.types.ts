@@ -29,6 +29,15 @@ export interface CourseImage {
 }
 
 /**
+ * Course grade object
+ */
+export interface CourseGrade {
+    id: number | null;
+    name: string | null;
+    code: string | null;
+}
+
+/**
  * Course entity
  */
 export interface Course {
@@ -37,6 +46,7 @@ export interface Course {
     description: string;
     slug: string;
     isActive: boolean;
+    grade: CourseGrade;
     image: CourseImage | null;
     createdAt: string;
     updatedAt: string;
@@ -157,6 +167,7 @@ export interface CourseCreatePayload {
     title: string;
     description: string;
     slug: string;
+    gradeId: string;
     isActive: boolean;
     image?: File;
 }

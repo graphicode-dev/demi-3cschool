@@ -167,6 +167,7 @@ export default function LearningCoursesList() {
                                 key={course.id}
                                 title={course.title}
                                 description={`${course.slug} • ${course.description}`}
+                                grade={course.grade?.name}
                                 status={{
                                     label: course.isActive
                                         ? t("common.active", "Active")

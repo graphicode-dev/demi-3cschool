@@ -23,6 +23,8 @@ interface ListCardProps extends BaseComponentProps {
     title: string;
     /** Card description */
     description?: string;
+    /** Grade name to display as a badge */
+    grade?: string | null;
     /** Status badge (e.g., "Active", "Inactive") */
     status?: {
         label: string;
@@ -145,6 +147,7 @@ const STATUS_COLORS = {
 export function ListCard({
     title,
     description,
+    grade,
     status,
     meta,
     onEdit,
@@ -169,6 +172,11 @@ export function ListCard({
                         <h3 className="text-base font-semibold text-gray-900 dark:text-white">
                             {title}
                         </h3>
+                        {grade && (
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-brand-100 text-brand-700 dark:bg-brand-900/30 dark:text-brand-400">
+                                {grade}
+                            </span>
+                        )}
                         {status && (
                             <span
                                 className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_COLORS[status.variant]}`}

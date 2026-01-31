@@ -13,3 +13,6 @@ export type {
     PaginatedStudentData,
     StudentListResponse,
 } from "./student.types";
+
+// Grade types
+export type { Grade, GradesResponse } from "./grade.types";

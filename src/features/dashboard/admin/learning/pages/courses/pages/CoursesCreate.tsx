@@ -17,6 +17,7 @@ import { useCreateCourse } from "../api";
 import { ProgramsCurriculum } from "@/features/dashboard/admin/learning/types";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useMutationHandler } from "@/shared/api";
+import { useGrades } from "@/features/dashboard/admin/systemManagements/api";
 
 const CURRICULUM_IDS: Record<ProgramsCurriculum, string> = {
     standard: "1",
@@ -33,6 +34,7 @@ const courseFormSchema = z.object({
             /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
             "Slug must be lowercase with hyphens only"
         ),
+    gradeId: z.string().min(1, "Grade is required"),
     isActive: z.boolean(),
 });
 
@@ -56,12 +58,12 @@ export default function LearningCoursesCreate() {
 
     const { mutateAsync, isPending } = useCreateCourse();
     const { execute } = useMutationHandler();
+    const { data: grades = [], isLoading: isLoadingGrades } = useGrades();
 
     const {
         control,
         handleSubmit,
-        formState: { errors, isSubmitting },
-        watch,
+        formState: { errors },
         setValue,
     } = useForm<CourseFormData>({
         resolver: zodResolver(courseFormSchema),
@@ -69,11 +71,10 @@ export default function LearningCoursesCreate() {
             title: "",
             description: "",
             slug: "",
+            gradeId: "",
             isActive: true,
         },
     });
-
-    const slugValue = watch("slug");
 
     const generateSlug = (title: string) => {
         return title
@@ -86,13 +87,11 @@ export default function LearningCoursesCreate() {
 
     const handleTitleChange = (value: string) => {
         const newSlug = generateSlug(value);
-        const currentTitle = watch("title");
-        if (!slugValue || slugValue === generateSlug(currentTitle)) {
-            setValue("slug", newSlug);
-        }
+        setValue("slug", newSlug);
     };
 
     const onSubmit = (data: CourseFormData) => {
+        console.log("data: ", JSON.stringify(data));
         execute(
             () =>
                 mutateAsync({
@@ -100,6 +99,7 @@ export default function LearningCoursesCreate() {
                     title: data.title,
                     description: data.description,
                     slug: data.slug,
+                    gradeId: data.gradeId,
                     isActive: data.isActive,
                 }),
             {
@@ -168,11 +168,37 @@ export default function LearningCoursesCreate() {
                             "courses:courses.form.fields.slug.placeholder",
                             "course-slug"
                         ),
+                        readOnly: true,
                     }}
                     label={{
                         text: t(
                             "courses:courses.form.fields.slug.label",
                             "URL Slug"
+                        ),
+                        required: true,
+                    }}
+                    style={{ size: "md" }}
+                />
+
+                <Form.Input
+                    name="gradeId"
+                    type={{
+                        type: "dropdown",
+                        placeholder: t(
+                            "courses:courses.form.fields.grade.placeholder",
+                            "Select a grade"
+                        ),
+                        options: grades
+                            .filter((grade) => grade.isActive)
+                            .map((grade) => ({
+                                value: String(grade.id),
+                                label: grade.name,
+                            })),
+                    }}
+                    label={{
+                        text: t(
+                            "courses:courses.form.fields.grade.label",
+                            "Grade"
                         ),
                         required: true,
                     }}
@@ -195,7 +221,6 @@ export default function LearningCoursesCreate() {
                         ),
                     }}
                     style={{ size: "md" }}
-                    layout={{ className: "flex items-end" }}
                 />
 
                 <Form.Input

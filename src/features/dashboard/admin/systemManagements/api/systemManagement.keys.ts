@@ -68,3 +68,33 @@ export type StudentQueryKey =
     | ReturnType<typeof studentKeys.list>
     | ReturnType<typeof studentKeys.details>
     | ReturnType<typeof studentKeys.detail>;
+
+// ============================================================================
+// Grade Query Keys
+// ============================================================================
+
+/**
+ * Query key factory for grades
+ *
+ * Hierarchy:
+ * - all: ['grades']
+ * - list: ['grades', 'list']
+ */
+export const gradeKeys = {
+    /**
+     * Root key for all grade queries
+     */
+    all: ["grades"] as const,
+
+    /**
+     * Key for grades list
+     */
+    list: () => [...gradeKeys.all, "list"] as const,
+};
+
+/**
+ * Type for grade query keys
+ */
+export type GradeQueryKey =
+    | typeof gradeKeys.all
+    | ReturnType<typeof gradeKeys.list>;
