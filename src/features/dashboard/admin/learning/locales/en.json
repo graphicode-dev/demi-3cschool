@@ -20,6 +20,85 @@
             "lessons": "Lessons"
         }
     },
+    "grades": {
+        "navTitle": "Grades",
+        "title": "Grades",
+        "subtitle": "Select a grade to view its learning content",
+        "totalLessons": "Total Lessons",
+        "items": {
+            "grade4": {
+                "title": "Grade 4",
+                "description": "Explore learning content for Grade 4 students"
+            },
+            "grade5": {
+                "title": "Grade 5",
+                "description": "Explore learning content for Grade 5 students"
+            },
+            "grade6": {
+                "title": "Grade 6",
+                "description": "Explore learning content for Grade 6 students"
+            }
+        }
+    },
+    "terms": {
+        "title": "Select Term",
+        "subtitle": "Choose a term to view lessons",
+        "overview": "Term Overview",
+        "lessons": "lessons",
+        "items": {
+            "firstTerm": {
+                "title": "First Term",
+                "description": "View First Term lessons and content"
+            },
+            "secondTerm": {
+                "title": "Second Term",
+                "description": "View Second Term lessons and content"
+            },
+            "summerCamp": {
+                "title": "Summer Camp",
+                "description": "View Summer Camp lessons and content"
+            }
+        }
+    },
+    "lessons": {
+        "title": "Lessons",
+        "subtitle": "Manage lessons for this grade and term",
+        "searchPlaceholder": "Search lessons...",
+        "showing": "Showing",
+        "of": "of",
+        "lessonsLabel": "lessons",
+        "actions": {
+            "add": "Add Lesson",
+            "edit": "Edit Lesson",
+            "delete": "Delete Lesson",
+            "view": "View Lesson"
+        },
+        "empty": {
+            "title": "No Lessons Found",
+            "message": "Create your first lesson to get started",
+            "searchMessage": "No lessons match your search criteria"
+        },
+        "deleteDialog": {
+            "title": "Delete Lesson",
+            "message": "Are you sure you want to delete this lesson? This action cannot be undone."
+        },
+        "toast": {
+            "deleteSuccess": "Lesson deleted successfully"
+        },
+        "form": {
+            "create": {
+                "title": "Create Lesson",
+                "subtitle": "Add a new lesson"
+            },
+            "edit": {
+                "title": "Edit Lesson",
+                "subtitle": "Update lesson details"
+            },
+            "view": {
+                "title": "Lesson Details"
+            }
+        }
+    },
     "courses": {
         "breadcrumb": "Courses",
         "title": "Courses",

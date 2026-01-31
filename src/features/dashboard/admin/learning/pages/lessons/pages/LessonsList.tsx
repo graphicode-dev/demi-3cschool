@@ -1,144 +1,43 @@
 /**
  * Learning - Lessons List Page
  *
- * Shared component for both Standard and Professional Learning lessons.
- * The curriculum type is determined from the URL path.
- * Displays lessons grouped by level.
- *
- * Fetching logic:
- * - null or "all" = fetch all lessons grouped by level
- * - levelId=<id> = fetch lessons for that specific level grouped
+ * Displays lessons for a specific level.
+ * New structure: /admin/grades/:gradeId/levels/:levelId/lessons
+ * Fetches lessons by levelId from URL params.
  */
 
-import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import {
-    useLocation,
-    useNavigate,
-    useSearchParams,
-    Link,
-} from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import {
     LoadingState,
     ErrorState,
     EmptyState,
     useConfirmDialog,
 } from "@/design-system";
-import { LevelFilterDropdown } from "../components";
-import { ProgramsCurriculum } from "@/features/dashboard/admin/learning/types";
-import { Level, LevelGroup, useLevelsList } from "../../levels";
-import { useDeleteLesson, useLessonsByLevel, useLessonsList } from "../api";
+import { useDeleteLesson, useLessonsByLevel } from "../api";
 import { ListCard } from "../../courses/components";
-import { Lesson, LessonGroup } from "../types";
+import { Lesson } from "../types";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useMutationHandler } from "@/shared/api";
-
-export function useCurriculumType() {
-    const location = useLocation();
-    let curriculumType: ProgramsCurriculum = "first_term";
-    let basePath = "/admin/firstTerm-learning";
-
-    if (location.pathname.includes("secondTerm")) {
-        curriculumType = "second_term";
-        basePath = "/admin/secondTerm-learning";
-    } else if (location.pathname.includes("summer-camp")) {
-        curriculumType = "summer_camp";
-        basePath = "/admin/summer-camp";
-    }
-
-    return {
-        curriculumType,
-        basePath,
-    };
-}
 
 export default function LearningLessonsList() {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const [searchParams, setSearchParams] = useSearchParams();
-    const { basePath, curriculumType } = useCurriculumType();
+    const { gradeId, levelId } = useParams<{
+        gradeId: string;
+        levelId: string;
+    }>();
 
-    // Get levelId from URL - this drives the fetching logic
-    // null or "all" = fetch all lessons, <id> = fetch by specific level
-    const levelIdFromUrl = searchParams.get("levelId");
-    const isAllSelected = !levelIdFromUrl || levelIdFromUrl === "all";
-    const isSpecificLevel = levelIdFromUrl && levelIdFromUrl !== "all";
+    // Build base path from URL params
+    const basePath = `/admin/grades/${gradeId}/levels/${levelId}`;
 
-    // Fetch all levels grouped for dropdown (filtered by curriculum type)
-    // Using type: "group" to get levels with their course info
-    const { data: allLevelsData, isLoading: isLevelsLoading } = useLevelsList({
-        type: "group",
-        programs_curriculum: curriculumType,
-    });
-
-    // Fetch all lessons grouped (when "all" is selected)
+    // Fetch lessons by level ID
     const {
-        data: allLessonsData,
-        isLoading: isAllLessonsLoading,
-        error: allLessonsError,
-        refetch: refetchAllLessons,
-    } = useLessonsList(
-        {
-            type: "group",
-            programs_curriculum: curriculumType,
-        },
-        {
-            enabled: isAllSelected,
-        }
-    );
-
-    // Fetch lessons by level (when specific levelId is selected)
-    const {
-        data: levelLessonsData,
-        isLoading: isLevelLessonsLoading,
-        error: levelLessonsError,
-        refetch: refetchLevelLessons,
-    } = useLessonsByLevel(
-        {
-            levelId: isSpecificLevel ? levelIdFromUrl : "",
-            type: "group",
-            programs_curriculum: curriculumType,
-        },
-        {
-            enabled: !!isSpecificLevel,
-        }
-    );
-
-    // Determine which data/loading/error to use based on URL
-    const lessonsData = isSpecificLevel ? levelLessonsData : allLessonsData;
-    const isLessonsLoading = isSpecificLevel
-        ? isLevelLessonsLoading
-        : isAllLessonsLoading;
-    const error = isSpecificLevel ? levelLessonsError : allLessonsError;
-    const refetch = isSpecificLevel ? refetchLevelLessons : refetchAllLessons;
-
-    // Map levels for dropdown - extract from grouped data
-    const levels = useMemo(() => {
-        const levelGroups = (allLevelsData as LevelGroup[]) ?? [];
-        if (levelGroups.length === 0) return [];
-
-        // Flatten all levels from all groups
-        const allLevels: { id: string; title: string }[] = [];
-        levelGroups.forEach((group: LevelGroup) => {
-            group.levels.forEach((level: Level) => {
-                allLevels.push({
-                    id: String(level.id),
-                    title: level.title,
-                });
-            });
-        });
-        return allLevels;
-    }, [allLevelsData]);
-
-    // Handle dropdown change - update URL
-    const handleLevelChange = (levelId: string | null) => {
-        if (levelId) {
-            setSearchParams({ levelId });
-        } else {
-            searchParams.delete("levelId");
-            setSearchParams(searchParams);
-        }
-    };
+        data: lessonsData,
+        isLoading,
+        error,
+        refetch,
+    } = useLessonsByLevel({ levelId: levelId || "" }, { enabled: !!levelId });
 
     const handleEdit = (id: string) => {
         navigate(`${basePath}/lessons/edit/${id}`);
@@ -174,10 +73,13 @@ export default function LearningLessonsList() {
         navigate(`${basePath}/lessons/view/${id}?tab=videos`);
     };
 
-    const lessonGroups = (lessonsData as LessonGroup[]) ?? [];
-    const isLoading = isLevelsLoading || isLessonsLoading;
+    // Get lessons array from response - API returns array directly for /lessons/level/:levelId
+    const lessons = Array.isArray(lessonsData)
+        ? (lessonsData as Lesson[])
+        : ((lessonsData as { items?: Lesson[] })?.items ?? []);
+    const levelTitle = lessons[0]?.level?.title || `Level ${levelId}`;
 
-    if (isLoading && !lessonsData) {
+    if (isLoading) {
         return <LoadingState message={t("common.loading", "Loading...")} />;
     }
 
@@ -186,7 +88,7 @@ export default function LearningLessonsList() {
             <ErrorState
                 message={
                     error.message ||
-                    t("errors.fetchFailed", "Failed to load data")
+                    t("errors.fetchFailed", "Failed to load lessons")
                 }
                 onRetry={refetch}
             />
@@ -196,14 +98,9 @@ export default function LearningLessonsList() {
     return (
         <PageWrapper
             pageHeaderProps={{
-                title: t(
-                    `learning:learning.${curriculumType}.lessons`,
-                    `${curriculumType === "first_term" ? "First Term" : curriculumType === "second_term" ? "Second Term" : "Summer Camp"} Learning - Lessons`
-                ),
-                subtitle: t(
-                    `learning:learning.${curriculumType}.lessonsDescription`,
-                    `Manage lessons in the ${curriculumType} learning track`
-                ),
+                title: t("learning:lessons.title", "Lessons"),
+                subtitle: levelTitle,
+                backButton: true,
                 actions: (
                     <Link
                         to={`${basePath}/lessons/create`}
@@ -227,15 +124,14 @@ export default function LearningLessonsList() {
                 ),
             }}
         >
-            <LevelFilterDropdown
-                levels={levels}
-                selectedLevelId={levelIdFromUrl}
-                onChange={handleLevelChange}
-                isLoading={isLevelsLoading}
-                className="max-w-xs"
-            />
+            {/* Level Badge */}
+            <div className="mb-6">
+                <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-brand-100 text-brand-700 dark:bg-brand-900/30 dark:text-brand-400">
+                    {levelTitle}
+                </span>
+            </div>
 
-            {lessonGroups.length === 0 ? (
+            {lessons.length === 0 ? (
                 <EmptyState
                     title={t("lessons:lessons.empty.title", "No lessons found")}
                     message={t(
@@ -244,68 +140,43 @@ export default function LearningLessonsList() {
                     )}
                 />
             ) : (
-                <div className="space-y-6">
-                    {lessonGroups.map(
-                        (group: LessonGroup, groupIndex: number) => (
-                            <div
-                                key={group.level?.id ?? `group-${groupIndex}`}
-                                className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
-                            >
-                                <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-                                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                                        {group.level?.title ??
-                                            t(
-                                                "lessons:lessons.noCourse",
-                                                "Uncategorized"
-                                            )}
-                                    </h2>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                                        {t(
-                                            "lessons:lessons.lessonsCount",
-                                            "{{count}} Lessons",
-                                            { count: group.lessons.length }
-                                        )}
-                                    </p>
-                                </div>
+                <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+                        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                            {levelTitle}
+                        </h2>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                            {t(
+                                "lessons:lessons.lessonsCount",
+                                "{{count}} Lessons",
+                                { count: lessons.length }
+                            )}
+                        </p>
+                    </div>
 
-                                <div className="divide-y divide-gray-200 dark:divide-gray-700">
-                                    {group.lessons.map((lesson: Lesson) => (
-                                        <ListCard
-                                            key={lesson.id}
-                                            title={lesson.title}
-                                            description={`${lesson.level.title} • ${lesson.description}`}
-                                            status={{
-                                                label: lesson.isActive
-                                                    ? t(
-                                                          "common.active",
-                                                          "Active"
-                                                      )
-                                                    : t(
-                                                          "common.inactive",
-                                                          "Inactive"
-                                                      ),
-                                                variant: lesson.isActive
-                                                    ? "success"
-                                                    : "default",
-                                            }}
-                                            meta={new Date(
-                                                lesson.createdAt
-                                            ).toLocaleDateString()}
-                                            onEdit={() =>
-                                                handleEdit(String(lesson.id))
-                                            }
-                                            onDelete={() =>
-                                                handleDelete(lesson)
-                                            }
-                                            onView={() =>
-                                                handleView(String(lesson.id))
-                                            }
-                                        />
-                                    ))}
-                                </div>
-                            </div>
-                        )
-                    )}
+                    <div className="divide-y divide-gray-200 dark:divide-gray-700">
+                        {lessons.map((lesson: Lesson) => (
+                            <ListCard
+                                key={lesson.id}
+                                title={lesson.title}
+                                description={lesson.description}
+                                status={{
+                                    label: lesson.isActive
+                                        ? t("common.active", "Active")
+                                        : t("common.inactive", "Inactive"),
+                                    variant: lesson.isActive
+                                        ? "success"
+                                        : "default",
+                                }}
+                                meta={new Date(
+                                    lesson.createdAt
+                                ).toLocaleDateString()}
+                                onEdit={() => handleEdit(String(lesson.id))}
+                                onDelete={() => handleDelete(lesson)}
+                                onView={() => handleView(String(lesson.id))}
+                            />
+                        ))}
+                    </div>
                 </div>
             )}
         </PageWrapper>

@@ -4,6 +4,7 @@
 
 export { learningNav, default } from "./nav";
 export {
+    gradesPaths,
     learningPaths,
     FirstTermLearningPaths,
     SecondTermLearningPaths,

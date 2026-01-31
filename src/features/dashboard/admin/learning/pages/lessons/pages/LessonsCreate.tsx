@@ -1,27 +1,22 @@
 /**
  * Learning - Create Lesson Page
  *
- * Shared component for both Standard and Professional Learning.
+ * Creates a new lesson for a specific level.
+ * Level ID is taken from URL params.
  * Uses react-hook-form with design-system Form components.
  */
 
-import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Form } from "@/design-system/components/form";
-import { learningPaths } from "@/features/dashboard/admin/learning/navigation/paths";
-import { ProgramsCurriculum } from "@/features/dashboard/admin/learning/types";
 import { useCreateLesson } from "../api";
-import { Level, LevelGroup, useLevelsList } from "../../levels";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useMutationHandler } from "@/shared/api";
-import { useCurriculumType } from "../../../hooks";
 
 const lessonFormSchema = z.object({
-    levelId: z.string().min(1, "Level is required"),
     title: z.string().min(1, "Title is required").max(255, "Title is too long"),
     description: z.string().min(1, "Description is required"),
     isActive: z.boolean(),
@@ -32,37 +27,16 @@ type LessonFormData = z.infer<typeof lessonFormSchema>;
 export default function LearningLessonsCreate() {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
-    const curriculumType = useCurriculumType();
-    const paths =
-        curriculumType === "first_term"
-            ? learningPaths.firstTerm
-            : curriculumType === "second_term"
-              ? learningPaths.secondTerm
-              : learningPaths.summerCamp;
+    const { gradeId, levelId } = useParams<{
+        gradeId: string;
+        levelId: string;
+    }>();
 
-    const preselectedLevelId = searchParams.get("levelId") || "";
+    // Build base path from URL params
+    const basePath = `/admin/grades/${gradeId}/levels/${levelId}`;
 
     const { mutateAsync, isPending } = useCreateLesson();
     const { execute } = useMutationHandler();
-    const { data: levelsData } = useLevelsList({
-        type: "group",
-        programs_curriculum: curriculumType,
-    });
-
-    // Extract levels from grouped data
-    const levels = useMemo(() => {
-        const levelGroups = (levelsData as LevelGroup[]) ?? [];
-        if (levelGroups.length === 0) return [];
-
-        const allLevels: Level[] = [];
-        levelGroups.forEach((group: LevelGroup) => {
-            group.levels.forEach((level: Level) => {
-                allLevels.push(level);
-            });
-        });
-        return allLevels;
-    }, [levelsData]);
 
     const {
         control,
@@ -71,7 +45,6 @@ export default function LearningLessonsCreate() {
     } = useForm<LessonFormData>({
         resolver: zodResolver(lessonFormSchema),
         defaultValues: {
-            levelId: preselectedLevelId,
             title: "",
             description: "",
             isActive: true,
@@ -82,7 +55,7 @@ export default function LearningLessonsCreate() {
         execute(
             () =>
                 mutateAsync({
-                    levelId: data.levelId,
+                    levelId: levelId || "",
                     title: data.title,
                     description: data.description,
                     isActive: data.isActive,
@@ -92,13 +65,13 @@ export default function LearningLessonsCreate() {
                     "lessons:lessons.messages.createSuccess",
                     "Lesson created successfully"
                 ),
-                onSuccess: () => navigate(paths.lessons.list()),
+                onSuccess: () => navigate(`${basePath}/lessons`),
             }
         );
     };
 
     const handleCancel = () => {
-        navigate(paths.lessons.list());
+        navigate(`${basePath}/lessons`);
     };
 
     return (
@@ -110,7 +83,7 @@ export default function LearningLessonsCreate() {
                 ),
                 subtitle: t(
                     "lessons:lessons.form.create.subtitle",
-                    `Add a new lesson to ${curriculumType === "first_term" ? "First Term" : curriculumType === "second_term" ? "Second Term" : "Summer Camp"} Learning`
+                    "Add a new lesson"
                 ),
                 backButton: true,
             }}
@@ -124,30 +97,6 @@ export default function LearningLessonsCreate() {
                     gap: { base: "4", md: "6" },
                 }}
             >
-                <Form.Input
-                    name="levelId"
-                    type={{
-                        type: "dropdown",
-                        placeholder: t(
-                            "lessons:lessons.form.fields.level.placeholder",
-                            "Select a level"
-                        ),
-                        options: levels.map((level: Level) => ({
-                            value: String(level.id),
-                            label: level.title,
-                        })),
-                    }}
-                    label={{
-                        text: t(
-                            "lessons:lessons.form.fields.level.label",
-                            "Level"
-                        ),
-                        required: true,
-                    }}
-                    style={{ size: "md" }}
-                    layout={{ className: "col-span-full" }}
-                />
-
                 <Form.Input
                     name="title"
                     type={{
@@ -184,7 +133,6 @@ export default function LearningLessonsCreate() {
                         ),
                     }}
                     style={{ size: "md" }}
-                    layout={{ className: "flex items-end" }}
                 />
 
                 <Form.Input

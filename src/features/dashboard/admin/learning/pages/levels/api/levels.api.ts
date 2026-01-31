@@ -19,6 +19,7 @@ import { api } from "@/shared/api/client";
 import type {
     Level,
     LevelGroup,
+    LevelByGrade,
     LevelsListParams,
     LevelsByCourseParams,
     LevelCreatePayload,
@@ -198,6 +199,29 @@ export const levelsApi = {
         if (response.error) {
             throw response.error;
         }
+    },
+
+    /**
+     * Get levels by grade ID
+     */
+    getByGrade: async (
+        gradeId: string | number,
+        signal?: AbortSignal
+    ): Promise<LevelByGrade[]> => {
+        const response = await api.get<ApiResponse<LevelByGrade[]>>(
+            `${BASE_URL}/grade/${gradeId}`,
+            { signal }
+        );
+
+        if (response.error) {
+            throw response.error;
+        }
+
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
+        }
+
+        return response.data.data;
     },
 };
 

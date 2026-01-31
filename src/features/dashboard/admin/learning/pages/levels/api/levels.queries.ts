@@ -33,6 +33,7 @@ import { levelsApi } from "./levels.api";
 import type {
     Level,
     LevelGroup,
+    LevelByGrade,
     LevelsListParams,
     LevelsByCourseParams,
     LevelsMetadata,
@@ -243,6 +244,33 @@ export function useLevel(
         queryKey: levelKeys.detail(id ?? ""),
         queryFn: ({ signal }) => levelsApi.getById(id!, signal),
         enabled: !!id,
+        ...options,
+    });
+}
+
+// ============================================================================
+// By Grade Query
+// ============================================================================
+
+/**
+ * Hook to fetch levels by grade ID
+ *
+ * @param gradeId - Grade ID to filter by
+ * @param options - Additional query options
+ *
+ * @example
+ * ```tsx
+ * const { data: levels, isLoading } = useLevelsByGrade(gradeId);
+ * ```
+ */
+export function useLevelsByGrade(
+    gradeId: string | number | undefined | null,
+    options?: Partial<UseQueryOptions<LevelByGrade[], Error>>
+) {
+    return useQuery({
+        queryKey: levelKeys.byGrade(gradeId ?? ""),
+        queryFn: ({ signal }) => levelsApi.getByGrade(gradeId!, signal),
+        enabled: !!gradeId,
         ...options,
     });
 }

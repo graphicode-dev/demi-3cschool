@@ -92,6 +92,12 @@ export const levelKeys = {
         [...levelKeys.all, "infinite", "byCourse", courseId] as const,
 
     /**
+     * Key for levels by grade ID
+     */
+    byGrade: (gradeId: string | number) =>
+        [...levelKeys.all, "byGrade", gradeId] as const,
+
+    /**
      * Key for all detail queries
      */
     details: () => [...levelKeys.all, "detail"] as const,
@@ -114,5 +120,6 @@ export type LevelQueryKey =
     | ReturnType<typeof levelKeys.byCourseId>
     | ReturnType<typeof levelKeys.infinite>
     | ReturnType<typeof levelKeys.infiniteByCourse>
+    | ReturnType<typeof levelKeys.byGrade>
     | ReturnType<typeof levelKeys.details>
     | ReturnType<typeof levelKeys.detail>;

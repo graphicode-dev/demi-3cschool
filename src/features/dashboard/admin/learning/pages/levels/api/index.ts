@@ -21,6 +21,7 @@
 export type {
     Level,
     LevelGroup,
+    LevelByGrade,
     LevelCourseRef,
     LevelCourse,
     LevelsListParams,
@@ -51,6 +52,7 @@ export {
     useLevelsInfinite,
     useLevelsInfiniteByCourse,
     useLevel,
+    useLevelsByGrade,
 } from "./levels.queries";
 
 // Mutation Hooks

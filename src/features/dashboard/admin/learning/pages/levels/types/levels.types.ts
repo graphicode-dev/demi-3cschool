@@ -162,6 +162,28 @@ export interface LevelsByCourseParams {
     programs_curriculum?: ProgramsCurriculum;
 }
 
+/**
+ * Level by grade response item
+ */
+export interface LevelByGrade {
+    id: number;
+    title: string;
+    slug: string;
+    description: string;
+    isActive: boolean;
+    programsCurriculum: {
+        id: number;
+        name: string;
+    };
+    grade: {
+        id: number;
+        name: string;
+        code: string;
+    };
+    createdAt: string;
+    updatedAt: string;
+}
+
 // ============================================================================
 // Payload Types
 // ============================================================================

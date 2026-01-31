@@ -1,23 +1,56 @@
 /**
  * Learning Feature - Path Builders
  *
- * Centralized, type-safe path builders for firstTerm and secondTerm Learning.
- * Includes Courses, Levels, and Lessons paths for both curriculum types.
+ * Centralized, type-safe path builders for Grades navigation.
+ * Flow: Grades -> Grade 4/5/6 -> Terms -> Lessons
  *
  * @example
  * ```ts
- * import { learningPaths } from '@/features/learning/navigation/paths';
+ * import { learningPaths, gradesPaths } from '@/features/learning/navigation/paths';
  *
- * navigate(learningPaths.firstTerm.courses.list());
- * navigate(learningPaths.secondTerm.levels.view(levelId));
+ * navigate(gradesPaths.list());
+ * navigate(gradesPaths.terms(4));
+ * navigate(gradesPaths.lessons(4, 'first_term'));
  * ```
  */
 
 import { registerFeaturePaths } from "@/router/paths.registry";
 
+const GRADES_BASE_PATH = "/admin/grades";
 const FIRST_TERM_BASE_PATH = "/admin/firstTerm-learning";
 const SECOND_TERM_BASE_PATH = "/admin/secondTerm-learning";
 const SUMMER_CAMP_BASE_PATH = "/admin/summer-camp";
+
+// ============================================================================
+// Grades Navigation Paths (New Structure)
+// ============================================================================
+
+export const gradesPaths = {
+    /** List all grades */
+    list: () => `${GRADES_BASE_PATH}`,
+    /** Terms list for a specific grade */
+    terms: (gradeId: string | number) => `${GRADES_BASE_PATH}/${gradeId}/terms`,
+    /** Lessons list for a specific grade and term */
+    lessons: (gradeId: string | number, termId: string) =>
+        `${GRADES_BASE_PATH}/${gradeId}/terms/${termId}/lessons`,
+    /** Create lesson for a specific grade and term */
+    lessonsCreate: (gradeId: string | number, termId: string) =>
+        `${GRADES_BASE_PATH}/${gradeId}/terms/${termId}/lessons/create`,
+    /** Edit lesson for a specific grade and term */
+    lessonsEdit: (
+        gradeId: string | number,
+        termId: string,
+        lessonId: string | number
+    ) =>
+        `${GRADES_BASE_PATH}/${gradeId}/terms/${termId}/lessons/edit/${lessonId}`,
+    /** View lesson for a specific grade and term */
+    lessonsView: (
+        gradeId: string | number,
+        termId: string,
+        lessonId: string | number
+    ) =>
+        `${GRADES_BASE_PATH}/${gradeId}/terms/${termId}/lessons/view/${lessonId}`,
+} as const;
 
 // ============================================================================
 // First Term Learning Paths
