@@ -109,11 +109,7 @@ export function usePermissions() {
     }, [permissionsData, setPermissionEntities]);
 
     // Clear permissions on logout
-    useEffect(() => {
-        if (!isAuthenticated) {
-            clearPermissions();
-        }
-    }, [isAuthenticated, clearPermissions]);
+    // Note: clearPermissions is handled by PermissionProvider, no need to duplicate here
 
     /**
      * Get user's permissions from store

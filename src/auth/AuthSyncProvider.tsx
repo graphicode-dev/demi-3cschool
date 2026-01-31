@@ -25,7 +25,6 @@ interface AuthSyncProviderProps {
 export function AuthSyncProvider({ children }: AuthSyncProviderProps) {
     const navigate = useNavigate();
     const { isAuthenticated, setUser, setIsAuthenticated } = authStore();
-    const { clearPermissions } = permissionStore();
     const lastTokenRef = useRef<string | undefined>(
         tokenService.getAccessToken()
     );
@@ -38,7 +37,7 @@ export function AuthSyncProvider({ children }: AuthSyncProviderProps) {
         if (currentState.isAuthenticated) {
             setUser(null);
             setIsAuthenticated(false);
-            clearPermissions();
+            permissionStore.getState().clearPermissions();
             tokenService.clearTokens();
 
             const loginPath = paths.auth.login();
@@ -128,13 +127,7 @@ export function AuthSyncProvider({ children }: AuthSyncProviderProps) {
             );
             clearInterval(cookieCheckInterval);
         };
-    }, [
-        isAuthenticated,
-        navigate,
-        setUser,
-        setIsAuthenticated,
-        clearPermissions,
-    ]);
+    }, [isAuthenticated, navigate, setUser, setIsAuthenticated]);
 
     return <>{children}</>;
 }

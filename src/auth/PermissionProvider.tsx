@@ -74,12 +74,12 @@ export function PermissionProvider({
         }
     }, [isSuccess, permissionsData, setPermissionEntities]);
 
-    // Clear permissions on logout
+    // Clear permissions on logout - use stable reference from store
     useEffect(() => {
         if (!isAuthenticated) {
-            clearPermissions();
+            permissionStore.getState().clearPermissions();
         }
-    }, [isAuthenticated, clearPermissions]);
+    }, [isAuthenticated]);
 
     // If user has permissions in their object (from login), use those
     useEffect(() => {
