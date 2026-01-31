@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { safeNavigate } from "@/utils";
 import { AuthSteps } from "@/auth/auth.types";
@@ -10,11 +10,14 @@ import LoginForm from "../../components/forms/login/LoginForm";
 import LoginMagicLinkForm from "../../components/forms/login/LoginMagicLinkForm";
 import { authStore } from "@/auth/auth.store";
 import { useLogin, useLoginWithMagicLink } from "../../api/auth.mutations";
+import { tokenService } from "@/auth";
 
 function LoginPage() {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { isAuthenticated, setAuthStep, authStep } = authStore();
+    const { isAuthenticated, setAuthStep, authStep, _hasHydrated } =
+        authStore();
+    const hasRedirected = useRef(false);
 
     const isPopup = window.opener !== null;
 
@@ -65,10 +68,18 @@ function LoginPage() {
     }, []);
 
     useEffect(() => {
-        if (isAuthenticated) {
+        // Wait for hydration and check if user has a valid token
+        // This prevents redirect loops when store has stale isAuthenticated state
+        if (
+            _hasHydrated &&
+            isAuthenticated &&
+            tokenService.hasToken() &&
+            !hasRedirected.current
+        ) {
+            hasRedirected.current = true;
             safeNavigate(navigate, paths.dashboard.classroom.profile());
         }
-    }, [isAuthenticated]);
+    }, [isAuthenticated, _hasHydrated, navigate]);
 
     return (
         <>
