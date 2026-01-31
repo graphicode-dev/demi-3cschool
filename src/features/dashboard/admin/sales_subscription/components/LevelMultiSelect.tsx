@@ -34,7 +34,7 @@ export function LevelMultiSelect({
     const [isOpen, setIsOpen] = useState(false);
 
     const { data: levelsData, isLoading } = useLevelsList({
-        programs_curriculum: "standard",
+        programs_curriculum: "first_term",
     });
 
     const levels: LevelOption[] = useMemo(() => {

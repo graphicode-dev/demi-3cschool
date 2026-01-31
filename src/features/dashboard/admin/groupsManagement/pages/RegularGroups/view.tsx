@@ -71,7 +71,7 @@ export default function RegularGroupViewPage() {
     };
 
     const lessonPath = (tab: ContentTabType) =>
-        `${paths.dashboard.learning.standardLessonsView(levelId!)}?tab=${tab}`;
+        `${paths.dashboard.learning.firstTermLessonsView(levelId!)}?tab=${tab}`;
 
     if (studentsError)
         return (

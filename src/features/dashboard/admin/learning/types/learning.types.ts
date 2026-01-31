@@ -1,7 +1,7 @@
 /**
  * Programs curriculum type
  */
-export type ProgramsCurriculum = "standard" | "professional";
+export type ProgramsCurriculum = "first_term" | "second_term" | "summer_camp";
 
 // ============================================================================
 // API Response Types

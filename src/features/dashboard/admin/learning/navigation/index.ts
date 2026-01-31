@@ -5,7 +5,8 @@
 export { learningNav, default } from "./nav";
 export {
     learningPaths,
-    standardLearningPaths,
-    professionalLearningPaths,
+    FirstTermLearningPaths,
+    SecondTermLearningPaths,
+    SummerCampLearningPaths,
 } from "./paths";
 export { learningRoutes } from "./routes";

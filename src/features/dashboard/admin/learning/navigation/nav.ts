@@ -14,7 +14,11 @@
 
 import type { FeatureNavModule } from "@/navigation/nav.types";
 import { learningPermissions } from "@/auth";
-import { standardLearningPaths, professionalLearningPaths } from "./paths";
+import {
+    FirstTermLearningPaths,
+    SecondTermLearningPaths,
+    SummerCampLearningPaths,
+} from "./paths";
 
 const { course, level, lesson } = learningPermissions;
 
@@ -23,63 +27,94 @@ export const learningNav: FeatureNavModule = {
     section: "Curriculum Management",
     items: [
         {
-            key: "standard-learning",
+            key: "first-term-learning",
             labelKey: "learning:learning.standard.title",
             label: "Standard Learning",
-            href: standardLearningPaths.courses.list(),
+            href: FirstTermLearningPaths.courses.list(),
             order: 2,
             permissions: [course.viewAny, level.viewAny, lesson.viewAny],
             children: [
                 {
-                    key: "standard-courses",
+                    key: "first-term-courses",
                     labelKey: "learning:learning.standard.courses",
                     label: "Courses",
-                    href: standardLearningPaths.courses.list(),
+                    href: FirstTermLearningPaths.courses.list(),
                     permissions: [course.viewAny],
                 },
                 {
-                    key: "standard-levels",
+                    key: "first-term-levels",
                     labelKey: "learning:learning.standard.levels",
                     label: "Levels",
-                    href: standardLearningPaths.levels.list(),
+                    href: FirstTermLearningPaths.levels.list(),
                     permissions: [level.viewAny],
                 },
                 {
-                    key: "standard-lessons",
+                    key: "first-term-lessons",
                     labelKey: "learning:learning.standard.lessons",
                     label: "Lessons",
-                    href: standardLearningPaths.lessons.list(),
+                    href: FirstTermLearningPaths.lessons.list(),
                     permissions: [lesson.viewAny],
                 },
             ],
         },
         {
-            key: "professional-learning",
+            key: "second-term-learning",
             labelKey: "learning:learning.professional.title",
             label: "Professional Learning",
-            href: professionalLearningPaths.courses.list(),
+            href: SecondTermLearningPaths.courses.list(),
             order: 3,
             permissions: [course.viewAny, level.viewAny, lesson.viewAny],
             children: [
                 {
-                    key: "professional-courses",
+                    key: "second-term-courses",
                     labelKey: "learning:learning.professional.courses",
                     label: "Courses",
-                    href: professionalLearningPaths.courses.list(),
+                    href: SecondTermLearningPaths.courses.list(),
                     permissions: [course.viewAny],
                 },
                 {
-                    key: "professional-levels",
+                    key: "second-term-levels",
                     labelKey: "learning:learning.professional.levels",
                     label: "Levels",
-                    href: professionalLearningPaths.levels.list(),
+                    href: SecondTermLearningPaths.levels.list(),
                     permissions: [level.viewAny],
                 },
                 {
-                    key: "professional-lessons",
+                    key: "second-term-lessons",
                     labelKey: "learning:learning.professional.lessons",
                     label: "Lessons",
-                    href: professionalLearningPaths.lessons.list(),
+                    href: SecondTermLearningPaths.lessons.list(),
+                    permissions: [lesson.viewAny],
+                },
+            ],
+        },
+        {
+            key: "summer-camp-learning",
+            labelKey: "learning:learning.summer-camp.title",
+            label: "Summer Camp",
+            href: SummerCampLearningPaths.courses.list(),
+            order: 4,
+            permissions: [course.viewAny, level.viewAny, lesson.viewAny],
+            children: [
+                {
+                    key: "summer-camp-courses",
+                    labelKey: "learning:learning.summer-camp.courses",
+                    label: "Courses",
+                    href: SummerCampLearningPaths.courses.list(),
+                    permissions: [course.viewAny],
+                },
+                {
+                    key: "summer-camp-levels",
+                    labelKey: "learning:learning.summer-camp.levels",
+                    label: "Levels",
+                    href: SummerCampLearningPaths.levels.list(),
+                    permissions: [level.viewAny],
+                },
+                {
+                    key: "summer-camp-lessons",
+                    labelKey: "learning:learning.summer-camp.lessons",
+                    label: "Lessons",
+                    href: SummerCampLearningPaths.lessons.list(),
                     permissions: [lesson.viewAny],
                 },
             ],

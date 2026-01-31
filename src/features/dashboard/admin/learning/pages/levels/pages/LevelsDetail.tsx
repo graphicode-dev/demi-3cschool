@@ -39,13 +39,7 @@ import {
 } from "../api/quiz options";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useMutationHandler } from "@/shared/api";
-
-function useCurriculumType(): ProgramsCurriculum {
-    const location = useLocation();
-    return location.pathname.includes("professional-learning")
-        ? "professional"
-        : "standard";
-}
+import { useCurriculumType } from "../../../hooks";
 
 const DEFAULT_NEW_QUIZ: Omit<NewQuizData, "levelId"> = {
     timeLimit: 60,
@@ -115,10 +109,12 @@ export default function LearningLevelsDetail() {
     const { t } = useTranslation();
     const { id } = useParams<{ id: string }>();
     const curriculumType = useCurriculumType();
-    const isStandard = curriculumType === "standard";
-    const paths = isStandard
-        ? learningPaths.standard
-        : learningPaths.professional;
+    const paths =
+        curriculumType === "first_term"
+            ? learningPaths.firstTerm
+            : curriculumType === "second_term"
+              ? learningPaths.secondTerm
+              : learningPaths.summerCamp;
 
     const {
         data: level,

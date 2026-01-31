@@ -100,7 +100,7 @@ export const coursesApi = {
     ): Promise<Course[]> => {
         const { programType, page } = params;
         const response = await api.get<ApiResponse<Course[]>>(
-            `${BASE_URL}/program/${programType}`,
+            `${BASE_URL}?programs_curriculum=${programType}`,
             {
                 params: page ? { page } : undefined,
                 signal,

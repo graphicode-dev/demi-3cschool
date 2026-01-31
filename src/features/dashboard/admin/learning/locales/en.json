@@ -1,14 +1,20 @@
 {
     "learning": {
         "title": "Learning",
-        "standard": {
-            "title": "Standard Learning",
+        "firstTerm": {
+            "title": "First Term",
             "courses": "Courses",
             "levels": "Levels",
             "lessons": "Lessons"
         },
-        "professional": {
-            "title": "Professional Learning",
+        "secondTerm": {
+            "title": "Second Term",
+            "courses": "Courses",
+            "levels": "Levels",
+            "lessons": "Lessons"
+        },
+        "summerCamp": {
+            "title": "Summer Camp",
             "courses": "Courses",
             "levels": "Levels",
             "lessons": "Lessons"

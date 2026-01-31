@@ -24,8 +24,9 @@ import {
     eligibleStudentsPermissions,
 } from "@/auth";
 import {
-    standardLearningPaths,
-    professionalLearningPaths,
+    FirstTermLearningPaths,
+    SecondTermLearningPaths,
+    SummerCampLearningPaths,
 } from "../learning/navigation/paths";
 import { programsPaths } from "../programs/navigation/paths";
 import { groupsPaths } from "../groupsManagement/navigation/paths";
@@ -52,66 +53,98 @@ export const adminNav: FeatureNavModule = {
             icon: BookOpen,
             permissions: [course.viewAny],
         },
-        // Standard Learning
+        // First Term Learning
         {
-            key: "standard-learning",
-            labelKey: "learning:learning.standard.title",
-            label: "Standard Learning",
-            href: standardLearningPaths.courses.list(),
+            key: "first-term-learning",
+            labelKey: "learning:learning.firstTerm.title",
+            label: "First Term Learning",
+            href: FirstTermLearningPaths.courses.list(),
             order: 2,
             permissions: [course.viewAny, level.viewAny, lesson.viewAny],
             children: [
                 {
-                    key: "standard-courses",
-                    labelKey: "learning:learning.standard.courses",
+                    key: "first-term-courses",
+                    labelKey: "learning:learning.firstTerm.courses",
                     label: "Courses",
-                    href: standardLearningPaths.courses.list(),
+                    href: FirstTermLearningPaths.courses.list(),
                     permissions: [course.viewAny],
                 },
                 {
-                    key: "standard-levels",
-                    labelKey: "learning:learning.standard.levels",
+                    key: "first-term-levels",
+                    labelKey: "learning:learning.firstTerm.levels",
                     label: "Levels",
-                    href: standardLearningPaths.levels.list(),
+                    href: FirstTermLearningPaths.levels.list(),
                     permissions: [level.viewAny],
                 },
                 {
-                    key: "standard-lessons",
-                    labelKey: "learning:learning.standard.lessons",
+                    key: "first-term-lessons",
+                    labelKey: "learning:learning.firstTerm.lessons",
                     label: "Lessons",
-                    href: standardLearningPaths.lessons.list(),
+                    href: FirstTermLearningPaths.lessons.list(),
                     permissions: [lesson.viewAny],
                 },
             ],
         },
-        // Professional Learning
+        // Second Term Learning
         {
-            key: "professional-learning",
-            labelKey: "learning:learning.professional.title",
-            label: "Professional Learning",
-            href: professionalLearningPaths.courses.list(),
+            key: "second-term-learning",
+            labelKey: "learning:learning.secondTerm.title",
+            label: "Second Term Learning",
+            href: SecondTermLearningPaths.courses.list(),
             order: 3,
             permissions: [course.viewAny, level.viewAny, lesson.viewAny],
             children: [
                 {
-                    key: "professional-courses",
-                    labelKey: "learning:learning.professional.courses",
+                    key: "second-term-courses",
+                    labelKey: "learning:learning.secondTerm.courses",
                     label: "Courses",
-                    href: professionalLearningPaths.courses.list(),
+                    href: SecondTermLearningPaths.courses.list(),
                     permissions: [course.viewAny],
                 },
                 {
-                    key: "professional-levels",
-                    labelKey: "learning:learning.professional.levels",
+                    key: "second-term-levels",
+                    labelKey: "learning:learning.secondTerm.levels",
                     label: "Levels",
-                    href: professionalLearningPaths.levels.list(),
+                    href: SecondTermLearningPaths.levels.list(),
                     permissions: [level.viewAny],
                 },
                 {
-                    key: "professional-lessons",
-                    labelKey: "learning:learning.professional.lessons",
+                    key: "second-term-lessons",
+                    labelKey: "learning:learning.secondTerm.lessons",
                     label: "Lessons",
-                    href: professionalLearningPaths.lessons.list(),
+                    href: SecondTermLearningPaths.lessons.list(),
+                    permissions: [lesson.viewAny],
+                },
+            ],
+        },
+        // Summer Camp Learning
+        {
+            key: "summer-camp-learning",
+            labelKey: "learning:learning.summerCamp.title",
+            label: "Summer Camp Learning",
+            href: SummerCampLearningPaths.courses.list(),
+            order: 3,
+            permissions: [course.viewAny, level.viewAny, lesson.viewAny],
+            children: [
+                {
+                    key: "summer-camp-courses",
+                    labelKey: "learning:learning.summerCamp.courses",
+                    label: "Courses",
+                    href: SummerCampLearningPaths.courses.list(),
+                    permissions: [course.viewAny],
+                },
+                {
+                    key: "summer-camp-levels",
+                    labelKey: "learning:learning.summerCamp.levels",
+                    label: "Levels",
+                    href: SummerCampLearningPaths.levels.list(),
+                    permissions: [level.viewAny],
+                },
+                {
+                    key: "summer-camp-lessons",
+                    labelKey: "learning:learning.summerCamp.lessons",
+                    label: "Lessons",
+                    href: SummerCampLearningPaths.lessons.list(),
                     permissions: [lesson.viewAny],
                 },
             ],

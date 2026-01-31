@@ -32,7 +32,6 @@ import {
     LevelGroupCard,
 } from "../components";
 import { learningPaths } from "@/features/dashboard/admin/learning/navigation/paths";
-import { ProgramsCurriculum } from "@/features/dashboard/admin/learning/types";
 import { Course, useCoursesByProgram } from "../../courses";
 import {
     Level,
@@ -42,13 +41,7 @@ import {
     useLevelsList,
 } from "../api";
 import PageWrapper from "@/design-system/components/PageWrapper";
-
-function useCurriculumType(): ProgramsCurriculum {
-    const location = useLocation();
-    return location.pathname.includes("professional-learning")
-        ? "professional"
-        : "standard";
-}
+import { useCurriculumType } from "../../../hooks";
 
 export default function LearningLevelsList() {
     const { t } = useTranslation();
@@ -62,10 +55,12 @@ export default function LearningLevelsList() {
     const isAllSelected = !courseIdFromUrl || courseIdFromUrl === "all";
     const isSpecificCourse = courseIdFromUrl && courseIdFromUrl !== "all";
 
-    const isStandard = curriculumType === "standard";
-    const paths = isStandard
-        ? learningPaths.standard
-        : learningPaths.professional;
+    const paths =
+        curriculumType === "first_term"
+            ? learningPaths.firstTerm
+            : curriculumType === "second_term"
+              ? learningPaths.secondTerm
+              : learningPaths.summerCamp;
 
     // Fetch courses for dropdown (filtered by curriculum type)
     const { data: coursesData, isLoading: isCoursesLoading } =
@@ -189,10 +184,8 @@ export default function LearningLevelsList() {
         <PageWrapper
             pageHeaderProps={{
                 title: t(
-                    isStandard
-                        ? "learning:learning.standard.levels"
-                        : "learning:learning.professional.levels",
-                    `${isStandard ? "Standard" : "Professional"} Learning - Levels`
+                    `learning:learning.${curriculumType}.levels`,
+                    `${curriculumType === "first_term" ? "First Term" : curriculumType === "second_term" ? "Second Term" : "Summer Camp"} Learning - Levels`
                 ),
                 subtitle: t(
                     "levels:levels.list.subtitle",

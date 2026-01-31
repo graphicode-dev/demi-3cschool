@@ -19,13 +19,7 @@ import { learningPaths } from "@/features/dashboard/admin/learning/navigation/pa
 import { ProgramsCurriculum } from "@/features/dashboard/admin/learning/types";
 import { Course, useCoursesList, useDeleteCourse } from "../api";
 import PageWrapper from "@/design-system/components/PageWrapper";
-
-function useCurriculumType(): ProgramsCurriculum {
-    const location = useLocation();
-    return location.pathname.includes("professional-learning")
-        ? "professional"
-        : "standard";
-}
+import { useCurriculumType } from "../../../hooks";
 
 export default function LearningCoursesList() {
     const { t } = useTranslation();
@@ -41,10 +35,12 @@ export default function LearningCoursesList() {
 
     const { mutateAsync: deleteCourse } = useDeleteCourse();
 
-    const isStandard = curriculumType === "standard";
-    const paths = isStandard
-        ? learningPaths.standard
-        : learningPaths.professional;
+    const paths =
+        curriculumType === "first_term"
+            ? learningPaths.firstTerm
+            : curriculumType === "second_term"
+              ? learningPaths.secondTerm
+              : learningPaths.summerCamp;
 
     const courses = data?.items ?? [];
 
@@ -101,16 +97,12 @@ export default function LearningCoursesList() {
         <PageWrapper
             pageHeaderProps={{
                 title: t(
-                    isStandard
-                        ? "learning:learning.standard.courses"
-                        : "learning:learning.professional.courses",
-                    `${isStandard ? "Standard" : "Professional"} Learning - Courses`
+                    `learning:learning.${curriculumType}.courses`,
+                    `${curriculumType === "first_term" ? "First Term" : curriculumType === "second_term" ? "Second Term" : "Summer Camp"} - Courses`
                 ),
                 subtitle: t(
-                    isStandard
-                        ? "learning:learning.standard.coursesDescription"
-                        : "learning:learning.professional.coursesDescription",
-                    `Manage courses in the ${isStandard ? "standard" : "professional"} learning track`
+                    `learning:learning.${curriculumType}.coursesDescription`,
+                    `Manage courses in the ${curriculumType} learning track`
                 ),
                 actions: (
                     <Link

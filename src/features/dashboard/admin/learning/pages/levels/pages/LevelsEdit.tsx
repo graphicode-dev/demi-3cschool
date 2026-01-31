@@ -19,6 +19,7 @@ import { useLevel, useUpdateLevel } from "../api";
 import { useCoursesByProgram } from "../../courses";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useMutationHandler } from "@/shared/api";
+import { useCurriculumType } from "../../../hooks";
 
 const levelFormSchema = z.object({
     courseId: z.string().min(1, "Course is required"),
@@ -29,22 +30,17 @@ const levelFormSchema = z.object({
 
 type LevelFormData = z.infer<typeof levelFormSchema>;
 
-function useCurriculumType(): ProgramsCurriculum {
-    const location = useLocation();
-    return location.pathname.includes("professional-learning")
-        ? "professional"
-        : "standard";
-}
-
 export default function LearningLevelsEdit() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     const curriculumType = useCurriculumType();
-    const isStandard = curriculumType === "standard";
-    const paths = isStandard
-        ? learningPaths.standard
-        : learningPaths.professional;
+    const paths =
+        curriculumType === "first_term"
+            ? learningPaths.firstTerm
+            : curriculumType === "second_term"
+              ? learningPaths.secondTerm
+              : learningPaths.summerCamp;
 
     const { data: level, isLoading, error, refetch } = useLevel(id);
     const { mutateAsync, isPending } = useUpdateLevel();

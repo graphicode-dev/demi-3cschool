@@ -1,86 +1,120 @@
 /**
  * Learning Feature - Path Builders
  *
- * Centralized, type-safe path builders for Standard and Professional Learning.
+ * Centralized, type-safe path builders for firstTerm and secondTerm Learning.
  * Includes Courses, Levels, and Lessons paths for both curriculum types.
  *
  * @example
  * ```ts
  * import { learningPaths } from '@/features/learning/navigation/paths';
  *
- * navigate(learningPaths.standard.courses.list());
- * navigate(learningPaths.professional.levels.view(levelId));
+ * navigate(learningPaths.firstTerm.courses.list());
+ * navigate(learningPaths.secondTerm.levels.view(levelId));
  * ```
  */
 
 import { registerFeaturePaths } from "@/router/paths.registry";
 
-const STANDARD_BASE_PATH = "/admin/standard-learning";
-const PROFESSIONAL_BASE_PATH = "/admin/professional-learning";
+const FIRST_TERM_BASE_PATH = "/admin/firstTerm-learning";
+const SECOND_TERM_BASE_PATH = "/admin/secondTerm-learning";
+const SUMMER_CAMP_BASE_PATH = "/admin/summer-camp";
 
 // ============================================================================
-// Standard Learning Paths
+// First Term Learning Paths
 // ============================================================================
 
-export const standardLearningPaths = {
+export const FirstTermLearningPaths = {
     courses: {
-        list: () => `${STANDARD_BASE_PATH}/courses`,
-        create: () => `${STANDARD_BASE_PATH}/courses/create`,
+        list: () => `${FIRST_TERM_BASE_PATH}/courses`,
+        create: () => `${FIRST_TERM_BASE_PATH}/courses/create`,
         edit: (id: string | number) =>
-            `${STANDARD_BASE_PATH}/courses/edit/${id}`,
+            `${FIRST_TERM_BASE_PATH}/courses/edit/${id}`,
         view: (id: string | number) =>
-            `${STANDARD_BASE_PATH}/courses/view/${id}`,
+            `${FIRST_TERM_BASE_PATH}/courses/view/${id}`,
     },
     levels: {
-        list: () => `${STANDARD_BASE_PATH}/levels`,
-        create: () => `${STANDARD_BASE_PATH}/levels/create`,
+        list: () => `${FIRST_TERM_BASE_PATH}/levels`,
+        create: () => `${FIRST_TERM_BASE_PATH}/levels/create`,
         edit: (id: string | number) =>
-            `${STANDARD_BASE_PATH}/levels/edit/${id}`,
+            `${FIRST_TERM_BASE_PATH}/levels/edit/${id}`,
         view: (id: string | number) =>
-            `${STANDARD_BASE_PATH}/levels/view/${id}`,
+            `${FIRST_TERM_BASE_PATH}/levels/view/${id}`,
     },
     lessons: {
-        list: () => `${STANDARD_BASE_PATH}/lessons`,
+        list: () => `${FIRST_TERM_BASE_PATH}/lessons`,
         listByLevel: (levelId: string | number) =>
-            `${STANDARD_BASE_PATH}/lessons?levelId=${levelId}`,
-        create: () => `${STANDARD_BASE_PATH}/lessons/create`,
+            `${FIRST_TERM_BASE_PATH}/lessons?levelId=${levelId}`,
+        create: () => `${FIRST_TERM_BASE_PATH}/lessons/create`,
         edit: (id: string | number) =>
-            `${STANDARD_BASE_PATH}/lessons/edit/${id}`,
+            `${FIRST_TERM_BASE_PATH}/lessons/edit/${id}`,
         view: (id: string | number) =>
-            `${STANDARD_BASE_PATH}/lessons/view/${id}`,
+            `${FIRST_TERM_BASE_PATH}/lessons/view/${id}`,
     },
 } as const;
 
 // ============================================================================
-// Professional Learning Paths
+// Second Term Learning Paths
 // ============================================================================
 
-export const professionalLearningPaths = {
+export const SecondTermLearningPaths = {
     courses: {
-        list: () => `${PROFESSIONAL_BASE_PATH}/courses`,
-        create: () => `${PROFESSIONAL_BASE_PATH}/courses/create`,
+        list: () => `${SECOND_TERM_BASE_PATH}/courses`,
+        create: () => `${SECOND_TERM_BASE_PATH}/courses/create`,
         edit: (id: string | number) =>
-            `${PROFESSIONAL_BASE_PATH}/courses/edit/${id}`,
+            `${SECOND_TERM_BASE_PATH}/courses/edit/${id}`,
         view: (id: string | number) =>
-            `${PROFESSIONAL_BASE_PATH}/courses/view/${id}`,
+            `${SECOND_TERM_BASE_PATH}/courses/view/${id}`,
     },
     levels: {
-        list: () => `${PROFESSIONAL_BASE_PATH}/levels`,
-        create: () => `${PROFESSIONAL_BASE_PATH}/levels/create`,
+        list: () => `${SECOND_TERM_BASE_PATH}/levels`,
+        create: () => `${SECOND_TERM_BASE_PATH}/levels/create`,
         edit: (id: string | number) =>
-            `${PROFESSIONAL_BASE_PATH}/levels/edit/${id}`,
+            `${SECOND_TERM_BASE_PATH}/levels/edit/${id}`,
         view: (id: string | number) =>
-            `${PROFESSIONAL_BASE_PATH}/levels/view/${id}`,
+            `${SECOND_TERM_BASE_PATH}/levels/view/${id}`,
     },
     lessons: {
-        list: () => `${PROFESSIONAL_BASE_PATH}/lessons`,
+        list: () => `${SECOND_TERM_BASE_PATH}/lessons`,
         listByLevel: (levelId: string | number) =>
-            `${PROFESSIONAL_BASE_PATH}/lessons?levelId=${levelId}`,
-        create: () => `${PROFESSIONAL_BASE_PATH}/lessons/create`,
+            `${SECOND_TERM_BASE_PATH}/lessons?levelId=${levelId}`,
+        create: () => `${SECOND_TERM_BASE_PATH}/lessons/create`,
         edit: (id: string | number) =>
-            `${PROFESSIONAL_BASE_PATH}/lessons/edit/${id}`,
+            `${SECOND_TERM_BASE_PATH}/lessons/edit/${id}`,
         view: (id: string | number) =>
-            `${PROFESSIONAL_BASE_PATH}/lessons/view/${id}`,
+            `${SECOND_TERM_BASE_PATH}/lessons/view/${id}`,
+    },
+} as const;
+
+// ============================================================================
+// Summer Camp Learning Paths
+// ============================================================================
+
+export const SummerCampLearningPaths = {
+    courses: {
+        list: () => `${SUMMER_CAMP_BASE_PATH}/courses`,
+        create: () => `${SUMMER_CAMP_BASE_PATH}/courses/create`,
+        edit: (id: string | number) =>
+            `${SUMMER_CAMP_BASE_PATH}/courses/edit/${id}`,
+        view: (id: string | number) =>
+            `${SUMMER_CAMP_BASE_PATH}/courses/view/${id}`,
+    },
+    levels: {
+        list: () => `${SUMMER_CAMP_BASE_PATH}/levels`,
+        create: () => `${SUMMER_CAMP_BASE_PATH}/levels/create`,
+        edit: (id: string | number) =>
+            `${SUMMER_CAMP_BASE_PATH}/levels/edit/${id}`,
+        view: (id: string | number) =>
+            `${SUMMER_CAMP_BASE_PATH}/levels/view/${id}`,
+    },
+    lessons: {
+        list: () => `${SUMMER_CAMP_BASE_PATH}/lessons`,
+        listByLevel: (levelId: string | number) =>
+            `${SUMMER_CAMP_BASE_PATH}/lessons?levelId=${levelId}`,
+        create: () => `${SUMMER_CAMP_BASE_PATH}/lessons/create`,
+        edit: (id: string | number) =>
+            `${SUMMER_CAMP_BASE_PATH}/lessons/edit/${id}`,
+        view: (id: string | number) =>
+            `${SUMMER_CAMP_BASE_PATH}/lessons/view/${id}`,
     },
 } as const;
 
@@ -89,8 +123,9 @@ export const professionalLearningPaths = {
 // ============================================================================
 
 export const learningPaths = {
-    standard: standardLearningPaths,
-    professional: professionalLearningPaths,
+    firstTerm: FirstTermLearningPaths,
+    secondTerm: SecondTermLearningPaths,
+    summerCamp: SummerCampLearningPaths,
 } as const;
 
 // ============================================================================
@@ -98,39 +133,54 @@ export const learningPaths = {
 // ============================================================================
 
 export const learningManagementPaths = registerFeaturePaths("learning", {
-    // Standard Learning
-    standardCoursesList: standardLearningPaths.courses.list,
-    standardCoursesCreate: standardLearningPaths.courses.create,
-    standardCoursesEdit: standardLearningPaths.courses.edit,
-    standardCoursesView: standardLearningPaths.courses.view,
-    standardLevelsList: standardLearningPaths.levels.list,
-    standardLevelsCreate: standardLearningPaths.levels.create,
-    standardLevelsEdit: standardLearningPaths.levels.edit,
-    standardLessonsList: standardLearningPaths.lessons.list,
-    standardLessonsListByLevel: standardLearningPaths.lessons.listByLevel,
-    standardLessonsCreate: standardLearningPaths.lessons.create,
-    standardLessonsEdit: standardLearningPaths.lessons.edit,
-    standardLessonsView: standardLearningPaths.lessons.view,
-    // Professional Learning
-    professionalCoursesList: professionalLearningPaths.courses.list,
-    professionalCoursesCreate: professionalLearningPaths.courses.create,
-    professionalCoursesEdit: professionalLearningPaths.courses.edit,
-    professionalCoursesView: professionalLearningPaths.courses.view,
-    professionalLevelsList: professionalLearningPaths.levels.list,
-    professionalLevelsCreate: professionalLearningPaths.levels.create,
-    professionalLevelsEdit: professionalLearningPaths.levels.edit,
-    professionalLessonsList: professionalLearningPaths.lessons.list,
-    professionalLessonsListByLevel:
-        professionalLearningPaths.lessons.listByLevel,
-    professionalLessonsCreate: professionalLearningPaths.lessons.create,
-    professionalLessonsEdit: professionalLearningPaths.lessons.edit,
-    professionalLessonsView: professionalLearningPaths.lessons.view,
+    // First Term Learning
+    firstTermCoursesList: FirstTermLearningPaths.courses.list,
+    firstTermCoursesCreate: FirstTermLearningPaths.courses.create,
+    firstTermCoursesEdit: FirstTermLearningPaths.courses.edit,
+    firstTermCoursesView: FirstTermLearningPaths.courses.view,
+    firstTermLevelsList: FirstTermLearningPaths.levels.list,
+    firstTermLevelsCreate: FirstTermLearningPaths.levels.create,
+    firstTermLevelsEdit: FirstTermLearningPaths.levels.edit,
+    firstTermLessonsList: FirstTermLearningPaths.lessons.list,
+    firstTermLessonsListByLevel: FirstTermLearningPaths.lessons.listByLevel,
+    firstTermLessonsCreate: FirstTermLearningPaths.lessons.create,
+    firstTermLessonsEdit: FirstTermLearningPaths.lessons.edit,
+    firstTermLessonsView: FirstTermLearningPaths.lessons.view,
+
+    // Second Term Learning
+    secondTermCoursesList: SecondTermLearningPaths.courses.list,
+    secondTermCoursesCreate: SecondTermLearningPaths.courses.create,
+    secondTermCoursesEdit: SecondTermLearningPaths.courses.edit,
+    secondTermCoursesView: SecondTermLearningPaths.courses.view,
+    secondTermLevelsList: SecondTermLearningPaths.levels.list,
+    secondTermLevelsCreate: SecondTermLearningPaths.levels.create,
+    secondTermLevelsEdit: SecondTermLearningPaths.levels.edit,
+    secondTermLessonsList: SecondTermLearningPaths.lessons.list,
+    secondTermLessonsListByLevel: SecondTermLearningPaths.lessons.listByLevel,
+    secondTermLessonsCreate: SecondTermLearningPaths.lessons.create,
+    secondTermLessonsEdit: SecondTermLearningPaths.lessons.edit,
+    secondTermLessonsView: SecondTermLearningPaths.lessons.view,
+
+    // Summer Camp Learning
+    summerCampCoursesList: SummerCampLearningPaths.courses.list,
+    summerCampCoursesCreate: SummerCampLearningPaths.courses.create,
+    summerCampCoursesEdit: SummerCampLearningPaths.courses.edit,
+    summerCampCoursesView: SummerCampLearningPaths.courses.view,
+    summerCampLevelsList: SummerCampLearningPaths.levels.list,
+    summerCampLevelsCreate: SummerCampLearningPaths.levels.create,
+    summerCampLevelsEdit: SummerCampLearningPaths.levels.edit,
+    summerCampLessonsList: SummerCampLearningPaths.lessons.list,
+    summerCampLessonsListByLevel: SummerCampLearningPaths.lessons.listByLevel,
+    summerCampLessonsCreate: SummerCampLearningPaths.lessons.create,
+    summerCampLessonsEdit: SummerCampLearningPaths.lessons.edit,
+    summerCampLessonsView: SummerCampLearningPaths.lessons.view,
 });
 
 // ============================================================================
 // Type Exports
 // ============================================================================
 
-export type StandardLearningPaths = typeof standardLearningPaths;
-export type ProfessionalLearningPaths = typeof professionalLearningPaths;
+export type FirstTermLearningPaths = typeof FirstTermLearningPaths;
+export type SecondTermLearningPaths = typeof SecondTermLearningPaths;
+export type SummerCampLearningPaths = typeof SummerCampLearningPaths;
 export type LearningPaths = typeof learningPaths;

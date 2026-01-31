@@ -35,20 +35,19 @@ import { useMutationHandler } from "@/shared/api";
 
 export function useCurriculumType() {
     const location = useLocation();
-    const curriculumType: ProgramsCurriculum = location.pathname.includes(
-        "professional-learning"
-    )
-        ? "professional"
-        : "standard";
+    let curriculumType: ProgramsCurriculum = "first_term";
+    let basePath = "/admin/firstTerm-learning";
 
-    const isStandard = curriculumType === "standard";
-    const basePath = isStandard
-        ? "/admin/standard-learning"
-        : "/admin/professional-learning";
+    if (location.pathname.includes("secondTerm")) {
+        curriculumType = "second_term";
+        basePath = "/admin/secondTerm-learning";
+    } else if (location.pathname.includes("summer-camp")) {
+        curriculumType = "summer_camp";
+        basePath = "/admin/summer-camp";
+    }
 
     return {
         curriculumType,
-        isStandard,
         basePath,
     };
 }
@@ -57,7 +56,7 @@ export default function LearningLessonsList() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
-    const { basePath, curriculumType, isStandard } = useCurriculumType();
+    const { basePath, curriculumType } = useCurriculumType();
 
     // Get levelId from URL - this drives the fetching logic
     // null or "all" = fetch all lessons, <id> = fetch by specific level
@@ -198,16 +197,12 @@ export default function LearningLessonsList() {
         <PageWrapper
             pageHeaderProps={{
                 title: t(
-                    isStandard
-                        ? "learning:learning.standard.lessons"
-                        : "learning:learning.professional.lessons",
-                    `${isStandard ? "Standard" : "Professional"} Learning - Lessons`
+                    `learning:learning.${curriculumType}.lessons`,
+                    `${curriculumType === "first_term" ? "First Term" : curriculumType === "second_term" ? "Second Term" : "Summer Camp"} Learning - Lessons`
                 ),
                 subtitle: t(
-                    isStandard
-                        ? "learning:learning.standard.lessonsDescription"
-                        : "learning:learning.professional.lessonsDescription",
-                    `Manage lessons in the ${isStandard ? "standard" : "professional"} learning track`
+                    `learning:learning.${curriculumType}.lessonsDescription`,
+                    `Manage lessons in the ${curriculumType} learning track`
                 ),
                 actions: (
                     <Link

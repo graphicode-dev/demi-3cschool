@@ -14,13 +14,13 @@ import { learningPermissions } from "@/auth";
 const { course, level, lesson } = learningPermissions;
 
 // ============================================================================
-// Standard Learning Routes
+// First Term Learning Routes
 // ============================================================================
 
-const standardLearningRoutes: RouteConfig[] = [
+const firstTermLearningRoutes: RouteConfig[] = [
     // Courses
     {
-        path: "standard-learning/courses",
+        path: "first-term/courses",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/courses/pages/CoursesList"),
         permissions: [course.viewAny],
@@ -28,7 +28,7 @@ const standardLearningRoutes: RouteConfig[] = [
         handle: { crumb: "learning:learning.standard.courses" },
     },
     {
-        path: "standard-learning/courses/create",
+        path: "first-term/courses/create",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/courses/pages/CoursesCreate"),
         permissions: [course.create],
@@ -36,7 +36,7 @@ const standardLearningRoutes: RouteConfig[] = [
         handle: { crumb: "learning:courses.form.create.title" },
     },
     {
-        path: "standard-learning/courses/edit/:id",
+        path: "first-term/courses/edit/:id",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/courses/pages/CoursesEdit"),
         permissions: [course.update],
@@ -46,7 +46,7 @@ const standardLearningRoutes: RouteConfig[] = [
 
     // Levels
     {
-        path: "standard-learning/levels",
+        path: "first-term/levels",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/levels/pages/LevelsList"),
         permissions: [level.viewAny],
@@ -54,7 +54,7 @@ const standardLearningRoutes: RouteConfig[] = [
         handle: { crumb: "learning:learning.standard.levels" },
     },
     {
-        path: "standard-learning/levels/create",
+        path: "first-term/levels/create",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/levels/pages/LevelsCreate"),
         permissions: [level.create],
@@ -62,7 +62,7 @@ const standardLearningRoutes: RouteConfig[] = [
         handle: { crumb: "learning:levels.form.create.title" },
     },
     {
-        path: "standard-learning/levels/edit/:id",
+        path: "first-term/levels/edit/:id",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/levels/pages/LevelsEdit"),
         permissions: [level.update],
@@ -70,7 +70,7 @@ const standardLearningRoutes: RouteConfig[] = [
         handle: { crumb: "learning:levels.form.edit.title" },
     },
     {
-        path: "standard-learning/levels/view/:id",
+        path: "first-term/levels/view/:id",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/levels/pages/LevelsDetail"),
         permissions: [level.view],
@@ -80,7 +80,7 @@ const standardLearningRoutes: RouteConfig[] = [
 
     // Lessons
     {
-        path: "standard-learning/lessons",
+        path: "first-term/lessons",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/lessons/pages/LessonsList"),
         permissions: [lesson.viewAny],
@@ -88,7 +88,7 @@ const standardLearningRoutes: RouteConfig[] = [
         handle: { crumb: "learning:learning.standard.lessons" },
     },
     {
-        path: "standard-learning/lessons/create",
+        path: "first-term/lessons/create",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/lessons/pages/LessonsCreate"),
         permissions: [lesson.create],
@@ -96,7 +96,7 @@ const standardLearningRoutes: RouteConfig[] = [
         handle: { crumb: "learning:lessons.form.create.title" },
     },
     {
-        path: "standard-learning/lessons/edit/:id",
+        path: "first-term/lessons/edit/:id",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/lessons/pages/LessonsEdit"),
         permissions: [lesson.update],
@@ -104,7 +104,7 @@ const standardLearningRoutes: RouteConfig[] = [
         handle: { crumb: "learning:lessons.form.edit.title" },
     },
     {
-        path: "standard-learning/lessons/view/:id",
+        path: "first-term/lessons/view/:id",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/lessons/pages/LessonsDetail"),
         permissions: [lesson.view],
@@ -116,13 +116,13 @@ const standardLearningRoutes: RouteConfig[] = [
 ];
 
 // ============================================================================
-// Professional Learning Routes (same pages, different paths)
+// Second Term Learning Routes (same pages, different paths)
 // ============================================================================
 
-const professionalLearningRoutes: RouteConfig[] = [
+const secondTermLearningRoutes: RouteConfig[] = [
     // Courses
     {
-        path: "professional-learning/courses",
+        path: "second-term/courses",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/courses/pages/CoursesList"),
         permissions: [course.viewAny],
@@ -130,7 +130,7 @@ const professionalLearningRoutes: RouteConfig[] = [
         handle: { crumb: "learning:learning.professional.courses" },
     },
     {
-        path: "professional-learning/courses/create",
+        path: "second-term/courses/create",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/courses/pages/CoursesCreate"),
         permissions: [course.create],
@@ -138,7 +138,7 @@ const professionalLearningRoutes: RouteConfig[] = [
         handle: { crumb: "learning:courses.form.create.title" },
     },
     {
-        path: "professional-learning/courses/edit/:id",
+        path: "second-term/courses/edit/:id",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/courses/pages/CoursesEdit"),
         permissions: [course.update],
@@ -147,7 +147,7 @@ const professionalLearningRoutes: RouteConfig[] = [
     },
     // Levels
     {
-        path: "professional-learning/levels",
+        path: "second-term/levels",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/levels/pages/LevelsList"),
         permissions: [level.viewAny],
@@ -155,7 +155,7 @@ const professionalLearningRoutes: RouteConfig[] = [
         handle: { crumb: "learning:learning.professional.levels" },
     },
     {
-        path: "professional-learning/levels/create",
+        path: "second-term/levels/create",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/levels/pages/LevelsCreate"),
         permissions: [level.create],
@@ -163,7 +163,7 @@ const professionalLearningRoutes: RouteConfig[] = [
         handle: { crumb: "learning:levels.form.create.title" },
     },
     {
-        path: "professional-learning/levels/edit/:id",
+        path: "second-term/levels/edit/:id",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/levels/pages/LevelsEdit"),
         permissions: [level.update],
@@ -171,7 +171,7 @@ const professionalLearningRoutes: RouteConfig[] = [
         handle: { crumb: "learning:levels.form.edit.title" },
     },
     {
-        path: "professional-learning/levels/view/:id",
+        path: "second-term/levels/view/:id",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/levels/pages/LevelsDetail"),
         permissions: [level.view],
@@ -181,7 +181,7 @@ const professionalLearningRoutes: RouteConfig[] = [
 
     // Lessons
     {
-        path: "professional-learning/lessons",
+        path: "second-term/lessons",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/lessons/pages/LessonsList"),
         permissions: [lesson.viewAny],
@@ -189,7 +189,7 @@ const professionalLearningRoutes: RouteConfig[] = [
         handle: { crumb: "learning:learning.professional.lessons" },
     },
     {
-        path: "professional-learning/lessons/create",
+        path: "second-term/lessons/create",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/lessons/pages/LessonsCreate"),
         permissions: [lesson.create],
@@ -197,7 +197,7 @@ const professionalLearningRoutes: RouteConfig[] = [
         handle: { crumb: "learning:lessons.form.create.title" },
     },
     {
-        path: "professional-learning/lessons/edit/:id",
+        path: "second-term/lessons/edit/:id",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/lessons/pages/LessonsEdit"),
         permissions: [lesson.update],
@@ -205,7 +205,108 @@ const professionalLearningRoutes: RouteConfig[] = [
         handle: { crumb: "learning:lessons.form.edit.title" },
     },
     {
-        path: "professional-learning/lessons/view/:id",
+        path: "second-term/lessons/view/:id",
+        lazy: () =>
+            import("@/features/dashboard/admin/learning/pages/lessons/pages/LessonsDetail"),
+        permissions: [lesson.view],
+        meta: { titleKey: "learning:lessons.form.view.title" },
+        handle: {
+            crumb: (params: Record<string, string>) => `Lesson #${params.id}`,
+        },
+    },
+];
+
+// ============================================================================
+// Summer Camp Learning Routes (same pages, different paths)
+// ============================================================================
+
+const summerCampLearningRoutes: RouteConfig[] = [
+    // Courses
+    {
+        path: "summer-camp/courses",
+        lazy: () =>
+            import("@/features/dashboard/admin/learning/pages/courses/pages/CoursesList"),
+        permissions: [course.viewAny],
+        meta: { titleKey: "learning:learning.professional.courses" },
+        handle: { crumb: "learning:learning.professional.courses" },
+    },
+    {
+        path: "summer-camp/courses/create",
+        lazy: () =>
+            import("@/features/dashboard/admin/learning/pages/courses/pages/CoursesCreate"),
+        permissions: [course.create],
+        meta: { titleKey: "learning:courses.form.create.title" },
+        handle: { crumb: "learning:courses.form.create.title" },
+    },
+    {
+        path: "summer-camp/courses/edit/:id",
+        lazy: () =>
+            import("@/features/dashboard/admin/learning/pages/courses/pages/CoursesEdit"),
+        permissions: [course.update],
+        meta: { titleKey: "learning:courses.form.edit.title" },
+        handle: { crumb: "learning:courses.form.edit.title" },
+    },
+    // Levels
+    {
+        path: "summer-camp/levels",
+        lazy: () =>
+            import("@/features/dashboard/admin/learning/pages/levels/pages/LevelsList"),
+        permissions: [level.viewAny],
+        meta: { titleKey: "learning:learning.professional.levels" },
+        handle: { crumb: "learning:learning.professional.levels" },
+    },
+    {
+        path: "summer-camp/levels/create",
+        lazy: () =>
+            import("@/features/dashboard/admin/learning/pages/levels/pages/LevelsCreate"),
+        permissions: [level.create],
+        meta: { titleKey: "learning:levels.form.create.title" },
+        handle: { crumb: "learning:levels.form.create.title" },
+    },
+    {
+        path: "summer-camp/levels/edit/:id",
+        lazy: () =>
+            import("@/features/dashboard/admin/learning/pages/levels/pages/LevelsEdit"),
+        permissions: [level.update],
+        meta: { titleKey: "learning:levels.form.edit.title" },
+        handle: { crumb: "learning:levels.form.edit.title" },
+    },
+    {
+        path: "summer-camp/levels/view/:id",
+        lazy: () =>
+            import("@/features/dashboard/admin/learning/pages/levels/pages/LevelsDetail"),
+        permissions: [level.view],
+        meta: { titleKey: "learning:levels.detail.title" },
+        handle: { crumb: "learning:levels.detail.title" },
+    },
+
+    // Lessons
+    {
+        path: "summer-camp/lessons",
+        lazy: () =>
+            import("@/features/dashboard/admin/learning/pages/lessons/pages/LessonsList"),
+        permissions: [lesson.viewAny],
+        meta: { titleKey: "learning:learning.professional.lessons" },
+        handle: { crumb: "learning:learning.professional.lessons" },
+    },
+    {
+        path: "summer-camp/lessons/create",
+        lazy: () =>
+            import("@/features/dashboard/admin/learning/pages/lessons/pages/LessonsCreate"),
+        permissions: [lesson.create],
+        meta: { titleKey: "learning:lessons.form.create.title" },
+        handle: { crumb: "learning:lessons.form.create.title" },
+    },
+    {
+        path: "summer-camp/lessons/edit/:id",
+        lazy: () =>
+            import("@/features/dashboard/admin/learning/pages/lessons/pages/LessonsEdit"),
+        permissions: [lesson.update],
+        meta: { titleKey: "learning:lessons.form.edit.title" },
+        handle: { crumb: "learning:lessons.form.edit.title" },
+    },
+    {
+        path: "summer-camp/lessons/view/:id",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/lessons/pages/LessonsDetail"),
         permissions: [lesson.view],
@@ -223,14 +324,18 @@ const professionalLearningRoutes: RouteConfig[] = [
 export const learningRoutes: FeatureRouteModule = {
     id: "learning",
     name: "Learning",
-    basePath: "/dashboard",
+    basePath: "/admin",
     layout: "dashboard",
     routes: {
         meta: {
             titleKey: "learning:learning.title",
             requiresAuth: true,
         },
-        children: [...standardLearningRoutes, ...professionalLearningRoutes],
+        children: [
+            ...firstTermLearningRoutes,
+            ...secondTermLearningRoutes,
+            ...summerCampLearningRoutes,
+        ],
     },
 };
 

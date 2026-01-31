@@ -19,6 +19,7 @@ import { ProgramsCurriculum } from "@/features/dashboard/admin/learning/types";
 import { useCourse, useUpdateCourse } from "../api";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useMutationHandler } from "@/shared/api";
+import { useCurriculumType } from "../../../hooks";
 
 const courseFormSchema = z.object({
     title: z.string().min(1, "Title is required").max(255, "Title is too long"),
@@ -35,22 +36,17 @@ const courseFormSchema = z.object({
 
 type CourseFormData = z.infer<typeof courseFormSchema>;
 
-function useCurriculumType(): ProgramsCurriculum {
-    const location = useLocation();
-    return location.pathname.includes("professional-learning")
-        ? "professional"
-        : "standard";
-}
-
 export default function LearningCoursesEdit() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
     const curriculumType = useCurriculumType();
-    const isStandard = curriculumType === "standard";
-    const paths = isStandard
-        ? learningPaths.standard
-        : learningPaths.professional;
+    const paths =
+        curriculumType === "first_term"
+            ? learningPaths.firstTerm
+            : curriculumType === "second_term"
+              ? learningPaths.secondTerm
+              : learningPaths.summerCamp;
 
     const { data: course, isLoading, error, refetch } = useCourse(id);
     const { mutateAsync, isPending } = useUpdateCourse();

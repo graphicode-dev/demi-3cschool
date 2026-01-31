@@ -17,6 +17,7 @@ import { useCreateLevel } from "../api";
 import { useCoursesByProgram } from "../../courses";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useMutationHandler } from "@/shared/api";
+import { useCurriculumType } from "../../../hooks";
 
 const levelFormSchema = z.object({
     courseId: z.string().min(1, "Course is required"),
@@ -27,22 +28,17 @@ const levelFormSchema = z.object({
 
 type LevelFormData = z.infer<typeof levelFormSchema>;
 
-function useCurriculumType(): ProgramsCurriculum {
-    const location = useLocation();
-    return location.pathname.includes("professional-learning")
-        ? "professional"
-        : "standard";
-}
-
 export default function LearningLevelsCreate() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const curriculumType = useCurriculumType();
-    const isStandard = curriculumType === "standard";
-    const paths = isStandard
-        ? learningPaths.standard
-        : learningPaths.professional;
+    const paths =
+        curriculumType === "first_term"
+            ? learningPaths.firstTerm
+            : curriculumType === "second_term"
+              ? learningPaths.secondTerm
+              : learningPaths.summerCamp;
 
     const preselectedCourseId = searchParams.get("courseId") || "";
 
@@ -97,7 +93,7 @@ export default function LearningLevelsCreate() {
                 title: t("levels:levels.form.create.title", "Create New Level"),
                 subtitle: t(
                     "levels:levels.form.create.subtitle",
-                    `Add a new level to ${isStandard ? "Standard" : "Professional"} Learning`
+                    `Add a new level to ${curriculumType === "first_term" ? "First Term" : curriculumType === "second_term" ? "Second Term" : "Summer Camp"} Learning`
                 ),
                 backButton: true,
             }}

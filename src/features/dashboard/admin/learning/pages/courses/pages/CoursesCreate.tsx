@@ -18,10 +18,12 @@ import { ProgramsCurriculum } from "@/features/dashboard/admin/learning/types";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useMutationHandler } from "@/shared/api";
 import { useGrades } from "@/features/dashboard/admin/systemManagements/api";
+import { useCurriculumType } from "../../../hooks";
 
 const CURRICULUM_IDS: Record<ProgramsCurriculum, string> = {
-    standard: "1",
-    professional: "2",
+    first_term: "1",
+    second_term: "2",
+    summer_camp: "3",
 };
 
 const courseFormSchema = z.object({
@@ -40,21 +42,16 @@ const courseFormSchema = z.object({
 
 type CourseFormData = z.infer<typeof courseFormSchema>;
 
-function useCurriculumType(): ProgramsCurriculum {
-    const location = useLocation();
-    return location.pathname.includes("professional-learning")
-        ? "professional"
-        : "standard";
-}
-
 export default function LearningCoursesCreate() {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const curriculumType = useCurriculumType();
-    const isStandard = curriculumType === "standard";
-    const paths = isStandard
-        ? learningPaths.standard
-        : learningPaths.professional;
+    const paths =
+        curriculumType === "first_term"
+            ? learningPaths.firstTerm
+            : curriculumType === "second_term"
+              ? learningPaths.secondTerm
+              : learningPaths.summerCamp;
 
     const { mutateAsync, isPending } = useCreateCourse();
     const { execute } = useMutationHandler();
@@ -125,7 +122,7 @@ export default function LearningCoursesCreate() {
                 ),
                 subtitle: t(
                     "courses:courses.form.create.subtitle",
-                    `Add a new course to ${isStandard ? "Standard" : "Professional"} Learning`
+                    `Add a new course to ${curriculumType === "first_term" ? "First Term" : curriculumType === "second_term" ? "Second Term" : "Summer Camp"} Learning`
                 ),
                 backButton: true,
             }}
