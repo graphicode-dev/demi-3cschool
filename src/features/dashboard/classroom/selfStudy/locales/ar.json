@@ -28,13 +28,47 @@
         "title": "الدرس",
         "missionPath": "مسار مهمتك",
         "done": "تم",
-        "quiz": "اختبار",
+        "quizLabel": "اختبار",
         "videoLocked": "هذا الفيديو مقفل",
         "tabs": {
             "about": "حول",
+            "review": "التقييم",
+            "materials": "المواد",
+            "lessonQuiz": "اختبار الدرس",
             "assignments": "الواجبات",
-            "quiz": "اختبار الدرس",
-            "materials": "المواد"
+            "editor": "المحرر"
+        },
+        "about": {
+            "videoLesson": "درس فيديو",
+            "yourProgress": "تقدمك",
+            "complete": "مكتمل"
+        },
+        "review": {
+            "helpUsImprove": "كيف كان هذا الدرس بالنسبة لك؟ ملاحظاتك تساعدنا على تحسين كيد كود!",
+            "rateThisLesson": "قيّم هذا الدرس",
+            "modal": {
+                "title": "كيف كان هذا الدرس؟",
+                "subtitle": "رأيك يهمنا!",
+                "feedbackLabel": "أخبرنا المزيد (اختياري)",
+                "feedbackPlaceholder": "ما الذي أعجبك أكثر؟",
+                "submit": "إرسال التقييم"
+            }
+        },
+        "quiz": {
+            "completed": "مكتمل",
+            "new": "جديد",
+            "questionsLabel": "أسئلة",
+            "score": "الدرجة",
+            "viewResult": "عرض النتيجة",
+            "startQuiz": "ابدأ الاختبار"
+        },
+        "assignments": {
+            "submitted": "تم التسليم",
+            "view": "عرض",
+            "submit": "تسليم"
+        },
+        "editor": {
+            "comingSoon": "محرر الكود قريباً..."
         },
         "questionOf": "السؤال {{current}} من {{total}}",
         "submitAnswer": "إرسال الإجابة",

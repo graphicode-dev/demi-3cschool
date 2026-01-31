@@ -1,17 +1,20 @@
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { ExamCard } from "../components";
 import { MOCK_FINAL_EXAMS } from "../mocks";
+import { finalExamsPaths } from "../navigation";
 import PageWrapper from "@/design-system/components/PageWrapper";
 
 export function FinalExamsPage() {
     const { t } = useTranslation("finalExams");
+    const navigate = useNavigate();
 
     const handleStartExam = (examId: number) => {
-        console.log("Start exam:", examId);
+        navigate(finalExamsPaths.take(examId));
     };
 
     const handleViewResults = (examId: number) => {
-        console.log("View results:", examId);
+        navigate(finalExamsPaths.result(examId));
     };
 
     return (

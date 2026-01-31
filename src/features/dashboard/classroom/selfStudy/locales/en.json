@@ -28,13 +28,47 @@
         "title": "Lesson",
         "missionPath": "Your Mission Path",
         "done": "Done",
-        "quiz": "Quiz",
+        "quizLabel": "Quiz",
         "videoLocked": "This video is locked",
         "tabs": {
             "about": "About",
+            "review": "Review",
+            "materials": "Materials",
+            "lessonQuiz": "Lesson Quiz",
             "assignments": "Assignments",
-            "quiz": "Lesson Quiz",
-            "materials": "Materials"
+            "editor": "Editor"
+        },
+        "about": {
+            "videoLesson": "Video Lesson",
+            "yourProgress": "Your Progress",
+            "complete": "Complete"
+        },
+        "review": {
+            "helpUsImprove": "How was this lesson for you? Your feedback helps us make KidCode better!",
+            "rateThisLesson": "Rate This Lesson",
+            "modal": {
+                "title": "How was this lesson?",
+                "subtitle": "Your Opinion Matters To Us!",
+                "feedbackLabel": "Tell us more (optional)",
+                "feedbackPlaceholder": "What did you like the most?",
+                "submit": "Submit Rating"
+            }
+        },
+        "quiz": {
+            "completed": "Completed",
+            "new": "New",
+            "questionsLabel": "Questions",
+            "score": "Score",
+            "viewResult": "View Result",
+            "startQuiz": "Start Quiz"
+        },
+        "assignments": {
+            "submitted": "Submitted",
+            "view": "View",
+            "submit": "Submit"
+        },
+        "editor": {
+            "comingSoon": "Code editor coming soon..."
         },
         "questionOf": "Question {{current}} of {{total}}",
         "submitAnswer": "Submit Answer",

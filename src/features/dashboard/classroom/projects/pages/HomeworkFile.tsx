@@ -72,9 +72,12 @@ export function HomeworkFilePage() {
                     </button>
                 </div>
 
-                {/* File Preview */}
-                <div className="mx-4 mb-4 sm:mx-6 sm:mb-6">
-                    <div className="bg-gray-100 dark:bg-gray-800 rounded-3xl h-80 flex items-center justify-center border border-gray-200 dark:border-gray-700">
+                {/* File Preview - A4 aspect ratio (1:1.414) */}
+                <div className="mx-4 mb-4 sm:mx-6 sm:mb-6 flex justify-center">
+                    <div
+                        className="bg-gray-100 dark:bg-gray-800 rounded-3xl flex items-center justify-center border border-gray-200 dark:border-gray-700 w-full max-w-[595px]"
+                        style={{ aspectRatio: "1 / 1.414" }}
+                    >
                         <p className="text-gray-500 dark:text-gray-400 text-sm">
                             {t("homeworkFile.previewPlaceholder")}
                         </p>

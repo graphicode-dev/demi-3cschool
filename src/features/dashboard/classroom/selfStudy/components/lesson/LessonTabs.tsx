@@ -6,20 +6,27 @@ interface LessonTabsProps {
     onTabChange: (tab: LessonTabType) => void;
 }
 
-const TABS: LessonTabType[] = ["about", "assignments", "quiz", "materials"];
+const TABS: LessonTabType[] = [
+    "about",
+    "review",
+    "materials",
+    "lessonQuiz",
+    "assignments",
+    "editor",
+];
 
 export function LessonTabs({ activeTab, onTabChange }: LessonTabsProps) {
     const { t } = useTranslation("selfStudy");
 
     return (
-        <div className="flex gap-6 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex gap-6 border-b border-gray-200 dark:border-gray-700 overflow-x-auto">
             {TABS.map((tab) => (
                 <button
                     key={tab}
                     type="button"
                     onClick={() => onTabChange(tab)}
                     className={`
-                        relative pb-3 text-base font-bold transition-colors
+                        relative pb-3 text-sm font-semibold transition-colors whitespace-nowrap
                         ${
                             activeTab === tab
                                 ? "text-brand-500"
@@ -29,7 +36,7 @@ export function LessonTabs({ activeTab, onTabChange }: LessonTabsProps) {
                 >
                     {t(`lesson.tabs.${tab}`)}
                     {activeTab === tab && (
-                        <div className="absolute bottom-0 left-0 right-0 h-1 bg-brand-500 rounded-full" />
+                        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-500 rounded-full" />
                     )}
                 </button>
             ))}

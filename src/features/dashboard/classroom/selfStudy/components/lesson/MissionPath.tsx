@@ -151,7 +151,9 @@ export function MissionPath({
                                                 }}
                                             >
                                                 <FileQuestion className="size-2.5" />
-                                                <span>{t("lesson.quiz")}</span>
+                                                <span>
+                                                    {t("lesson.quizLabel")}
+                                                </span>
                                             </span>
                                         </Tooltip>
                                     )}
@@ -159,7 +161,7 @@ export function MissionPath({
                                     hasQuiz && (
                                         <>
                                             <Lock className="size-2.5" />
-                                            <span>{t("lesson.quiz")}</span>
+                                            <span>{t("lesson.quizLabel")}</span>
                                         </>
                                     )}
                             </div>

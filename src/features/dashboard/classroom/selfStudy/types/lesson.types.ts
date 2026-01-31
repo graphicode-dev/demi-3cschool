@@ -75,4 +75,50 @@ export interface PlayerState {
     duration: number;
 }
 
-export type LessonTabType = "about" | "assignments" | "quiz" | "materials";
+export type LessonTabType =
+    | "about"
+    | "review"
+    | "materials"
+    | "lessonQuiz"
+    | "assignments"
+    | "editor";
+
+export type AssignmentStatus = "pending" | "submitted" | "graded";
+export type LessonQuizStatus = "new" | "completed";
+
+export interface LessonMaterial {
+    id: number;
+    name: string;
+    type: "PDF" | "IMAGE" | "VIDEO" | "DOCUMENT";
+    size: string;
+    url: string;
+}
+
+export interface LessonAssignment {
+    id: number;
+    title: string;
+    description: string;
+    status: AssignmentStatus;
+    dueDate?: string;
+    submittedAt?: string;
+    grade?: number;
+    maxGrade?: number;
+}
+
+export interface LessonQuizItem {
+    id: number;
+    title: string;
+    questionsCount: number;
+    duration: number;
+    status: LessonQuizStatus;
+    score?: number;
+    maxScore?: number;
+}
+
+export interface LessonReview {
+    rating: number;
+    totalRatings: number;
+    averageRating: number;
+    userRating?: number;
+    userFeedback?: string;
+}

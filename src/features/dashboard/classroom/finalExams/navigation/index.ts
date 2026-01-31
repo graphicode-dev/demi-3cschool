@@ -1,3 +1,3 @@
 export { finalExamsNavItem } from "./nav";
 export { finalExamsRoutes } from "./routes";
-export { FINAL_EXAMS_PATH } from "./paths";
+export { FINAL_EXAMS_PATH, finalExamsPaths } from "./paths";
