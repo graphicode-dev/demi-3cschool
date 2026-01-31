@@ -176,6 +176,13 @@ export const navRegistry = {
         };
 
         this.getAll().forEach((module) => {
+            // Ensure the section exists in grouped object
+            if (!grouped[module.section]) {
+                console.warn(
+                    `[Nav] Unknown section "${module.section}" for module "${module.featureId}". Skipping.`
+                );
+                return;
+            }
             grouped[module.section].push(...module.items);
         });
 

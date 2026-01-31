@@ -69,29 +69,32 @@ export const loadFeatureRoutes = (): void => {
         [
             "../features/*/navigation/routes.{ts,tsx}",
             "../features/dashboard/*/navigation/routes.{ts,tsx}",
-            "../features/dashboard/shared/*/navigation/routes.{ts,tsx}",
+            "../features/dashboard/*/*/navigation/routes.{ts,tsx}",
+            "../features/dashboard/*/*/*/navigation/routes.{ts,tsx}",
         ],
         { eager: true }
     );
 
     Object.entries(routeModules).forEach(([path, module]) => {
+        // Validation function for FeatureRouteModule
+        const isFeatureRouteModule = (
+            exp: unknown
+        ): exp is FeatureRouteModule =>
+            typeof exp === "object" &&
+            exp !== null &&
+            !Array.isArray(exp) &&
+            "id" in exp &&
+            "basePath" in exp &&
+            "routes" in exp;
+
         // Find the route module export (default or named)
-        const routeModule =
-            module.default ||
-            Object.values(module).find(
-                (exp): exp is FeatureRouteModule =>
-                    typeof exp === "object" &&
-                    exp !== null &&
-                    "id" in exp &&
-                    "basePath" in exp &&
-                    "routes" in exp
-            );
+        const routeModule = isFeatureRouteModule(module.default)
+            ? module.default
+            : Object.values(module).find(isFeatureRouteModule);
 
         if (routeModule) {
             routeRegistry.register(routeModule);
             console.debug(`[Router] Registered routes: ${routeModule.id}`);
-        } else {
-            console.warn(`[Router] No valid route module found in: ${path}`);
         }
     });
 };
@@ -104,6 +107,8 @@ export const loadFeatureNavigation = (): void => {
         [
             "../features/*/navigation/nav.{ts,tsx}",
             "../features/dashboard/*/navigation/nav.{ts,tsx}",
+            "../features/dashboard/*/*/navigation/nav.{ts,tsx}",
+            "../features/dashboard/*/*/*/navigation/nav.{ts,tsx}",
         ],
         { eager: true }
     );

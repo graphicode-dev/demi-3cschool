@@ -20,9 +20,9 @@ import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { navRegistry } from "../navRegistry";
 import type { NavItem } from "../nav.types";
-import { paths } from "@/router";
 import { CLASSROOM_PATH } from "@/features/dashboard/classroom/navigation/constant";
 import { ADMIN_PATH } from "@/features/dashboard/admin/navigation/constant";
+import { overviewPaths } from "@/features/dashboard/admin/overview/navigation";
 
 export interface BreadcrumbItem {
     path: string;
@@ -48,7 +48,7 @@ interface UseBreadcrumbsOptions {
 }
 
 const DEFAULT_DASHBOARD = {
-    path: paths.dashboard.root.list(),
+    path: overviewPaths.list(),
     label: "Dashboard",
     labelKey: "overview:overview.breadcrumb",
 };

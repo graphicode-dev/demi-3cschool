@@ -213,6 +213,14 @@ export const routeRegistry = {
         this.getAll().forEach((module) => {
             const layout = module.layout ?? "dashboard";
 
+            // Skip modules without routes
+            if (!module.routes) {
+                console.warn(
+                    `[Router] Module "${module.id}" has no routes defined. Skipping.`
+                );
+                return;
+            }
+
             // If basePath is empty and routes have children, add children directly
             if (!module.basePath && module.routes.children?.length) {
                 const childRoutes = module.routes.children.map(transformRoute);
