@@ -1,8 +1,12 @@
 import type { RouteConfig } from "@/router";
+import { learningPermissions } from "@/auth";
+
+const { lessonAssignment } = learningPermissions;
 
 /**
  * Projects feature routes
  * These routes are under the classroom dashboard
+ * Permission-controlled using learningPermissions config.
  */
 export const projectsRoutes: RouteConfig[] = [
     {
@@ -15,6 +19,7 @@ export const projectsRoutes: RouteConfig[] = [
             titleKey: "projects:title",
             requiresAuth: true,
         },
+        permissions: [lessonAssignment.viewAny],
     },
 ];
 

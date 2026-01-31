@@ -21,7 +21,7 @@ export const reportsRoutes: RouteConfig[] = [
             titleKey: "classroom:nav.reports",
             requiresAuth: true,
         },
-        // permissions: [report.viewAny],
+        permissions: [report.viewAny],
     },
     {
         path: "reports/view/:id",
@@ -36,6 +36,6 @@ export const reportsRoutes: RouteConfig[] = [
             titleKey: "classroom:nav.reports",
             requiresAuth: true,
         },
-        // permissions: [report.view],
+        permissions: [report.view],
     },
 ];

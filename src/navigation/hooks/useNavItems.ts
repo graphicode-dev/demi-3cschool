@@ -23,6 +23,7 @@ import { authStore } from "@/auth/auth.store";
 import type { Permission } from "@/auth/auth.types";
 import type { NavItem, NavSectionConfig, NavFilterOptions } from "../nav.types";
 import type { AcceptanceExamStatus } from "@/features/dashboard/classroom/acceptanceTest/types";
+import type { User } from "@/auth/auth.types";
 
 interface UseNavItemsReturn {
     /**
@@ -63,6 +64,9 @@ interface UseNavItemsReturn {
 export const useNavItems = (
     overrideOptions?: Partial<NavFilterOptions>
 ): UseNavItemsReturn => {
+    // Subscribe to user changes from auth store to react to login/logout
+    const user = authStore((state) => state.user);
+
     const {
         permissions,
         hasPermission,
@@ -72,18 +76,23 @@ export const useNavItems = (
         hasAnyRole,
     } = usePermissions();
 
+    // Get user role for filtering
+    const userRole = useMemo(() => {
+        return user?.role?.name?.toLowerCase() as NavFilterOptions["role"];
+    }, [user?.role?.name]);
+
     const filterOptions: NavFilterOptions = useMemo(
         () => ({
+            role: userRole,
             permissions,
             includeHidden: false,
             ...overrideOptions,
         }),
-        [permissions, overrideOptions]
+        [userRole, permissions, overrideOptions]
     );
 
     // Determine which dashboard section to show based on user role
     const userDashboardSection = useMemo(() => {
-        const user = authStore.getState().user;
         // Admin users see Admin section, others see Classroom section
         if (
             user?.role?.name === "admin" ||
@@ -92,7 +101,7 @@ export const useNavItems = (
             return "Admin";
         }
         return "Classroom";
-    }, []);
+    }, [user?.role?.name]);
 
     // Get acceptance exam status for students
     // TEMPORARY: Bypassed until backend is ready - uncomment when ready

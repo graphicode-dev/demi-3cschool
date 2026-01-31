@@ -1,8 +1,12 @@
 import type { RouteConfig } from "@/router";
+import { groupsPermissions } from "@/auth";
+
+const { groupSession } = groupsPermissions;
 
 /**
  * My Schedule feature routes
  * These routes are under the classroom dashboard
+ * Permission-controlled using groupsPermissions config.
  */
 export const myScheduleRoutes: RouteConfig[] = [
     {
@@ -15,6 +19,7 @@ export const myScheduleRoutes: RouteConfig[] = [
             titleKey: "mySchedule:title",
             requiresAuth: true,
         },
+        permissions: [groupSession.viewAny],
     },
 ];
 

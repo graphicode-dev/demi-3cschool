@@ -2,15 +2,17 @@
  * Shared Dashboard Features - Navigation Module
  *
  * Creates navigation items for shared features that work with both admin and classroom.
+ * Permission-controlled sidebar items using accountPermissions and supportPermissions config.
  */
 
 import type { NavItem } from "@/navigation/nav.types";
 import { User, MessageSquare, Award, FileText, Ticket } from "lucide-react";
 import { ticketsPaths } from "../ticketsManagement/navigation/paths";
-import { supportPermissions } from "@/auth";
+import { supportPermissions, accountPermissions } from "@/auth";
 import { getDashboardBasePath } from "./paths";
 
 const { ticket } = supportPermissions;
+const { conversation, certificate, report } = accountPermissions;
 
 /**
  * Create shared navigation items for a specific section
@@ -34,6 +36,7 @@ export const createSharedNavItems = (
             label: "Chat",
             href: `${basePath}/chat`,
             icon: MessageSquare,
+            permissions: [conversation.viewAny],
         },
         {
             key: "certificates",
@@ -41,6 +44,7 @@ export const createSharedNavItems = (
             label: "Certificates",
             href: `${basePath}/certificates`,
             icon: Award,
+            permissions: [certificate.viewAny],
         },
         {
             key: "reports",
@@ -48,6 +52,7 @@ export const createSharedNavItems = (
             label: "Reports",
             href: `${basePath}/reports`,
             icon: FileText,
+            permissions: [report.viewAny],
         },
         {
             key: "tickets-management",

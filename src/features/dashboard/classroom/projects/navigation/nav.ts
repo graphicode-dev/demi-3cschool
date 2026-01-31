@@ -2,11 +2,15 @@
  * Projects Feature - Navigation Module
  *
  * Navigation configuration for the projects feature.
+ * Permission-controlled sidebar items using learningPermissions config.
  */
 
 import type { NavItem } from "@/navigation/nav.types";
 import { FolderKanban } from "lucide-react";
+import { learningPermissions } from "@/auth";
 import { PROJECTS_PATH } from "./paths";
+
+const { lessonAssignment } = learningPermissions;
 
 export const projectsNavItem: NavItem = {
     key: "projects",
@@ -15,6 +19,7 @@ export const projectsNavItem: NavItem = {
     href: PROJECTS_PATH,
     icon: FolderKanban,
     order: 30,
+    permissions: [lessonAssignment.viewAny],
 };
 
 export default projectsNavItem;

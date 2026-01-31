@@ -1,8 +1,12 @@
 import type { RouteConfig } from "@/router";
+import { learningPermissions } from "@/auth";
+
+const { lesson } = learningPermissions;
 
 /**
  * Self Study feature routes
  * These routes are under the classroom dashboard
+ * Permission-controlled using learningPermissions config.
  */
 export const selfStudyRoutes: RouteConfig[] = [
     {
@@ -15,6 +19,7 @@ export const selfStudyRoutes: RouteConfig[] = [
             titleKey: "selfStudy:title",
             requiresAuth: true,
         },
+        permissions: [lesson.viewAny],
     },
     {
         path: "self-study/lesson/:sessionId",
@@ -26,6 +31,7 @@ export const selfStudyRoutes: RouteConfig[] = [
             titleKey: "selfStudy:lesson.title",
             requiresAuth: true,
         },
+        permissions: [lesson.view],
     },
 ];
 

@@ -8,6 +8,7 @@ import { AcceptanceExamRouteGuard } from "../components";
  * - Redirects to profile if status is "accepted"
  * - Routes user to correct page based on their status (pending/waiting/rejected)
  */
+
 export const acceptanceTestRoutes: RouteConfig[] = [
     {
         path: "acceptance-exam",

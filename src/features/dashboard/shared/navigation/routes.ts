@@ -3,9 +3,13 @@
  *
  * These routes are shared between admin and classroom sections.
  * They are imported by both admin and classroom route modules.
+ * Permission-controlled using accountPermissions config.
  */
 
 import type { RouteConfig } from "@/router";
+import { accountPermissions } from "@/auth";
+
+const { conversation, certificate, report } = accountPermissions;
 
 /**
  * Create shared routes with a specific base path prefix
@@ -40,6 +44,7 @@ export const createSharedRoutes = (
             titleKey: `${basePath}:nav.chat`,
             requiresAuth: true,
         },
+        permissions: [conversation.viewAny],
     },
     {
         path: "certificates",
@@ -54,6 +59,7 @@ export const createSharedRoutes = (
             titleKey: `${basePath}:nav.certificates`,
             requiresAuth: true,
         },
+        permissions: [certificate.viewAny],
     },
     {
         path: "reports",
@@ -68,6 +74,7 @@ export const createSharedRoutes = (
             titleKey: `${basePath}:nav.reports`,
             requiresAuth: true,
         },
+        permissions: [report.viewAny],
     },
     {
         path: "reports/view/:id",
@@ -82,6 +89,7 @@ export const createSharedRoutes = (
             titleKey: `${basePath}:nav.reports`,
             requiresAuth: true,
         },
+        permissions: [report.view],
     },
 ];
 

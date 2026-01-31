@@ -16,7 +16,8 @@ import { dashboardPermissions } from "@/auth/permission.config";
 const overviewRoutes: RouteConfig[] = [
     {
         index: true,
-        lazy: () => import("@/features/dashboard/admin/overview/pages/Dashboard"),
+        lazy: () =>
+            import("@/features/dashboard/admin/overview/pages/Dashboard"),
         permissions: [dashboardPermissions.view],
         meta: { titleKey: "common:dashboard" },
         handle: { crumb: "common:dashboard" },
@@ -38,6 +39,7 @@ export const overviewManagementRoutes: FeatureRouteModule = {
             requiresAuth: true,
         },
         children: overviewRoutes,
+        permissions: [dashboardPermissions.view],
     },
 };
 

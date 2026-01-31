@@ -14,7 +14,7 @@ import type { ComponentType, ReactNode } from "react";
 /**
  * Role type
  */
-export type Roles = "admin" | "student" | "teacher";
+export type Roles = "admin" | "super_admin" | "student" | "teacher";
 
 /**
  * Lazy component loader function
