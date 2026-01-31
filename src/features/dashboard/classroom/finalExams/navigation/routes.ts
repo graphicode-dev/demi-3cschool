@@ -19,7 +19,7 @@ export const finalExamsRoutes: RouteConfig[] = [
             titleKey: "finalExams:title",
             requiresAuth: true,
         },
-        permissions: [levelQuiz.viewAny],
+        // permissions: [levelQuiz.viewAny],
     },
 ];
 

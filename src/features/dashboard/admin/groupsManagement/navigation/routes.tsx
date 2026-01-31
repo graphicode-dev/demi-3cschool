@@ -121,7 +121,7 @@ const groupsRoutes: RouteConfig[] = [
 export const groupsManagementRoutes: FeatureRouteModule = {
     id: "groupsManagement",
     name: "Groups Management",
-    basePath: "/dashboard/groups",
+    basePath: "/admin/groups",
     layout: "dashboard",
     routes: {
         meta: {

@@ -15,8 +15,8 @@
 
 import { registerFeaturePaths } from "@/router/paths.registry";
 
-const STANDARD_BASE_PATH = "/dashboard/standard-learning";
-const PROFESSIONAL_BASE_PATH = "/dashboard/professional-learning";
+const STANDARD_BASE_PATH = "/admin/standard-learning";
+const PROFESSIONAL_BASE_PATH = "/admin/professional-learning";
 
 // ============================================================================
 // Standard Learning Paths

@@ -19,7 +19,7 @@ export const projectsRoutes: RouteConfig[] = [
             titleKey: "projects:title",
             requiresAuth: true,
         },
-        permissions: [lessonAssignment.viewAny],
+        // permissions: [lessonAssignment.viewAny],
     },
 ];
 

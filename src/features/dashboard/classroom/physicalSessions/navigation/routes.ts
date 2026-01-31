@@ -19,6 +19,6 @@ export const physicalSessionsRoutes: RouteConfig[] = [
             titleKey: "physicalSessions:title",
             requiresAuth: true,
         },
-        permissions: [groupSession.viewAny],
+        // permissions: [groupSession.viewAny],
     },
 ];

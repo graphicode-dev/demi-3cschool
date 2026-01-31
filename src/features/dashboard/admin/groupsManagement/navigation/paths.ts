@@ -24,7 +24,7 @@ import {
 // Groups Paths
 // ============================================================================
 
-const BasePath = "/dashboard/groups";
+const BasePath = "/admin/groups";
 
 export const groupsPaths = {
     regularList: () => `${BasePath}/regular`,

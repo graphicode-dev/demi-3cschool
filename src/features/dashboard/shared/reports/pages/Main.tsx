@@ -130,7 +130,7 @@ function ReportsPage() {
 
     const handleViewReport = useCallback(
         (reportId: string) => {
-            navigate(`/dashboard/reports/${reportId}`);
+            navigate(`reports/view/${reportId}`);
         },
         [navigate]
     );

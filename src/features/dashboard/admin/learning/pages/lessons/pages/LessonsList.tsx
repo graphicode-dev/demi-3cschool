@@ -43,8 +43,8 @@ export function useCurriculumType() {
 
     const isStandard = curriculumType === "standard";
     const basePath = isStandard
-        ? "/dashboard/standard-learning"
-        : "/dashboard/professional-learning";
+        ? "/admin/standard-learning"
+        : "/admin/professional-learning";
 
     return {
         curriculumType,

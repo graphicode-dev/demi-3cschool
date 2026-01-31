@@ -7,10 +7,7 @@
 
 import type { NavItem } from "@/navigation/nav.types";
 import { Building2 } from "lucide-react";
-import { groupsPermissions } from "@/auth";
 import { physicalSessions } from "./paths";
-
-const { groupSession } = groupsPermissions;
 
 export const physicalSessionsNavItem: NavItem = {
     key: "physical-sessions",
@@ -19,7 +16,6 @@ export const physicalSessionsNavItem: NavItem = {
     href: physicalSessions.main(),
     icon: Building2,
     order: 1,
-    permissions: [groupSession.viewAny],
 };
 
 export default physicalSessionsNavItem;

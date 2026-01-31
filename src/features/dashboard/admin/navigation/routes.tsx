@@ -2,7 +2,7 @@
  * Admin Feature - Route Module
  *
  * Defines routes for the admin feature.
- * Base path: /dashboard/*
+ * Base path: /admin/*
  *
  * Consolidates ALL admin features:
  * - Overview (dashboard home)
@@ -44,6 +44,10 @@ const { group, groupSession, studentAttendance } = groupsPermissions;
 const overviewRoutes: RouteConfig[] = [
     {
         index: true,
+        element: <Navigate to="overview" replace />,
+    },
+    {
+        path: "overview",
         lazy: () =>
             import("@/features/dashboard/admin/overview/pages/Dashboard"),
         permissions: [dashboardPermissions.view],
@@ -415,22 +419,19 @@ const salesRoutes: RouteConfig[] = [
 // Admin Shared Routes (profile, chat, certificates, reports)
 // ============================================================================
 
-const adminOnlySharedRoutes: RouteConfig[] = [
-    ...adminSharedRoutes.map((route) => ({
-        ...route,
-        path: route.path ? `admin/${route.path}` : undefined,
-    })),
-];
+// Shared routes already have relative paths (profile, chat, etc.)
+// No need to prefix since basePath is /admin
+const adminOnlySharedRoutes: RouteConfig[] = [...adminSharedRoutes];
 
 /**
  * Admin Route Module
  *
- * Consolidates all admin features under /dashboard/*
+ * Consolidates all admin features under /admin/*
  */
 export const adminRouteModule: FeatureRouteModule = {
     id: "admin",
     name: "Admin",
-    basePath: "/dashboard",
+    basePath: "/admin",
     layout: "dashboard",
     routes: {
         children: [
@@ -456,11 +457,8 @@ export const adminRouteModule: FeatureRouteModule = {
                       ? undefined
                       : "tickets",
             })),
-            // Settings
-            ...settingsRoutes.map((route) => ({
-                ...route,
-                path: route.path ? `admin/${route.path}` : undefined,
-            })),
+            // Settings (relative paths, basePath is /admin)
+            ...settingsRoutes,
             // Shared features (profile, chat, certificates, reports)
             ...adminOnlySharedRoutes,
         ],

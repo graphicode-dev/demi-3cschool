@@ -7,10 +7,7 @@
 
 import type { NavItem } from "@/navigation/nav.types";
 import { Video } from "lucide-react";
-import { groupsPermissions } from "@/auth";
 import { virtualSessions } from "./paths";
-
-const { groupSession } = groupsPermissions;
 
 export const virtualSessionsNavItem: NavItem = {
     key: "virtual-sessions",
@@ -19,7 +16,6 @@ export const virtualSessionsNavItem: NavItem = {
     href: virtualSessions.main(),
     icon: Video,
     order: 2,
-    permissions: [groupSession.viewAny],
 };
 
 export default virtualSessionsNavItem;

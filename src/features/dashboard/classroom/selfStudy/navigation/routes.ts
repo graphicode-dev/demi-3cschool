@@ -19,7 +19,7 @@ export const selfStudyRoutes: RouteConfig[] = [
             titleKey: "selfStudy:title",
             requiresAuth: true,
         },
-        permissions: [lesson.viewAny],
+        // permissions: [lesson.viewAny],
     },
     {
         path: "self-study/lesson/:sessionId",
@@ -31,7 +31,7 @@ export const selfStudyRoutes: RouteConfig[] = [
             titleKey: "selfStudy:lesson.title",
             requiresAuth: true,
         },
-        permissions: [lesson.view],
+        // permissions: [lesson.view],
     },
 ];
 

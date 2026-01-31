@@ -228,7 +228,7 @@ export const adminNav: FeatureNavModule = {
             key: "settings",
             labelKey: "admin:nav.settings",
             label: "Settings",
-            href: "/dashboard/admin/settings",
+            href: "/admin/settings",
             icon: Settings,
             order: 100,
         },

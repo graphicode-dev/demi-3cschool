@@ -33,7 +33,7 @@ const groupsAnalyticsRoutes: RouteConfig[] = [
 export const groupsAnalyticsManagementRoutes: FeatureRouteModule = {
     id: "groupsAnalytics",
     name: "Groups Analytics",
-    basePath: "/dashboard/groups-analytics",
+    basePath: "/admin/groups-analytics",
     layout: "dashboard",
     routes: {
         meta: {

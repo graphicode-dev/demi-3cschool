@@ -20,6 +20,7 @@ const featureLocales = import.meta.glob<LocaleModule>(
         "../features/dashboard/*/locales/*.json",
         "../features/dashboard/shared/*/locales/*.json",
         "../features/dashboard/classroom/*/locales/*.json",
+
     ],
     { eager: true }
 );

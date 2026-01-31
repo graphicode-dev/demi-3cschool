@@ -19,7 +19,7 @@ export const selfStudyNavItem: NavItem = {
     href: selfStudy.main(),
     icon: BookOpen,
     order: 0,
-    permissions: [lesson.viewAny],
+    // permissions: [lesson.viewAny],
 };
 
 export default selfStudyNavItem;

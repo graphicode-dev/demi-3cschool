@@ -19,7 +19,7 @@ export const myScheduleRoutes: RouteConfig[] = [
             titleKey: "mySchedule:title",
             requiresAuth: true,
         },
-        permissions: [groupSession.viewAny],
+        // permissions: [groupSession.viewAny],
     },
 ];
 

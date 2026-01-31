@@ -20,6 +20,6 @@ export const ticketsPageRoutes: RouteConfig[] = [
             titleKey: "ticketsManagement:tickets.pageTitle",
             requiresAuth: true,
         },
-        permissions: [ticket.viewAny],
+        // permissions: [ticket.viewAny],
     },
 ];

@@ -129,6 +129,8 @@ export const loadFeatureNavigation = (): void => {
             "!../features/dashboard/admin/sales_subscription/**",
             "!../features/dashboard/admin/settings/**",
             "!../features/dashboard/admin/ticketsManagement/**",
+            // Exclude classroom ticketsManagement nav (it's admin-only, students use supportHelp)
+            "!../features/dashboard/classroom/ticketsManagement/navigation/nav.{ts,tsx}",
         ],
         { eager: true }
     );

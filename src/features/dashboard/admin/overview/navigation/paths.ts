@@ -21,7 +21,7 @@ import { registerFeaturePaths } from "@/router/paths.registry";
 // ============================================================================
 
 export const overviewPaths = {
-    list: () => "/dashboard",
+    list: () => "/admin/overview",
 } as const;
 
 // ============================================================================

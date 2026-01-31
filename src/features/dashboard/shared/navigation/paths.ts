@@ -43,29 +43,6 @@ export const sharedPaths = {
     chat: () => `${getDashboardBasePath()}/chat`,
     certificates: () => `${getDashboardBasePath()}/certificates`,
     reports: () => `${getDashboardBasePath()}/reports`,
-    ticketsManagement: {
-        root: () => `${getDashboardBasePath()}/tickets-management`,
-        overview: () => `${getDashboardBasePath()}/tickets-management/overview`,
-        teamStructure: () => `${getDashboardBasePath()}/tickets-management/team-structure`,
-        manageTeam: () => `${getDashboardBasePath()}/tickets-management/team-structure/manage`,
-        addLead: () =>
-            `${getDashboardBasePath()}/tickets-management/team-structure/manage/lead/add`,
-        editLead: (id: string) =>
-            `${getDashboardBasePath()}/tickets-management/team-structure/manage/lead/${id}/edit`,
-        changeLeadBlock: (id: string) =>
-            `${getDashboardBasePath()}/tickets-management/team-structure/manage/lead/${id}/change-block`,
-        convertLeadToAgent: (id: string) =>
-            `${getDashboardBasePath()}/tickets-management/team-structure/manage/lead/${id}/convert`,
-        addAgent: () =>
-            `${getDashboardBasePath()}/tickets-management/team-structure/manage/agent/add`,
-        editAgent: (id: string) =>
-            `${getDashboardBasePath()}/tickets-management/team-structure/manage/agent/${id}/edit`,
-        promoteAgentToLead: (id: string) =>
-            `${getDashboardBasePath()}/tickets-management/team-structure/manage/agent/${id}/promote`,
-        tickets: () => `${getDashboardBasePath()}/tickets-management/tickets`,
-        distribution: () => `${getDashboardBasePath()}/tickets-management/distribution`,
-        performance: () => `${getDashboardBasePath()}/tickets-management/performance`,
-    },
 } as const;
 
 /**

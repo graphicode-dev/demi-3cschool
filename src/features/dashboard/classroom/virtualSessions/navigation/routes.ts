@@ -19,7 +19,7 @@ export const virtualSessionsRoutes: RouteConfig[] = [
             titleKey: "virtualSessions:title",
             requiresAuth: true,
         },
-        permissions: [groupSession.viewAny],
+        // permissions: [groupSession.viewAny],
     },
     {
         path: "virtual-sessions/recording/:sessionId",
@@ -31,6 +31,6 @@ export const virtualSessionsRoutes: RouteConfig[] = [
             titleKey: "virtualSessions:recording.title",
             requiresAuth: true,
         },
-        permissions: [groupSession.view],
+        // permissions: [groupSession.view],
     },
 ];

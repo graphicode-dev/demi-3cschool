@@ -1,7 +1,7 @@
 /**
  * Settings paths - Admin only
  */
-const ADMIN_BASE_PATH = "/dashboard/admin";
+const ADMIN_BASE_PATH = "/admin";
 
 export const settings = {
     list: () => `${ADMIN_BASE_PATH}/settings`,

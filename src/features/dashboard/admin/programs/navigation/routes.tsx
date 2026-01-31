@@ -33,7 +33,7 @@ const programsRoutes: RouteConfig[] = [
 export const programsManagementRoutes: FeatureRouteModule = {
     id: "programsManagement",
     name: "Programs Management",
-    basePath: "/dashboard/programs",
+    basePath: "/admin/programs",
     layout: "dashboard",
     routes: {
         meta: {

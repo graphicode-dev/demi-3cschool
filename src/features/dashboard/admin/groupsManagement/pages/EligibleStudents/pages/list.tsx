@@ -123,7 +123,7 @@ function EligibleStudentsList() {
             const path = getGroupTypePath(
                 groupType as "regular" | "semi_private" | "private"
             );
-            navigate(`/dashboard/groups/${path}?assignStudent=${studentId}`);
+            navigate(`/admin/groups/${path}?assignStudent=${studentId}`);
         },
         [navigate]
     );

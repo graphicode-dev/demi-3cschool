@@ -30,7 +30,7 @@ export const useDashboardSection = (): DashboardSection => {
  */
 export const useDashboardPaths = () => {
     const section = useDashboardSection();
-    const basePath = `/dashboard/${section}`;
+    const basePath = `/${section}`;
 
     return useMemo(
         () => ({

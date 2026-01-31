@@ -19,7 +19,7 @@ import { subscriptionRoutes } from "../pages/installments/navigation/routes";
 export const salesSubscriptionRouteModule: FeatureRouteModule = {
     id: "sales-subscription",
     name: "Sales Subscription",
-    basePath: "/dashboard/sales",
+    basePath: "/admin/sales",
     layout: "dashboard",
     routes: {
         children: [

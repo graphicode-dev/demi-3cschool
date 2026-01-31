@@ -19,7 +19,7 @@ import { registerFeaturePaths } from "@/router/paths.registry";
 // GroupsAnalytics Paths
 // ============================================================================
 
-const BasePath = "/dashboard/groups-analytics";
+const BasePath = "/admin/groups-analytics";
 
 export const groupsAnalyticsPaths = {
     List: () => `${BasePath}`,
