@@ -37,6 +37,10 @@ import { classroomPaths } from "@/features/dashboard/classroom/navigation/paths"
 import { adminPaths } from "@/features/dashboard/admin/navigation/paths";
 import { sharedPaths } from "@/features/dashboard/shared/navigation/paths";
 import { overviewPaths } from "@/features/dashboard/admin/overview/navigation";
+import { learningManagementPaths } from "@/features/learning/navigation/paths";
+import { groupsManagementPaths } from "@/features/groupsManagement/navigation";
+import { groupsAnalyticsManagementPaths } from "@/features/groupsAnalytics/navigation";
+import { salesSubscriptionPaths } from "@/features/sales_subscription";
 
 // ============================================================================
 // Path Builder Factory
@@ -79,12 +83,12 @@ export const paths = {
     // ========================================================================
     dashboard: {
         root: overviewPaths,
-        // learning: learningManagementPaths,
-        // groupsManagement: groupsManagementPaths,
-        // groupsAnalyticsManagement: groupsAnalyticsManagementPaths,
+        learning: learningManagementPaths,
+        groupsManagement: groupsManagementPaths,
+        groupsAnalyticsManagement: groupsAnalyticsManagementPaths,
         classroom: classroomPaths,
         admin: adminPaths,
-        // salesSubscription: salesSubscriptionPaths,
+        salesSubscription: salesSubscriptionPaths,
         ticketsManagement: sharedPaths.ticketsManagement,
     },
 
