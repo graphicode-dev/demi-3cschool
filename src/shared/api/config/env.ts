@@ -3,22 +3,8 @@
  * Single source of truth for API-related configuration values
  */
 
-const getBaseUrl = (): string => {
-    const url = import.meta.env.VITE_BASE_URL as string;
-    // If URL doesn't start with a protocol or //, add // for protocol-relative URL
-    if (
-        url &&
-        !url.startsWith("http://") &&
-        !url.startsWith("https://") &&
-        !url.startsWith("//")
-    ) {
-        return `//${url}`;
-    }
-    return url;
-};
-
 export const API_CONFIG = {
-    BASE_URL: getBaseUrl(),
+    BASE_URL: import.meta.env.VITE_BASE_URL,
     TIMEOUT: 30000,
     AUTH_COOKIE_NAME: import.meta.env.VITE_AUTH_COOKIE_NAME,
     PROJECT_NAME: import.meta.env.VITE_PROJECT_NAME,
