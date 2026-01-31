@@ -4,6 +4,7 @@ import { Monitor, Building2 } from "lucide-react";
 import { ScheduleCalendar } from "../components";
 import { MOCK_SCHEDULE_SESSIONS } from "../mocks";
 import type { ScheduleSession } from "../types";
+import PageWrapper from "@/design-system/components/PageWrapper";
 
 type FilterType = "all" | "online" | "offline";
 
@@ -17,17 +18,12 @@ export function MySchedulePage() {
     });
 
     return (
-        <div className="flex flex-col gap-6 px-4 py-6 max-w-6xl mx-auto">
-            {/* Header */}
-            <div className="flex flex-col gap-1">
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {t("title")}
-                </h1>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {t("description")}
-                </p>
-            </div>
-
+        <PageWrapper
+            pageHeaderProps={{
+                title: t("title"),
+                subtitle: t("description"),
+            }}
+        >
             {/* Filter Tabs */}
             <div className="flex justify-center gap-4">
                 <button
@@ -66,7 +62,7 @@ export function MySchedulePage() {
 
             {/* Calendar */}
             <ScheduleCalendar sessions={filteredSessions} />
-        </div>
+        </PageWrapper>
     );
 }
 

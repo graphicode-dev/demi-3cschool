@@ -11,6 +11,7 @@ import { SessionCard } from "../components";
 import { mockSessions } from "../mockData";
 import { resourcesPaths } from "../navigation/paths";
 import type { Session } from "../types";
+import PageWrapper from "@/design-system/components/PageWrapper";
 
 export function ResourcesPage() {
     const { t } = useTranslation("resources");
@@ -61,20 +62,15 @@ export function ResourcesPage() {
     }
 
     return (
-        <div className="flex flex-col h-full p-4">
-            {/* Header */}
-            <div className="mb-4">
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
-                    {t("resources.pageTitle", "Learning Resources")}
-                </h1>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {t(
-                        "resources.pageSubtitle",
-                        "Find activities and materials for your sessions."
-                    )}
-                </p>
-            </div>
-
+        <PageWrapper
+            pageHeaderProps={{
+                title: t("resources.pageTitle", "Learning Resources"),
+                subtitle: t(
+                    "resources.pageSubtitle",
+                    "Find activities and materials for your sessions."
+                ),
+            }}
+        >
             {/* Sessions Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {sessions.map((session) => (
@@ -96,7 +92,7 @@ export function ResourcesPage() {
                     </div>
                 </div>
             )}
-        </div>
+        </PageWrapper>
     );
 }
 

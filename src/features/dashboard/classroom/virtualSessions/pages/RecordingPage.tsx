@@ -67,7 +67,7 @@ function RecordingPage() {
 
     return (
         <PageWrapper>
-            <div className="flex flex-col gap-6 max-w-4xl mx-auto px-4 py-4">
+            <div className="space-y-6">
                 {/* Back Button */}
                 <button
                     onClick={handleGoBack}

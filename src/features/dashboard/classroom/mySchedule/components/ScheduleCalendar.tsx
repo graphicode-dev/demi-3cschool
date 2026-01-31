@@ -91,10 +91,6 @@ export function ScheduleCalendar({ sessions }: ScheduleCalendarProps) {
         <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-theme-sm overflow-hidden">
             {/* Header */}
             <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
-                    {t("mySchedule")}
-                </h3>
-
                 {/* Month Navigation */}
                 <div className="flex items-center justify-between">
                     <button

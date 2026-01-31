@@ -57,86 +57,79 @@ function VirtualSessionsPage() {
     };
 
     return (
-        <PageWrapper>
-            <div className="flex flex-col gap-6 max-w-5xl mx-auto px-4 py-4">
-                {/* Header */}
-                <div className="flex flex-col gap-1">
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                        {t("title")}
-                    </h1>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                        {t("description")}
-                    </p>
-                </div>
+        <PageWrapper
+            pageHeaderProps={{
+                title: t("title"),
+                subtitle: t("description"),
+            }}
+        >
+            {/* Term Stepper */}
+            <TermStepper
+                terms={data.terms}
+                selectedTermId={selectedTermId}
+                onTermSelect={setSelectedTermId}
+                translationNamespace="virtualSessions"
+            />
 
-                {/* Term Stepper */}
-                <TermStepper
-                    terms={data.terms}
-                    selectedTermId={selectedTermId}
-                    onTermSelect={setSelectedTermId}
-                    translationNamespace="virtualSessions"
-                />
+            {/* Current Live Sessions */}
+            {liveSessions.length > 0 && (
+                <section className="flex flex-col gap-4">
+                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                        {t("sections.currentLive")}
+                    </h2>
+                    <div className="flex flex-wrap gap-4">
+                        {liveSessions.map((session) => (
+                            <VirtualSessionCard
+                                key={session.id}
+                                session={session}
+                                onJoinSession={handleJoinSession}
+                            />
+                        ))}
+                    </div>
+                </section>
+            )}
 
-                {/* Current Live Sessions */}
-                {liveSessions.length > 0 && (
-                    <section className="flex flex-col gap-4">
+            {/* Upcoming Sessions */}
+            {upcomingSessions.length > 0 && (
+                <section className="flex flex-col gap-4">
+                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
+                        {t("sections.upcoming")}
+                    </h2>
+                    <div className="flex flex-wrap gap-4">
+                        {upcomingSessions.map((session) => (
+                            <VirtualSessionCard
+                                key={session.id}
+                                session={session}
+                                onViewInfo={handleViewInfo}
+                            />
+                        ))}
+                    </div>
+                </section>
+            )}
+
+            {/* Completed Sessions */}
+            {completedSessions.length > 0 && (
+                <section className="flex flex-col gap-4">
+                    <div className="flex items-center justify-between">
                         <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                            {t("sections.currentLive")}
+                            {t("sections.completed")}
                         </h2>
-                        <div className="flex flex-wrap gap-4">
-                            {liveSessions.map((session) => (
-                                <VirtualSessionCard
-                                    key={session.id}
-                                    session={session}
-                                    onJoinSession={handleJoinSession}
-                                />
-                            ))}
-                        </div>
-                    </section>
-                )}
-
-                {/* Upcoming Sessions */}
-                {upcomingSessions.length > 0 && (
-                    <section className="flex flex-col gap-4">
-                        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                            {t("sections.upcoming")}
-                        </h2>
-                        <div className="flex flex-wrap gap-4">
-                            {upcomingSessions.map((session) => (
-                                <VirtualSessionCard
-                                    key={session.id}
-                                    session={session}
-                                    onViewInfo={handleViewInfo}
-                                />
-                            ))}
-                        </div>
-                    </section>
-                )}
-
-                {/* Completed Sessions */}
-                {completedSessions.length > 0 && (
-                    <section className="flex flex-col gap-4">
-                        <div className="flex items-center justify-between">
-                            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                                {t("sections.completed")}
-                            </h2>
-                            <button className="flex items-center gap-1 text-sm font-medium text-warning-500 hover:text-warning-600 transition-colors">
-                                {t("session.viewAllHistory")}
-                                <ChevronRight className="size-4" />
-                            </button>
-                        </div>
-                        <div className="flex flex-wrap gap-4">
-                            {completedSessions.slice(0, 4).map((session) => (
-                                <VirtualSessionCard
-                                    key={session.id}
-                                    session={session}
-                                    onViewRecording={handleViewRecording}
-                                />
-                            ))}
-                        </div>
-                    </section>
-                )}
-            </div>
+                        <button className="flex items-center gap-1 text-sm font-medium text-warning-500 hover:text-warning-600 transition-colors">
+                            {t("session.viewAllHistory")}
+                            <ChevronRight className="size-4" />
+                        </button>
+                    </div>
+                    <div className="flex flex-wrap gap-4">
+                        {completedSessions.slice(0, 4).map((session) => (
+                            <VirtualSessionCard
+                                key={session.id}
+                                session={session}
+                                onViewRecording={handleViewRecording}
+                            />
+                        ))}
+                    </div>
+                </section>
+            )}
 
             {/* Session Info Modal */}
             {selectedSession && (

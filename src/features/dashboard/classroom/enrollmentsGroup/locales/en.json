@@ -1,0 +1,52 @@
+{
+    "title": "Enrollments Group",
+    "description": "Pick the time that works best for you to start learning programming.",
+    "onlineSessions": "Online Sessions",
+    "offlineSessions": "Offline Sessions",
+    "chooseGroupBanner": "You will choose your group once to begin your journey",
+    "filterGroups": "Filter Groups",
+    "selectDay": "Select Day",
+    "selectLocation": "Select Location",
+    "allDays": "All Days",
+    "allLocations": "All Locations",
+    "day": "Day",
+    "time": "Time",
+    "location": "Location",
+    "center": "Center",
+    "sessionType": "Session Type",
+    "online": "Online",
+    "offline": "Offline",
+    "enrollNow": "Enroll Now",
+    "viewMap": "View Map",
+    "yourGroup": "Your Group",
+    "activeStatus": "Active Status",
+    "successOnline": "You have successfully joined this group",
+    "successOffline": "Your offline session is booked",
+    "offlineUnlockBanner": "Offline session will unlock after completing {{count}} online sessions.",
+    "offlineReminder": "Don't forget to bring your laptop!",
+    "days": {
+        "sunday": "Sunday",
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday"
+    },
+    "unlockOffline": {
+        "title": "Unlock Offline Sessions",
+        "description": "Offline sessions will be available after you complete your first {{count}} online classes.",
+        "keepLearning": "Keep learning online —",
+        "unlockSoon": "your offline session will unlock soon!"
+    },
+    "confirmModal": {
+        "titleOnline": "Confirm your group",
+        "titleOffline": "Confirm your offline session",
+        "subtitle": "You Are About To Join The {{day}} Group.",
+        "warningOnline": "Please make sure this time works for you.",
+        "warningOffline": "Please arrive 10 minutes early at the center. Bring your laptop and charger!",
+        "cantChange": "You can't change your group after joining.",
+        "confirmButton": "Confirm & Join",
+        "backButton": "Back"
+    }
+}

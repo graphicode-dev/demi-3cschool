@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
 import { MessageSquare, CloudUpload, Download, ArrowLeft } from "lucide-react";
 import { MOCK_PROJECTS } from "../mocks";
+import PageWrapper from "@/design-system/components/PageWrapper";
 
 export function SubmitAssignmentPage() {
     const { t } = useTranslation("projects");
@@ -13,16 +14,6 @@ export function SubmitAssignmentPage() {
     const [isDragging, setIsDragging] = useState(false);
 
     const project = MOCK_PROJECTS.find((p) => p.id === Number(projectId));
-
-    if (!project) {
-        return (
-            <div className="flex flex-col items-center justify-center py-12">
-                <p className="text-gray-500 dark:text-gray-400">
-                    {t("projectNotFound")}
-                </p>
-            </div>
-        );
-    }
 
     const handleDragOver = useCallback((e: React.DragEvent) => {
         e.preventDefault();
@@ -58,27 +49,24 @@ export function SubmitAssignmentPage() {
 
     const isSubmitDisabled = files.length === 0;
 
-    return (
-        <div className="flex flex-col gap-6 max-w-4xl mx-auto">
-            {/* Back Button */}
-            <button
-                onClick={() => navigate(-1)}
-                className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors w-fit"
-            >
-                <ArrowLeft className="size-4" />
-                <span className="text-sm font-medium">{t("back")}</span>
-            </button>
-
-            {/* Header Section */}
-            <div className="flex flex-col gap-1">
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {t("submit.title")}
-                </h1>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {t("submit.description")}
+    if (!project) {
+        return (
+            <div className="flex flex-col items-center justify-center py-12">
+                <p className="text-gray-500 dark:text-gray-400">
+                    {t("projectNotFound")}
                 </p>
             </div>
+        );
+    }
 
+    return (
+        <PageWrapper
+            pageHeaderProps={{
+                title: t("submit.title"),
+                subtitle: t("submit.description"),
+                backButton: true,
+            }}
+        >
             {/* Form Card */}
             <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-theme-sm border border-gray-200 dark:border-gray-700 p-6 sm:p-8">
                 <div className="flex flex-col gap-6">
@@ -175,7 +163,7 @@ export function SubmitAssignmentPage() {
                     </button>
                 </div>
             </div>
-        </div>
+        </PageWrapper>
     );
 }
 

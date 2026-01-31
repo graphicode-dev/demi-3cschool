@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
 import { FileText, Download, ArrowLeft } from "lucide-react";
 import { MOCK_PROJECTS } from "../mocks";
+import PageWrapper from "@/design-system/components/PageWrapper";
 
 export function HomeworkFilePage() {
     const { t } = useTranslation("projects");
@@ -27,26 +28,13 @@ export function HomeworkFilePage() {
     };
 
     return (
-        <div className="flex flex-col gap-6 max-w-4xl mx-auto">
-            {/* Back Button */}
-            <button
-                onClick={() => navigate(-1)}
-                className="flex items-center gap-2 text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors w-fit"
-            >
-                <ArrowLeft className="size-4" />
-                <span className="text-sm font-medium">{t("back")}</span>
-            </button>
-
-            {/* Header Section */}
-            <div className="flex flex-col gap-1">
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {t("homeworkFile.title")}
-                </h1>
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {t("homeworkFile.description")}
-                </p>
-            </div>
-
+        <PageWrapper
+            pageHeaderProps={{
+                title: t("homeworkFile.title"),
+                subtitle: t("homeworkFile.description"),
+                backButton: true,
+            }}
+        >
             {/* File Card */}
             <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-theme-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
                 {/* File Header */}
@@ -93,7 +81,7 @@ export function HomeworkFilePage() {
                     </div>
                 </div>
             </div>
-        </div>
+        </PageWrapper>
     );
 }
 

@@ -1,0 +1,52 @@
+{
+    "title": "مجموعات التسجيل",
+    "description": "اختر الوقت الأنسب لك لبدء تعلم البرمجة.",
+    "onlineSessions": "جلسات أونلاين",
+    "offlineSessions": "جلسات حضورية",
+    "chooseGroupBanner": "ستختار مجموعتك مرة واحدة لبدء رحلتك",
+    "filterGroups": "تصفية المجموعات",
+    "selectDay": "اختر اليوم",
+    "selectLocation": "اختر الموقع",
+    "allDays": "جميع الأيام",
+    "allLocations": "جميع المواقع",
+    "day": "اليوم",
+    "time": "الوقت",
+    "location": "الموقع",
+    "center": "المركز",
+    "sessionType": "نوع الجلسة",
+    "online": "أونلاين",
+    "offline": "حضوري",
+    "enrollNow": "سجل الآن",
+    "viewMap": "عرض الخريطة",
+    "yourGroup": "مجموعتك",
+    "activeStatus": "حالة نشطة",
+    "successOnline": "لقد انضممت بنجاح إلى هذه المجموعة",
+    "successOffline": "تم حجز جلستك الحضورية",
+    "offlineUnlockBanner": "ستفتح الجلسات الحضورية بعد إكمال {{count}} جلسات أونلاين.",
+    "offlineReminder": "لا تنسَ إحضار حاسوبك المحمول!",
+    "days": {
+        "sunday": "الأحد",
+        "monday": "الاثنين",
+        "tuesday": "الثلاثاء",
+        "wednesday": "الأربعاء",
+        "thursday": "الخميس",
+        "friday": "الجمعة",
+        "saturday": "السبت"
+    },
+    "unlockOffline": {
+        "title": "فتح الجلسات الحضورية",
+        "description": "ستتوفر الجلسات الحضورية بعد إكمال أول {{count}} فصول أونلاين.",
+        "keepLearning": "استمر في التعلم أونلاين —",
+        "unlockSoon": "ستفتح جلستك الحضورية قريباً!"
+    },
+    "confirmModal": {
+        "titleOnline": "تأكيد مجموعتك",
+        "titleOffline": "تأكيد جلستك الحضورية",
+        "subtitle": "أنت على وشك الانضمام إلى مجموعة {{day}}.",
+        "warningOnline": "يرجى التأكد من أن هذا الوقت مناسب لك.",
+        "warningOffline": "يرجى الوصول قبل 10 دقائق من الموعد. أحضر حاسوبك المحمول والشاحن!",
+        "cantChange": "لا يمكنك تغيير مجموعتك بعد الانضمام.",
+        "confirmButton": "تأكيد والانضمام",
+        "backButton": "رجوع"
+    }
+}
