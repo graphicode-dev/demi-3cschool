@@ -65,12 +65,22 @@ interface NavExports {
 export const loadFeatureRoutes = (): void => {
     // Vite glob import - eager loads all matching modules
     // Matches both top-level features and nested dashboard features
+    // Excludes admin feature routes (consolidated in admin/navigation/routes.tsx)
     const routeModules = import.meta.glob<FeatureExports>(
         [
             "../features/*/navigation/routes.{ts,tsx}",
             "../features/dashboard/*/navigation/routes.{ts,tsx}",
             "../features/dashboard/*/*/navigation/routes.{ts,tsx}",
             "../features/dashboard/*/*/*/navigation/routes.{ts,tsx}",
+            // Exclude admin feature routes (they are consolidated in admin/navigation/routes.tsx)
+            "!../features/dashboard/admin/learning/**",
+            "!../features/dashboard/admin/groupsManagement/**",
+            "!../features/dashboard/admin/groupsAnalytics/**",
+            "!../features/dashboard/admin/programs/**",
+            "!../features/dashboard/admin/overview/**",
+            "!../features/dashboard/admin/sales_subscription/**",
+            "!../features/dashboard/admin/settings/**",
+            "!../features/dashboard/admin/ticketsManagement/**",
         ],
         { eager: true }
     );
@@ -103,12 +113,22 @@ export const loadFeatureRoutes = (): void => {
  * Auto-load all feature navigation using Vite glob import
  */
 export const loadFeatureNavigation = (): void => {
+    // Excludes admin feature nav (consolidated in admin/navigation/nav.ts)
     const navModules = import.meta.glob<NavExports>(
         [
             "../features/*/navigation/nav.{ts,tsx}",
             "../features/dashboard/*/navigation/nav.{ts,tsx}",
             "../features/dashboard/*/*/navigation/nav.{ts,tsx}",
             "../features/dashboard/*/*/*/navigation/nav.{ts,tsx}",
+            // Exclude admin feature nav (they are consolidated in admin/navigation/nav.ts)
+            "!../features/dashboard/admin/learning/**",
+            "!../features/dashboard/admin/groupsManagement/**",
+            "!../features/dashboard/admin/groupsAnalytics/**",
+            "!../features/dashboard/admin/programs/**",
+            "!../features/dashboard/admin/overview/**",
+            "!../features/dashboard/admin/sales_subscription/**",
+            "!../features/dashboard/admin/settings/**",
+            "!../features/dashboard/admin/ticketsManagement/**",
         ],
         { eager: true }
     );

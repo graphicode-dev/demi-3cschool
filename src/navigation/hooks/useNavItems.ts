@@ -23,7 +23,12 @@ import { authStore } from "@/auth/auth.store";
 import type { Permission } from "@/auth/auth.types";
 import type { NavItem, NavSectionConfig, NavFilterOptions } from "../nav.types";
 import type { AcceptanceExamStatus } from "@/features/dashboard/classroom/acceptanceTest/types";
-import type { User } from "@/auth/auth.types";
+
+// Admin-only sections that should not appear for classroom users
+const ADMIN_ONLY_SECTIONS: string[] = ["Admin"];
+
+// Classroom-only sections
+const CLASSROOM_ONLY_SECTIONS: string[] = ["Classroom"];
 
 interface UseNavItemsReturn {
     /**
@@ -129,19 +134,20 @@ export const useNavItems = (
         // Filter sections based on role and acceptance exam status
         return allSections
             .filter((section) => {
-                // Filter out the opposite dashboard section
-                if (
-                    section.id === "Classroom" &&
-                    userDashboardSection === "Admin"
-                ) {
-                    return false;
+                // For classroom users, hide all admin-only sections
+                if (userDashboardSection === "Classroom") {
+                    if (ADMIN_ONLY_SECTIONS.includes(section.id)) {
+                        return false;
+                    }
                 }
-                if (
-                    section.id === "Admin" &&
-                    userDashboardSection === "Classroom"
-                ) {
-                    return false;
+
+                // For admin users, hide classroom-only sections
+                if (userDashboardSection === "Admin") {
+                    if (CLASSROOM_ONLY_SECTIONS.includes(section.id)) {
+                        return false;
+                    }
                 }
+
                 return true;
             })
             .map((section) => {
