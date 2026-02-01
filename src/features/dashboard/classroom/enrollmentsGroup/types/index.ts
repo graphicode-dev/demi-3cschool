@@ -36,3 +36,118 @@ export interface EnrollmentState {
     onlineSessionsCompleted: number;
     requiredOnlineSessions: number;
 }
+
+// ============================================================================
+// API Response Types
+// ============================================================================
+
+/**
+ * Schedule entity from API
+ */
+export interface GroupSchedule {
+    id: number;
+    groupId: number;
+    dayOfWeek: DayOfWeek;
+    startTime: string;
+    endTime: string;
+    createdAt: string;
+    updatedAt: string;
+}
+
+/**
+ * Level entity from API
+ */
+export interface GroupLevel {
+    id: number;
+    title: string;
+    slug: string;
+}
+
+/**
+ * Programs Curriculum entity from API
+ */
+export interface GroupProgramsCurriculum {
+    id: number;
+    name: string;
+    caption: string;
+    description: string;
+    isActive: number | boolean;
+}
+
+/**
+ * Grade entity from API
+ */
+export interface GroupGrade {
+    id: number;
+    name: string;
+    code: string;
+}
+
+/**
+ * Grade Rule entity from API
+ */
+export interface GroupGradeRule {
+    id: number;
+    name: string;
+    code: string;
+}
+
+/**
+ * Location entity for offline groups
+ */
+export interface GroupLocation {
+    id: number;
+    name: string;
+    address?: string;
+}
+
+/**
+ * Available Group entity from API
+ */
+export interface AvailableGroup {
+    id: number;
+    name: string;
+    maxCapacity: number;
+    enrolledCount: number | null;
+    availableSlots: number | null;
+    isFull: boolean | null;
+    locationType: "online" | "offline";
+    isActive: boolean;
+    level: GroupLevel;
+    programsCurriculum: GroupProgramsCurriculum;
+    grade: GroupGrade;
+    schedules: GroupSchedule[];
+    trainer: unknown | null;
+    gradeRule: GroupGradeRule;
+    location?: GroupLocation;
+    primaryTeacher?: Record<string, unknown>;
+    createdAt: string;
+    updatedAt: string;
+}
+
+/**
+ * My Program Groups Response Data
+ */
+export interface MyProgramGroupsData {
+    enrolled: boolean;
+    group: AvailableGroup | null;
+    available: AvailableGroup[];
+}
+
+/**
+ * My Program Groups API Response
+ */
+export interface MyProgramGroupsResponse {
+    success: boolean;
+    message: string;
+    data: MyProgramGroupsData;
+}
+
+/**
+ * Enroll Response
+ */
+export interface EnrollResponse {
+    success: boolean;
+    message: string;
+    data?: unknown;
+}

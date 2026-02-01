@@ -2,6 +2,7 @@
  * EnrolledGroupCard Component
  *
  * Displays the user's enrolled group with active status.
+ * Matches the Figma design with green border, "Your Group" badge, and Active Status footer.
  */
 
 import { useTranslation } from "react-i18next";
@@ -17,7 +18,7 @@ export function EnrolledGroupCard({ group }: EnrolledGroupCardProps) {
     const isOffline = group.sessionType === "offline";
 
     return (
-        <div className="bg-white dark:bg-gray-900 rounded-2xl border-2 border-success-200 dark:border-success-500/30 p-5 flex flex-col gap-4">
+        <div className="bg-white dark:bg-gray-900 rounded-2xl border-2 border-success-300 dark:border-success-500/40 p-5 flex flex-col gap-4">
             {/* Header */}
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
@@ -32,16 +33,18 @@ export function EnrolledGroupCard({ group }: EnrolledGroupCardProps) {
                         {isOffline ? t("offlineSessions") : t("onlineSessions")}
                     </span>
                 </div>
-                <span className="px-3 py-1 bg-success-100 dark:bg-success-500/20 text-success-600 dark:text-success-400 text-xs font-semibold rounded-full flex items-center gap-1">
-                    <Monitor className="size-3" />
+                <span className="px-3 py-1.5 bg-success-100 dark:bg-success-500/20 text-success-600 dark:text-success-400 text-xs font-semibold rounded-lg flex items-center gap-1.5">
+                    <Monitor className="size-3.5" />
                     {t("yourGroup")}
                 </span>
             </div>
 
             {/* Location (offline only) */}
             {isOffline && group.location && (
-                <div className="flex items-start gap-2">
-                    <MapPin className="size-4 text-warning-500 mt-0.5" />
+                <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-full bg-warning-100 dark:bg-warning-500/20 flex items-center justify-center shrink-0">
+                        <MapPin className="size-4 text-warning-500" />
+                    </div>
                     <div className="flex flex-col">
                         <span className="text-xs text-gray-500 dark:text-gray-400 uppercase">
                             {t("location")}
@@ -59,8 +62,18 @@ export function EnrolledGroupCard({ group }: EnrolledGroupCardProps) {
             )}
 
             {/* Day */}
-            <div className="flex items-center gap-2">
-                <Calendar className="size-4 text-gray-400" />
+            <div className="flex items-center gap-3">
+                <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
+                        isOffline
+                            ? "bg-warning-100 dark:bg-warning-500/20"
+                            : "bg-brand-100 dark:bg-brand-500/20"
+                    }`}
+                >
+                    <Calendar
+                        className={`size-4 ${isOffline ? "text-warning-500" : "text-brand-500"}`}
+                    />
+                </div>
                 <div className="flex flex-col">
                     <span className="text-xs text-gray-500 dark:text-gray-400 uppercase">
                         {t("day")}
@@ -72,8 +85,18 @@ export function EnrolledGroupCard({ group }: EnrolledGroupCardProps) {
             </div>
 
             {/* Time */}
-            <div className="flex items-center gap-2">
-                <Clock className="size-4 text-gray-400" />
+            <div className="flex items-center gap-3">
+                <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
+                        isOffline
+                            ? "bg-warning-100 dark:bg-warning-500/20"
+                            : "bg-brand-100 dark:bg-brand-500/20"
+                    }`}
+                >
+                    <Clock
+                        className={`size-4 ${isOffline ? "text-warning-500" : "text-brand-500"}`}
+                    />
+                </div>
                 <div className="flex flex-col">
                     <span className="text-xs text-gray-500 dark:text-gray-400 uppercase">
                         {t("time")}
@@ -85,9 +108,9 @@ export function EnrolledGroupCard({ group }: EnrolledGroupCardProps) {
             </div>
 
             {/* Active Status */}
-            <div className="flex items-center justify-center gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
-                <CheckSquare className="size-4 text-success-500" />
-                <span className="text-sm font-medium text-success-500">
+            <div className="flex items-center justify-center gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">
+                <CheckSquare className="size-5 text-success-500" />
+                <span className="text-sm font-semibold text-success-500">
                     {t("activeStatus")}
                 </span>
             </div>

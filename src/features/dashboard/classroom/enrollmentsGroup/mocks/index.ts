@@ -74,6 +74,15 @@ export const MOCK_NOT_ENROLLED_STATE: EnrollmentState = {
     requiredOnlineSessions: 8,
 };
 
+// Mock state for not enrolled user but offline unlocked (to see offline group cards)
+export const MOCK_NOT_ENROLLED_OFFLINE_UNLOCKED: EnrollmentState = {
+    onlineGroup: null,
+    offlineGroup: null,
+    offlineUnlocked: true,
+    onlineSessionsCompleted: 8,
+    requiredOnlineSessions: 8,
+};
+
 // Mock state for enrolled online user
 export const MOCK_ENROLLED_ONLINE_STATE: EnrollmentState = {
     onlineGroup: {

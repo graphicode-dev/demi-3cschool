@@ -1,0 +1,129 @@
+/**
+ * TermStepper Component
+ *
+ * Displays the term progress stepper with clickable terms.
+ * Terms can be completed, current, or locked based on their status.
+ */
+
+import { Check, Lock } from "lucide-react";
+
+export type TermStatus = "completed" | "current" | "locked";
+
+export interface Term {
+    id: number | string;
+    label: string;
+    status: TermStatus;
+}
+
+interface TermStepperProps {
+    terms: Term[];
+    selectedTermId: number | string | undefined;
+    onTermSelect: (termId: number | string) => void;
+    isLoading?: boolean;
+    className?: string;
+}
+
+export function TermStepper({
+    terms,
+    selectedTermId,
+    onTermSelect,
+    isLoading = false,
+    className = "",
+}: TermStepperProps) {
+    const getStepStyles = (status: TermStatus, isSelected: boolean) => {
+        switch (status) {
+            case "completed":
+                return {
+                    circle: isSelected
+                        ? "bg-success-600 text-white border-success-600 ring-4 ring-success-100"
+                        : "bg-success-500 text-white border-success-500",
+                    label: isSelected
+                        ? "text-success-600 font-semibold"
+                        : "text-success-500 font-medium",
+                    clickable: true,
+                };
+            case "current":
+                return {
+                    circle: isSelected
+                        ? "bg-brand-500 text-white border-brand-500 ring-4 ring-brand-100"
+                        : "bg-white dark:bg-gray-800 text-brand-500 border-brand-500 border-2",
+                    label: isSelected
+                        ? "text-brand-600 font-semibold"
+                        : "text-brand-500 font-medium",
+                    clickable: true,
+                };
+            case "locked":
+                return {
+                    circle: "bg-gray-200 dark:bg-gray-700 text-gray-400 border-gray-300 dark:border-gray-600",
+                    label: "text-gray-400 dark:text-gray-500",
+                    clickable: false,
+                };
+        }
+    };
+
+    const handleTermClick = (term: Term) => {
+        if (term.status !== "locked" && !isLoading) {
+            onTermSelect(term.id);
+        }
+    };
+
+    return (
+        <div className={`flex items-center justify-center ${className}`}>
+            {terms.map((term, index) => {
+                const isSelected = term.id === selectedTermId;
+                const styles = getStepStyles(term.status, isSelected);
+                const isLast = index === terms.length - 1;
+
+                return (
+                    <div key={term.id} className="flex items-center">
+                        {/* Step */}
+                        <button
+                            type="button"
+                            onClick={() => handleTermClick(term)}
+                            disabled={term.status === "locked" || isLoading}
+                            className={`flex flex-col items-center ${
+                                styles.clickable
+                                    ? "cursor-pointer hover:opacity-80"
+                                    : "cursor-not-allowed"
+                            } transition-opacity disabled:opacity-50`}
+                        >
+                            {/* Circle */}
+                            <div
+                                className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${styles.circle}`}
+                            >
+                                {term.status === "completed" ? (
+                                    <Check className="w-5 h-5" />
+                                ) : term.status === "locked" ? (
+                                    <Lock className="w-4 h-4" />
+                                ) : (
+                                    <span className="text-sm font-bold">
+                                        {index + 1}
+                                    </span>
+                                )}
+                            </div>
+                            {/* Label */}
+                            <span
+                                className={`mt-2 text-sm whitespace-nowrap transition-colors ${styles.label}`}
+                            >
+                                {term.label}
+                            </span>
+                        </button>
+
+                        {/* Connector Line */}
+                        {!isLast && (
+                            <div
+                                className={`w-20 md:w-32 h-0.5 mx-2 ${
+                                    term.status === "completed"
+                                        ? "bg-success-500"
+                                        : "bg-gray-300 dark:bg-gray-600"
+                                }`}
+                            />
+                        )}
+                    </div>
+                );
+            })}
+        </div>
+    );
+}
+
+export default TermStepper;

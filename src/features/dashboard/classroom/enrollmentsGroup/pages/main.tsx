@@ -1,12 +1,13 @@
 /**
  * EnrollmentsGroupPage
  *
- * Main page for enrollment groups with online/offline tabs.
+ * Main page for enrollment groups with term stepper, online/offline tabs,
+ * filter section, and group cards.
  */
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { Monitor, MapPin, Star } from "lucide-react";
+import { Monitor, MapPin, Star, Loader2 } from "lucide-react";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import {
     GroupCard,
@@ -14,25 +15,87 @@ import {
     ConfirmEnrollmentModal,
     UnlockOfflineSection,
     FilterGroups,
+    TermStepper,
+    type Term,
+    type TermStatus,
 } from "../components";
 import {
-    MOCK_ONLINE_GROUPS,
-    MOCK_OFFLINE_GROUPS,
-    MOCK_NOT_ENROLLED_STATE,
-} from "../mocks";
+    useOnlineGroupsQuery,
+    useOfflineGroupsQuery,
+    useEnrollMutation,
+} from "../api";
+import { useProgramsCurriculumList } from "@/features/dashboard/admin/programs/api";
 import type {
     EnrollmentGroup,
-    SessionType,
     DayOfWeek,
-    EnrollmentState,
+    AvailableGroup,
+    EnrolledGroup,
 } from "../types";
 
 type TabType = "online" | "offline";
 
+/**
+ * Helper to convert API AvailableGroup to UI EnrollmentGroup
+ */
+const mapApiGroupToEnrollmentGroup = (
+    apiGroup: AvailableGroup,
+    isEnrolled: boolean = false
+): EnrollmentGroup => {
+    const schedule = apiGroup.schedules[0];
+    return {
+        id: apiGroup.id,
+        sessionType: apiGroup.locationType,
+        day: schedule?.dayOfWeek || "friday",
+        startTime: schedule?.startTime ? formatTime(schedule.startTime) : "TBD",
+        endTime: schedule?.endTime ? formatTime(schedule.endTime) : "TBD",
+        location: apiGroup.location?.name,
+        address: apiGroup.location?.address,
+        isEnrolled,
+    };
+};
+
+/**
+ * Helper to convert API AvailableGroup to UI EnrolledGroup
+ */
+const mapApiGroupToEnrolledGroup = (
+    apiGroup: AvailableGroup
+): EnrolledGroup => {
+    const schedule = apiGroup.schedules[0];
+    return {
+        id: apiGroup.id,
+        sessionType: apiGroup.locationType,
+        day: schedule?.dayOfWeek || "friday",
+        startTime: schedule?.startTime ? formatTime(schedule.startTime) : "TBD",
+        endTime: schedule?.endTime ? formatTime(schedule.endTime) : "TBD",
+        location: apiGroup.location?.name,
+        address: apiGroup.location?.address,
+        isEnrolled: true,
+        isActive: apiGroup.isActive,
+    };
+};
+
+/**
+ * Format time from "HH:MM:SS" to "H:MM AM/PM"
+ */
+const formatTime = (time: string): string => {
+    const [hours, minutes] = time.split(":");
+    const hour = parseInt(hours, 10);
+    const ampm = hour >= 12 ? "PM" : "AM";
+    const hour12 = hour % 12 || 12;
+    return `${hour12}:${minutes} ${ampm}`;
+};
+
 export function EnrollmentsGroupPage() {
     const { t } = useTranslation("enrollmentsGroup");
 
+    // Fetch curriculum list for term stepper
+    const { data: curriculumData, isLoading: isLoadingCurriculum } =
+        useProgramsCurriculumList();
+
     // State
+    const [selectedCurriculumId, setSelectedCurriculumId] = useState<
+        number | undefined
+    >(undefined);
     const [activeTab, setActiveTab] = useState<TabType>("online");
     const [selectedDay, setSelectedDay] = useState<DayOfWeek | "all">("all");
     const [selectedLocation, setSelectedLocation] = useState<string | "all">(
@@ -43,78 +106,171 @@ export function EnrollmentsGroupPage() {
     );
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    // Mock enrollment state - in real app, this would come from API
-    const [enrollmentState, setEnrollmentState] = useState<EnrollmentState>(
-        MOCK_NOT_ENROLLED_STATE
-    );
+    // Set initial curriculum when data loads
+    // API returns array directly in data, or paginated with items
+    const curriculums = Array.isArray(curriculumData)
+        ? curriculumData
+        : (curriculumData?.items ?? []);
 
-    // Check if user is enrolled
-    const isEnrolledOnline = !!enrollmentState.onlineGroup;
-    const isEnrolledOffline = !!enrollmentState.offlineGroup;
-    const offlineUnlocked = enrollmentState.offlineUnlocked;
+    // Auto-select first active curriculum if none selected
+    if (!selectedCurriculumId && curriculums.length > 0) {
+        const activeCurriculum = curriculums.find((c) => c.isActive);
+        if (activeCurriculum) {
+            setSelectedCurriculumId(activeCurriculum.id);
+        } else if (curriculums[0]) {
+            setSelectedCurriculumId(curriculums[0].id);
+        }
+    }
+
+    // Build terms from curriculum data
+    const terms: Term[] = useMemo(() => {
+        if (!curriculums.length) return [];
+
+        // Find the selected curriculum index to determine status
+        const selectedIndex = curriculums.findIndex(
+            (c) => c.id === selectedCurriculumId
+        );
+
+        return curriculums.map((curriculum, index) => {
+            let status: TermStatus;
+
+            // If all are active, use position-based logic relative to selected
+            if (selectedIndex >= 0) {
+                if (index < selectedIndex) {
+                    status = "completed";
+                } else if (index === selectedIndex) {
+                    status = "current";
+                } else {
+                    // Mark as locked only if not active, otherwise current
+                    status = curriculum.isActive ? "current" : "locked";
+                }
+            } else {
+                // Fallback: first active is current, before are completed, after are locked
+                const firstActiveIndex = curriculums.findIndex(
+                    (c) => c.isActive
+                );
+                if (
+                    index < firstActiveIndex ||
+                    (firstActiveIndex === -1 && index === 0)
+                ) {
+                    status = "completed";
+                } else if (
+                    curriculum.isActive &&
+                    (firstActiveIndex === index || firstActiveIndex === -1)
+                ) {
+                    status = "current";
+                } else {
+                    status = curriculum.isActive ? "current" : "locked";
+                }
+            }
+
+            return {
+                id: curriculum.id,
+                label: curriculum.caption || curriculum.name,
+                status,
+            };
+        });
+    }, [curriculums, selectedCurriculumId]);
+
+    // Fetch online groups for selected curriculum
+    const {
+        data: onlineData,
+        isLoading: isLoadingOnline,
+        refetch: refetchOnline,
+    } = useOnlineGroupsQuery(selectedCurriculumId, {
+        enabled: !!selectedCurriculumId,
+    });
+
+    // Fetch offline groups for selected curriculum
+    const {
+        data: offlineData,
+        isLoading: isLoadingOffline,
+        refetch: refetchOffline,
+    } = useOfflineGroupsQuery(selectedCurriculumId, {
+        enabled: !!selectedCurriculumId,
+    });
+
+    // Enroll mutation
+    const enrollMutation = useEnrollMutation();
+
+    // Check enrollment status
+    const isEnrolledOnline = onlineData?.enrolled ?? false;
+    const isEnrolledOffline = offlineData?.enrolled ?? false;
+    const enrolledOnlineGroup = onlineData?.group;
+    const enrolledOfflineGroup = offlineData?.group;
+    const availableOnlineGroups = onlineData?.available ?? [];
+    const availableOfflineGroups = offlineData?.available ?? [];
+
+    // Determine if offline is unlocked (user must be enrolled in online first)
+    const offlineUnlocked = isEnrolledOnline;
 
     // Get unique locations for filter
     const locations = useMemo(() => {
         const uniqueLocations = new Set(
-            MOCK_OFFLINE_GROUPS.map((g) => g.location).filter(Boolean)
+            availableOfflineGroups
+                .map((g) => g.location?.name)
+                .filter(Boolean) as string[]
         );
-        return Array.from(uniqueLocations) as string[];
-    }, []);
+        return Array.from(uniqueLocations);
+    }, [availableOfflineGroups]);
 
     // Filter groups
     const filteredOnlineGroups = useMemo(() => {
-        return MOCK_ONLINE_GROUPS.filter((group) => {
-            if (selectedDay !== "all" && group.day !== selectedDay)
-                return false;
+        return availableOnlineGroups.filter((group) => {
+            if (selectedDay !== "all") {
+                const hasMatchingSchedule = group.schedules.some(
+                    (s) => s.dayOfWeek === selectedDay
+                );
+                if (!hasMatchingSchedule) return false;
+            }
             return true;
         });
-    }, [selectedDay]);
+    }, [availableOnlineGroups, selectedDay]);
 
     const filteredOfflineGroups = useMemo(() => {
-        return MOCK_OFFLINE_GROUPS.filter((group) => {
-            if (selectedDay !== "all" && group.day !== selectedDay)
-                return false;
+        return availableOfflineGroups.filter((group) => {
+            if (selectedDay !== "all") {
+                const hasMatchingSchedule = group.schedules.some(
+                    (s) => s.dayOfWeek === selectedDay
+                );
+                if (!hasMatchingSchedule) return false;
+            }
             if (
                 selectedLocation !== "all" &&
-                group.location !== selectedLocation
-            )
+                group.location?.name !== selectedLocation
+            ) {
                 return false;
+            }
             return true;
         });
-    }, [selectedDay, selectedLocation]);
+    }, [availableOfflineGroups, selectedDay, selectedLocation]);
 
     // Handlers
+    const handleTermSelect = useCallback((termId: number | string) => {
+        setSelectedCurriculumId(termId as number);
+    }, []);
+
     const handleEnroll = (group: EnrollmentGroup) => {
         setSelectedGroup(group);
         setIsModalOpen(true);
     };
 
-    const handleConfirmEnrollment = () => {
+    const handleConfirmEnrollment = async () => {
         if (!selectedGroup) return;
 
-        // Mock enrollment - in real app, this would be an API call
-        if (selectedGroup.sessionType === "online") {
-            setEnrollmentState((prev) => ({
-                ...prev,
-                onlineGroup: {
-                    ...selectedGroup,
-                    isEnrolled: true,
-                    isActive: true,
-                },
-            }));
-        } else {
-            setEnrollmentState((prev) => ({
-                ...prev,
-                offlineGroup: {
-                    ...selectedGroup,
-                    isEnrolled: true,
-                    isActive: true,
-                },
-            }));
+        try {
+            await enrollMutation.mutateAsync(selectedGroup.id);
+            setIsModalOpen(false);
+            setSelectedGroup(null);
+            // Refetch data after enrollment
+            if (selectedGroup.sessionType === "online") {
+                refetchOnline();
+            } else {
+                refetchOffline();
+            }
+        } catch (error) {
+            console.error("Enrollment failed:", error);
         }
-
-        setIsModalOpen(false);
-        setSelectedGroup(null);
     };
 
     const handleViewMap = (group: EnrollmentGroup) => {
@@ -122,31 +278,43 @@ export function EnrollmentsGroupPage() {
         console.log("View map for:", group.location);
     };
 
+    const isLoading =
+        isLoadingCurriculum || isLoadingOnline || isLoadingOffline;
+
+    // Render loading state
+    const renderLoading = () => (
+        <div className="flex items-center justify-center py-12">
+            <Loader2 className="size-8 text-brand-500 animate-spin" />
+        </div>
+    );
+
     // Render enrolled view for online
     const renderEnrolledOnlineView = () => (
         <div className="space-y-6">
             {/* Success Message */}
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                {t("successOnline")} 🎉
+                {t("successOnline", "You have successfully joined this group")}{" "}
+                🎉
             </h2>
 
             {/* Enrolled Card */}
-            {enrollmentState.onlineGroup && (
-                <EnrolledGroupCard group={enrollmentState.onlineGroup} />
+            {enrolledOnlineGroup && (
+                <EnrolledGroupCard
+                    group={mapApiGroupToEnrolledGroup(enrolledOnlineGroup)}
+                />
             )}
 
             {/* Offline Unlock Banner */}
-            {!offlineUnlocked && (
+            {!isEnrolledOffline && (
                 <div className="flex items-center gap-3 p-4 bg-warning-50 dark:bg-warning-500/10 border border-warning-200 dark:border-warning-500/30 rounded-xl">
                     <div className="w-8 h-8 bg-warning-100 dark:bg-warning-500/20 rounded-lg flex items-center justify-center">
                         <MapPin className="size-4 text-warning-500" />
                     </div>
                     <p className="text-sm text-gray-700 dark:text-gray-300">
-                        {t("offlineUnlockBanner", {
-                            count:
-                                enrollmentState.requiredOnlineSessions -
-                                enrollmentState.onlineSessionsCompleted,
-                        })}
+                        {t(
+                            "offlineUnlockBanner",
+                            "Offline session will unlock after completing 8 online sessions."
+                        )}
                     </p>
                 </div>
             )}
@@ -158,12 +326,14 @@ export function EnrollmentsGroupPage() {
         <div className="space-y-6">
             {/* Success Message */}
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                {t("successOffline")} 🎉
+                {t("successOffline", "Your offline session is booked")} 🎉
             </h2>
 
             {/* Enrolled Card */}
-            {enrollmentState.offlineGroup && (
-                <EnrolledGroupCard group={enrollmentState.offlineGroup} />
+            {enrolledOfflineGroup && (
+                <EnrolledGroupCard
+                    group={mapApiGroupToEnrolledGroup(enrolledOfflineGroup)}
+                />
             )}
 
             {/* Reminder Banner */}
@@ -172,7 +342,7 @@ export function EnrollmentsGroupPage() {
                     <Monitor className="size-4 text-warning-500" />
                 </div>
                 <p className="text-sm text-gray-700 dark:text-gray-300">
-                    {t("offlineReminder")}
+                    {t("offlineReminder", "Don't forget to bring your laptop!")}
                 </p>
             </div>
         </div>
@@ -185,7 +355,10 @@ export function EnrollmentsGroupPage() {
             <div className="flex items-center gap-2 px-4 py-3 bg-brand-50 dark:bg-brand-500/10 border border-brand-200 dark:border-brand-500/30 rounded-xl">
                 <Star className="size-5 text-warning-500" />
                 <span className="text-sm text-gray-700 dark:text-gray-300">
-                    {t("chooseGroupBanner")}
+                    {t(
+                        "chooseGroupBanner",
+                        "You will choose your group once to begin your journey"
+                    )}
                 </span>
             </div>
 
@@ -200,31 +373,43 @@ export function EnrollmentsGroupPage() {
             />
 
             {/* Groups Grid */}
-            {activeTab === "online" ? (
+            {isLoading ? (
+                renderLoading()
+            ) : activeTab === "online" ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     {filteredOnlineGroups.map((group) => (
                         <GroupCard
                             key={group.id}
-                            group={group}
+                            group={mapApiGroupToEnrollmentGroup(group)}
                             onEnroll={handleEnroll}
                         />
                     ))}
+                    {filteredOnlineGroups.length === 0 && (
+                        <div className="col-span-full text-center py-8 text-gray-500">
+                            {t("noGroupsAvailable", "No groups available")}
+                        </div>
+                    )}
                 </div>
             ) : offlineUnlocked ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
                     {filteredOfflineGroups.map((group) => (
                         <GroupCard
                             key={group.id}
-                            group={group}
+                            group={mapApiGroupToEnrollmentGroup(group)}
                             onEnroll={handleEnroll}
                             onViewMap={handleViewMap}
                         />
                     ))}
+                    {filteredOfflineGroups.length === 0 && (
+                        <div className="col-span-full text-center py-8 text-gray-500">
+                            {t("noGroupsAvailable", "No groups available")}
+                        </div>
+                    )}
                 </div>
             ) : (
                 <UnlockOfflineSection
-                    completedSessions={enrollmentState.onlineSessionsCompleted}
-                    requiredSessions={enrollmentState.requiredOnlineSessions}
+                    completedSessions={0}
+                    requiredSessions={8}
                 />
             )}
         </div>
@@ -233,44 +418,67 @@ export function EnrollmentsGroupPage() {
     return (
         <PageWrapper
             pageHeaderProps={{
-                title: t("title"),
-                subtitle: t("description"),
+                title: t("title", "Enrollments Group"),
+                subtitle: t(
+                    "description",
+                    "Pick the time that works best for you to start learning programming."
+                ),
             }}
         >
-            {/* Tabs */}
-            <div className="flex items-center gap-2">
-                <button
-                    onClick={() => setActiveTab("online")}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
-                        activeTab === "online"
-                            ? "bg-brand-500 text-white"
-                            : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-                    }`}
-                >
-                    <Monitor className="size-4" />
-                    {t("onlineSessions")}
-                </button>
-                <button
-                    onClick={() => setActiveTab("offline")}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-colors ${
-                        activeTab === "offline"
-                            ? "bg-warning-500 text-white"
-                            : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"
-                    }`}
-                >
-                    <MapPin className="size-4" />
-                    {t("offlineSessions")}
-                </button>
-            </div>
+            <div className="space-y-6">
+                {/* Term Stepper */}
+                {isLoadingCurriculum ? (
+                    <div className="flex justify-center py-6">
+                        <Loader2 className="size-6 text-brand-500 animate-spin" />
+                    </div>
+                ) : (
+                    <TermStepper
+                        terms={terms}
+                        selectedTermId={selectedCurriculumId}
+                        onTermSelect={handleTermSelect}
+                        isLoading={isLoading}
+                        className="py-6"
+                    />
+                )}
 
-            {/* Content */}
-            {activeTab === "online"
-                ? isEnrolledOnline
-                    ? renderEnrolledOnlineView()
-                    : renderNotEnrolledView()
-                : isEnrolledOffline
-                  ? renderEnrolledOfflineView()
-                  : renderNotEnrolledView()}
+                {/* Tabs */}
+                <div className="flex items-center justify-center gap-2">
+                    <button
+                        onClick={() => setActiveTab("online")}
+                        className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-colors ${
+                            activeTab === "online"
+                                ? "bg-brand-500 text-white"
+                                : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
+                        }`}
+                    >
+                        <Monitor className="size-4" />
+                        {t("onlineSessions", "Online Sessions")}
+                    </button>
+                    <button
+                        onClick={() => setActiveTab("offline")}
+                        className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-colors ${
+                            activeTab === "offline"
+                                ? "bg-warning-500 text-white"
+                                : "bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
+                        }`}
+                    >
+                        <MapPin className="size-4" />
+                        {t("offlineSessions", "Offline Sessions")}
+                    </button>
+                </div>
+
+                {/* Divider */}
+                <hr className="border-gray-200 dark:border-gray-700" />
+
+                {/* Content */}
+                {activeTab === "online"
+                    ? isEnrolledOnline
+                        ? renderEnrolledOnlineView()
+                        : renderNotEnrolledView()
+                    : isEnrolledOffline
+                      ? renderEnrolledOfflineView()
+                      : renderNotEnrolledView()}
+            </div>
 
             {/* Confirmation Modal */}
             {selectedGroup && (
