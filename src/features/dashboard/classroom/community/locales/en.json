@@ -1,0 +1,163 @@
+{
+    "title": "Community",
+    "description": "Stay connected with classmates and instructors.",
+    "tabs": {
+        "community": "Community",
+        "management": "Management"
+    },
+    "feed": {
+        "title": "Academy Community",
+        "subtitle": "Stay connected with classmates and instructors.",
+        "whatsNews": "What's the news?",
+        "postToFeed": "Post to Feed",
+        "discard": "Discard"
+    },
+    "hub": {
+        "title": "Knowledge Hub",
+        "subtitle": "Help newcomers with their coding journey.",
+        "filters": {
+            "all": "All",
+            "projectHelp": "Project Help",
+            "homework": "Homework",
+            "codingTip": "Coding Tip",
+            "resource": "Resource"
+        }
+    },
+    "viewModes": {
+        "feed": "Feed",
+        "hub": "Knowledge Hub",
+        "myPosts": "My Posts",
+        "channels": "Channels",
+        "saved": "Saved"
+    },
+    "post": {
+        "pinnedPost": "Pinned Post",
+        "react": "React",
+        "comment": "Comment",
+        "share": "Share",
+        "link": "Link",
+        "edit": "Edit",
+        "copyLink": "Copy Link",
+        "report": "Report",
+        "delete": "Delete",
+        "saveChanges": "Save Changes",
+        "cancel": "Cancel",
+        "helpful": "Helpful",
+        "reply": "Reply",
+        "bestSolution": "Best Solution",
+        "discussionThread": "Discussion Thread",
+        "newest": "Newest",
+        "topRated": "Top Rated",
+        "noComments": "No comments yet. Start the conversation!",
+        "addComment": "Add a comment...",
+        "deleteConfirmMessage": "Are you sure you want to delete this post? This action cannot be undone.",
+        "reportMessage": "Please provide a reason for reporting this post:",
+        "reportPlaceholder": "Enter reason..."
+    },
+    "channel": {
+        "follow": "Follow",
+        "following": "Following",
+        "followers": "followers",
+        "subscribers": "subscribers",
+        "verifiedChannel": "Verified Academy Channel",
+        "followChannel": "Follow Channel",
+        "backToCommunity": "Back to Community"
+    },
+    "creator": {
+        "public": "Public",
+        "group": "Group",
+        "feeling": "Feeling...",
+        "askForHelp": "Ask for Help",
+        "uploadMedia": "Upload Media",
+        "poll": "Poll",
+        "tagUser": "Tag User",
+        "emojis": "Emojis",
+        "question": "Question?",
+        "addOption": "+ Add option"
+    },
+    "widgets": {
+        "hubMentors": "Hub Mentors",
+        "joinMentorSquad": "Join the Mentor Squad",
+        "mentorDescription": "Help others solve coding challenges and earn exclusive rewards.",
+        "applyToHelp": "Apply to Help"
+    },
+    "empty": {
+        "noUpdates": "No updates yet",
+        "followChannels": "Follow channels or start a conversation yourself!"
+    },
+    "management": {
+        "title": "Community Management",
+        "subtitle": "Moderate content and manage academy channels.",
+        "newOfficialPost": "New Official Post",
+        "stats": {
+            "totalPosts": "Total Posts",
+            "activeChannels": "Active Channels",
+            "unresolvedReports": "Unresolved Reports",
+            "verifiedAdmins": "Verified Admins"
+        },
+        "tabs": {
+            "feedOverview": "Feed Overview",
+            "postModeration": "Post Moderation",
+            "reports": "Reports",
+            "channelManagement": "Channel Management",
+            "globalBroadcast": "Global Broadcast"
+        },
+        "moderation": {
+            "searchPlaceholder": "Search posts or users to moderate..."
+        },
+        "reports": {
+            "noReports": "No Reports Pending",
+            "communityBehaving": "Your community is behaving well!",
+            "dismiss": "Dismiss",
+            "deletePost": "Delete Post",
+            "contentPreview": "Content Preview:"
+        },
+        "channels": {
+            "createNew": "Create New Official Channel",
+            "thumbnail": "General Thumbnail",
+            "channelName": "Channel Name",
+            "description": "Description",
+            "accessSetting": "Access Setting",
+            "gradeFocus": "Grade Focus",
+            "general": "General",
+            "restricted": "Restricted (Invite Only)",
+            "allGrades": "All Grades",
+            "createChannel": "Create Channel",
+            "manageAll": "Manage All Channels",
+            "viewInside": "View Inside",
+            "manageAdmins": "Manage Admins"
+        },
+        "broadcast": {
+            "title": "Global Broadcast",
+            "subtitle": "Send an announcement to all students across the main feed.",
+            "placeholder": "Write your announcement...",
+            "broadcastToEveryone": "Broadcast to Everyone"
+        },
+        "officialPost": {
+            "title": "Create Official Post",
+            "selectTarget": "Select Target",
+            "mainPublicFeed": "Main Public Feed",
+            "placeholder": "What's the official update?",
+            "postOfficially": "Post Officially"
+        },
+        "tips": {
+            "title": "Moderator Quick Tips",
+            "systemNotifications": "System notifications will highlight posts with 2+ reports automatically.",
+            "managerModeActive": "Manager Mode Active"
+        },
+        "activity": {
+            "title": "Live Activity Reports",
+            "newReport": "New Report:",
+            "allClear": "All clear! No pending reports."
+        },
+        "channelDetail": {
+            "backToManagement": "Back to Management",
+            "editBanner": "Edit Banner",
+            "channelPosts": "Channel Posts",
+            "noPosts": "No official posts in this channel yet.",
+            "adminControl": "Admin Control",
+            "addOfficialPost": "Add Official Post",
+            "channelSettings": "Channel Settings"
+        }
+    }
+}

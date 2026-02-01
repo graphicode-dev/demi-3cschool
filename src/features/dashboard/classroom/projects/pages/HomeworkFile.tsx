@@ -65,7 +65,7 @@ export function HomeworkFilePage() {
                     {/* Download Button */}
                     <button
                         onClick={handleDownload}
-                        className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-brand-500 to-brand-400 text-white font-bold shadow-lg shadow-brand-500/30 hover:shadow-brand-500/40 transition-all"
+                        className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-linear-to-r from-brand-500 to-brand-400 text-white font-bold shadow-lg shadow-brand-500/30 hover:shadow-brand-500/40 transition-all"
                     >
                         <Download className="size-5" />
                         {t("homeworkFile.download")}

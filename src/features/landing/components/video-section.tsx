@@ -14,14 +14,14 @@ function VideoSection() {
                 className="absolute -top-24 right-0 w-80 h-80 rounded-full blur-[50px] opacity-50"
                 style={{
                     background:
-                        "linear-gradient(135deg, rgba(0, 174, 237, 0.05) 0%, rgba(43, 182, 115, 0.05) 100%)",
+                        "linear-linear(135deg, rgba(0, 174, 237, 0.05) 0%, rgba(43, 182, 115, 0.05) 100%)",
                 }}
             />
             <div
                 className="absolute -bottom-24 left-0 w-80 h-80 rounded-full blur-[50px] opacity-50"
                 style={{
                     background:
-                        "linear-gradient(135deg, rgba(244, 196, 48, 0.05) 0%, rgba(0, 174, 237, 0.05) 100%)",
+                        "linear-linear(135deg, rgba(244, 196, 48, 0.05) 0%, rgba(0, 174, 237, 0.05) 100%)",
                 }}
             />
 
@@ -57,12 +57,12 @@ function VideoSection() {
                     }`}
                 >
                     <div className="relative bg-white border-4 border-brand-500/10 rounded-[32px] shadow-[0px_31px_63px_-15px_rgba(0,0,0,0.25)] overflow-hidden aspect-video group cursor-pointer">
-                        {/* Gradient Overlay */}
+                        {/* linear Overlay */}
                         <div
                             className="absolute inset-0 z-10"
                             style={{
                                 background:
-                                    "linear-gradient(150deg, rgba(0, 174, 237, 0.2) 0%, rgba(0, 0, 0, 0) 50%, rgba(30, 93, 184, 0.2) 100%)",
+                                    "linear-linear(150deg, rgba(0, 174, 237, 0.2) 0%, rgba(0, 0, 0, 0) 50%, rgba(30, 93, 184, 0.2) 100%)",
                             }}
                         />
 

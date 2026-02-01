@@ -1,0 +1,163 @@
+{
+    "title": "المجتمع",
+    "description": "ابق على تواصل مع زملائك والمدربين.",
+    "tabs": {
+        "community": "المجتمع",
+        "management": "الإدارة"
+    },
+    "feed": {
+        "title": "مجتمع الأكاديمية",
+        "subtitle": "ابق على تواصل مع زملائك والمدربين.",
+        "whatsNews": "ما الجديد؟",
+        "postToFeed": "نشر في الخلاصة",
+        "discard": "تجاهل"
+    },
+    "hub": {
+        "title": "مركز المعرفة",
+        "subtitle": "ساعد المبتدئين في رحلتهم البرمجية.",
+        "filters": {
+            "all": "الكل",
+            "projectHelp": "مساعدة المشروع",
+            "homework": "الواجبات",
+            "codingTip": "نصيحة برمجية",
+            "resource": "مصدر"
+        }
+    },
+    "viewModes": {
+        "feed": "الخلاصة",
+        "hub": "مركز المعرفة",
+        "myPosts": "منشوراتي",
+        "channels": "القنوات",
+        "saved": "المحفوظات"
+    },
+    "post": {
+        "pinnedPost": "منشور مثبت",
+        "react": "تفاعل",
+        "comment": "تعليق",
+        "share": "مشاركة",
+        "link": "رابط",
+        "edit": "تعديل",
+        "copyLink": "نسخ الرابط",
+        "report": "إبلاغ",
+        "delete": "حذف",
+        "saveChanges": "حفظ التغييرات",
+        "cancel": "إلغاء",
+        "helpful": "مفيد",
+        "reply": "رد",
+        "bestSolution": "أفضل حل",
+        "discussionThread": "سلسلة النقاش",
+        "newest": "الأحدث",
+        "topRated": "الأعلى تقييماً",
+        "noComments": "لا توجد تعليقات بعد. ابدأ المحادثة!",
+        "addComment": "أضف تعليقاً...",
+        "deleteConfirmMessage": "هل أنت متأكد من حذف هذا المنشور؟ لا يمكن التراجع عن هذا الإجراء.",
+        "reportMessage": "يرجى تقديم سبب للإبلاغ عن هذا المنشور:",
+        "reportPlaceholder": "أدخل السبب..."
+    },
+    "channel": {
+        "follow": "متابعة",
+        "following": "متابَع",
+        "followers": "متابعين",
+        "subscribers": "مشتركين",
+        "verifiedChannel": "قناة أكاديمية موثقة",
+        "followChannel": "متابعة القناة",
+        "backToCommunity": "العودة للمجتمع"
+    },
+    "creator": {
+        "public": "عام",
+        "group": "مجموعة",
+        "feeling": "أشعر...",
+        "askForHelp": "طلب مساعدة",
+        "uploadMedia": "رفع وسائط",
+        "poll": "استطلاع",
+        "tagUser": "إشارة لمستخدم",
+        "emojis": "رموز تعبيرية",
+        "question": "السؤال؟",
+        "addOption": "+ إضافة خيار"
+    },
+    "widgets": {
+        "hubMentors": "مرشدو المركز",
+        "joinMentorSquad": "انضم لفريق المرشدين",
+        "mentorDescription": "ساعد الآخرين في حل تحديات البرمجة واحصل على مكافآت حصرية.",
+        "applyToHelp": "تقدم للمساعدة"
+    },
+    "empty": {
+        "noUpdates": "لا توجد تحديثات بعد",
+        "followChannels": "تابع القنوات أو ابدأ محادثة بنفسك!"
+    },
+    "management": {
+        "title": "إدارة المجتمع",
+        "subtitle": "إدارة المحتوى وقنوات الأكاديمية.",
+        "newOfficialPost": "منشور رسمي جديد",
+        "stats": {
+            "totalPosts": "إجمالي المنشورات",
+            "activeChannels": "القنوات النشطة",
+            "unresolvedReports": "البلاغات المعلقة",
+            "verifiedAdmins": "المشرفون الموثقون"
+        },
+        "tabs": {
+            "feedOverview": "نظرة عامة على الخلاصة",
+            "postModeration": "إدارة المنشورات",
+            "reports": "البلاغات",
+            "channelManagement": "إدارة القنوات",
+            "globalBroadcast": "بث عام"
+        },
+        "moderation": {
+            "searchPlaceholder": "ابحث عن منشورات أو مستخدمين للإدارة..."
+        },
+        "reports": {
+            "noReports": "لا توجد بلاغات معلقة",
+            "communityBehaving": "مجتمعك يتصرف بشكل جيد!",
+            "dismiss": "تجاهل",
+            "deletePost": "حذف المنشور",
+            "contentPreview": "معاينة المحتوى:"
+        },
+        "channels": {
+            "createNew": "إنشاء قناة رسمية جديدة",
+            "thumbnail": "الصورة المصغرة",
+            "channelName": "اسم القناة",
+            "description": "الوصف",
+            "accessSetting": "إعداد الوصول",
+            "gradeFocus": "تركيز الصف",
+            "general": "عام",
+            "restricted": "مقيد (بدعوة فقط)",
+            "allGrades": "جميع الصفوف",
+            "createChannel": "إنشاء القناة",
+            "manageAll": "إدارة جميع القنوات",
+            "viewInside": "عرض الداخل",
+            "manageAdmins": "إدارة المشرفين"
+        },
+        "broadcast": {
+            "title": "بث عام",
+            "subtitle": "أرسل إعلاناً لجميع الطلاب عبر الخلاصة الرئيسية.",
+            "placeholder": "اكتب إعلانك...",
+            "broadcastToEveryone": "بث للجميع"
+        },
+        "officialPost": {
+            "title": "إنشاء منشور رسمي",
+            "selectTarget": "اختر الهدف",
+            "mainPublicFeed": "الخلاصة العامة الرئيسية",
+            "placeholder": "ما هو التحديث الرسمي؟",
+            "postOfficially": "نشر رسمياً"
+        },
+        "tips": {
+            "title": "نصائح سريعة للمشرفين",
+            "systemNotifications": "ستبرز إشعارات النظام المنشورات التي تحتوي على بلاغين أو أكثر تلقائياً.",
+            "managerModeActive": "وضع المدير نشط"
+        },
+        "activity": {
+            "title": "تقارير النشاط المباشر",
+            "newReport": "بلاغ جديد:",
+            "allClear": "كل شيء واضح! لا توجد بلاغات معلقة."
+        },
+        "channelDetail": {
+            "backToManagement": "العودة للإدارة",
+            "editBanner": "تعديل البانر",
+            "channelPosts": "منشورات القناة",
+            "noPosts": "لا توجد منشورات رسمية في هذه القناة بعد.",
+            "adminControl": "تحكم المشرف",
+            "addOfficialPost": "إضافة منشور رسمي",
+            "channelSettings": "إعدادات القناة"
+        }
+    }
+}

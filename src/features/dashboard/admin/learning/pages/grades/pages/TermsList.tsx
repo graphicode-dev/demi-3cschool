@@ -203,7 +203,7 @@ export default function TermsList() {
 
             {/* Term Stats */}
             {Object.keys(termStats).length > 0 && (
-                <div className="mt-8 p-6 bg-gradient-to-r from-brand-50 to-purple-50 dark:from-brand-900/20 dark:to-purple-900/20 rounded-2xl border border-brand-100 dark:border-brand-800">
+                <div className="mt-8 p-6 bg-linear-to-r from-brand-50 to-purple-50 dark:from-brand-900/20 dark:to-purple-900/20 rounded-2xl border border-brand-100 dark:border-brand-800">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
                         {t("learning:terms.overview", "Term Overview")}
                     </h3>

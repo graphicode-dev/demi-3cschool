@@ -14,6 +14,7 @@ export const classroomPaths = {
     certificates: () => `${CLASSROOM_PATH}/certificates`,
     reports: () => `${CLASSROOM_PATH}/reports`,
     acceptanceTest: () => `${CLASSROOM_PATH}/acceptance-exam`,
+    community: () => `${CLASSROOM_PATH}/community`,
 } as const;
 
 export const classroomManagementPaths = registerFeaturePaths("classroom", {

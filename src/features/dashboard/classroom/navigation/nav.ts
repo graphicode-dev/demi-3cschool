@@ -17,6 +17,7 @@ import { myScheduleNavItem } from "../mySchedule/navigation";
 import { supportHelpNavItem } from "../ticketsManagement/pages/supportHelp/navigation";
 import { resourcesNavItem } from "../resources/navigation";
 import { enrollmentsGroupNavItem } from "../enrollmentsGroup/navigation";
+import { communityNavItem } from "../community/navigation";
 
 export const classroomNav: FeatureNavModule = {
     featureId: "classroom",
@@ -35,6 +36,7 @@ export const classroomNav: FeatureNavModule = {
         myScheduleNavItem,
         supportHelpNavItem,
         resourcesNavItem,
+        communityNavItem,
     ],
 };
 

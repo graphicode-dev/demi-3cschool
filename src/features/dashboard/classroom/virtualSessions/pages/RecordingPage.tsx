@@ -80,7 +80,7 @@ function RecordingPage() {
                 {/* Video Player */}
                 <div className="relative w-full aspect-video bg-gray-900 rounded-2xl overflow-hidden">
                     {/* Placeholder image - replace with actual video player */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-gray-800 to-gray-900 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-linear-to-b from-gray-800 to-gray-900 flex items-center justify-center">
                         <button className="size-20 bg-brand-500 hover:bg-brand-600 rounded-full flex items-center justify-center transition-colors shadow-lg">
                             <Play
                                 className="size-8 text-white ml-1"
@@ -137,7 +137,7 @@ function RecordingPage() {
                 </div>
 
                 {/* CTA Banner */}
-                <div className="relative bg-gradient-to-r from-brand-50 to-brand-100 dark:from-brand-500/10 dark:to-brand-500/5 rounded-2xl p-6 overflow-hidden">
+                <div className="relative bg-linear-to-r from-brand-50 to-brand-100 dark:from-brand-500/10 dark:to-brand-500/5 rounded-2xl p-6 overflow-hidden">
                     {/* Decorative elements */}
                     <div className="absolute top-4 right-4 size-24 bg-warning-200/30 rounded-full blur-2xl" />
                     <div className="absolute bottom-4 right-20 size-16 bg-brand-200/30 rounded-full blur-xl" />

@@ -1,53 +1,37 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import {
     Plus,
-    ChevronRight,
     Trophy,
-    Zap,
     LayoutGrid,
     LayoutList,
     BookmarkCheck,
     Image as ImageIcon,
-    Video,
-    FileVideo,
     Globe,
     Users as UsersIcon,
     AtSign,
     BarChart3,
     X,
-    Trash2,
     User as UserIcon,
-    Play,
-    Heart,
-    MessageSquare,
-    Share2,
-    Music,
-    UserPlus,
     ArrowLeft,
-    Bell,
-    MoreVertical,
     CheckCircle2,
     Send,
-    HelpCircle,
     BookOpen,
     GraduationCap,
-    CheckCircle,
     Star,
-    Hash,
     Smile,
-    Paperclip,
 } from "lucide-react";
-import {
-    MOCK_POSTS,
-    MOCK_CHANNELS,
-    CURRENT_USER,
-    MOCK_USERS,
-} from "../constants";
-import PostCard from "./PostCard";
-import ChannelCard from "./ChannelCard";
-import { Post, Channel, Audience, User, PostCategory } from "../types";
-
-type CommunityTab = "feed" | "hub" | "my-posts" | "channels" | "saved";
+import { PostCard } from "./PostCard";
+import { ChannelCard } from "./ChannelCard";
+import type {
+    Post,
+    Channel,
+    Audience,
+    CommunityUser,
+    PostCategory,
+    CommunityTab,
+} from "../types";
+import { CURRENT_USER, MOCK_USERS } from "../mocks";
 
 const FEELINGS = [
     { emoji: "😊", label: "Happy" },
@@ -93,7 +77,7 @@ interface CommunityViewProps {
     onReportPost?: (id: string, reason: string) => void;
 }
 
-const CommunityView: React.FC<CommunityViewProps> = ({
+export function CommunityView({
     posts,
     channels,
     onLike,
@@ -104,37 +88,33 @@ const CommunityView: React.FC<CommunityViewProps> = ({
     onFollow,
     onCreatePost,
     onReportPost,
-}) => {
+}: CommunityViewProps) {
+    const { t } = useTranslation("community");
     const [viewMode, setViewMode] = useState<CommunityTab>("feed");
     const [selectedChannelId, setSelectedChannelId] = useState<string | null>(
         null
     );
     const [hubFilter, setHubFilter] = useState<PostCategory | "All">("All");
 
-    // Creation State
     const [postText, setPostText] = useState("");
     const [postCategory, setPostCategory] = useState<PostCategory>("General");
     const [audience, setAudience] = useState<Audience>("Public");
     const [feeling, setFeeling] = useState<string | null>(null);
     const [isExpanded, setIsExpanded] = useState(false);
 
-    // Media State
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [attachedFile, setAttachedFile] = useState<{
         url: string;
         type: "image" | "video" | "gif";
     } | null>(null);
 
-    // Poll State
     const [showPollBuilder, setShowPollBuilder] = useState(false);
     const [pollQuestion, setPollQuestion] = useState("");
     const [pollOptions, setPollOptions] = useState(["", ""]);
 
-    // Tag State
-    const [taggedUsers, setTaggedUsers] = useState<User[]>([]);
+    const [taggedUsers, setTaggedUsers] = useState<CommunityUser[]>([]);
     const [showTagList, setShowTagList] = useState(false);
 
-    // Emoji State
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
     const [showFeelingPicker, setShowFeelingPicker] = useState(false);
 
@@ -153,7 +133,7 @@ const CommunityView: React.FC<CommunityViewProps> = ({
         if (!postText.trim() && !pollQuestion && !attachedFile) return;
 
         const newPost: Post = {
-            id: Date.now().toString(),
+            id: crypto.randomUUID(),
             author: CURRENT_USER,
             content: postText,
             likes: 0,
@@ -243,45 +223,49 @@ const CommunityView: React.FC<CommunityViewProps> = ({
     const selectedChannel = channels.find((c) => c.id === selectedChannelId);
 
     return (
-        <div className="p-8 max-w-6xl mx-auto min-h-screen">
+        <div className="p-8 max-w-6xl mx-auto min-h-screen bg-background dark:bg-background-dark">
             {!selectedChannelId ? (
                 <>
                     <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-6">
                         <div>
-                            <h2 className="text-[32px] font-black text-gray-900 tracking-tight leading-none mb-2">
+                            <h2 className="text-[32px] font-black text-gray-900 dark:text-white tracking-tight leading-none mb-2">
                                 {viewMode === "hub"
-                                    ? "Knowledge Hub"
-                                    : "Academy Community"}
+                                    ? t("hub.title")
+                                    : t("feed.title")}
                             </h2>
-                            <p className="text-gray-400 font-medium text-[15px]">
+                            <p className="text-gray-400 dark:text-gray-500 font-medium text-[15px]">
                                 {viewMode === "hub"
-                                    ? "Help newcomers with their coding journey."
-                                    : "Stay connected with classmates and instructors."}
+                                    ? t("hub.subtitle")
+                                    : t("feed.subtitle")}
                             </p>
                         </div>
 
-                        <div className="flex bg-white p-1 rounded-2xl border border-gray-100 shadow-sm overflow-x-auto no-scrollbar max-w-full">
+                        <div className="flex bg-white dark:bg-gray-800 p-1 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm overflow-x-auto no-scrollbar max-w-full">
                             {[
-                                { id: "feed", icon: LayoutList, label: "Feed" },
+                                {
+                                    id: "feed",
+                                    icon: LayoutList,
+                                    labelKey: "viewModes.feed",
+                                },
                                 {
                                     id: "hub",
                                     icon: GraduationCap,
-                                    label: "Knowledge Hub",
+                                    labelKey: "viewModes.hub",
                                 },
                                 {
                                     id: "my-posts",
                                     icon: UserIcon,
-                                    label: "My Posts",
+                                    labelKey: "viewModes.myPosts",
                                 },
                                 {
                                     id: "channels",
                                     icon: LayoutGrid,
-                                    label: "Channels",
+                                    labelKey: "viewModes.channels",
                                 },
                                 {
                                     id: "saved",
                                     icon: BookmarkCheck,
-                                    label: "Saved",
+                                    labelKey: "viewModes.saved",
                                 },
                             ].map((mode) => (
                                 <button
@@ -289,10 +273,10 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                     onClick={() =>
                                         setViewMode(mode.id as CommunityTab)
                                     }
-                                    className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-[13px] font-bold transition-all whitespace-nowrap ${viewMode === mode.id ? "bg-[#00ADEF] text-white shadow-lg shadow-[#00ADEF]/20" : "text-gray-500 hover:bg-gray-50"}`}
+                                    className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-[13px] font-bold transition-all whitespace-nowrap ${viewMode === mode.id ? "bg-[#00ADEF] text-white shadow-lg shadow-[#00ADEF]/20" : "text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700"}`}
                                 >
                                     <mode.icon size={16} />
-                                    {mode.label}
+                                    {t(mode.labelKey)}
                                 </button>
                             ))}
                         </div>
@@ -308,10 +292,10 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                             size={18}
                             className="group-hover:-translate-x-1 transition-transform"
                         />
-                        Back to Community
+                        {t("channel.backToCommunity")}
                     </button>
 
-                    <div className="bg-white rounded-[40px] border border-gray-100 overflow-hidden shadow-xl mb-8">
+                    <div className="bg-white dark:bg-gray-800 rounded-[40px] border border-gray-100 dark:border-gray-700 overflow-hidden shadow-xl mb-8">
                         <div className="h-52 relative">
                             <img
                                 src={selectedChannel?.banner}
@@ -337,14 +321,15 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                     </div>
                                     <p className="text-white/80 font-bold text-sm">
                                         {selectedChannel?.followers.toLocaleString()}{" "}
-                                        subscribers • Verified Academy Channel
+                                        {t("channel.subscribers")} •{" "}
+                                        {t("channel.verifiedChannel")}
                                     </p>
                                 </div>
                             </div>
                         </div>
-                        <div className="p-8 flex items-center justify-between border-b border-gray-50 bg-[#fcfdfe]">
+                        <div className="p-8 flex items-center justify-between border-b border-gray-50 dark:border-gray-700 bg-[#fcfdfe] dark:bg-gray-800">
                             <div className="max-w-2xl">
-                                <p className="text-gray-600 font-medium leading-relaxed text-[15px]">
+                                <p className="text-gray-600 dark:text-gray-300 font-medium leading-relaxed text-[15px]">
                                     {selectedChannel?.description}
                                 </p>
                             </div>
@@ -356,8 +341,8 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                 className={`px-10 py-4 rounded-[20px] font-black text-sm transition-all shadow-lg ${selectedChannel?.isFollowing ? "bg-gray-100 text-gray-500 hover:bg-gray-200" : "bg-[#00ADEF] text-white shadow-[#00ADEF]/20 hover:scale-[1.02]"}`}
                             >
                                 {selectedChannel?.isFollowing
-                                    ? "Following"
-                                    : "Follow Channel"}
+                                    ? t("channel.following")
+                                    : t("channel.followChannel")}
                             </button>
                         </div>
                     </div>
@@ -375,8 +360,10 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                     ].map((cat) => (
                         <button
                             key={cat}
-                            onClick={() => setHubFilter(cat as any)}
-                            className={`px-5 py-2.5 rounded-full text-[12px] font-bold transition-all border ${hubFilter === cat ? "bg-indigo-600 text-white border-indigo-600 shadow-md" : "bg-white text-gray-500 border-gray-100 hover:bg-gray-50"}`}
+                            onClick={() =>
+                                setHubFilter(cat as PostCategory | "All")
+                            }
+                            className={`px-5 py-2.5 rounded-full text-[12px] font-bold transition-all border ${hubFilter === cat ? "bg-indigo-600 text-white border-indigo-600 shadow-md" : "bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"}`}
                         >
                             {cat}
                         </button>
@@ -386,12 +373,11 @@ const CommunityView: React.FC<CommunityViewProps> = ({
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2">
-                    {/* Enhanced Post Creator UI matching Screenshot */}
                     {(viewMode === "feed" ||
                         viewMode === "hub" ||
                         selectedChannelId) && (
                         <div
-                            className={`bg-white rounded-[32px] border border-gray-100 shadow-sm mb-8 transition-all duration-300 ${isExpanded ? "ring-4 ring-blue-50 shadow-xl" : "hover:shadow-md"}`}
+                            className={`bg-white dark:bg-gray-800 rounded-[32px] border border-gray-100 dark:border-gray-700 shadow-sm mb-8 transition-all duration-300 ${isExpanded ? "ring-4 ring-blue-50 dark:ring-blue-900/30 shadow-xl" : "hover:shadow-md"}`}
                         >
                             <div className="p-6">
                                 <div className="flex items-center gap-4 mb-5">
@@ -406,13 +392,12 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                                 onClick={() =>
                                                     setIsExpanded(true)
                                                 }
-                                                className="w-full text-left py-3 px-5 rounded-2xl bg-[#f8fafc] text-gray-400 text-[14px] font-medium transition-all hover:bg-gray-100"
+                                                className="w-full text-left py-3 px-5 rounded-2xl bg-[#f8fafc] dark:bg-gray-700 text-gray-400 dark:text-gray-500 text-[14px] font-medium transition-all hover:bg-gray-100 dark:hover:bg-gray-600"
                                             >
-                                                What's the news?
+                                                {t("feed.whatsNews")}
                                             </button>
                                         ) : (
                                             <div className="flex items-center gap-2">
-                                                {/* Audience Selector */}
                                                 <div className="relative">
                                                     <button
                                                         onClick={() =>
@@ -423,7 +408,7 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                                                     : "Public"
                                                             )
                                                         }
-                                                        className="flex items-center gap-1.5 px-3 py-1.5 bg-[#f8fafc] rounded-xl text-[11px] font-bold text-gray-500 border border-gray-100 hover:bg-white transition-all"
+                                                        className="flex items-center gap-1.5 px-3 py-1.5 bg-[#f8fafc] dark:bg-gray-700 rounded-xl text-[11px] font-bold text-gray-500 dark:text-gray-400 border border-gray-100 dark:border-gray-600 hover:bg-white dark:hover:bg-gray-600 transition-all"
                                                     >
                                                         {audience ===
                                                         "Public" ? (
@@ -437,7 +422,6 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                                     </button>
                                                 </div>
 
-                                                {/* Feeling Selector */}
                                                 <div className="relative">
                                                     <button
                                                         onClick={() =>
@@ -445,7 +429,7 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                                                 !showFeelingPicker
                                                             )
                                                         }
-                                                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all border ${feeling ? "bg-blue-50 text-blue-600 border-blue-100" : "bg-[#f8fafc] text-gray-500 border-gray-100"}`}
+                                                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[11px] font-bold transition-all border ${feeling ? "bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border-blue-100 dark:border-blue-800" : "bg-[#f8fafc] dark:bg-gray-700 text-gray-500 dark:text-gray-400 border-gray-100 dark:border-gray-600"}`}
                                                     >
                                                         <Smile size={12} />
                                                         {feeling
@@ -453,7 +437,7 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                                             : "Feeling..."}
                                                     </button>
                                                     {showFeelingPicker && (
-                                                        <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-100 shadow-2xl rounded-2xl z-50 p-2 animate-in fade-in zoom-in-95">
+                                                        <div className="absolute top-full left-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-2xl rounded-2xl z-50 p-2 animate-in fade-in zoom-in-95">
                                                             {FEELINGS.map(
                                                                 (f) => (
                                                                     <button
@@ -468,7 +452,7 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                                                                 false
                                                                             );
                                                                         }}
-                                                                        className="w-full text-left px-3 py-2 hover:bg-gray-50 rounded-lg text-xs font-bold text-gray-700 flex items-center gap-2"
+                                                                        className="w-full text-left px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg text-xs font-bold text-gray-700 dark:text-gray-300 flex items-center gap-2"
                                                                     >
                                                                         <span>
                                                                             {
@@ -485,7 +469,6 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                                     )}
                                                 </div>
 
-                                                {/* Hub Category if applicable */}
                                                 {viewMode === "hub" && (
                                                     <select
                                                         value={postCategory}
@@ -533,18 +516,17 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                             onChange={(e) =>
                                                 setPostText(e.target.value)
                                             }
-                                            className="w-full bg-transparent border-none p-0 text-[16px] text-gray-700 placeholder-gray-300 focus:ring-0 focus:outline-none outline-none ring-0 shadow-none resize-none min-h-[140px] mb-4 font-medium"
+                                            className="w-full bg-transparent border-none p-0 text-[16px] text-gray-700 dark:text-gray-200 placeholder-gray-300 dark:placeholder-gray-600 focus:ring-0 focus:outline-none outline-none ring-0 shadow-none resize-none min-h-[140px] mb-4 font-medium"
                                             style={{
                                                 border: "none",
                                                 boxShadow: "none",
                                             }}
                                         />
 
-                                        {/* Poll Builder UI */}
                                         {showPollBuilder && (
-                                            <div className="bg-blue-50/50 rounded-3xl p-5 mb-6 border border-dashed border-blue-200">
+                                            <div className="bg-blue-50/50 dark:bg-blue-900/20 rounded-3xl p-5 mb-6 border border-dashed border-blue-200 dark:border-blue-800">
                                                 <div className="flex items-center justify-between mb-4">
-                                                    <h4 className="text-[11px] font-black text-blue-600 uppercase tracking-widest flex items-center gap-2">
+                                                    <h4 className="text-[11px] font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest flex items-center gap-2">
                                                         <BarChart3 size={16} />{" "}
                                                         Poll
                                                     </h4>
@@ -558,7 +540,7 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                                             e.target.value
                                                         )
                                                     }
-                                                    className="w-full bg-white border border-gray-100 rounded-xl px-4 py-2.5 text-sm mb-3 outline-none focus:ring-2 focus:ring-blue-100"
+                                                    className="w-full bg-white dark:bg-gray-700 border border-gray-100 dark:border-gray-600 rounded-xl px-4 py-2.5 text-sm text-gray-900 dark:text-gray-100 mb-3 outline-none focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-800"
                                                 />
                                                 <div className="space-y-2">
                                                     {pollOptions.map(
@@ -580,7 +562,7 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                                                         n
                                                                     );
                                                                 }}
-                                                                className="w-full bg-white border border-gray-50 rounded-xl px-4 py-2 text-xs outline-none focus:ring-2 focus:ring-blue-100"
+                                                                className="w-full bg-white dark:bg-gray-700 border border-gray-50 dark:border-gray-600 rounded-xl px-4 py-2 text-xs text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-800"
                                                             />
                                                         )
                                                     )}
@@ -599,7 +581,6 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                             </div>
                                         )}
 
-                                        {/* Media Preview */}
                                         {attachedFile && (
                                             <div className="relative mb-6 rounded-3xl overflow-hidden group max-w-sm border border-gray-100 shadow-lg">
                                                 {attachedFile.type ===
@@ -626,13 +607,12 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                             </div>
                                         )}
 
-                                        {/* Tagged Users */}
                                         {taggedUsers.length > 0 && (
                                             <div className="flex flex-wrap gap-2 mb-6">
                                                 {taggedUsers.map((user) => (
                                                     <span
                                                         key={user.id}
-                                                        className="flex items-center gap-1.5 px-3 py-1 bg-gray-50 text-gray-600 rounded-full text-[11px] font-bold border border-gray-100"
+                                                        className="flex items-center gap-1.5 px-3 py-1 bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full text-[11px] font-bold border border-gray-100 dark:border-gray-600"
                                                     >
                                                         @
                                                         {
@@ -662,8 +642,7 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                             </div>
                                         )}
 
-                                        {/* Creator Footer matching Screenshot */}
-                                        <div className="flex items-center justify-between pt-6 border-t border-gray-50">
+                                        <div className="flex items-center justify-between pt-6 border-t border-gray-50 dark:border-gray-700">
                                             <div className="flex items-center gap-1">
                                                 <input
                                                     type="file"
@@ -676,7 +655,7 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                                     onClick={() =>
                                                         fileInputRef.current?.click()
                                                     }
-                                                    className="p-3 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded-2xl transition-all"
+                                                    className="p-3 text-gray-400 dark:text-gray-500 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-2xl transition-all"
                                                     title="Upload Media"
                                                 >
                                                     <ImageIcon size={20} />
@@ -687,7 +666,7 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                                             !showPollBuilder
                                                         )
                                                     }
-                                                    className={`p-3 rounded-2xl transition-all ${showPollBuilder ? "bg-blue-100 text-blue-600" : "text-gray-400 hover:text-blue-500 hover:bg-blue-50"}`}
+                                                    className={`p-3 rounded-2xl transition-all ${showPollBuilder ? "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400" : "text-gray-400 dark:text-gray-500 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30"}`}
                                                     title="Poll"
                                                 >
                                                     <BarChart3 size={20} />
@@ -700,13 +679,13 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                                                 !showTagList
                                                             )
                                                         }
-                                                        className={`p-3 rounded-2xl transition-all ${showTagList ? "bg-amber-100 text-amber-600" : "text-gray-400 hover:text-amber-600 hover:bg-amber-50"}`}
+                                                        className={`p-3 rounded-2xl transition-all ${showTagList ? "bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400" : "text-gray-400 dark:text-gray-500 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-900/30"}`}
                                                         title="Tag User"
                                                     >
                                                         <AtSign size={20} />
                                                     </button>
                                                     {showTagList && (
-                                                        <div className="absolute bottom-full left-0 mb-3 w-56 bg-white border border-gray-100 shadow-2xl rounded-2xl z-50 p-2 overflow-y-auto max-h-48 no-scrollbar">
+                                                        <div className="absolute bottom-full left-0 mb-3 w-56 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-2xl rounded-2xl z-50 p-2 overflow-y-auto max-h-48 no-scrollbar">
                                                             {MOCK_USERS.map(
                                                                 (user) => (
                                                                     <button
@@ -735,7 +714,7 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                                                                 false
                                                                             );
                                                                         }}
-                                                                        className="w-full flex items-center gap-2 p-2 hover:bg-blue-50 rounded-xl transition-all text-left"
+                                                                        className="w-full flex items-center gap-2 p-2 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-xl transition-all text-left"
                                                                     >
                                                                         <img
                                                                             src={
@@ -744,7 +723,7 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                                                             className="w-7 h-7 rounded-lg"
                                                                             alt=""
                                                                         />
-                                                                        <span className="text-xs font-bold text-gray-700">
+                                                                        <span className="text-xs font-bold text-gray-700 dark:text-gray-300">
                                                                             {
                                                                                 user.name
                                                                             }
@@ -756,7 +735,6 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                                     )}
                                                 </div>
 
-                                                {/* Emoji Picker Implementation */}
                                                 <div className="relative">
                                                     <button
                                                         onClick={() =>
@@ -764,13 +742,13 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                                                 !showEmojiPicker
                                                             )
                                                         }
-                                                        className={`p-3 rounded-2xl transition-all ${showEmojiPicker ? "bg-purple-100 text-purple-600" : "text-gray-400 hover:text-purple-600 hover:bg-purple-50"}`}
+                                                        className={`p-3 rounded-2xl transition-all ${showEmojiPicker ? "bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400" : "text-gray-400 dark:text-gray-500 hover:text-purple-600 hover:bg-purple-50 dark:hover:bg-purple-900/30"}`}
                                                         title="Emojis"
                                                     >
                                                         <Smile size={20} />
                                                     </button>
                                                     {showEmojiPicker && (
-                                                        <div className="absolute bottom-full left-0 mb-3 w-48 bg-white border border-gray-100 shadow-2xl rounded-2xl z-50 p-3 grid grid-cols-4 gap-2 animate-in zoom-in-95">
+                                                        <div className="absolute bottom-full left-0 mb-3 w-48 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-2xl rounded-2xl z-50 p-3 grid grid-cols-4 gap-2 animate-in zoom-in-95">
                                                             {EMOJIS.map((e) => (
                                                                 <button
                                                                     key={e}
@@ -792,9 +770,9 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                             <div className="flex items-center gap-4">
                                                 <button
                                                     onClick={() => resetForm()}
-                                                    className="text-[13px] font-black text-gray-400 hover:text-gray-600 px-4 uppercase tracking-widest"
+                                                    className="text-[13px] font-black text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 px-4 uppercase tracking-widest"
                                                 >
-                                                    Discard
+                                                    {t("feed.discard")}
                                                 </button>
                                                 <button
                                                     onClick={
@@ -808,7 +786,7 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                                     className="px-8 py-3.5 rounded-[22px] text-[15px] font-black shadow-xl transition-all disabled:opacity-30 disabled:pointer-events-none flex items-center gap-2 bg-[#A0E2F1] text-[#00ADEF] shadow-blue-200/50 hover:scale-[1.02]"
                                                 >
                                                     <Send size={18} />
-                                                    Post to Feed
+                                                    {t("feed.postToFeed")}
                                                 </button>
                                             </div>
                                         </div>
@@ -818,7 +796,6 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                         </div>
                     )}
 
-                    {/* Feed Content */}
                     <div className="space-y-6">
                         {filteredPosts.length > 0 ? (
                             filteredPosts.map((post) => (
@@ -834,19 +811,18 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                 />
                             ))
                         ) : (
-                            <div className="p-24 text-center bg-white rounded-[48px] border border-dashed border-gray-200">
-                                <div className="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-8">
+                            <div className="p-24 text-center bg-white dark:bg-gray-800 rounded-[48px] border border-dashed border-gray-200 dark:border-gray-700">
+                                <div className="w-24 h-24 bg-gray-50 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-8">
                                     <BookOpen
                                         className="text-gray-200"
                                         size={40}
                                     />
                                 </div>
-                                <h3 className="text-2xl font-black text-gray-800 mb-2">
-                                    No updates yet
+                                <h3 className="text-2xl font-black text-gray-800 dark:text-white mb-2">
+                                    {t("empty.noUpdates")}
                                 </h3>
-                                <p className="text-gray-400 text-sm font-medium">
-                                    Follow channels or start a conversation
-                                    yourself!
+                                <p className="text-gray-400 dark:text-gray-500 text-sm font-medium">
+                                    {t("empty.followChannels")}
                                 </p>
                             </div>
                         )}
@@ -866,17 +842,16 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                     )}
                 </div>
 
-                {/* Widgets Area */}
                 {!selectedChannelId && (
                     <div className="space-y-8">
-                        <div className="bg-white rounded-[40px] border border-gray-100 p-8 shadow-sm">
+                        <div className="bg-white dark:bg-gray-800 rounded-[40px] border border-gray-100 dark:border-gray-700 p-8 shadow-sm">
                             <div className="flex items-center justify-between mb-8">
-                                <h3 className="font-black text-gray-800 text-[14px] uppercase tracking-widest flex items-center gap-2">
+                                <h3 className="font-black text-gray-800 dark:text-white text-[14px] uppercase tracking-widest flex items-center gap-2">
                                     <Trophy
                                         size={18}
                                         className="text-[#FFB800]"
                                     />
-                                    Hub Mentors
+                                    {t("widgets.hubMentors")}
                                 </h3>
                             </div>
                             <div className="space-y-5">
@@ -885,13 +860,13 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                 ).map((user) => (
                                     <div
                                         key={user.id}
-                                        className="flex items-center justify-between group cursor-pointer hover:bg-gray-50 p-2 -m-2 rounded-2xl transition-colors"
+                                        className="flex items-center justify-between group cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 p-2 -m-2 rounded-2xl transition-colors"
                                     >
                                         <div className="flex items-center gap-4">
                                             <div className="relative">
                                                 <img
                                                     src={user.avatar}
-                                                    className="w-11 h-11 rounded-2xl border border-gray-100"
+                                                    className="w-11 h-11 rounded-2xl border border-gray-100 dark:border-gray-600"
                                                     alt=""
                                                 />
                                                 <div className="absolute -top-1.5 -right-1.5 bg-yellow-400 border-2 border-white rounded-full p-1 shadow-sm">
@@ -901,12 +876,12 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                                     />
                                                 </div>
                                             </div>
-                                            <span className="text-[14px] font-bold text-gray-700 group-hover:text-[#00ADEF] transition-colors">
+                                            <span className="text-[14px] font-bold text-gray-700 dark:text-gray-300 group-hover:text-[#00ADEF] transition-colors">
                                                 {user.name}
                                             </span>
                                         </div>
-                                        <div className="px-3 py-1 bg-indigo-50 rounded-xl">
-                                            <p className="text-[11px] font-black text-indigo-600">
+                                        <div className="px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 rounded-xl">
+                                            <p className="text-[11px] font-black text-indigo-600 dark:text-indigo-400">
                                                 Lvl {user.gradeLevel}
                                             </p>
                                         </div>
@@ -920,16 +895,13 @@ const CommunityView: React.FC<CommunityViewProps> = ({
                                 <GraduationCap size={150} />
                             </div>
                             <h3 className="font-black text-2xl mb-4 relative z-10 leading-tight">
-                                Join the
-                                <br />
-                                Mentor Squad
+                                {t("widgets.joinMentorSquad")}
                             </h3>
                             <p className="text-[13px] text-white/80 mb-10 font-medium relative z-10 leading-relaxed">
-                                Help others solve coding challenges and earn
-                                exclusive rewards.
+                                {t("widgets.mentorDescription")}
                             </p>
                             <button className="w-full bg-white text-indigo-600 py-4 rounded-[22px] text-[14px] font-black hover:bg-gray-50 transition-all shadow-xl relative z-10 uppercase tracking-widest">
-                                Apply to Help
+                                {t("widgets.applyToHelp")}
                             </button>
                         </div>
                     </div>
@@ -942,6 +914,6 @@ const CommunityView: React.FC<CommunityViewProps> = ({
       `}</style>
         </div>
     );
-};
+}
 
 export default CommunityView;

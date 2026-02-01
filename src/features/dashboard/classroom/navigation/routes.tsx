@@ -20,6 +20,7 @@ import { myScheduleRoutes } from "../mySchedule/navigation";
 import { supportHelpRoutes } from "../ticketsManagement/pages/supportHelp/navigation";
 import { resourcesRoutes } from "../resources/navigation";
 import { enrollmentsGroupRoutes } from "../enrollmentsGroup/navigation";
+import { communityRoutes } from "../community/navigation";
 import { classroomPaths } from "./paths";
 import { CLASSROOM_PATH } from "./constant";
 
@@ -60,6 +61,8 @@ export const classroomRouteModule: FeatureRouteModule = {
             ...resourcesRoutes,
             // Enrollments Group feature
             ...enrollmentsGroupRoutes,
+            // Community feature
+            ...communityRoutes,
         ],
     },
 };

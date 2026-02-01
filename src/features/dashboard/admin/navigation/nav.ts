@@ -14,9 +14,10 @@
  */
 
 import type { FeatureNavModule } from "@/navigation/nav.types";
-import { Settings, BookOpen, ChartColumnIcon } from "lucide-react";
+import { Settings, BookOpen, ChartColumnIcon, ShieldCheck } from "lucide-react";
 import { adminSharedNavItems } from "@/features/dashboard/shared/navigation";
 import { ticketsManagementNavItem } from "../ticketsManagement/navigation/nav";
+import { communityManagementPaths } from "../communityManagement/navigation/paths";
 import {
     learningPermissions,
     groupsPermissions,
@@ -78,6 +79,15 @@ export const adminNav: FeatureNavModule = {
         },
         // Tickets Management
         ticketsManagementNavItem,
+        // Community Management
+        {
+            key: "community-management",
+            labelKey: "communityManagement:title",
+            label: "Community Management",
+            href: communityManagementPaths.main,
+            icon: ShieldCheck,
+            order: 60,
+        },
         // Settings
         {
             key: "settings",

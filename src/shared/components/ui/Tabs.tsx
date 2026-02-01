@@ -169,7 +169,7 @@ function Tabs<T extends string>({
                         </div>
                     </div>
 
-                    {/* Gradient fade indicators */}
+                    {/* linear fade indicators */}
                     {visibleTabs.length > 3 && (
                         <>
                             <div className="absolute left-0 top-0 bottom-0 w-8 bg-linear-to-r from-white dark:from-gray-900 to-transparent pointer-events-none sm:hidden" />

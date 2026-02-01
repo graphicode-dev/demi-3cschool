@@ -35,7 +35,7 @@ export function NavigationCard({
             <div className="flex items-start justify-between">
                 <Link to={href} className="flex items-start gap-4 flex-1">
                     <div
-                        className={`w-12 h-12 rounded-xl ${iconBg} flex items-center justify-center flex-shrink-0`}
+                        className={`w-12 h-12 rounded-xl ${iconBg} flex items-center justify-center shrink-0`}
                     >
                         {icon}
                     </div>
@@ -48,7 +48,7 @@ export function NavigationCard({
                         </p>
                     </div>
                 </Link>
-                <div className="flex items-center gap-2 flex-shrink-0 mt-1">
+                <div className="flex items-center gap-2 shrink-0 mt-1">
                     {onQuiz && (
                         <button
                             type="button"

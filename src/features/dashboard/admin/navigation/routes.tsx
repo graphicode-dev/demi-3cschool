@@ -21,6 +21,7 @@ import type { FeatureRouteModule, RouteConfig } from "@/router/routes.types";
 import { adminSharedRoutes } from "@/features/dashboard/shared/navigation";
 import { settingsRoutes } from "../settings/navigation";
 import { ticketsManagementRoutes } from "../ticketsManagement/navigation";
+import { communityManagementRoutes } from "../communityManagement/navigation";
 
 // Import admin feature route arrays
 import {
@@ -332,6 +333,8 @@ export const adminRouteModule: FeatureRouteModule = {
             ...settingsRoutes,
             // Shared features (profile, chat, certificates, reports)
             ...adminOnlySharedRoutes,
+            // Community Management
+            ...communityManagementRoutes,
         ],
     },
 };

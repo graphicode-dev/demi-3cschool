@@ -61,7 +61,7 @@ export function ProjectCard({
                 {/* Left Section: Icon + Content */}
                 <div className="flex gap-4 items-start">
                     {/* File Icon */}
-                    <div className="flex-shrink-0 size-14 rounded-2xl bg-brand-500/15 flex items-center justify-center shadow-sm">
+                    <div className="shrink-0 size-14 rounded-2xl bg-brand-500/15 flex items-center justify-center shadow-sm">
                         <FileText className="size-7 text-brand-500" />
                     </div>
 
@@ -97,7 +97,7 @@ export function ProjectCard({
                 </div>
 
                 {/* Right Section: Action Buttons */}
-                <div className="flex items-center gap-2 flex-shrink-0 sm:self-center">
+                <div className="flex items-center gap-2 shrink-0 sm:self-center">
                     {/* View Homework Button */}
                     <button
                         onClick={() => onViewHomework?.(project.id)}
