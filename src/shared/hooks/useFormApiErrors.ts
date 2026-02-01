@@ -45,10 +45,6 @@ export interface UseFormApiErrorsOptions<TFieldValues extends FieldValues> {
  * ```tsx
  * const { handleApiError } = useFormApiErrors({
  *     setError,
- *     fieldMap: {
- *         group_type: "groupType",
- *         max_installments: "max_installments",
- *     },
  * });
  *
  * try {

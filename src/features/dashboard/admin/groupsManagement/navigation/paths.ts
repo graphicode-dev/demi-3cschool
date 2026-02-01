@@ -30,44 +30,49 @@ export const groupsPaths = {
     regularList: (
         gradeId: string | number = ":gradeId",
         levelId: string | number = ":levelId"
-    ) => `${BasePath}/grades/${gradeId}/levels/${levelId}/regular`,
+    ) => `${BasePath}/grades/${gradeId}/levels/${levelId}/group`,
     regularCreate: (
         gradeId: string | number = ":gradeId",
         levelId: string | number = ":levelId"
-    ) => `${BasePath}/grades/${gradeId}/levels/${levelId}/regular/create`,
+    ) => `${BasePath}/grades/${gradeId}/levels/${levelId}/group/create`,
     regularView: (
         gradeId: string | number = ":gradeId",
         levelId: string | number = ":levelId",
         id: string | number = ":id"
-    ) => `${BasePath}/grades/${gradeId}/levels/${levelId}/regular/view/${id}`,
+    ) => `${BasePath}/grades/${gradeId}/levels/${levelId}/group/view/${id}`,
     regularEdit: (
         gradeId: string | number = ":gradeId",
         levelId: string | number = ":levelId",
         id: string | number = ":id"
-    ) => `${BasePath}/grades/${gradeId}/levels/${levelId}/regular/edit/${id}`,
+    ) => `${BasePath}/grades/${gradeId}/levels/${levelId}/group/edit/${id}`,
     regularAssign: (
         gradeId: string | number = ":gradeId",
         levelId: string | number = ":levelId",
         id: string | number = ":id"
-    ) => `${BasePath}/grades/${gradeId}/levels/${levelId}/regular/${id}/assign`,
+    ) => `${BasePath}/grades/${gradeId}/levels/${levelId}/group/${id}/assign`,
     regularAttendance: (
         gradeId: string | number = ":gradeId",
         levelId: string | number = ":levelId",
         id: string | number = ":id"
     ) =>
-        `${BasePath}/grades/${gradeId}/levels/${levelId}/regular/${id}/attendance`,
+        `${BasePath}/grades/${gradeId}/levels/${levelId}/group/${id}/attendance`,
     regularInstructor: (
         gradeId: string | number = ":gradeId",
         levelId: string | number = ":levelId",
         id: string | number = ":id"
     ) =>
-        `${BasePath}/grades/${gradeId}/levels/${levelId}/regular/${id}/instructor`,
+        `${BasePath}/grades/${gradeId}/levels/${levelId}/group/${id}/instructor`,
     regularSessions: (
         gradeId: string | number = ":gradeId",
         levelId: string | number = ":levelId",
         id: string | number = ":id"
+    ) => `${BasePath}/grades/${gradeId}/levels/${levelId}/group/${id}/sessions`,
+    regularFinalQuiz: (
+        gradeId: string | number = ":gradeId",
+        levelId: string | number = ":levelId",
+        id: string | number = ":id"
     ) =>
-        `${BasePath}/grades/${gradeId}/levels/${levelId}/regular/${id}/sessions`,
+        `${BasePath}/grades/${gradeId}/levels/${levelId}/group/${id}/final-quiz`,
     sessionsList: () => `${BasePath}/sessions`,
 } as const;
 
@@ -85,6 +90,7 @@ export const groupsManagementPaths = registerFeaturePaths("groupsManagement", {
     regularAttendance: groupsPaths.regularAttendance,
     regularInstructor: groupsPaths.regularInstructor,
     regularSessions: groupsPaths.regularSessions,
+    regularFinalQuiz: groupsPaths.regularFinalQuiz,
     sessionsList: groupsPaths.sessionsList,
 });
 

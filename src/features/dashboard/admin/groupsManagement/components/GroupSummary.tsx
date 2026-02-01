@@ -2,16 +2,13 @@ import { useTranslation } from "react-i18next";
 
 interface GroupSummaryData {
     groupName: string;
-    program: string;
-    course: string;
+    grade?: string;
     level: string;
     days: string[];
     startTime: string;
     endTime: string;
-    ageGroup: string;
     capacity: number;
     locationType?: string;
-    groupType?: string;
 }
 
 interface GroupSummaryProps {
@@ -172,26 +169,10 @@ export function GroupSummary({
 
                         <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-800">
                             <span className="text-sm text-gray-500 dark:text-gray-400">
-                                {t(
-                                    "groups.form.fields.program.label",
-                                    "Program Type"
-                                )}
-                            </span>
-                            <span className="px-3 py-1 text-xs bg-brand-500 text-white rounded-full">
-                                {data.program ||
-                                    t(
-                                        "groups.form.summary.notSelected",
-                                        "Not selected"
-                                    )}
-                            </span>
-                        </div>
-
-                        <div className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-800">
-                            <span className="text-sm text-gray-500 dark:text-gray-400">
-                                {t("groups.form.fields.course.label", "Course")}
+                                {t("groups.form.fields.grade.label", "Grade")}
                             </span>
                             <span className="text-sm text-gray-900 dark:text-white">
-                                {data.course ||
+                                {data.grade ||
                                     t(
                                         "groups.form.summary.notSelected",
                                         "Not selected"
@@ -209,19 +190,6 @@ export function GroupSummary({
                                         "groups.form.summary.notSelected",
                                         "Not selected"
                                     )}
-                            </span>
-                        </div>
-
-                        <div className="flex items-center justify-between py-2">
-                            <span className="text-sm text-gray-500 dark:text-gray-400">
-                                {t(
-                                    "groups.form.fields.groupType.label",
-                                    "Group Type"
-                                )}
-                            </span>
-                            <span className="text-sm text-gray-900 dark:text-white">
-                                {data.groupType ||
-                                    t("groups.form.summary.general", "General")}
                             </span>
                         </div>
                     </div>

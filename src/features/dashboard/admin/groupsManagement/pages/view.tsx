@@ -1,12 +1,9 @@
 import {
     Users,
     Clock,
-    User,
     MapPin,
     Edit,
     Trash2,
-    Users2,
-    Code,
     BookOpen,
     CheckSquare2,
     FileText,
@@ -14,29 +11,38 @@ import {
     Video,
     Lock,
     UserPlus,
+    GraduationCap,
+    Layers,
 } from "lucide-react";
 import { LearningCard } from "../components/LearningCard";
 import { StudentListItem } from "../components/StudentListItem";
-import { MOCK_INSTRUCTOR } from "../mockData";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { paths } from "@/router";
+import { gradesPaths } from "@/features/dashboard/admin/learning/navigation/paths";
+import { groupsPaths } from "../navigation/paths";
 import { useGroup } from "../api";
 import {
     useGetGroupStudentsQuery,
     useRemoveStudentMutation,
 } from "../api/assignStudent";
-import { ConfirmDialog, ErrorState, LoadingState } from "@/design-system";
+import { ErrorState, LoadingState } from "@/design-system";
 import { useTranslation } from "react-i18next";
-import { useState } from "react";
 import { useMutationHandler } from "@/shared/api";
 import { ContentTabType } from "@/features/dashboard/admin/learning/pages/lessons/components/content-manager/LessonContentManager";
 
 export default function RegularGroupViewPage() {
     const { t } = useTranslation("groupsManagement");
     const navigate = useNavigate();
-    const { id: groupId } = useParams<{ id: string }>();
+    const {
+        gradeId,
+        levelId,
+        id: groupId,
+    } = useParams<{
+        gradeId: string;
+        levelId: string;
+        id: string;
+    }>();
     const { execute } = useMutationHandler();
-    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const {
         data: students = [],
         isLoading: studentsLoading,
@@ -45,10 +51,15 @@ export default function RegularGroupViewPage() {
     } = useGetGroupStudentsQuery(groupId!);
 
     const { data: groupData } = useGroup(groupId);
-    const levelId = groupData?.level.id as string;
 
     const handleGroupEdit = () => {
-        navigate(paths.dashboard.groupsManagement.regularEdit(groupId));
+        navigate(
+            paths.dashboard.groupsManagement.regularEdit(
+                gradeId,
+                levelId,
+                groupId
+            )
+        );
     };
 
     const { mutateAsync: removeStudent, isPending: isRemovingStudent } =
@@ -71,7 +82,7 @@ export default function RegularGroupViewPage() {
     };
 
     const lessonPath = (tab: ContentTabType) =>
-        `${paths.dashboard.learning.firstTermLessonsView(levelId!)}?tab=${tab}`;
+        `${gradesPaths.lessons(gradeId!, levelId!)}?tab=${tab}`;
 
     if (studentsError)
         return (
@@ -99,28 +110,52 @@ export default function RegularGroupViewPage() {
                                 <div className="flex items-center gap-2">
                                     <Users className="w-5 h-5" />
                                     <span className="text-base">
-                                        {/* {groupData?.studentsCount} Students */}
+                                        Max {groupData?.maxCapacity} Students
                                     </span>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <Clock className="w-5 h-5" />
-                                    <span className="text-base">
-                                        09:00 - 11:30
-                                    </span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <User className="w-5 h-5" />
-                                    <span className="text-base">
-                                        {/* {groupData?.instructorsCount}{" "} */}
-                                        Instructors
-                                    </span>
-                                </div>
+                                {groupData?.schedules?.[0] && (
+                                    <div className="flex items-center gap-2">
+                                        <Clock className="w-5 h-5" />
+                                        <span className="text-base">
+                                            {groupData.schedules[0].startTime?.slice(
+                                                0,
+                                                5
+                                            )}{" "}
+                                            -{" "}
+                                            {groupData.schedules[0].endTime?.slice(
+                                                0,
+                                                5
+                                            )}
+                                        </span>
+                                    </div>
+                                )}
+                                {groupData?.schedules?.[0] && (
+                                    <div className="flex items-center gap-2">
+                                        <Calendar className="w-5 h-5" />
+                                        <span className="text-base capitalize">
+                                            {groupData.schedules[0].dayOfWeek}
+                                        </span>
+                                    </div>
+                                )}
                                 <div className="flex items-center gap-2 bg-brand-500/10 px-3 py-1 rounded-full">
                                     <MapPin className="w-4 h-4 text-brand-400" />
-                                    <span className="text-brand-400 text-base">
+                                    <span className="text-brand-400 text-base capitalize">
                                         {groupData?.locationType}
                                     </span>
                                 </div>
+                                {groupData?.isActive !== undefined && (
+                                    <div
+                                        className={`flex items-center gap-2 px-3 py-1 rounded-full ${groupData.isActive ? "bg-green-500/10" : "bg-red-500/10"}`}
+                                    >
+                                        <span
+                                            className={`text-base ${groupData.isActive ? "text-green-400" : "text-red-400"}`}
+                                        >
+                                            {groupData.isActive
+                                                ? "Active"
+                                                : "Inactive"}
+                                        </span>
+                                    </div>
+                                )}
                             </div>
                         </div>
                         <div className="flex items-center gap-3">
@@ -149,11 +184,11 @@ export default function RegularGroupViewPage() {
                     </h3>
                     <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mb-6">
                         <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-                            {/* Group Type */}
+                            {/* Grade */}
                             <div className="flex items-start gap-3">
                                 <div className="shrink-0">
                                     <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-brand-100 dark:bg-brand-900">
-                                        <Users
+                                        <GraduationCap
                                             size={18}
                                             className="text-brand-600 dark:text-brand-300"
                                         />
@@ -161,15 +196,35 @@ export default function RegularGroupViewPage() {
                                 </div>
                                 <div className="min-w-0">
                                     <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">
-                                        Group Type
+                                        Grade
                                     </p>
                                     <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">
-                                        Regular Group
+                                        {groupData?.grade?.name || "-"}
                                     </p>
                                 </div>
                             </div>
 
-                            {/* Program */}
+                            {/* Level */}
+                            <div className="flex items-start gap-3">
+                                <div className="shrink-0">
+                                    <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-brand-100 dark:bg-brand-900">
+                                        <Layers
+                                            size={18}
+                                            className="text-brand-600 dark:text-brand-300"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="min-w-0">
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">
+                                        Level
+                                    </p>
+                                    <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">
+                                        {groupData?.level?.title || "-"}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Program/Curriculum */}
                             <div className="flex items-start gap-3">
                                 <div className="shrink-0">
                                     <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-brand-100 dark:bg-brand-900">
@@ -184,47 +239,8 @@ export default function RegularGroupViewPage() {
                                         Program
                                     </p>
                                     <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">
-                                        Standard Learning
-                                    </p>
-                                </div>
-                            </div>
-
-                            {/* Course & Level */}
-                            <div className="flex items-start gap-3">
-                                <div className="shrink-0">
-                                    <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-brand-100 dark:bg-brand-900">
-                                        <Code
-                                            size={18}
-                                            className="text-brand-600 dark:text-brand-300"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="min-w-0">
-                                    <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">
-                                        Course & Level
-                                    </p>
-                                    <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">
-                                        Python Basics – L2
-                                    </p>
-                                </div>
-                            </div>
-
-                            {/* Age Group */}
-                            <div className="flex items-start gap-3">
-                                <div className="shrink-0">
-                                    <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-brand-100 dark:bg-brand-900">
-                                        <Users2
-                                            size={18}
-                                            className="text-brand-600 dark:text-brand-300"
-                                        />
-                                    </div>
-                                </div>
-                                <div className="min-w-0">
-                                    <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">
-                                        Age Group
-                                    </p>
-                                    <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">
-                                        9–12
+                                        {groupData?.programsCurriculum
+                                            ?.caption || "-"}
                                     </p>
                                 </div>
                             </div>
@@ -244,8 +260,27 @@ export default function RegularGroupViewPage() {
                                         Capacity
                                     </p>
                                     <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">
-                                        {/* {groupData?.enrolledStudents} /{" "} */}
-                                        {groupData?.maxCapacity}
+                                        {groupData?.maxCapacity || "-"}
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Location Type */}
+                            <div className="flex items-start gap-3">
+                                <div className="shrink-0">
+                                    <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-brand-100 dark:bg-brand-900">
+                                        <MapPin
+                                            size={18}
+                                            className="text-brand-600 dark:text-brand-300"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="min-w-0">
+                                    <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">
+                                        Location Type
+                                    </p>
+                                    <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1 capitalize">
+                                        {groupData?.locationType || "-"}
                                     </p>
                                 </div>
                             </div>
@@ -291,6 +326,8 @@ export default function RegularGroupViewPage() {
                             linkText="Manage Sessions"
                             linkColor="text-brand-600"
                             to={paths.dashboard.groupsManagement.regularSessions(
+                                gradeId,
+                                levelId,
                                 groupId
                             )}
                         />
@@ -301,6 +338,8 @@ export default function RegularGroupViewPage() {
                             linkText="Manage Attendances"
                             linkColor="text-brand-600"
                             to={paths.dashboard.groupsManagement.regularAttendance(
+                                gradeId,
+                                levelId,
                                 groupId
                             )}
                         />
@@ -310,7 +349,11 @@ export default function RegularGroupViewPage() {
                             description="Unlock the next level"
                             linkText="View Final Quiz"
                             linkColor="text-brand-600"
-                            to=""
+                            to={groupsPaths.regularFinalQuiz(
+                                gradeId,
+                                levelId,
+                                groupId
+                            )}
                         />
 
                         <LearningCard
@@ -334,6 +377,8 @@ export default function RegularGroupViewPage() {
                             </h3>
                             <Link
                                 to={paths.dashboard.groupsManagement.regularAssign(
+                                    gradeId,
+                                    levelId,
                                     groupId
                                 )}
                                 className="inline-flex items-center gap-2 px-4 py-2 bg-brand-500 text-white text-sm font-semibold rounded-lg hover:bg-brand-600 transition-colors"
@@ -357,32 +402,53 @@ export default function RegularGroupViewPage() {
                         </div>
                     </div>
 
-                    {/* Instructor Card */}
+                    {/* Trainer/Instructor Card */}
                     <div className="pt-6 space-y-6">
                         <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">
-                            Instructor
+                            Trainer
                         </h3>
 
                         <div className="bg-brand-50 dark:bg-brand-900/20 rounded-lg border border-brand-200 dark:border-brand-800 p-6 flex flex-col items-center text-center">
-                            <div className="flex items-center justify-center w-16 h-16 rounded-full bg-brand-500 text-white text-lg font-bold mb-4 shrink-0">
-                                {MOCK_INSTRUCTOR.initials}
-                            </div>
-                            <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
-                                {MOCK_INSTRUCTOR.name}
-                            </h4>
-                            <p className="text-base text-gray-600 dark:text-gray-400 mb-1">
-                                {MOCK_INSTRUCTOR.role}
-                            </p>
-                            <p className="text-xs text-gray-500 dark:text-gray-500 mb-6">
-                                Assigned date {MOCK_INSTRUCTOR.assignedDate}
-                            </p>
+                            {groupData?.trainer?.name ? (
+                                <>
+                                    <div className="flex items-center justify-center w-16 h-16 rounded-full bg-brand-500 text-white text-lg font-bold mb-4 shrink-0">
+                                        {groupData.trainer.name
+                                            .split(" ")
+                                            .map((n: string) => n[0])
+                                            .join("")
+                                            .toUpperCase()}
+                                    </div>
+                                    <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
+                                        {groupData.trainer.name}
+                                    </h4>
+                                    <p className="text-base text-gray-600 dark:text-gray-400 mb-6">
+                                        Trainer
+                                    </p>
+                                </>
+                            ) : (
+                                <>
+                                    <div className="flex items-center justify-center w-16 h-16 rounded-full bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 text-lg font-bold mb-4 shrink-0">
+                                        ?
+                                    </div>
+                                    <h4 className="text-lg font-semibold text-gray-500 dark:text-gray-400 mb-1">
+                                        No Trainer Assigned
+                                    </h4>
+                                    <p className="text-base text-gray-400 dark:text-gray-500 mb-6">
+                                        Assign a trainer to this group
+                                    </p>
+                                </>
+                            )}
                             <Link
                                 to={paths.dashboard.groupsManagement.regularInstructor(
+                                    gradeId,
+                                    levelId,
                                     groupId
                                 )}
                                 className="px-4 py-2 bg-brand-500 text-white text-sm font-semibold rounded-lg hover:bg-brand-600 transition-colors"
                             >
-                                Manage Instructor
+                                {groupData?.trainer?.name
+                                    ? "Manage Trainer"
+                                    : "Assign Trainer"}
                             </Link>
                         </div>
                     </div>

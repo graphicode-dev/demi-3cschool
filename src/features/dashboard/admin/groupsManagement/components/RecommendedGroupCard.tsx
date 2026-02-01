@@ -1,11 +1,11 @@
 import { useTranslation } from "react-i18next";
 
 interface RecommendedGroup {
-    id: string;
+    id: string | number;
     name: string;
     studentsCount: number;
     level: string;
-    course: string;
+    grade: string;
     status: string;
     days: string;
     times: string;
@@ -123,7 +123,7 @@ export function RecommendedGroupCard({
                     {group.level}
                 </span>
                 <span className="px-2 py-1 text-xs bg-brand-50 dark:bg-brand-900/20 text-brand-600 dark:text-brand-400 rounded">
-                    {group.course}
+                    {group.grade}
                 </span>
                 <span className="px-2 py-1 text-xs bg-white dark:bg-gray-800 text-brand-600 dark:text-brand-400 rounded">
                     {group.status}
@@ -159,7 +159,7 @@ export function RecommendedGroupCard({
 
             <button
                 type="button"
-                onClick={() => onViewDetails?.(group.id)}
+                onClick={() => onViewDetails?.(String(group.id))}
                 className={`w-full py-2.5 text-sm rounded-lg transition-colors ${
                     isRecommended
                         ? "bg-brand-500 text-white hover:bg-brand-600"

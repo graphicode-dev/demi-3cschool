@@ -112,6 +112,8 @@ interface DynamicTableProps<T> {
     // Groupable columns - controls which columns appear in the "Group by" filter dropdown
     // Each column can have an isDefault flag to be pre-selected
     groupableColumns?: GroupableColumn[];
+    // Custom card renderer for cards view
+    renderCard?: (row: TableData, columns: TableColumn[]) => React.ReactNode;
 }
 
 export const DynamicTable = ({
@@ -153,6 +155,8 @@ export const DynamicTable = ({
     onFiltersChange,
     // Groupable columns
     groupableColumns,
+    // Custom card renderer
+    renderCard,
 }: DynamicTableProps<TableData>) => {
     const { t } = useTranslation();
     // Check if there are default selected groups to determine initial view mode
@@ -492,7 +496,7 @@ export const DynamicTable = ({
             case "grid":
                 return <TableGridView {...viewProps} />;
             case "cards":
-                return <TableCardView {...viewProps} />;
+                return <TableCardView {...viewProps} renderCard={renderCard} />;
             case "group":
                 return <TableGroupView {...viewProps} />;
             default:
@@ -502,7 +506,7 @@ export const DynamicTable = ({
 
     return (
         <div
-            className={`w-full overflow-hidden overflow-x-auto bg-white dark:bg-gray-800 rounded-2xl ${
+            className={`w-full bg-white dark:bg-gray-800 rounded-2xl ${
                 hideBorder ? "" : "border border-gray-200 dark:border-gray-800"
             }`}
         >
@@ -627,7 +631,7 @@ export const DynamicTable = ({
                     </div>
                 )}
 
-                <>{renderTableView()}</>
+                <div className="overflow-visible">{renderTableView()}</div>
 
                 {/* Advanced Filter Builder Modal */}
                 {metadata && showFilterBuilder && (

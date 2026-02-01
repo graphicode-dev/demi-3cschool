@@ -1,3 +1,4 @@
+import React from "react";
 import type { TableData, TableColumn } from "@/shared/types";
 import { TableAvatar } from "./TableAvatar";
 import { getInitials } from "@/utils/tableUtils";
@@ -20,9 +21,18 @@ const renderCellValue = (value: unknown): string => {
 interface TableCardViewProps {
     data: TableData[];
     columns: TableColumn[];
+    renderCard?: (row: TableData, columns: TableColumn[]) => React.ReactNode;
+    onRowClick?: (rowId: string) => void;
+    disableRowClick?: boolean;
 }
 
-export const TableCardView = ({ data, columns }: TableCardViewProps) => {
+export const TableCardView = ({
+    data,
+    columns,
+    renderCard,
+    onRowClick,
+    disableRowClick = false,
+}: TableCardViewProps) => {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {data.length === 0 ? (
@@ -31,11 +41,38 @@ export const TableCardView = ({ data, columns }: TableCardViewProps) => {
                 </div>
             ) : (
                 data.map((row) => {
+                    // Use custom renderCard if provided
+                    if (renderCard) {
+                        return (
+                            <div
+                                key={row.id}
+                                onClick={() =>
+                                    !disableRowClick && onRowClick?.(row.id)
+                                }
+                                className={
+                                    !disableRowClick && onRowClick
+                                        ? "cursor-pointer"
+                                        : ""
+                                }
+                            >
+                                {renderCard(row, columns)}
+                            </div>
+                        );
+                    }
+
+                    // Default card rendering
                     const name = String(row.columns.name || "");
                     return (
                         <div
                             key={row.id}
+                            onClick={() =>
+                                !disableRowClick && onRowClick?.(row.id)
+                            }
                             className={`bg-white dark:bg-gray-800 rounded-2xl border p-4 relative group transition-all ${
+                                !disableRowClick && onRowClick
+                                    ? "cursor-pointer"
+                                    : ""
+                            } ${
                                 row.selected
                                     ? "border-brand-500 bg-brand-50/30 dark:bg-brand-500/10"
                                     : "border-gray-200 hover:border-brand-200 dark:border-gray-700 dark:hover:border-brand-700"

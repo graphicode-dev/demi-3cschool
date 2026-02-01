@@ -154,7 +154,7 @@ export default function GroupsLevelsList() {
                         key={level.id}
                         title={level.title}
                         description={`${getTermDisplayName(level.programsCurriculum.name, t)} • ${level.description || t("groupsManagement:groups.levels.viewGroups", "View groups")}`}
-                        href={`/admin/groups/grades/${gradeId}/levels/${level.id}/regular`}
+                        href={`/admin/groups/grades/${gradeId}/levels/${level.id}/group`}
                         icon={<LevelIcon index={index} />}
                         iconBg={getIconBg(index)}
                         testId={`groups-level-card-${level.id}`}

@@ -44,12 +44,15 @@ export const useSessionsMetadataQuery = () => {
 /**
  * Hook for fetching sessions list with filtering and pagination
  */
-export const useSessionsListQuery = (params: SessionsListParams) => {
+export const useSessionsListQuery = (
+    params: SessionsListParams,
+    options?: { enabled?: boolean }
+) => {
     return useQuery({
         queryKey: sessionKeys.list(params),
         queryFn: ({ signal }) => sessionsApi.getList(params, signal),
         staleTime: 5 * 60 * 1000, // 5 minutes
-        enabled: true, // Always enabled for list queries
+        enabled: options?.enabled ?? true,
         retry: (failureCount, error) => {
             // Retry on network errors but not on 4xx errors
             if (error instanceof Error && error.message.includes("4")) {

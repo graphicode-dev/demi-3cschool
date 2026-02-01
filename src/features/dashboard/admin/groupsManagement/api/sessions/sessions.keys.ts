@@ -57,7 +57,6 @@ export const sessionKeys = {
                 name: params.name,
                 course_id: params.course_id,
                 level_id: params.level_id,
-                group_type: params.group_type,
                 location_type: params.location_type,
                 is_active: params.is_active,
                 max_capacity: params.max_capacity,

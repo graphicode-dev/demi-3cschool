@@ -25,8 +25,9 @@ const groupFormSchema = z.object({
     days: z.string().min(1, "Day is required"),
     startTime: z.string().min(1, "Start time is required"),
     endTime: z.string().min(1, "End time is required"),
-    ageGroupId: z.string().min(1, "Age group is required"),
     capacity: z.string().min(1, "Capacity is required"),
+    locationType: z.enum(["online", "offline"]),
+    trainerId: z.string().optional(),
 });
 
 type GroupFormData = z.infer<typeof groupFormSchema>;
@@ -43,14 +44,9 @@ const STEPS = [
         label: "Schedule",
     },
     {
-        id: "ageGroup",
-        labelKey: "groups.form.steps.ageGroup",
-        label: "Age Group",
-    },
-    {
         id: "capacity",
         labelKey: "groups.form.steps.capacity",
-        label: "Capacity",
+        label: "Capacity & Location",
     },
     {
         id: "confirmation",
@@ -65,8 +61,8 @@ const transformRecommendationToRecommendedGroup = (
     id: recommendation.group.id,
     name: recommendation.group.name,
     studentsCount: 0,
-    level: recommendation.group.level.title,
-    course: recommendation.group.course.title,
+    level: recommendation.group.level?.title || "-",
+    grade: recommendation.group.grade?.name || "-",
     status: recommendation.group.isActive ? "Active" : "Inactive",
     days: recommendation.group.schedules
         .map((s) => s.dayOfWeek.charAt(0).toUpperCase() + s.dayOfWeek.slice(1))
@@ -76,19 +72,12 @@ const transformRecommendationToRecommendedGroup = (
         : "-",
 });
 
-const MOCK_AGE_GROUPS = [
-    { value: "1", label: "6-8 years" },
-    { value: "2", label: "9-12 years" },
-    { value: "3", label: "13-16 years" },
-    { value: "4", label: "17+ years" },
+const LOCATION_TYPES = [
+    { value: "online", label: "Online" },
+    { value: "offline", label: "Offline" },
 ];
 
 const DAYS_OPTIONS = [
-    { value: "sunday", label: "Sunday" },
-    { value: "monday", label: "Monday" },
-    { value: "tuesday", label: "Tuesday" },
-    { value: "wednesday", label: "Wednesday" },
-    { value: "thursday", label: "Thursday" },
     { value: "friday", label: "Friday" },
     { value: "saturday", label: "Saturday" },
 ];
@@ -129,25 +118,26 @@ export default function RegularGroupCreate() {
             days: "",
             startTime: "",
             endTime: "",
-            ageGroupId: "",
             capacity: "10",
+            locationType: "online",
+            trainerId: "",
         },
     });
 
     // Only register fields that are NOT controlled by Controller
     useEffect(() => {
         register("days");
-        register("ageGroupId");
         register("capacity");
+        register("locationType");
+        register("trainerId");
     }, [register]);
 
     const stepFields: Record<number, (keyof GroupFormData)[]> = useMemo(
         () => ({
             0: ["groupName"],
             1: ["days", "startTime", "endTime"],
-            2: ["ageGroupId"],
-            3: ["capacity"],
-            4: [], // Confirmation step has no new fields
+            2: ["capacity", "locationType"],
+            3: [], // Confirmation step has no new fields
         }),
         []
     );
@@ -169,7 +159,6 @@ export default function RegularGroupCreate() {
             return {
                 course_id: "", // Not needed when we have levelId
                 level_id: levelId,
-                group_type: "regular",
                 capacity: parseInt(formValues.capacity, 10),
                 limit: 10,
             };
@@ -192,20 +181,18 @@ export default function RegularGroupCreate() {
     const summaryData = useMemo(() => {
         return {
             groupName: formValues.groupName,
-            program: "Standard Learning",
-            course: "",
+            grade: `Grade ${gradeId}`,
             level: `Level ${levelId}`,
             days: formValues.days
                 ? [getLabel(DAYS_OPTIONS, formValues.days)]
                 : [],
             startTime: formValues.startTime,
             endTime: formValues.endTime,
-            ageGroup: getLabel(MOCK_AGE_GROUPS, formValues.ageGroupId),
             capacity: parseInt(formValues.capacity, 10) || 0,
-            locationType: "Online",
-            groupType: "General",
+            locationType:
+                formValues.locationType === "online" ? "Online" : "Offline",
         };
-    }, [formValues, levelId]);
+    }, [formValues, levelId, gradeId]);
 
     const handleNext = async () => {
         const fields = stepFields[currentStep];
@@ -220,19 +207,17 @@ export default function RegularGroupCreate() {
         if (currentStep > 0) {
             setCurrentStep((prev) => prev - 1);
         } else {
-            navigate(`${basePath}/regular`);
+            navigate(`${basePath}/group`);
         }
     };
 
     const onSubmit = (data: GroupFormData) => {
         const payload = {
-            course_id: "", // Will be derived from level on backend
-            level_id: levelId || "",
+            level_id: parseInt(levelId || "0", 10),
             name: data.groupName,
+            grade_id: parseInt(gradeId || "0", 10),
             maxCapacity: parseInt(data.capacity, 10),
-            groupType: "regular" as const,
-            min_age: parseInt(data.ageGroupId, 10),
-            max_age: parseInt(data.ageGroupId, 10) + 2,
+            location_type: data.locationType as "online" | "offline",
             groupSchedules: [
                 {
                     day_of_week: data.days as any,
@@ -240,6 +225,9 @@ export default function RegularGroupCreate() {
                     endTime: data.endTime,
                 },
             ],
+            ...(data.locationType === "offline" && data.trainerId
+                ? { trainer_id: parseInt(data.trainerId, 10) }
+                : {}),
         };
 
         execute(() => mutateAsync(payload), {
@@ -247,7 +235,7 @@ export default function RegularGroupCreate() {
                 "groups.messages.createSuccess",
                 "Group created successfully"
             ),
-            onSuccess: () => navigate(`${basePath}/regular`),
+            onSuccess: () => navigate(`${basePath}/group`),
             setError,
             fieldMapping: {
                 name: "groupName",
@@ -345,10 +333,10 @@ export default function RegularGroupCreate() {
                                 <Form.Input
                                     name="startTime"
                                     type={{
-                                        type: "text",
+                                        type: "time",
                                         placeholder: t(
                                             "groups.form.fields.startTime.placeholder",
-                                            "e.g., 10:00 AM"
+                                            "Select start time"
                                         ),
                                     }}
                                     label={{
@@ -363,10 +351,10 @@ export default function RegularGroupCreate() {
                                 <Form.Input
                                     name="endTime"
                                     type={{
-                                        type: "text",
+                                        type: "time",
                                         placeholder: t(
                                             "groups.form.fields.endTime.placeholder",
-                                            "e.g., 12:00 PM"
+                                            "Select end time"
                                         ),
                                     }}
                                     label={{
@@ -386,80 +374,100 @@ export default function RegularGroupCreate() {
             case 2:
                 return (
                     <FormSection
-                        title={t("groups.form.sections.ageGroup", "Age Group")}
+                        title={t(
+                            "groups.form.sections.capacityLocation",
+                            "Capacity & Location"
+                        )}
                     >
-                        {/* Age Group Dropdown - Using Controller */}
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                {t(
-                                    "groups.form.fields.ageGroup.label",
-                                    "Age Group"
-                                )}
-                                <span className="text-red-500 ml-1">*</span>
-                            </label>
-                            <Controller
-                                name="ageGroupId"
-                                control={control}
-                                render={({ field }) => (
-                                    <select
-                                        {...field}
-                                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-500 focus:border-transparent"
-                                    >
-                                        <option value="">
-                                            {t(
-                                                "groups.form.fields.ageGroup.placeholder",
-                                                "Select Age Group"
-                                            )}
-                                        </option>
-                                        {MOCK_AGE_GROUPS.map((ageGroup) => (
-                                            <option
-                                                key={ageGroup.value}
-                                                value={ageGroup.value}
+                        <div className="space-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <Form.Input
+                                    name="capacity"
+                                    type={{
+                                        type: "number",
+                                        placeholder: t(
+                                            "groups.form.fields.capacity.placeholder",
+                                            "Enter maximum capacity"
+                                        ),
+                                        min: 1,
+                                        max: 100,
+                                    }}
+                                    label={{
+                                        text: t(
+                                            "groups.form.fields.capacity.label",
+                                            "Maximum Capacity"
+                                        ),
+                                        required: true,
+                                    }}
+                                    style={{ size: "md" }}
+                                />
+
+                                {/* Location Type Dropdown */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        {t(
+                                            "groups.form.fields.locationType.label",
+                                            "Location Type"
+                                        )}
+                                        <span className="text-red-500 ml-1">
+                                            *
+                                        </span>
+                                    </label>
+                                    <Controller
+                                        name="locationType"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <select
+                                                {...field}
+                                                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-500 focus:border-transparent"
                                             >
-                                                {ageGroup.label}
-                                            </option>
-                                        ))}
-                                    </select>
-                                )}
-                            />
-                            {errors.ageGroupId && (
-                                <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-                                    {errors.ageGroupId.message}
-                                </p>
+                                                {LOCATION_TYPES.map(
+                                                    (option) => (
+                                                        <option
+                                                            key={option.value}
+                                                            value={option.value}
+                                                        >
+                                                            {option.label}
+                                                        </option>
+                                                    )
+                                                )}
+                                            </select>
+                                        )}
+                                    />
+                                    {errors.locationType && (
+                                        <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                                            {errors.locationType.message}
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Trainer ID - only shown when offline */}
+                            {watch("locationType") === "offline" && (
+                                <Form.Input
+                                    name="trainerId"
+                                    type={{
+                                        type: "text",
+                                        placeholder: t(
+                                            "groups.form.fields.trainerId.placeholder",
+                                            "Enter trainer ID"
+                                        ),
+                                    }}
+                                    label={{
+                                        text: t(
+                                            "groups.form.fields.trainerId.label",
+                                            "Trainer ID"
+                                        ),
+                                        required: false,
+                                    }}
+                                    style={{ size: "md" }}
+                                />
                             )}
                         </div>
                     </FormSection>
                 );
 
             case 3:
-                return (
-                    <FormSection
-                        title={t("groups.form.sections.capacity", "Capacity")}
-                    >
-                        <Form.Input
-                            name="capacity"
-                            type={{
-                                type: "number",
-                                placeholder: t(
-                                    "groups.form.fields.capacity.placeholder",
-                                    "Enter maximum capacity"
-                                ),
-                                min: 1,
-                                max: 100,
-                            }}
-                            label={{
-                                text: t(
-                                    "groups.form.fields.capacity.label",
-                                    "Maximum Capacity"
-                                ),
-                                required: true,
-                            }}
-                            style={{ size: "md" }}
-                        />
-                    </FormSection>
-                );
-
-            case 4:
                 return (
                     <GroupSummary
                         data={summaryData}

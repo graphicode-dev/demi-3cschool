@@ -138,9 +138,6 @@ export default function PriceListEdit() {
                 "Level price updated successfully"
             ),
             setError,
-            fieldMapping: {
-                group_type: "groupType",
-            },
             onSuccess: () => navigate(salesPaths.priceLists.list()),
         });
     });

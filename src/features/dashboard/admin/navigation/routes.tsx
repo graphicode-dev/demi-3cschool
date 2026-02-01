@@ -161,7 +161,7 @@ const groupsManagementRoutes: RouteConfig[] = [
     },
     // Groups List for a Level
     {
-        path: "groups/grades/:gradeId/levels/:levelId/regular",
+        path: "groups/grades/:gradeId/levels/:levelId/group",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/list"),
         permissions: [group.viewAny],
@@ -170,7 +170,7 @@ const groupsManagementRoutes: RouteConfig[] = [
     },
     // Create Group for a Level
     {
-        path: "groups/grades/:gradeId/levels/:levelId/regular/create",
+        path: "groups/grades/:gradeId/levels/:levelId/group/create",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/create"),
         permissions: [group.create],
@@ -179,7 +179,7 @@ const groupsManagementRoutes: RouteConfig[] = [
     },
     // View Group
     {
-        path: "groups/grades/:gradeId/levels/:levelId/regular/view/:id",
+        path: "groups/grades/:gradeId/levels/:levelId/group/view/:id",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/view"),
         permissions: [group.view],
@@ -188,7 +188,7 @@ const groupsManagementRoutes: RouteConfig[] = [
     },
     // Edit Group
     {
-        path: "groups/grades/:gradeId/levels/:levelId/regular/edit/:id",
+        path: "groups/grades/:gradeId/levels/:levelId/group/edit/:id",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/edit"),
         permissions: [group.update],
@@ -197,7 +197,7 @@ const groupsManagementRoutes: RouteConfig[] = [
     },
     // Assign Students to Group
     {
-        path: "groups/grades/:gradeId/levels/:levelId/regular/:id/assign",
+        path: "groups/grades/:gradeId/levels/:levelId/group/:id/assign",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/assign"),
         permissions: [group.update],
@@ -206,7 +206,7 @@ const groupsManagementRoutes: RouteConfig[] = [
     },
     // Group Attendance
     {
-        path: "groups/grades/:gradeId/levels/:levelId/regular/:id/attendance",
+        path: "groups/grades/:gradeId/levels/:levelId/group/:id/attendance",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/attendance"),
         permissions: [studentAttendance.viewAny],
@@ -215,7 +215,7 @@ const groupsManagementRoutes: RouteConfig[] = [
     },
     // Group Instructor
     {
-        path: "groups/grades/:gradeId/levels/:levelId/regular/:id/instructor",
+        path: "groups/grades/:gradeId/levels/:levelId/group/:id/instructor",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/instructor"),
         permissions: [group.update],
@@ -224,12 +224,21 @@ const groupsManagementRoutes: RouteConfig[] = [
     },
     // Group Sessions
     {
-        path: "groups/grades/:gradeId/levels/:levelId/regular/:id/sessions",
+        path: "groups/grades/:gradeId/levels/:levelId/group/:id/sessions",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/sessions"),
         permissions: [groupSession.viewAny],
         meta: { titleKey: "groupsManagement:groups.sessions.title" },
         handle: { crumb: "groupsManagement:groups.sessions.title" },
+    },
+    // Group Final Level Quiz
+    {
+        path: "groups/grades/:gradeId/levels/:levelId/group/:id/final-quiz",
+        lazy: () =>
+            import("@/features/dashboard/admin/groupsManagement/pages/finalLevelQuiz"),
+        permissions: [group.view],
+        meta: { titleKey: "groupsManagement:groups.finalQuiz.title" },
+        handle: { crumb: "groupsManagement:groups.finalQuiz.title" },
     },
 ];
 

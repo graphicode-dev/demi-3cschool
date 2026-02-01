@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useEffect } from "react";
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
@@ -9,136 +9,61 @@ import { FormSection } from "../components";
 import { groupsPaths } from "../navigation/paths";
 import { useGroup, useUpdateGroup } from "../api";
 import { useMutationHandler } from "@/shared/api";
-
-import type {
-    Group,
-    GroupUpdatePayload,
-    GroupSchedulePayload,
-} from "../types/groups.types";
-import { ProgramsCurriculum } from "@/features/dashboard/admin/learning/types";
-import { useCoursesList } from "@/features/dashboard/admin/learning/pages/courses";
-import { useLevelsByCourse } from "@/features/dashboard/admin/learning/pages/levels";
+import type { Group, GroupUpdatePayload } from "../types/groups.types";
 import PageWrapper from "@/design-system/components/PageWrapper";
 
 const editGroupSchema = z.object({
     groupName: z.string().min(1, "Group name is required").max(255),
-    programType: z.enum(["standard", "professional"]),
-    courseId: z.string().min(1, "Course is required"),
     levelId: z.string().min(1, "Level is required"),
-    ageGroups: z.array(z.string()).min(1, "At least one age group is required"),
-    groupType: z.enum(["regular", "semi-private", "private"]),
-    locationType: z.enum(["online", "offline", "hybrid"]),
+    gradeId: z.string().min(1, "Grade is required"),
     maxCapacity: z.number().min(1, "Capacity must be at least 1").max(100),
-    days: z.array(z.string()).min(1, "At least one day is required"),
-    schedules: z.array(
-        z.object({
-            day: z.string(),
-            startTime: z.string().min(1, "Start time is required"),
-            endTime: z.string().min(1, "End time is required"),
-        })
-    ),
+    locationType: z.enum(["online", "offline"]),
+    trainerId: z.string().optional(),
+    days: z.string().min(1, "Day is required"),
+    startTime: z.string().min(1, "Start time is required"),
+    endTime: z.string().min(1, "End time is required"),
 });
 
 type EditGroupFormData = z.infer<typeof editGroupSchema>;
 
-const MOCK_COURSES = [
-    { value: "1", label: "Web Development" },
-    { value: "2", label: "Python Programming" },
-    { value: "3", label: "Data Science" },
-    { value: "4", label: "Scratch" },
-    { value: "5", label: "Game Development" },
-];
-
-const MOCK_LEVELS = [
-    { value: "1", label: "Level 1 - Beginner" },
-    { value: "2", label: "Level 2 - Intermediate" },
-    { value: "3", label: "Level 3 - Advanced" },
-];
-
-const AGE_GROUP_OPTIONS = [
-    { value: "6-8", label: "6-8 Ages" },
-    { value: "9-12", label: "9-12 Ages" },
-    { value: "13-17", label: "13-17 Ages" },
+const DAYS_OPTIONS = [
+    { value: "friday", label: "Friday" },
+    { value: "saturday", label: "Saturday" },
 ];
 
 const LOCATION_TYPES = [
     { value: "online", label: "Online" },
     { value: "offline", label: "Offline" },
-    { value: "hybrid", label: "Hybrid" },
-];
-
-const GROUP_TYPES = [
-    { value: "regular", label: "Regular" },
-    { value: "semi-private", label: "Semi Private" },
-    { value: "private", label: "Private" },
-];
-
-const PROGRAM_TYPES = [
-    { value: "standard", label: "Standard Learning" },
-    { value: "professional", label: "Professional Learning" },
-];
-
-const DAY_MAP: Record<string, string> = {
-    sun: "sunday",
-    mon: "monday",
-    tue: "tuesday",
-    wed: "wednesday",
-    thu: "thursday",
-    fri: "friday",
-    sat: "saturday",
-};
-
-const REVERSE_DAY_MAP: Record<string, string> = {
-    sunday: "sun",
-    monday: "mon",
-    tuesday: "tue",
-    wednesday: "wed",
-    thursday: "thu",
-    friday: "fri",
-    saturday: "sat",
-};
-
-const DAYS_OPTIONS = [
-    { value: "sun", label: "Sun" },
-    { value: "mon", label: "Mon" },
-    { value: "tue", label: "Tue" },
-    { value: "wed", label: "Wed" },
-    { value: "thu", label: "Thu" },
-    { value: "fri", label: "Fri" },
-    { value: "sat", label: "Sat" },
 ];
 
 const getDefaultFormData = (group: Group): EditGroupFormData => {
-    const ageGroup = `${group.ageRule.minAge}-${group.ageRule.maxAge - 2}`;
-    const days = group.schedules.map(
-        (s) => REVERSE_DAY_MAP[s.dayOfWeek] || s.dayOfWeek
-    );
+    const firstSchedule = group.schedules[0];
 
     return {
         groupName: group.name,
-        programType: "standard", // Default since not in Group entity
-        courseId: String(group.courseId), // Convert to string
-        levelId: String(group.levelId), // Convert to string
-        ageGroups: [ageGroup],
-        groupType:
-            group.groupType === "semi_private"
-                ? "semi-private"
-                : group.groupType,
-        locationType: group.locationType || "online",
+        levelId: String(group.level?.id || ""),
+        gradeId: String(group.grade?.id || ""),
         maxCapacity: group.maxCapacity,
-        days,
-        schedules: group.schedules.map((s) => ({
-            day: REVERSE_DAY_MAP[s.dayOfWeek] || s.dayOfWeek,
-            startTime: s.startTime,
-            endTime: s.endTime,
-        })),
+        locationType: (group.locationType as "online" | "offline") || "online",
+        trainerId: group.trainer?.id ? String(group.trainer.id) : "",
+        days: firstSchedule?.dayOfWeek || "",
+        startTime: firstSchedule?.startTime || "",
+        endTime: firstSchedule?.endTime || "",
     };
 };
 
 export default function EditGroupPage() {
     const { t } = useTranslation("groupsManagement");
     const navigate = useNavigate();
-    const { id: groupId } = useParams<{ id: string }>();
+    const {
+        gradeId,
+        levelId,
+        id: groupId,
+    } = useParams<{
+        gradeId: string;
+        levelId: string;
+        id: string;
+    }>();
     const { mutateAsync, isPending } = useUpdateGroup();
     const { execute } = useMutationHandler();
 
@@ -150,65 +75,6 @@ export default function EditGroupPage() {
     } = useGroup(groupId, {
         enabled: !!groupId,
     });
-
-    // Get courses based on program type
-    const selectedProgramType: ProgramsCurriculum | undefined = group
-        ? ("standard" as ProgramsCurriculum)
-        : undefined;
-
-    const { data: coursesData, isLoading: isLoadingCourses } = useCoursesList(
-        selectedProgramType
-            ? { programs_curriculum: selectedProgramType }
-            : undefined,
-        {
-            enabled: !!selectedProgramType,
-        }
-    );
-
-    const courses = useMemo(() => {
-        if (!coursesData) return [];
-        if ("items" in coursesData && Array.isArray(coursesData.items)) {
-            return coursesData.items;
-        }
-        if (Array.isArray(coursesData)) {
-            return coursesData;
-        }
-        return [];
-    }, [coursesData]);
-
-    // Get levels based on selected course
-    const selectedCourseId = group?.courseId || "";
-
-    const { data: levelsData, isLoading: isLoadingLevels } = useLevelsByCourse({
-        courseId: selectedCourseId,
-    });
-
-    const levels = useMemo(() => {
-        if (!levelsData) return [];
-        if ("items" in levelsData && Array.isArray(levelsData.items)) {
-            return levelsData.items;
-        }
-        if (Array.isArray(levelsData)) {
-            return levelsData;
-        }
-        return [];
-    }, [levelsData]);
-
-    const courseOptions = useMemo(() => {
-        return courses.map(
-            (course: { id: string | number; title: string }) => ({
-                value: String(course.id), // Ensure string value
-                label: course.title,
-            })
-        );
-    }, [courses]);
-
-    const levelOptions = useMemo(() => {
-        return levels.map((level: { id: string | number; title: string }) => ({
-            value: String(level.id), // Ensure string value
-            label: level.title,
-        }));
-    }, [levels]);
 
     // Form setup
     const {
@@ -222,15 +88,14 @@ export default function EditGroupPage() {
         resolver: zodResolver(editGroupSchema),
         defaultValues: {
             groupName: "",
-            programType: "standard",
-            courseId: "",
             levelId: "",
-            ageGroups: [],
-            groupType: "regular",
-            locationType: "online",
+            gradeId: "",
             maxCapacity: 10,
-            days: [],
-            schedules: [],
+            locationType: "online",
+            trainerId: "",
+            days: "",
+            startTime: "",
+            endTime: "",
         },
     });
 
@@ -242,121 +107,25 @@ export default function EditGroupPage() {
         }
     }, [group, reset]);
 
-    const selectedDays = watch("days");
-    const schedules = watch("schedules");
-
-    const handleDayToggle = useCallback(
-        (day: string) => {
-            const currentDays = selectedDays || [];
-            const currentSchedules = schedules || [];
-
-            if (currentDays.includes(day)) {
-                setValue(
-                    "days",
-                    currentDays.filter((d) => d !== day)
-                );
-                setValue(
-                    "schedules",
-                    currentSchedules.filter((s) => s.day !== day)
-                );
-            } else {
-                setValue("days", [...currentDays, day]);
-                setValue("schedules", [
-                    ...currentSchedules,
-                    { day, startTime: "10:00 AM", endTime: "12:00 PM" },
-                ]);
-            }
-        },
-        [selectedDays, schedules, setValue]
-    );
-
-    const updateScheduleTime = useCallback(
-        (day: string, field: "startTime" | "endTime", value: string) => {
-            const currentSchedules = schedules || [];
-            const updatedSchedules = currentSchedules.map((s) =>
-                s.day === day ? { ...s, [field]: value } : s
-            );
-            setValue("schedules", updatedSchedules);
-        },
-        [schedules, setValue]
-    );
-
-    // Helper function to convert time to H:i format (24-hour)
-    const formatTimeForAPI = (timeString: string): string => {
-        if (!timeString) return "";
-
-        console.log("Original time:", timeString);
-
-        // If already in H:i format, return as is
-        if (/^\d{1,2}:\d{2}$/.test(timeString)) {
-            console.log("Already in H:i format:", timeString);
-            return timeString;
-        }
-
-        // Convert 12-hour format (e.g., "10:00 AM") to 24-hour format (e.g., "10:00")
-        const match = timeString.match(/(\d{1,2}):(\d{2})\s*(AM|PM)/i);
-        if (match) {
-            const [, hours, minutes, period] = match;
-            let hour = parseInt(hours);
-            const minute = minutes;
-
-            console.log("Parsed time:", {
-                hours,
-                minutes,
-                period,
-                hour,
-                minute,
-            });
-
-            if (period.toUpperCase() === "PM" && hour !== 12) {
-                hour = hour + 12;
-            } else if (period.toUpperCase() === "AM" && hour === 12) {
-                hour = 0;
-            }
-
-            const formattedTime = `${hour.toString().padStart(2, "0")}:${minute}`;
-            console.log("Formatted time:", formattedTime);
-            return formattedTime;
-        }
-
-        // Fallback: try to extract just HH:MM from any format
-        const timeMatch = timeString.match(/(\d{1,2}):(\d{2})/);
-        if (timeMatch) {
-            const [, hours, minutes] = timeMatch;
-            const hour = parseInt(hours);
-            const minute = minutes;
-            const formattedTime = `${hour.toString().padStart(2, "0")}:${minute}`;
-            console.log("Extracted time:", formattedTime);
-            return formattedTime;
-        }
-
-        console.log("Could not parse time, returning original");
-        return timeString;
-    };
-
     const onSubmit = (data: EditGroupFormData) => {
         if (!groupId) return;
 
-        // Transform form data to API payload
-        const ageGroup = data.ageGroups[0];
-        const [minAge] = ageGroup.split("-").map(Number);
-
         const payload: GroupUpdatePayload = {
+            level_id: parseInt(data.levelId, 10),
             name: data.groupName,
-            course_id: data.courseId,
-            level_id: data.levelId,
+            grade_id: parseInt(data.gradeId, 10),
             maxCapacity: data.maxCapacity,
-            groupType:
-                data.groupType === "semi-private"
-                    ? "semi_private"
-                    : (data.groupType as "regular" | "private"),
-            min_age: minAge,
-            max_age: minAge + 2,
-            groupSchedules: data.schedules.map((schedule) => ({
-                day_of_week: DAY_MAP[schedule.day] as any,
-                startTime: formatTimeForAPI(schedule.startTime),
-                endTime: formatTimeForAPI(schedule.endTime),
-            })),
+            location_type: data.locationType,
+            groupSchedules: [
+                {
+                    day_of_week: data.days as any,
+                    startTime: data.startTime,
+                    endTime: data.endTime,
+                },
+            ],
+            ...(data.locationType === "offline" && data.trainerId
+                ? { trainer_id: parseInt(data.trainerId, 10) }
+                : {}),
         };
 
         execute(() => mutateAsync({ id: groupId, data: payload }), {
@@ -364,14 +133,10 @@ export default function EditGroupPage() {
                 "groups.messages.updateSuccess",
                 "Group updated successfully"
             ),
-            onSuccess: () => navigate(groupsPaths.regularView(groupId)),
+            onSuccess: () =>
+                navigate(groupsPaths.regularView(gradeId, levelId, groupId)),
         });
     };
-
-    const getDayLabel = useCallback((dayValue: string) => {
-        const day = DAYS_OPTIONS.find((d) => d.value === dayValue);
-        return day?.label || dayValue;
-    }, []);
 
     // Show loading state while fetching group data
     if (isLoadingGroup) {
@@ -466,483 +231,181 @@ export default function EditGroupPage() {
                         />
                     </FormSection>
 
-                    {/* Program & Course */}
+                    {/* Schedule */}
                     <FormSection
-                        title={t(
-                            "groups.form.sections.programCourse",
-                            "Program & Course"
-                        )}
+                        title={t("groups.form.sections.schedule", "Schedule")}
                     >
                         <div className="space-y-6">
-                            {/* Program Type */}
+                            {/* Days Dropdown */}
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-                                    {t(
-                                        "groups.form.fields.programType.label",
-                                        "Program Type"
-                                    )}{" "}
-                                    <span className="text-red-500">*</span>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    {t("groups.form.fields.days.label", "Days")}
+                                    <span className="text-red-500 ml-1">*</span>
                                 </label>
                                 <Controller
-                                    name="programType"
+                                    name="days"
                                     control={control}
                                     render={({ field }) => (
                                         <select
                                             {...field}
                                             className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-500 focus:border-transparent"
                                         >
-                                            {PROGRAM_TYPES.map((program) => (
-                                                <option
-                                                    key={program.value}
-                                                    value={program.value}
-                                                >
-                                                    {program.label}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    )}
-                                />
-                                {errors.programType && (
-                                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-                                        {errors.programType.message}
-                                    </p>
-                                )}
-                            </div>
-
-                            {/* Course Dropdown */}
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                    {t(
-                                        "groups.form.fields.course.label",
-                                        "Course"
-                                    )}
-                                    <span className="text-red-500 ml-1">*</span>
-                                </label>
-                                <Controller
-                                    name="courseId"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <select
-                                            {...field}
-                                            disabled={
-                                                isLoadingCourses ||
-                                                courseOptions.length === 0
-                                            }
-                                            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
-                                        >
                                             <option value="">
                                                 {t(
-                                                    "groups.form.fields.course.placeholder",
-                                                    "Select Course"
+                                                    "groups.form.fields.days.placeholder",
+                                                    "Select Day"
                                                 )}
                                             </option>
-                                            {courseOptions.map((course) => (
+                                            {DAYS_OPTIONS.map((day) => (
                                                 <option
-                                                    key={course.value}
-                                                    value={course.value}
+                                                    key={day.value}
+                                                    value={day.value}
                                                 >
-                                                    {course.label}
+                                                    {day.label}
                                                 </option>
                                             ))}
                                         </select>
                                     )}
                                 />
-                                {errors.courseId && (
+                                {errors.days && (
                                     <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-                                        {errors.courseId.message}
+                                        {errors.days.message}
                                     </p>
                                 )}
                             </div>
 
-                            {/* Level Dropdown */}
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                    {t(
-                                        "groups.form.fields.level.label",
-                                        "Level"
-                                    )}
-                                    <span className="text-red-500 ml-1">*</span>
-                                </label>
-                                <Controller
-                                    name="levelId"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <select
-                                            {...field}
-                                            disabled={
-                                                isLoadingLevels ||
-                                                levelOptions.length === 0
-                                            }
-                                            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
-                                        >
-                                            <option value="">
-                                                {t(
-                                                    "groups.form.fields.level.placeholder",
-                                                    "Select Level"
-                                                )}
-                                            </option>
-                                            {levelOptions.map((level) => (
-                                                <option
-                                                    key={level.value}
-                                                    value={level.value}
-                                                >
-                                                    {level.label}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    )}
-                                />
-                                {errors.levelId && (
-                                    <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-                                        {errors.levelId.message}
-                                    </p>
-                                )}
-                            </div>
-                        </div>
-                    </FormSection>
-
-                    {/* Student Details */}
-                    <FormSection
-                        title={t(
-                            "groups.edit.sections.studentDetails",
-                            "Student Details"
-                        )}
-                    >
-                        <div className="space-y-6">
-                            {/* Age Group */}
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-                                    {t(
-                                        "groups.form.fields.ageGroup.label",
-                                        "Age Group"
-                                    )}{" "}
-                                    <span className="text-red-500">*</span>
-                                </label>
-                                <Controller
-                                    name="ageGroups"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <div className="flex items-center gap-6">
-                                            {AGE_GROUP_OPTIONS.map((option) => (
-                                                <label
-                                                    key={option.value}
-                                                    className="flex items-center gap-2 cursor-pointer"
-                                                >
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={field.value?.includes(
-                                                            option.value
-                                                        )}
-                                                        onChange={(e) => {
-                                                            const current =
-                                                                field.value ||
-                                                                [];
-                                                            if (
-                                                                e.target.checked
-                                                            ) {
-                                                                field.onChange([
-                                                                    ...current,
-                                                                    option.value,
-                                                                ]);
-                                                            } else {
-                                                                field.onChange(
-                                                                    current.filter(
-                                                                        (v) =>
-                                                                            v !==
-                                                                            option.value
-                                                                    )
-                                                                );
-                                                            }
-                                                        }}
-                                                        className="w-4 h-4 text-brand-500 border-gray-300 rounded focus:ring-brand-500"
-                                                    />
-                                                    <span className="text-sm text-gray-700 dark:text-gray-300">
-                                                        {option.label}
-                                                    </span>
-                                                </label>
-                                            ))}
-                                        </div>
-                                    )}
-                                />
-                                <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                                    {t(
-                                        "groups.edit.fields.ageGroup.hint",
-                                        "Select one or more age groups for this class"
-                                    )}
-                                </p>
-                            </div>
-
-                            {/* Group Type */}
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-                                    {t(
-                                        "groups.edit.fields.groupType.label",
-                                        "Group Type"
-                                    )}{" "}
-                                    <span className="text-red-500">*</span>
-                                </label>
-                                <Controller
-                                    name="groupType"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <div className="flex items-center gap-6">
-                                            <label className="flex items-center gap-2 cursor-pointer">
-                                                <input
-                                                    type="radio"
-                                                    {...field}
-                                                    value="regular"
-                                                    checked={
-                                                        field.value ===
-                                                        "regular"
-                                                    }
-                                                    className="w-4 h-4 text-brand-500 border-gray-300 focus:ring-brand-500"
-                                                />
-                                                <span className="text-sm text-gray-700 dark:text-gray-300">
-                                                    {t(
-                                                        "groups.edit.fields.groupType.general",
-                                                        "General"
-                                                    )}
-                                                </span>
-                                            </label>
-                                            <label className="flex items-center gap-2 cursor-pointer">
-                                                <input
-                                                    type="radio"
-                                                    {...field}
-                                                    value="semi-private"
-                                                    checked={
-                                                        field.value ===
-                                                        "semi-private"
-                                                    }
-                                                    className="w-4 h-4 text-brand-500 border-gray-300 focus:ring-brand-500"
-                                                />
-                                                <span className="text-sm text-gray-700 dark:text-gray-300">
-                                                    {t(
-                                                        "groups.edit.fields.groupType.semiPrivate",
-                                                        "Semi-Private"
-                                                    )}
-                                                </span>
-                                            </label>
-                                            <label className="flex items-center gap-2 cursor-pointer">
-                                                <input
-                                                    type="radio"
-                                                    {...field}
-                                                    value="private"
-                                                    checked={
-                                                        field.value ===
-                                                        "private"
-                                                    }
-                                                    className="w-4 h-4 text-brand-500 border-gray-300 focus:ring-brand-500"
-                                                />
-                                                <span className="text-sm text-gray-700 dark:text-gray-300">
-                                                    {t(
-                                                        "groups.edit.fields.groupType.private",
-                                                        "Private"
-                                                    )}
-                                                </span>
-                                            </label>
-                                        </div>
-                                    )}
-                                />
-                            </div>
-                        </div>
-                    </FormSection>
-
-                    {/* Location & Capacity */}
-                    <FormSection
-                        title={t(
-                            "groups.edit.sections.locationCapacity",
-                            "Location & Capacity"
-                        )}
-                    >
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
+                            {/* Time inputs */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <Form.Input
-                                    name="locationType"
+                                    name="startTime"
                                     type={{
-                                        type: "dropdown",
+                                        type: "time",
                                         placeholder: t(
-                                            "groups.edit.fields.locationType.placeholder",
-                                            "Select Location Type"
+                                            "groups.form.fields.startTime.placeholder",
+                                            "Select start time"
                                         ),
-                                        options: LOCATION_TYPES,
                                     }}
                                     label={{
                                         text: t(
-                                            "groups.edit.fields.locationType.label",
-                                            "Location Type"
+                                            "groups.form.fields.startTime.label",
+                                            "Start Time"
                                         ),
                                         required: true,
                                     }}
                                     style={{ size: "md" }}
                                 />
-                                <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                                    {t(
-                                        "groups.edit.fields.locationType.hint",
-                                        "All groups are conducted online"
-                                    )}
-                                </p>
+                                <Form.Input
+                                    name="endTime"
+                                    type={{
+                                        type: "time",
+                                        placeholder: t(
+                                            "groups.form.fields.endTime.placeholder",
+                                            "Select end time"
+                                        ),
+                                    }}
+                                    label={{
+                                        text: t(
+                                            "groups.form.fields.endTime.label",
+                                            "End Time"
+                                        ),
+                                        required: true,
+                                    }}
+                                    style={{ size: "md" }}
+                                />
                             </div>
-                            <Form.Input
-                                name="maxCapacity"
-                                type={{
-                                    type: "number",
-                                    placeholder: t(
-                                        "groups.form.fields.capacity.placeholder",
-                                        "Enter maximum capacity"
-                                    ),
-                                    min: 1,
-                                    max: 100,
-                                }}
-                                label={{
-                                    text: t(
-                                        "groups.edit.fields.maxCapacity.label",
-                                        "Maximum Capacity"
-                                    ),
-                                    required: true,
-                                }}
-                                style={{ size: "md" }}
-                            />
                         </div>
                     </FormSection>
 
-                    {/* Schedule */}
+                    {/* Capacity & Location */}
                     <FormSection
-                        title={t("groups.form.sections.schedule", "Schedule")}
+                        title={t(
+                            "groups.form.sections.capacityLocation",
+                            "Capacity & Location"
+                        )}
                     >
                         <div className="space-y-6">
-                            {/* Days Selection */}
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-                                    {t("groups.form.fields.days.label", "Days")}{" "}
-                                    <span className="text-red-500">*</span>
-                                </label>
-                                <div className="flex flex-wrap gap-2">
-                                    {DAYS_OPTIONS.map((day) => {
-                                        const isSelected =
-                                            selectedDays?.includes(day.value);
-                                        return (
-                                            <button
-                                                key={day.value}
-                                                type="button"
-                                                onClick={() =>
-                                                    handleDayToggle(day.value)
-                                                }
-                                                aria-pressed={isSelected}
-                                                aria-label={`${day.label} - ${isSelected ? "selected" : "not selected"}`}
-                                                className={`px-4 py-2 text-sm font-medium rounded-lg border transition-colors ${
-                                                    isSelected
-                                                        ? "bg-brand-500 text-white border-brand-500"
-                                                        : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:border-brand-300"
-                                                }`}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <Form.Input
+                                    name="maxCapacity"
+                                    type={{
+                                        type: "number",
+                                        placeholder: t(
+                                            "groups.form.fields.capacity.placeholder",
+                                            "Enter maximum capacity"
+                                        ),
+                                        min: 1,
+                                        max: 100,
+                                    }}
+                                    label={{
+                                        text: t(
+                                            "groups.form.fields.capacity.label",
+                                            "Maximum Capacity"
+                                        ),
+                                        required: true,
+                                    }}
+                                    style={{ size: "md" }}
+                                />
+
+                                {/* Location Type Dropdown */}
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        {t(
+                                            "groups.form.fields.locationType.label",
+                                            "Location Type"
+                                        )}
+                                        <span className="text-red-500 ml-1">
+                                            *
+                                        </span>
+                                    </label>
+                                    <Controller
+                                        name="locationType"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <select
+                                                {...field}
+                                                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-500 focus:border-transparent"
                                             >
-                                                {day.label}
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                                <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
-                                    {t(
-                                        "groups.edit.fields.days.hint",
-                                        "Select one or more days per week"
+                                                {LOCATION_TYPES.map(
+                                                    (option) => (
+                                                        <option
+                                                            key={option.value}
+                                                            value={option.value}
+                                                        >
+                                                            {option.label}
+                                                        </option>
+                                                    )
+                                                )}
+                                            </select>
+                                        )}
+                                    />
+                                    {errors.locationType && (
+                                        <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                                            {errors.locationType.message}
+                                        </p>
                                     )}
-                                </p>
+                                </div>
                             </div>
 
-                            {/* Time for Each Day */}
-                            {selectedDays && selectedDays.length > 0 && (
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-                                        {t(
-                                            "groups.edit.fields.timeForEachDay.label",
-                                            "Time for Each Day"
-                                        )}{" "}
-                                        <span className="text-red-500">*</span>
-                                    </label>
-                                    <div className="space-y-4">
-                                        {selectedDays.map((dayValue) => {
-                                            const schedule = schedules?.find(
-                                                (s) => s.day === dayValue
-                                            );
-                                            return (
-                                                <div
-                                                    key={dayValue}
-                                                    className="flex items-center gap-4"
-                                                >
-                                                    <div className="flex items-center gap-2 min-w-[100px]">
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={true}
-                                                            readOnly
-                                                            className="w-4 h-4 text-brand-500 border-gray-300 rounded focus:ring-brand-500"
-                                                        />
-                                                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                                                            {getDayLabel(
-                                                                dayValue
-                                                            )}
-                                                        </span>
-                                                    </div>
-                                                    <div className="flex items-center gap-4 flex-1">
-                                                        <div className="flex-1">
-                                                            <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
-                                                                {t(
-                                                                    "groups.form.fields.startTime.label",
-                                                                    "Start Time"
-                                                                )}
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                value={
-                                                                    schedule?.startTime ||
-                                                                    ""
-                                                                }
-                                                                onChange={(e) =>
-                                                                    updateScheduleTime(
-                                                                        dayValue,
-                                                                        "startTime",
-                                                                        e.target
-                                                                            .value
-                                                                    )
-                                                                }
-                                                                placeholder="10:00 AM"
-                                                                aria-label={`Start time for ${getDayLabel(dayValue)}`}
-                                                                className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
-                                                            />
-                                                        </div>
-                                                        <span className="text-gray-400 mt-5">
-                                                            —
-                                                        </span>
-                                                        <div className="flex-1">
-                                                            <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
-                                                                {t(
-                                                                    "groups.form.fields.endTime.label",
-                                                                    "End Time"
-                                                                )}
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                value={
-                                                                    schedule?.endTime ||
-                                                                    ""
-                                                                }
-                                                                onChange={(e) =>
-                                                                    updateScheduleTime(
-                                                                        dayValue,
-                                                                        "endTime",
-                                                                        e.target
-                                                                            .value
-                                                                    )
-                                                                }
-                                                                placeholder="12:00 PM"
-                                                                aria-label={`End time for ${getDayLabel(dayValue)}`}
-                                                                className="w-full px-3 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                </div>
+                            {/* Trainer ID - only shown when offline */}
+                            {watch("locationType") === "offline" && (
+                                <Form.Input
+                                    name="trainerId"
+                                    type={{
+                                        type: "text",
+                                        placeholder: t(
+                                            "groups.form.fields.trainerId.placeholder",
+                                            "Enter trainer ID"
+                                        ),
+                                    }}
+                                    label={{
+                                        text: t(
+                                            "groups.form.fields.trainerId.label",
+                                            "Trainer ID"
+                                        ),
+                                        required: false,
+                                    }}
+                                    style={{ size: "md" }}
+                                />
                             )}
                         </div>
                     </FormSection>

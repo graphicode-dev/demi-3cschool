@@ -155,12 +155,12 @@ export const groupsApi = {
         params: GroupsByLevelParams,
         signal?: AbortSignal
     ): Promise<Group[] | PaginatedData<Group>> => {
-        const { levelId, groupType = "regular", page } = params;
+        const { levelId, page } = params;
 
         const response = await api.get<
             ListResponse<Group> | PaginatedResponse<Group>
         >(`${BASE_URL}/level/${levelId}`, {
-            params: { group_type: groupType, ...(page ? { page } : {}) },
+            params: { ...(page ? { page } : {}) },
             signal,
         });
 

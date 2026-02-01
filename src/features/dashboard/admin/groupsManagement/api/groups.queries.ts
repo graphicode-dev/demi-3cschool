@@ -201,7 +201,6 @@ export function useGroup(
  * const { data, isLoading } = useGroupRecommendations({
  *     course_id: '1',
  *     level_id: '1',
- *     group_type: 'regular',
  *     capacity: 5,
  *     limit: 10,
  * });

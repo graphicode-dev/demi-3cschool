@@ -3,11 +3,11 @@ import { useEffect } from "react";
 import { RecommendedGroupCard } from "./RecommendedGroupCard";
 
 interface RecommendedGroup {
-    id: string;
+    id: string | number;
     name: string;
     studentsCount: number;
     level: string;
-    course: string;
+    grade: string;
     status: string;
     days: string;
     times: string;

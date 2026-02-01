@@ -60,45 +60,6 @@
             }
         }
     },
-    "lessons": {
-        "title": "Lessons",
-        "subtitle": "Manage lessons for this grade and term",
-        "searchPlaceholder": "Search lessons...",
-        "showing": "Showing",
-        "of": "of",
-        "lessonsLabel": "lessons",
-        "actions": {
-            "add": "Add Lesson",
-            "edit": "Edit Lesson",
-            "delete": "Delete Lesson",
-            "view": "View Lesson"
-        },
-        "empty": {
-            "title": "No Lessons Found",
-            "message": "Create your first lesson to get started",
-            "searchMessage": "No lessons match your search criteria"
-        },
-        "deleteDialog": {
-            "title": "Delete Lesson",
-            "message": "Are you sure you want to delete this lesson? This action cannot be undone."
-        },
-        "toast": {
-            "deleteSuccess": "Lesson deleted successfully"
-        },
-        "form": {
-            "create": {
-                "title": "Create Lesson",
-                "subtitle": "Add a new lesson"
-            },
-            "edit": {
-                "title": "Edit Lesson",
-                "subtitle": "Update lesson details"
-            },
-            "view": {
-                "title": "Lesson Details"
-            }
-        }
-    },
     "courses": {
         "breadcrumb": "Courses",
         "title": "Courses",
@@ -331,7 +292,41 @@
         },
         "empty": {
             "title": "No Content Selected",
-            "description": "Select a content item from the list or add new content to get started"
+            "description": "Select a content item from the list or add new content to get started",
+            "message": "Create your first lesson to get started",
+            "searchMessage": "No lessons match your search criteria"
+        },
+        "title": "Lessons",
+        "subtitle": "Manage lessons for this grade and term",
+        "searchPlaceholder": "Search lessons...",
+        "showing": "Showing",
+        "of": "of",
+        "lessonsLabel": "lessons",
+        "actions": {
+            "add": "Add Lesson",
+            "edit": "Edit Lesson",
+            "delete": "Delete Lesson",
+            "view": "View Lesson"
+        },
+        "deleteDialog": {
+            "title": "Delete Lesson",
+            "message": "Are you sure you want to delete this lesson? This action cannot be undone."
+        },
+        "toast": {
+            "deleteSuccess": "Lesson deleted successfully"
+        },
+        "form": {
+            "create": {
+                "title": "Create Lesson",
+                "subtitle": "Add a new lesson"
+            },
+            "edit": {
+                "title": "Edit Lesson",
+                "subtitle": "Update lesson details"
+            },
+            "view": {
+                "title": "Lesson Details"
+            }
         }
     }
 }

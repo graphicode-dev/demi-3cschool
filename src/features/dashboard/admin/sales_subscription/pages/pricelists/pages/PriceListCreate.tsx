@@ -102,9 +102,6 @@ export default function PriceListCreate() {
                 "Level price created successfully"
             ),
             setError,
-            fieldMapping: {
-                group_type: "groupType",
-            },
             onSuccess: () => navigate(salesPaths.priceLists.list()),
         });
     });

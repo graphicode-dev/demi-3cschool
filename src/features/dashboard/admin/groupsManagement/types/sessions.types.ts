@@ -96,7 +96,7 @@ export interface SessionsListParams {
     name?: string;
     course_id?: number;
     level_id?: number;
-    group_type?: "regular" | "semi_private" | "private";
+    group_id?: number;
     location_type?: "online" | "offline" | "hybrid";
     is_active?: boolean;
     max_capacity?: number;

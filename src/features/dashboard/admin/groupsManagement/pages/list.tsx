@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { DynamicTable } from "@/design-system/components/table";
 import type { TableColumn, TableData } from "@/shared/types";
 import { StatCard } from "../components";
-import { groupsPaths } from "../navigation/paths";
+import { GroupCard } from "../components/GroupCard";
 import { useGroupsByLevel, type Group, type PaginatedData } from "../api";
 import PageWrapper from "@/design-system/components/PageWrapper";
 
@@ -81,13 +81,13 @@ const formatScheduleTimes = (schedules: Group["schedules"]): string => {
  * Transform API Group data to TableData format
  */
 const transformGroupToTableData = (group: Group): TableData => ({
-    id: group.id,
+    id: String(group.id),
     avatar: "",
     columns: {
         name: group.name,
-        course: group.course?.title || "-",
         level: group.level?.title || "-",
-        ageGroup: `${group.ageRule?.minAge || 0} - ${group.ageRule?.maxAge || 0}`,
+        grade: group.grade?.name || "-",
+        programsCurriculum: group.programsCurriculum?.caption || "-",
         capacity: group.maxCapacity,
         locationType: group.locationType || "-",
         days: formatSchedules(group.schedules),
@@ -111,7 +111,6 @@ function RegularGroupsPage() {
     // Fetch groups by level ID
     const { data, isLoading, isError } = useGroupsByLevel({
         levelId: levelId || "",
-        groupType: "regular",
         page: currentPage,
     });
 
@@ -130,6 +129,39 @@ function RegularGroupsPage() {
         [groups]
     );
 
+    // Create a map for looking up original group data by ID
+    const groupsMap = useMemo(() => {
+        const map = new Map<string, Group>();
+        groups.forEach((group) => map.set(String(group.id), group));
+        return map;
+    }, [groups]);
+
+    // Custom card renderer for groups
+    const renderGroupCard = useCallback(
+        (row: TableData) => {
+            const group = groupsMap.get(row.id);
+            if (!group) return null;
+
+            return (
+                <GroupCard
+                    name={group.name}
+                    levelTitle={group.level?.title}
+                    gradeName={group.grade?.name}
+                    programCaption={group.programsCurriculum?.caption}
+                    locationType={group.locationType || undefined}
+                    trainerName={group.trainer?.name}
+                    schedules={group.schedules}
+                    maxCapacity={group.maxCapacity}
+                    enrolledCount={0}
+                    sessionCount={0}
+                    totalSessions={0}
+                    isActive={group.isActive ?? true}
+                />
+            );
+        },
+        [groupsMap]
+    );
+
     // Calculate stats from data
     const stats = useMemo(() => {
         const activeCount = groups.filter((g) => g.isActive).length;
@@ -146,7 +178,7 @@ function RegularGroupsPage() {
 
     const handleRowClick = useCallback(
         (rowId: string) => {
-            navigate(`${basePath}/regular/view/${rowId}`);
+            navigate(`${basePath}/group/view/${rowId}`);
         },
         [navigate, basePath]
     );
@@ -160,21 +192,21 @@ function RegularGroupsPage() {
                 sortable: true,
             },
             {
-                id: "course",
-                header: t("groups.table.course", "Course"),
-                accessorKey: "course",
-                sortable: true,
-            },
-            {
                 id: "level",
                 header: t("groups.table.level", "Level"),
                 accessorKey: "level",
                 sortable: true,
             },
             {
-                id: "ageGroup",
-                header: t("groups.table.ageGroup", "Age Group"),
-                accessorKey: "ageGroup",
+                id: "grade",
+                header: t("groups.table.grade", "Grade"),
+                accessorKey: "grade",
+                sortable: true,
+            },
+            {
+                id: "programsCurriculum",
+                header: t("groups.table.programsCurriculum", "Curriculum"),
+                accessorKey: "programsCurriculum",
                 sortable: true,
             },
             {
@@ -222,7 +254,7 @@ function RegularGroupsPage() {
                 backButton: true,
                 actions: (
                     <Link
-                        to={`${basePath}/regular/create`}
+                        to={`${basePath}/group/create`}
                         className="inline-flex items-center gap-2 px-4 py-2.5 bg-brand-500 text-white text-sm font-medium rounded-lg hover:bg-brand-600 transition-colors"
                     >
                         <svg
@@ -265,10 +297,10 @@ function RegularGroupsPage() {
             </div>
 
             <DynamicTable
+                initialView="cards"
                 title={t("groups.table.title", "Class Name")}
                 data={tableData}
                 columns={columns}
-                initialView="grid"
                 itemsPerPage={paginationInfo?.perPage ?? 10}
                 hideHeader={true}
                 onRowClick={handleRowClick}
@@ -276,6 +308,7 @@ function RegularGroupsPage() {
                 lastPage={paginationInfo?.lastPage}
                 totalCount={groups.length}
                 onPageChange={paginationInfo ? handlePageChange : undefined}
+                renderCard={renderGroupCard}
             />
 
             {isLoading && (

@@ -48,8 +48,45 @@ export interface GroupCourseRef {
  * Level reference in group
  */
 export interface GroupLevelRef {
-    id: string;
+    id: string | number;
     title: string;
+    slug?: string;
+}
+
+/**
+ * Programs curriculum reference in group
+ */
+export interface GroupProgramsCurriculumRef {
+    id: string | number;
+    name: string;
+    caption: string;
+    description?: string;
+    isActive?: number;
+}
+
+/**
+ * Grade reference in group
+ */
+export interface GroupGradeRef {
+    id: string | number;
+    name: string;
+    code: string;
+}
+
+/**
+ * Trainer reference in group
+ */
+export interface GroupTrainerRef {
+    id?: string | number;
+    name?: string;
+}
+
+/**
+ * Primary teacher reference in group
+ */
+export interface GroupPrimaryTeacherRef {
+    id?: string | number;
+    name?: string;
 }
 
 /**
@@ -77,18 +114,18 @@ export interface GroupAgeRule {
  * Group entity
  */
 export interface Group {
-    id: string;
-    courseId: string;
-    levelId: string;
+    id: string | number;
     name: string;
     maxCapacity: number;
     locationType: LocationType | null;
-    groupType: GroupType;
     isActive: boolean | null;
-    course: GroupCourseRef;
     level: GroupLevelRef;
+    programsCurriculum: GroupProgramsCurriculumRef;
+    grade: GroupGradeRef;
     schedules: GroupSchedule[];
-    ageRule: GroupAgeRule;
+    trainer?: GroupTrainerRef;
+    gradeRule?: GroupGradeRef;
+    primaryTeacher?: GroupPrimaryTeacherRef;
     createdAt: string;
     updatedAt: string;
 }
@@ -187,7 +224,6 @@ export interface GroupsListParams {
  */
 export interface GroupsByLevelParams {
     levelId: string;
-    groupType?: GroupType;
     page?: number;
 }
 
@@ -208,28 +244,26 @@ export interface GroupSchedulePayload {
  * Create group payload
  */
 export interface GroupCreatePayload {
-    course_id: string;
-    level_id: string;
+    level_id: string | number;
     name: string;
+    grade_id: string | number;
     maxCapacity: number;
-    groupType: GroupType;
-    min_age: number;
-    max_age: number;
+    location_type: "online" | "offline";
     groupSchedules: GroupSchedulePayload[];
+    trainer_id?: string | number;
 }
 
 /**
  * Update group payload
  */
 export interface GroupUpdatePayload {
-    course_id?: string;
-    level_id?: string;
+    level_id?: string | number;
     name?: string;
+    grade_id?: string | number;
     maxCapacity?: number;
-    groupType?: GroupType;
-    min_age?: number;
-    max_age?: number;
+    location_type?: "online" | "offline";
     groupSchedules?: GroupSchedulePayload[];
+    trainer_id?: string | number;
 }
 
 // ============================================================================
@@ -242,7 +276,6 @@ export interface GroupUpdatePayload {
 export interface GroupRecommendPayload {
     course_id: string;
     level_id: string;
-    group_type: GroupType;
     capacity: number;
     limit?: number;
 }

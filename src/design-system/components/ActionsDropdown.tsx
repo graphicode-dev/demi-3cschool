@@ -1,4 +1,5 @@
 import { ReactNode, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
 const DefaultTriggerIcon = () => (
     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -40,7 +41,7 @@ const ActionsDropdown: React.FC<DropdownProps> = ({
     alignment = "right",
 }) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [showAbove, setShowAbove] = useState(false);
+    const [menuStyle, setMenuStyle] = useState<React.CSSProperties>({});
     const buttonRef = useRef<HTMLButtonElement>(null);
     const menuRef = useRef<HTMLDivElement>(null);
 
@@ -51,13 +52,39 @@ const ActionsDropdown: React.FC<DropdownProps> = ({
             const spaceBelow = window.innerHeight - rect.bottom;
             const spaceAbove = rect.top;
 
-            if (direction === "auto") {
-                setShowAbove(
-                    spaceBelow < menuHeight && spaceAbove > menuHeight
-                );
+            const showAbove =
+                direction === "auto"
+                    ? spaceBelow < menuHeight && spaceAbove > menuHeight
+                    : direction === "top";
+
+            // Calculate menu position
+            const style: React.CSSProperties = {
+                position: "fixed",
+                zIndex: 99999,
+            };
+
+            // Vertical positioning
+            if (showAbove) {
+                style.bottom = window.innerHeight - rect.top + 8;
             } else {
-                setShowAbove(direction === "top");
+                style.top = rect.bottom + 8;
             }
+
+            // Horizontal positioning based on alignment
+            switch (alignment) {
+                case "left":
+                    style.left = rect.left;
+                    break;
+                case "center":
+                    style.left = rect.left + rect.width / 2;
+                    style.transform = "translateX(-50%)";
+                    break;
+                default: // right
+                    style.right = window.innerWidth - rect.right;
+                    break;
+            }
+
+            setMenuStyle(style);
         }
         setIsOpen(!isOpen);
     };
@@ -83,21 +110,6 @@ const ActionsDropdown: React.FC<DropdownProps> = ({
         };
     }, [isOpen]);
 
-    const getAlignmentClass = () => {
-        switch (alignment) {
-            case "left":
-                return "-left-[80%]";
-            case "center":
-                return "-translate-x-1/2";
-            default:
-                return "right-5";
-        }
-    };
-
-    const getPositionClass = () => {
-        return showAbove ? "bottom-full mb-2" : "-top-5";
-    };
-
     return (
         <div className="relative">
             <button
@@ -110,25 +122,27 @@ const ActionsDropdown: React.FC<DropdownProps> = ({
                 {triggerIcon || <DefaultTriggerIcon />}
             </button>
 
-            {isOpen && (
-                <div
-                    ref={menuRef}
-                    className={`absolute ${getAlignmentClass()} ${getPositionClass()}  z-50 ${width} bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 py-1 max-h-40 overflow-y-auto ${menuClassName}`}
-                >
-                    {actions.map((action) => (
-                        <div key={action.id}>
-                            {action.divider && (
-                                <div className="my-1 border-t border-gray-200 dark:border-gray-700" />
-                            )}
-                            <button
-                                onClick={() => {
-                                    if (!action.disabled) {
-                                        action?.onClick?.(itemId);
-                                        setIsOpen(false);
-                                    }
-                                }}
-                                disabled={action.disabled}
-                                className={`
+            {isOpen &&
+                createPortal(
+                    <div
+                        ref={menuRef}
+                        style={menuStyle}
+                        className={`${width} bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 py-1 max-h-64 overflow-y-auto ${menuClassName}`}
+                    >
+                        {actions.map((action) => (
+                            <div key={action.id}>
+                                {action.divider && (
+                                    <div className="my-1 border-t border-gray-200 dark:border-gray-700" />
+                                )}
+                                <button
+                                    onClick={() => {
+                                        if (!action.disabled) {
+                                            action?.onClick?.(itemId);
+                                            setIsOpen(false);
+                                        }
+                                    }}
+                                    disabled={action.disabled}
+                                    className={`
                                     w-full text-left px-4 py-2 text-sm
                                     flex items-center gap-2
                                     transition-colors duration-150
@@ -142,18 +156,19 @@ const ActionsDropdown: React.FC<DropdownProps> = ({
                                         "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                                     }
                                 `}
-                            >
-                                {action.icon && (
-                                    <span className="w-4 h-4 shrink-0">
-                                        {action.icon}
-                                    </span>
-                                )}
-                                <span>{action.label}</span>
-                            </button>
-                        </div>
-                    ))}
-                </div>
-            )}
+                                >
+                                    {action.icon && (
+                                        <span className="w-4 h-4 shrink-0">
+                                            {action.icon}
+                                        </span>
+                                    )}
+                                    <span>{action.label}</span>
+                                </button>
+                            </div>
+                        ))}
+                    </div>,
+                    document.body
+                )}
         </div>
     );
 };

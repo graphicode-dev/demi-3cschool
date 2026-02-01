@@ -4,3 +4,7 @@ export * from "./instructor.types";
 export * from "./sessions.types";
 export * from "./assignTeacher.types";
 export * from "./assignStudent.types";
+export * from "./quiz.types";
+export * from "./level-quiz-options.types";
+export * from "./level-quiz-questions.types";
+export * from "./level-quizzes.types";

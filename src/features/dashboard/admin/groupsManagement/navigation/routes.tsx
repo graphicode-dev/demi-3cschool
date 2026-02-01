@@ -5,7 +5,7 @@
  * Uses FeatureRouteModule format for the new routing architecture.
  * Permission-controlled routes using groupsPermissions config.
  *
- * New structure: /admin/groups/grades/:gradeId/levels/:levelId/regular
+ * New structure: /admin/groups/grades/:gradeId/levels/:levelId/group
  */
 
 import { Navigate } from "react-router-dom";
@@ -44,7 +44,7 @@ const groupsRoutes: RouteConfig[] = [
     },
     // Groups List for a Level
     {
-        path: "grades/:gradeId/levels/:levelId/regular",
+        path: "grades/:gradeId/levels/:levelId/group",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/list"),
         permissions: [group.viewAny],
@@ -53,7 +53,7 @@ const groupsRoutes: RouteConfig[] = [
     },
     // Create Group for a Level
     {
-        path: "grades/:gradeId/levels/:levelId/regular/create",
+        path: "grades/:gradeId/levels/:levelId/group/create",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/create"),
         permissions: [group.create],
@@ -62,7 +62,7 @@ const groupsRoutes: RouteConfig[] = [
     },
     // View Group
     {
-        path: "grades/:gradeId/levels/:levelId/regular/view/:id",
+        path: "grades/:gradeId/levels/:levelId/group/view/:id",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/view"),
         permissions: [group.view],
@@ -71,7 +71,7 @@ const groupsRoutes: RouteConfig[] = [
     },
     // Edit Group
     {
-        path: "grades/:gradeId/levels/:levelId/regular/edit/:id",
+        path: "grades/:gradeId/levels/:levelId/group/edit/:id",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/edit"),
         permissions: [group.update],
@@ -80,7 +80,7 @@ const groupsRoutes: RouteConfig[] = [
     },
     // Assign Students to Group
     {
-        path: "grades/:gradeId/levels/:levelId/regular/:id/assign",
+        path: "grades/:gradeId/levels/:levelId/group/:id/assign",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/assign"),
         permissions: [group.update],
@@ -89,7 +89,7 @@ const groupsRoutes: RouteConfig[] = [
     },
     // Group Attendance
     {
-        path: "grades/:gradeId/levels/:levelId/regular/:id/attendance",
+        path: "grades/:gradeId/levels/:levelId/group/:id/attendance",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/attendance"),
         permissions: [studentAttendance.viewAny],
@@ -98,7 +98,7 @@ const groupsRoutes: RouteConfig[] = [
     },
     // Group Instructor
     {
-        path: "grades/:gradeId/levels/:levelId/regular/:id/instructor",
+        path: "grades/:gradeId/levels/:levelId/group/:id/instructor",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/instructor"),
         permissions: [group.update],
@@ -107,12 +107,21 @@ const groupsRoutes: RouteConfig[] = [
     },
     // Group Sessions
     {
-        path: "grades/:gradeId/levels/:levelId/regular/:id/sessions",
+        path: "grades/:gradeId/levels/:levelId/group/:id/sessions",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/sessions"),
         permissions: [groupSession.viewAny],
         meta: { titleKey: "groupsManagement:groups.sessions.title" },
         handle: { crumb: "groupsManagement:groups.sessions.title" },
+    },
+    // Group Final Level Quiz
+    {
+        path: "grades/:gradeId/levels/:levelId/group/:id/final-quiz",
+        lazy: () =>
+            import("@/features/dashboard/admin/groupsManagement/pages/finalLevelQuiz"),
+        permissions: [group.view],
+        meta: { titleKey: "groupsManagement:groups.finalQuiz.title" },
+        handle: { crumb: "groupsManagement:groups.finalQuiz.title" },
     },
 ];
 

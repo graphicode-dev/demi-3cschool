@@ -29,27 +29,27 @@ export const gradesPaths = {
     /** List all grades */
     list: () => `${GRADES_BASE_PATH}`,
     /** Terms list for a specific grade */
-    terms: (gradeId: string | number) => `${GRADES_BASE_PATH}/${gradeId}/terms`,
+    terms: (gradeId: string | number) => `${GRADES_BASE_PATH}/${gradeId}/levels`,
     /** Lessons list for a specific grade and term */
     lessons: (gradeId: string | number, termId: string) =>
-        `${GRADES_BASE_PATH}/${gradeId}/terms/${termId}/lessons`,
+        `${GRADES_BASE_PATH}/${gradeId}/levels/${termId}/lessons`,
     /** Create lesson for a specific grade and term */
     lessonsCreate: (gradeId: string | number, termId: string) =>
-        `${GRADES_BASE_PATH}/${gradeId}/terms/${termId}/lessons/create`,
+        `${GRADES_BASE_PATH}/${gradeId}/levels/${termId}/lessons/create`,
     /** Edit lesson for a specific grade and term */
     lessonsEdit: (
         gradeId: string | number,
         termId: string,
         lessonId: string | number
     ) =>
-        `${GRADES_BASE_PATH}/${gradeId}/terms/${termId}/lessons/edit/${lessonId}`,
+        `${GRADES_BASE_PATH}/${gradeId}/levels/${termId}/lessons/edit/${lessonId}`,
     /** View lesson for a specific grade and term */
     lessonsView: (
         gradeId: string | number,
         termId: string,
         lessonId: string | number
     ) =>
-        `${GRADES_BASE_PATH}/${gradeId}/terms/${termId}/lessons/view/${lessonId}`,
+        `${GRADES_BASE_PATH}/${gradeId}/levels/${termId}/lessons/view/${lessonId}`,
 } as const;
 
 // ============================================================================

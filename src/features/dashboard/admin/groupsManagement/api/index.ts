@@ -75,11 +75,16 @@ export {
     assignTeacherKeys,
     type AssignTeacherQueryKey,
 } from "./assignTeacher/assignTeacher.keys";
+export {
+    attendanceKeys,
+    type AttendanceQueryKey,
+} from "./attendance/attendance.keys";
 
 // API Functions
 export { groupsApi } from "./groups.api";
 export { sessionsApi } from "./sessions/sessions.api";
 export { assignTeacherApi } from "./assignTeacher/assignTeacher.api";
+export { attendanceApi } from "./attendance/attendance.api";
 
 // Query Hooks
 export {
@@ -108,6 +113,11 @@ export {
     useTeacherAvailabilityQuery,
 } from "./assignTeacher/assignTeacher.queries";
 
+export {
+    useTeacherAttendanceQuery,
+    useStudentAttendanceQuery,
+} from "./attendance/attendance.queries";
+
 // Mutation Hooks
 export {
     useCreateGroup,
@@ -128,3 +138,12 @@ export {
     useTeacherAssignmentWithOptimism,
     useBatchTeacherAssignmentMutation,
 } from "./assignTeacher/assignTeacher.mutations";
+
+export {
+    useUpdateTeacherAttendanceMutation,
+    useUpdateStudentAttendanceMutation,
+} from "./attendance/attendance.mutations";
+
+export * from "./quiz options"
+export * from "./quiz questions"
+export * from "./quizzes"
