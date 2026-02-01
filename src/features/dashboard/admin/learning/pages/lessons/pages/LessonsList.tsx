@@ -73,6 +73,10 @@ export default function LearningLessonsList() {
         navigate(`${basePath}/lessons/view/${id}?tab=videos`);
     };
 
+    const handleQuiz = (id: string) => {
+        navigate(`${basePath}/lessons/quiz/${id}`);
+    };
+
     // Get lessons array from response - API returns array directly for /lessons/level/:levelId
     const lessons = Array.isArray(lessonsData)
         ? (lessonsData as Lesson[])
@@ -174,6 +178,7 @@ export default function LearningLessonsList() {
                                 onEdit={() => handleEdit(String(lesson.id))}
                                 onDelete={() => handleDelete(lesson)}
                                 onView={() => handleView(String(lesson.id))}
+                                onQuiz={() => handleQuiz(String(lesson.id))}
                             />
                         ))}
                     </div>

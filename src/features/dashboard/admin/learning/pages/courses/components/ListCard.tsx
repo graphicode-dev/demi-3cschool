@@ -38,6 +38,8 @@ interface ListCardProps extends BaseComponentProps {
     onDelete?: () => void;
     /** View/Navigate action handler */
     onView?: () => void;
+    /** Quiz action handler */
+    onQuiz?: () => void;
     /** Custom actions to render */
     actions?: ReactNode;
     /** Whether the card is disabled */
@@ -132,6 +134,28 @@ function CalendarIcon() {
     );
 }
 
+/**
+ * Quiz icon component
+ */
+function QuizIcon() {
+    return (
+        <svg
+            className="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+            />
+        </svg>
+    );
+}
+
 const STATUS_COLORS = {
     success:
         "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
@@ -153,6 +177,7 @@ export function ListCard({
     onEdit,
     onDelete,
     onView,
+    onQuiz,
     actions,
     disabled = false,
     className = "",
@@ -204,6 +229,20 @@ export function ListCard({
                     actions
                 ) : (
                     <div className="flex items-center gap-2">
+                        {onQuiz && (
+                            <button
+                                type="button"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onQuiz();
+                                }}
+                                className="h-8 w-8 flex items-center justify-center text-gray-500 hover:text-brand-500 transition-colors"
+                                aria-label="Quizzes"
+                                title="Go to Quizzes"
+                            >
+                                <QuizIcon />
+                            </button>
+                        )}
                         {onEdit && (
                             <button
                                 type="button"

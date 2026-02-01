@@ -9,8 +9,8 @@
  * ```ts
  * // In a query hook
  * const { data } = useQuery({
- *     queryKey: levelQuizKeys.list(params),
- *     queryFn: ({ signal }) => levelQuizzesApi.getList(params, signal),
+ *     queryKey: levelQuizKeys.byLevel(levelId),
+ *     queryFn: ({ signal }) => levelQuizzesApi.getByLevelId(levelId, params, signal),
  * });
  * ```
  */
@@ -24,7 +24,6 @@ import {
     LevelQuizzesMetadata,
 } from "../../types/level-quizzes.types";
 import { LevelQuiz } from "../../types";
-import { PaginatedData } from "@/features/dashboard/admin/sales_subscription";
 
 const BASE_URL = "/level-quizzes";
 
@@ -34,6 +33,7 @@ const BASE_URL = "/level-quizzes";
 export const levelQuizzesApi = {
     /**
      * Get level quizzes metadata (filters, operators, field types)
+     * GET /level-quizzes/metadata
      */
     getMetadata: async (
         signal?: AbortSignal
@@ -55,33 +55,37 @@ export const levelQuizzesApi = {
     },
 
     /**
-     * Get list of all level quizzes
+     * Get level quizzes by level ID
+     * GET /level-quizzes/:levelId/quizzes?page=1
+     * Response returns array directly in data field
      */
-    getList: async (
+    getByLevelId: async (
+        levelId: string,
         params?: LevelQuizzesListParams,
         signal?: AbortSignal
-    ): Promise<PaginatedData<LevelQuiz>> => {
-        const response = await api.get<ApiResponse<LevelQuiz[]>>(BASE_URL, {
-            params: params as Record<string, unknown> | undefined,
-            signal,
-        });
+    ): Promise<LevelQuiz[]> => {
+        const response = await api.get<ApiResponse<LevelQuiz[]>>(
+            `${BASE_URL}/${levelId}/quizzes`,
+            {
+                params: params as Record<string, unknown> | undefined,
+                signal,
+            }
+        );
 
         if (response.error) {
             throw response.error;
         }
 
-        const items = response.data!.data!;
-        return {
-            items,
-            perPage: items.length,
-            currentPage: 1,
-            lastPage: 1,
-            nextPageUrl: null,
-        };
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
+        }
+
+        return response.data.data;
     },
 
     /**
      * Get single level quiz by ID
+     * GET /level-quizzes/:levelQuiz
      */
     getById: async (id: string, signal?: AbortSignal): Promise<LevelQuiz> => {
         const response = await api.get<ApiResponse<LevelQuiz>>(
@@ -102,9 +106,10 @@ export const levelQuizzesApi = {
 
     /**
      * Create a new level quiz
+     * POST /level-quizzes
      */
-    create: async (payload: LevelQuizCreatePayload): Promise<LevelQuiz[]> => {
-        const response = await api.post<ApiResponse<LevelQuiz[]>>(BASE_URL, {
+    create: async (payload: LevelQuizCreatePayload): Promise<LevelQuiz> => {
+        const response = await api.post<ApiResponse<LevelQuiz>>(BASE_URL, {
             levelId: payload.levelId,
             timeLimit: payload.timeLimit,
             passingScore: payload.passingScore,
@@ -126,6 +131,7 @@ export const levelQuizzesApi = {
 
     /**
      * Update an existing level quiz
+     * PATCH /level-quizzes/:levelQuiz
      */
     update: async (
         id: string,
@@ -156,6 +162,7 @@ export const levelQuizzesApi = {
 
     /**
      * Delete a level quiz
+     * DELETE /level-quizzes/:levelQuiz
      */
     delete: async (id: string): Promise<void> => {
         const response = await api.delete(`${BASE_URL}/${id}`);

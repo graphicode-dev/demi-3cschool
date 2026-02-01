@@ -168,7 +168,6 @@ export const navRegistry = {
         const grouped: GroupedNavItems = {
             "Curriculum Management": [],
             "Groups Management": [],
-            "Sales Analysis": [],
             Account: [],
             "Tickets Management": [],
             Classroom: [],

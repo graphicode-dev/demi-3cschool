@@ -61,24 +61,46 @@ export const lessonQuizzesApi = {
         params?: LessonQuizzesListParams,
         signal?: AbortSignal
     ): Promise<PaginatedData<LessonQuiz>> => {
-        const response = await api.get<ApiResponse<LessonQuiz[]>>(BASE_URL, {
-            params: params as Record<string, unknown> | undefined,
-            signal,
-        });
+        const response = await api.get<ApiResponse<PaginatedData<LessonQuiz>>>(
+            BASE_URL,
+            {
+                params: params as Record<string, unknown> | undefined,
+                signal,
+            }
+        );
 
         if (response.error) {
             throw response.error;
         }
 
-        // API returns array directly, wrap in paginated format
-        const items = response.data!.data!;
-        return {
-            items,
-            currentPage: 1,
-            lastPage: 1,
-            perPage: items.length,
-            nextPageUrl: null,
-        };
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
+        }
+
+        return response.data.data;
+    },
+
+    /**
+     * Get list of lesson quizzes by level ID
+     */
+    getByLevelId: async (
+        levelId: string,
+        params?: LessonQuizzesListParams,
+        signal?: AbortSignal
+    ): Promise<LessonQuiz[]> => {
+        const response = await api.get<ApiResponse<LessonQuiz[]>>(
+            `${BASE_URL}/level/${levelId}`,
+            {
+                params: params as Record<string, unknown> | undefined,
+                signal,
+            }
+        );
+
+        if (response.error) {
+            throw response.error;
+        }
+
+        return response.data?.data ?? [];
     },
 
     /**
@@ -110,8 +132,8 @@ export const lessonQuizzesApi = {
             timeLimit: payload.timeLimit,
             passingScore: payload.passingScore,
             maxAttempts: payload.maxAttempts,
-            shuffleQuestions: payload.shuffleQuestions ? 1 : 0,
-            showAnswers: payload.showAnswers ? 1 : 0,
+            shuffleQuestions: payload.shuffleQuestions,
+            showAnswers: payload.showAnswers,
         });
 
         if (response.error) {
@@ -139,18 +161,8 @@ export const lessonQuizzesApi = {
                 timeLimit: payload.timeLimit,
                 passingScore: payload.passingScore,
                 maxAttempts: payload.maxAttempts,
-                shuffleQuestions:
-                    payload.shuffleQuestions !== undefined
-                        ? payload.shuffleQuestions
-                            ? 1
-                            : 0
-                        : undefined,
-                showAnswers:
-                    payload.showAnswers !== undefined
-                        ? payload.showAnswers
-                            ? 1
-                            : 0
-                        : undefined,
+                shuffleQuestions: payload.shuffleQuestions,
+                showAnswers: payload.showAnswers,
             }
         );
 

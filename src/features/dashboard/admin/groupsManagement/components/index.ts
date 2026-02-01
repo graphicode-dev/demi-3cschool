@@ -12,3 +12,4 @@ export { InstructorSummaryCards } from "./InstructorSummaryCards";
 export { PrimaryTeacherCard } from "./PrimaryTeacherCard";
 export { InstructorSessionsTable } from "./InstructorSessionsTable";
 export * from "./quiz";
+export * from "./sessions";

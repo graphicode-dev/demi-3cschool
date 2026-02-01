@@ -19,7 +19,6 @@
 
 import { LevelQuizzesListParams } from "../../types/level-quizzes.types";
 
-
 /**
  * Query key factory for level quizzes
  *
@@ -48,20 +47,12 @@ export const levelQuizKeys = {
     lists: () => [...levelQuizKeys.all, "list"] as const,
 
     /**
-     * Key for specific list with params
+     * Key for quizzes by level ID
      */
-    list: (params?: LevelQuizzesListParams) =>
+    byLevel: (levelId: string, params?: LevelQuizzesListParams) =>
         params
-            ? ([...levelQuizKeys.lists(), params] as const)
-            : levelQuizKeys.lists(),
-
-    /**
-     * Key for infinite list queries
-     */
-    infinite: (params?: Omit<LevelQuizzesListParams, "page">) =>
-        params
-            ? ([...levelQuizKeys.all, "infinite", params] as const)
-            : ([...levelQuizKeys.all, "infinite"] as const),
+            ? ([...levelQuizKeys.all, "byLevel", levelId, params] as const)
+            : ([...levelQuizKeys.all, "byLevel", levelId] as const),
 
     /**
      * Key for all detail queries
@@ -81,7 +72,6 @@ export type LevelQuizQueryKey =
     | typeof levelQuizKeys.all
     | ReturnType<typeof levelQuizKeys.metadata>
     | ReturnType<typeof levelQuizKeys.lists>
-    | ReturnType<typeof levelQuizKeys.list>
-    | ReturnType<typeof levelQuizKeys.infinite>
+    | ReturnType<typeof levelQuizKeys.byLevel>
     | ReturnType<typeof levelQuizKeys.details>
     | ReturnType<typeof levelQuizKeys.detail>;

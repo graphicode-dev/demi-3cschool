@@ -33,7 +33,7 @@ export interface GroupWithPrimaryTeacher {
     levelId: number;
     name: string;
     maxCapacity: number;
-    locationType: "online" | "offline" | "hybrid";
+    locationType: "online" | "offline";
     groupType: "regular" | "semi_private" | "private";
     isActive: boolean;
     course: {

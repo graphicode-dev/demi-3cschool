@@ -24,7 +24,7 @@ import {
     LevelQuizzesMetadata,
 } from "../../types/level-quizzes.types";
 import { LevelQuiz } from "../../types";
-import { PaginatedData } from "@/features/dashboard/admin/sales_subscription";
+import { PaginatedData } from "../../../courses";
 
 const BASE_URL = "/level-quizzes";
 
@@ -55,29 +55,26 @@ export const levelQuizzesApi = {
     },
 
     /**
-     * Get list of all level quizzes
+     * Get list of level quizzes by level ID
      */
-    getList: async (
+    getByLevelId: async (
+        levelId: string,
         params?: LevelQuizzesListParams,
         signal?: AbortSignal
-    ): Promise<PaginatedData<LevelQuiz>> => {
-        const response = await api.get<ApiResponse<LevelQuiz[]>>(BASE_URL, {
-            params: params as Record<string, unknown> | undefined,
-            signal,
-        });
+    ): Promise<LevelQuiz[]> => {
+        const response = await api.get<ApiResponse<LevelQuiz[]>>(
+            `${BASE_URL}/${levelId}/quizzes`,
+            {
+                params: params as Record<string, unknown> | undefined,
+                signal,
+            }
+        );
 
         if (response.error) {
             throw response.error;
         }
 
-        const items = response.data!.data!;
-        return {
-            items,
-            perPage: items.length,
-            currentPage: 1,
-            lastPage: 1,
-            nextPageUrl: null,
-        };
+        return response.data?.data ?? [];
     },
 
     /**
@@ -103,8 +100,8 @@ export const levelQuizzesApi = {
     /**
      * Create a new level quiz
      */
-    create: async (payload: LevelQuizCreatePayload): Promise<LevelQuiz[]> => {
-        const response = await api.post<ApiResponse<LevelQuiz[]>>(BASE_URL, {
+    create: async (payload: LevelQuizCreatePayload): Promise<LevelQuiz> => {
+        const response = await api.post<ApiResponse<LevelQuiz>>(BASE_URL, {
             levelId: payload.levelId,
             timeLimit: payload.timeLimit,
             passingScore: payload.passingScore,

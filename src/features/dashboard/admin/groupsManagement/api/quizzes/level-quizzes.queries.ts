@@ -9,26 +9,18 @@
  * // Get level quizzes metadata
  * const { data: metadata } = useLevelQuizzesMetadata();
  *
- * // List all level quizzes with pagination
- * const { data, isLoading } = useLevelQuizzesList({ page: 1 });
+ * // List level quizzes by level ID
+ * const { data, isLoading } = useLevelQuizzesByLevel(levelId, { page: 1 });
  *
  * // Get single level quiz
  * const { data: levelQuiz } = useLevelQuiz(levelQuizId);
  * ```
  */
 
-import {
-    useQuery,
-    useInfiniteQuery,
-    type UseQueryOptions,
-} from "@tanstack/react-query";
+import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
 import { levelQuizKeys } from "./level-quizzes.keys";
 import { levelQuizzesApi } from "./level-quizzes.api";
-import {
-    LevelQuizzesListParams,
-    LevelQuizzesMetadata,
-} from "../../types/level-quizzes.types";
-import { PaginatedData } from "@/features/dashboard/admin/sales_subscription";
+import { LevelQuizzesMetadata } from "../../types/level-quizzes.types";
 import { LevelQuiz } from "../../types";
 
 // ============================================================================
@@ -70,74 +62,37 @@ export function useLevelQuizzesMetadata(
 // ============================================================================
 
 /**
- * Hook to fetch paginated list of all level quizzes
+ * Hook to fetch list of level quizzes by level ID
  *
- * @param params - Query parameters for pagination
+ * @param levelId - Level ID to fetch quizzes for
  * @param options - Additional query options
  *
  * @example
  * ```tsx
- * const { data, isLoading, error } = useLevelQuizzesList({ page: 1 });
+ * const { data, isLoading, error } = useLevelQuizzesByLevel(levelId);
  *
  * if (isLoading) return <Spinner />;
  * if (error) return <ErrorMessage error={error} />;
  *
  * return (
  *     <ul>
- *         {data.items.map(quiz => (
+ *         {data?.map(quiz => (
  *             <li key={quiz.id}>{quiz.level.title} - {quiz.timeLimit}min</li>
  *         ))}
  *     </ul>
  * );
  * ```
  */
-export function useLevelQuizzesList(
-    params?: LevelQuizzesListParams,
-    options?: Partial<UseQueryOptions<PaginatedData<LevelQuiz>, Error>>
+export function useLevelQuizzesByLevel(
+    levelId: string | undefined | null,
+    options?: Partial<UseQueryOptions<LevelQuiz[], Error>>
 ) {
     return useQuery({
-        queryKey: levelQuizKeys.list(params),
-        queryFn: ({ signal }) => levelQuizzesApi.getList(params, signal),
+        queryKey: levelQuizKeys.byLevel(levelId ?? ""),
+        queryFn: ({ signal }) =>
+            levelQuizzesApi.getByLevelId(levelId!, undefined, signal),
+        enabled: !!levelId,
         ...options,
-    });
-}
-
-/**
- * Hook to fetch infinite list of all level quizzes (for infinite scroll)
- *
- * @example
- * ```tsx
- * const {
- *     data,
- *     fetchNextPage,
- *     hasNextPage,
- *     isFetchingNextPage,
- * } = useLevelQuizzesInfinite();
- *
- * return (
- *     <>
- *         {data?.pages.map(page =>
- *             page.items.map(quiz => <QuizCard key={quiz.id} quiz={quiz} />)
- *         )}
- *         {hasNextPage && (
- *             <button onClick={() => fetchNextPage()}>
- *                 {isFetchingNextPage ? 'Loading...' : 'Load More'}
- *             </button>
- *         )}
- *     </>
- * );
- * ```
- */
-export function useLevelQuizzesInfinite() {
-    return useInfiniteQuery({
-        queryKey: levelQuizKeys.infinite(),
-        queryFn: ({ pageParam, signal }) =>
-            levelQuizzesApi.getList({ page: pageParam as number }, signal),
-        initialPageParam: 1,
-        getNextPageParam: (lastPage) => {
-            const { currentPage, lastPage: totalPages } = lastPage;
-            return currentPage < totalPages ? currentPage + 1 : undefined;
-        },
     });
 }
 

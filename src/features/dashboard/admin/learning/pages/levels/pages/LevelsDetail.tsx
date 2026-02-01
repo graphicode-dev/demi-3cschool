@@ -1,16 +1,15 @@
 /**
- * Learning - Level Detail Page (Final Quizzes)
+ * Learning - Level Detail Page (Level Quizzes)
  *
  * Shared component for both Standard and Professional Learning.
- * Shows Final Quizzes for a specific level with expandable quiz cards
+ * Shows Level Quizzes for a specific level with expandable quiz cards
  * and question management functionality.
  */
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useLocation, useParams } from "react-router-dom";
-import { LoadingState, ErrorState } from "@/design-system";
-import { learningPaths } from "@/features/dashboard/admin/learning/navigation/paths";
+import { useParams } from "react-router-dom";
+import { LoadingState, ErrorState, ConfirmDialog } from "@/design-system";
 import { AlertTriangle, Plus } from "lucide-react";
 import type {
     NewQuizData,
@@ -19,18 +18,20 @@ import type {
     LevelQuiz,
     LevelQuizQuestion,
     LevelQuizOption,
+    QuizQuestionWithOptions,
 } from "../types";
-import { ProgramsCurriculum } from "@/features/dashboard/admin/learning/types";
 import { useLevel } from "../api";
-import { QuizCard, QuizForm } from "../components";
+import { QuizCard, QuizForm, QuestionForm } from "../components";
 import {
     useCreateLevelQuiz,
     useDeleteLevelQuiz,
-    useLevelQuizzesList,
+    useUpdateLevelQuiz,
+    useLevelQuizzesByLevel,
 } from "../api/quizzes";
 import {
     useCreateLevelQuizQuestion,
     useDeleteLevelQuizQuestion,
+    useUpdateLevelQuizQuestion,
     useLevelQuizQuestionsList,
 } from "../api/quiz questions";
 import {
@@ -39,7 +40,6 @@ import {
 } from "../api/quiz options";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useMutationHandler } from "@/shared/api";
-import { useCurriculumType } from "../../../hooks";
 
 const DEFAULT_NEW_QUIZ: Omit<NewQuizData, "levelId"> = {
     timeLimit: 60,
@@ -107,27 +107,21 @@ function transformQuizToUI(
 
 export default function LearningLevelsDetail() {
     const { t } = useTranslation();
-    const { id } = useParams<{ id: string }>();
-    const curriculumType = useCurriculumType();
-    const paths =
-        curriculumType === "first_term"
-            ? learningPaths.firstTerm
-            : curriculumType === "second_term"
-              ? learningPaths.secondTerm
-              : learningPaths.summerCamp;
+    const { id, levelId } = useParams<{ id?: string; levelId?: string }>();
+    const resolvedId = id || levelId;
 
     const {
         data: level,
         isLoading: levelLoading,
         error: levelError,
         refetch: refetchLevel,
-    } = useLevel(id);
+    } = useLevel(resolvedId);
 
     const {
         data: quizzesData,
         isLoading: quizzesLoading,
         refetch: refetchQuizzes,
-    } = useLevelQuizzesList();
+    } = useLevelQuizzesByLevel(resolvedId);
     const {
         data: questionsData,
         isLoading: questionsLoading,
@@ -143,11 +137,15 @@ export default function LearningLevelsDetail() {
         useCreateLevelQuiz();
     const { mutateAsync: deleteQuizAsync, isPending: isDeletingQuiz } =
         useDeleteLevelQuiz();
+    const { mutateAsync: updateQuizAsync, isPending: isUpdatingQuiz } =
+        useUpdateLevelQuiz();
 
     const { mutateAsync: createQuestionAsync, isPending: isCreatingQuestion } =
         useCreateLevelQuizQuestion();
     const { mutateAsync: deleteQuestionAsync, isPending: isDeletingQuestion } =
         useDeleteLevelQuizQuestion();
+    const { mutateAsync: updateQuestionAsync, isPending: isUpdatingQuestion } =
+        useUpdateLevelQuizQuestion();
 
     const { mutateAsync: createOptionAsync, isPending: isCreatingOption } =
         useCreateLevelQuizOption();
@@ -164,14 +162,35 @@ export default function LearningLevelsDetail() {
     const [newQuestion, setNewQuestion] =
         useState<NewQuestionFormData>(DEFAULT_NEW_QUESTION);
 
-    const quizzes = quizzesData?.items || [];
+    // Edit states
+    const [editingQuiz, setEditingQuiz] =
+        useState<LevelQuizWithQuestions | null>(null);
+    const [editQuizData, setEditQuizData] =
+        useState<Omit<NewQuizData, "levelId">>(DEFAULT_NEW_QUIZ);
+    const [editingQuestion, setEditingQuestion] = useState<{
+        quizId: string;
+        question: QuizQuestionWithOptions;
+    } | null>(null);
+    const [editQuestionData, setEditQuestionData] =
+        useState<NewQuestionFormData>(DEFAULT_NEW_QUESTION);
+
+    // Delete confirmation dialogs
+    const [deleteQuizDialog, setDeleteQuizDialog] = useState<{
+        isOpen: boolean;
+        quizId: string | null;
+    }>({ isOpen: false, quizId: null });
+    const [deleteQuestionDialog, setDeleteQuestionDialog] = useState<{
+        isOpen: boolean;
+        quizId: string | null;
+        questionId: string | null;
+    }>({ isOpen: false, quizId: null, questionId: null });
+
+    const quizzes = quizzesData || [];
     const questions = questionsData?.items || [];
     const options = optionsData?.items || [];
 
-    const levelQuizzes = quizzes.filter((q) => String(q.level.id) === id);
-
-    const transformedQuizzes: LevelQuizWithQuestions[] = levelQuizzes.map(
-        (quiz) => transformQuizToUI(quiz, questions, options)
+    const transformedQuizzes: LevelQuizWithQuestions[] = quizzes.map((quiz) =>
+        transformQuizToUI(quiz, questions, options)
     );
 
     const toggleQuizExpand = (quizId: string) => {
@@ -194,12 +213,12 @@ export default function LearningLevelsDetail() {
     const resetNewQuestion = () => setNewQuestion(DEFAULT_NEW_QUESTION);
 
     const handleCreateQuiz = () => {
-        if (!id) return;
+        if (!resolvedId) return;
 
         execute(
             () =>
                 createQuizAsync({
-                    levelId: id,
+                    levelId: resolvedId,
                     timeLimit: newQuiz.timeLimit,
                     passingScore: newQuiz.passingScore,
                     maxAttempts: newQuiz.maxAttempts,
@@ -221,13 +240,122 @@ export default function LearningLevelsDetail() {
     };
 
     const handleDeleteQuiz = (quizId: string) => {
-        execute(() => deleteQuizAsync(quizId), {
+        setDeleteQuizDialog({ isOpen: true, quizId });
+    };
+
+    const confirmDeleteQuiz = async () => {
+        if (!deleteQuizDialog.quizId) return;
+        await execute(() => deleteQuizAsync(deleteQuizDialog.quizId!), {
             successMessage: t(
                 "levels:quiz.messages.deleteSuccess",
                 "Quiz deleted successfully"
             ),
             onSuccess: () => refetchQuizzes(),
         });
+        setDeleteQuizDialog({ isOpen: false, quizId: null });
+    };
+
+    const handleEditQuiz = (quiz: LevelQuizWithQuestions) => {
+        setEditingQuiz(quiz);
+        setEditQuizData({
+            timeLimit: quiz.timeLimit,
+            passingScore: quiz.passingScore,
+            maxAttempts: quiz.maxAttempts,
+            shuffleQuestions: quiz.shuffleQuestions,
+            showAnswers: quiz.showAnswers,
+        });
+    };
+
+    const handleUpdateQuiz = async () => {
+        if (!editingQuiz || !resolvedId) return;
+
+        execute(
+            () =>
+                updateQuizAsync({
+                    id: editingQuiz.id,
+                    data: {
+                        levelId: resolvedId,
+                        timeLimit: editQuizData.timeLimit,
+                        passingScore: editQuizData.passingScore,
+                        maxAttempts: editQuizData.maxAttempts,
+                        shuffleQuestions: editQuizData.shuffleQuestions,
+                        showAnswers: editQuizData.showAnswers,
+                    },
+                }),
+            {
+                successMessage: t(
+                    "levels:quiz.messages.updateSuccess",
+                    "Quiz updated successfully"
+                ),
+                onSuccess: () => {
+                    setEditingQuiz(null);
+                    setEditQuizData(DEFAULT_NEW_QUIZ);
+                    refetchQuizzes();
+                },
+            }
+        );
+    };
+
+    const handleCancelEditQuiz = () => {
+        setEditingQuiz(null);
+        setEditQuizData(DEFAULT_NEW_QUIZ);
+    };
+
+    const handleEditQuestion = (quizId: string, questionId: string) => {
+        const quiz = transformedQuizzes.find((q) => q.id === quizId);
+        const question = quiz?.questions.find((q) => q.id === questionId);
+        if (!question) return;
+
+        setEditingQuestion({ quizId, question });
+        setEditQuestionData({
+            quizId,
+            question: question.question,
+            type: question.type,
+            points: question.points,
+            order: question.order,
+            explanation: question.explanation || "",
+            isActive: Boolean(question.isActive ?? true),
+            options: question.options.map((opt) => ({
+                text: opt.text,
+                isCorrect: opt.isCorrect ?? false,
+            })),
+        });
+    };
+
+    const handleUpdateQuestion = async () => {
+        if (!editingQuestion) return;
+
+        execute(
+            () =>
+                updateQuestionAsync({
+                    id: editingQuestion.question.id,
+                    data: {
+                        quizId: editingQuestion.quizId,
+                        question: editQuestionData.question,
+                        type: editQuestionData.type,
+                        points: editQuestionData.points,
+                        order: editQuestionData.order,
+                        explanation: editQuestionData.explanation,
+                        isActive: editQuestionData.isActive,
+                    },
+                }),
+            {
+                successMessage: t(
+                    "levels:quiz.messages.questionUpdateSuccess",
+                    "Question updated successfully"
+                ),
+                onSuccess: () => {
+                    setEditingQuestion(null);
+                    setEditQuestionData(DEFAULT_NEW_QUESTION);
+                    refetchQuestions();
+                },
+            }
+        );
+    };
+
+    const handleCancelEditQuestion = () => {
+        setEditingQuestion(null);
+        setEditQuestionData(DEFAULT_NEW_QUESTION);
     };
 
     const handleCreateQuestion = async (quizId: string) => {
@@ -278,15 +406,28 @@ export default function LearningLevelsDetail() {
     };
 
     const handleDeleteQuestion = (quizId: string, questionId: string) => {
-        execute(() => deleteQuestionAsync(questionId), {
-            successMessage: t(
-                "levels:quiz.messages.questionDeleteSuccess",
-                "Question deleted successfully"
-            ),
-            onSuccess: () => {
-                refetchQuestions();
-                refetchOptions();
-            },
+        setDeleteQuestionDialog({ isOpen: true, quizId, questionId });
+    };
+
+    const confirmDeleteQuestion = async () => {
+        if (!deleteQuestionDialog.questionId) return;
+        await execute(
+            () => deleteQuestionAsync(deleteQuestionDialog.questionId!),
+            {
+                successMessage: t(
+                    "levels:quiz.messages.questionDeleteSuccess",
+                    "Question deleted successfully"
+                ),
+                onSuccess: () => {
+                    refetchQuestions();
+                    refetchOptions();
+                },
+            }
+        );
+        setDeleteQuestionDialog({
+            isOpen: false,
+            quizId: null,
+            questionId: null,
         });
     };
 
@@ -312,7 +453,7 @@ export default function LearningLevelsDetail() {
     return (
         <PageWrapper
             pageHeaderProps={{
-                title: `${level?.title || "Level"} - ${t("levels:levels.finalQuiz", "Final Quiz")}`,
+                title: `${level?.title || "Level"} - ${t("levels:levels.levelQuiz", "Level Quiz")}`,
                 backButton: true,
             }}
         >
@@ -337,12 +478,12 @@ export default function LearningLevelsDetail() {
                 </div>
             </div>
 
-            {/* Final Quizzes Section */}
+            {/* Level Quizzes Section */}
             <div className="space-y-4">
                 <div className="flex items-center justify-between">
                     <div>
                         <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                            {t("levels:levels.finalQuizzes", "Final Quizzes")}
+                            {t("levels:levels.levelQuizzes", "Level Quizzes")}
                         </h2>
                         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                             {t("levels:levels.examsCount", "{{count}} Exams", {
@@ -357,7 +498,7 @@ export default function LearningLevelsDetail() {
                         className="inline-flex items-center gap-2 px-4 py-2.5 bg-brand-500 text-white text-sm font-medium rounded-lg hover:bg-brand-600 transition-colors disabled:opacity-50"
                     >
                         <Plus className="w-4 h-4" />
-                        {t("levels:levels.addFinalQuiz", "Add Final Quiz")}
+                        {t("levels:levels.addLevelQuiz", "Add Level Quiz")}
                     </button>
                 </div>
 
@@ -385,7 +526,7 @@ export default function LearningLevelsDetail() {
                             <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
                                 {t(
                                     "levels:quiz.addFirstQuiz",
-                                    "Click 'Add Final Quiz' to create your first quiz"
+                                    "Click 'Add Level Quiz' to create your first quiz"
                                 )}
                             </p>
                         </div>
@@ -400,7 +541,7 @@ export default function LearningLevelsDetail() {
                                 newQuestion={newQuestion}
                                 onToggleExpand={() => toggleQuizExpand(quiz.id)}
                                 onToggleQuestionExpand={toggleQuestionExpand}
-                                onEdit={() => {}}
+                                onEdit={() => handleEditQuiz(quiz)}
                                 onDelete={() => handleDeleteQuiz(quiz.id)}
                                 onAddQuestion={() =>
                                     setIsAddingQuestion(quiz.id)
@@ -438,6 +579,85 @@ export default function LearningLevelsDetail() {
                     )}
                 </p>
             </div>
+
+            {/* Edit Quiz Modal */}
+            {editingQuiz && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                    <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-lg mx-4">
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                            {t("levels:quiz.editQuiz", "Edit Quiz")}
+                        </h3>
+                        <QuizForm
+                            quiz={editQuizData}
+                            onChange={setEditQuizData}
+                            onSave={handleUpdateQuiz}
+                            onCancel={handleCancelEditQuiz}
+                            isPending={isUpdatingQuiz}
+                        />
+                    </div>
+                </div>
+            )}
+
+            {/* Delete Quiz Confirmation Dialog */}
+            <ConfirmDialog
+                isOpen={deleteQuizDialog.isOpen}
+                onClose={() =>
+                    setDeleteQuizDialog({ isOpen: false, quizId: null })
+                }
+                variant="danger"
+                title={t("levels:quiz.deleteDialog.title", "Delete Quiz")}
+                message={t(
+                    "levels:quiz.deleteDialog.message",
+                    "Are you sure you want to delete this quiz? All questions and options will be permanently removed. This action cannot be undone."
+                )}
+                confirmText={t("common.delete", "Delete")}
+                cancelText={t("common.cancel", "Cancel")}
+                onConfirm={confirmDeleteQuiz}
+                loading={isDeletingQuiz}
+            />
+
+            {/* Delete Question Confirmation Dialog */}
+            <ConfirmDialog
+                isOpen={deleteQuestionDialog.isOpen}
+                onClose={() =>
+                    setDeleteQuestionDialog({
+                        isOpen: false,
+                        quizId: null,
+                        questionId: null,
+                    })
+                }
+                variant="danger"
+                title={t(
+                    "levels:quiz.deleteQuestionDialog.title",
+                    "Delete Question"
+                )}
+                message={t(
+                    "levels:quiz.deleteQuestionDialog.message",
+                    "Are you sure you want to delete this question? All options will be permanently removed. This action cannot be undone."
+                )}
+                confirmText={t("common.delete", "Delete")}
+                cancelText={t("common.cancel", "Cancel")}
+                onConfirm={confirmDeleteQuestion}
+                loading={isDeletingQuestion}
+            />
+
+            {/* Edit Question Modal */}
+            {editingQuestion && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                    <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                            {t("levels:quiz.editQuestion", "Edit Question")}
+                        </h3>
+                        <QuestionForm
+                            question={editQuestionData}
+                            onChange={setEditQuestionData}
+                            onSave={handleUpdateQuestion}
+                            onCancel={handleCancelEditQuestion}
+                            isPending={isUpdatingQuestion}
+                        />
+                    </div>
+                </div>
+            )}
         </PageWrapper>
     );
 }

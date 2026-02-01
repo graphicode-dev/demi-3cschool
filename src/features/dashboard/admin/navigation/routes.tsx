@@ -28,10 +28,6 @@ import {
     groupsPermissions,
     dashboardPermissions,
 } from "@/auth";
-import { purchaseRoutes } from "../sales_subscription/pages/purchases/navigation/routes";
-import { couponsRoutes } from "../sales_subscription/pages/coupons/navigation";
-import { priceListsRoutes } from "../sales_subscription/pages/pricelists/navigation";
-import { subscriptionRoutes } from "../sales_subscription/pages/installments/navigation/routes";
 
 const { course, level, lesson } = learningPermissions;
 const { group, groupSession, studentAttendance } = groupsPermissions;
@@ -113,6 +109,24 @@ const gradesRoutes: RouteConfig[] = [
         permissions: [lesson.view],
         meta: { titleKey: "learning:lessons.form.view.title" },
         handle: { crumb: "learning:lessons.form.view.title" },
+    },
+    // Lesson Quizzes
+    {
+        path: "grades/:gradeId/levels/:levelId/lessons/quiz/:id",
+        lazy: () =>
+            import("@/features/dashboard/admin/learning/pages/lessons/pages/LessonsQuizDetail"),
+        permissions: [lesson.view],
+        meta: { titleKey: "learning:lessons.quiz.title" },
+        handle: { crumb: "learning:lessons.quiz.title" },
+    },
+    // Level Quizzes
+    {
+        path: "grades/:gradeId/levels/:levelId/quiz",
+        lazy: () =>
+            import("@/features/dashboard/admin/learning/pages/levels/pages/LevelsDetail"),
+        permissions: [lesson.view],
+        meta: { titleKey: "learning:levels.quiz.title" },
+        handle: { crumb: "learning:levels.quiz.title" },
     },
 ];
 
@@ -258,37 +272,6 @@ const groupsAnalyticsRoutes: RouteConfig[] = [
 ];
 
 // ============================================================================
-// Sales Subscription Routes
-// ============================================================================
-
-const salesRoutes: RouteConfig[] = [
-    {
-        path: "sales",
-        element: <Navigate to="sales/coupons" replace />,
-    },
-    // Coupons routes (prefixed with sales/)
-    ...couponsRoutes.map((route) => ({
-        ...route,
-        path: route.path ? `sales/${route.path}` : undefined,
-    })),
-    // Price Lists routes (prefixed with sales/)
-    ...priceListsRoutes.map((route) => ({
-        ...route,
-        path: route.path ? `sales/${route.path}` : undefined,
-    })),
-    // Purchases routes (prefixed with sales/)
-    ...purchaseRoutes.map((route) => ({
-        ...route,
-        path: route.path ? `sales/${route.path}` : undefined,
-    })),
-    // Subscriptions/Installments routes (prefixed with sales/)
-    ...subscriptionRoutes.map((route) => ({
-        ...route,
-        path: route.path ? `sales/${route.path}` : undefined,
-    })),
-];
-
-// ============================================================================
 // Admin Shared Routes (profile, chat, certificates, reports)
 // ============================================================================
 
@@ -318,8 +301,6 @@ export const adminRouteModule: FeatureRouteModule = {
             ...groupsManagementRoutes,
             // Groups Analytics
             ...groupsAnalyticsRoutes,
-            // Sales Subscription
-            ...salesRoutes,
             // Tickets Management
             ...ticketsManagementRoutes.map((route) => ({
                 ...route,

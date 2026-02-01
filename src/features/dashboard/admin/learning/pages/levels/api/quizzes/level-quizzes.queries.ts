@@ -28,8 +28,8 @@ import {
     LevelQuizzesListParams,
     LevelQuizzesMetadata,
 } from "../../types/level-quizzes.types";
-import { PaginatedData } from "@/features/dashboard/admin/sales_subscription";
 import { LevelQuiz } from "../../types";
+import { PaginatedData } from "../../../courses";
 
 // ============================================================================
 // Metadata Query
@@ -70,14 +70,15 @@ export function useLevelQuizzesMetadata(
 // ============================================================================
 
 /**
- * Hook to fetch paginated list of all level quizzes
+ * Hook to fetch paginated list of level quizzes by level ID
  *
+ * @param levelId - Level ID to fetch quizzes for
  * @param params - Query parameters for pagination
  * @param options - Additional query options
  *
  * @example
  * ```tsx
- * const { data, isLoading, error } = useLevelQuizzesList({ page: 1 });
+ * const { data, isLoading, error } = useLevelQuizzesByLevel(levelId, { page: 1 });
  *
  * if (isLoading) return <Spinner />;
  * if (error) return <ErrorMessage error={error} />;
@@ -91,53 +92,17 @@ export function useLevelQuizzesMetadata(
  * );
  * ```
  */
-export function useLevelQuizzesList(
+export function useLevelQuizzesByLevel(
+    levelId: string | undefined | null,
     params?: LevelQuizzesListParams,
-    options?: Partial<UseQueryOptions<PaginatedData<LevelQuiz>, Error>>
+    options?: Partial<UseQueryOptions<LevelQuiz[], Error>>
 ) {
     return useQuery({
-        queryKey: levelQuizKeys.list(params),
-        queryFn: ({ signal }) => levelQuizzesApi.getList(params, signal),
+        queryKey: levelQuizKeys.byLevel(levelId ?? "", params),
+        queryFn: ({ signal }) =>
+            levelQuizzesApi.getByLevelId(levelId!, params, signal),
+        enabled: !!levelId,
         ...options,
-    });
-}
-
-/**
- * Hook to fetch infinite list of all level quizzes (for infinite scroll)
- *
- * @example
- * ```tsx
- * const {
- *     data,
- *     fetchNextPage,
- *     hasNextPage,
- *     isFetchingNextPage,
- * } = useLevelQuizzesInfinite();
- *
- * return (
- *     <>
- *         {data?.pages.map(page =>
- *             page.items.map(quiz => <QuizCard key={quiz.id} quiz={quiz} />)
- *         )}
- *         {hasNextPage && (
- *             <button onClick={() => fetchNextPage()}>
- *                 {isFetchingNextPage ? 'Loading...' : 'Load More'}
- *             </button>
- *         )}
- *     </>
- * );
- * ```
- */
-export function useLevelQuizzesInfinite() {
-    return useInfiniteQuery({
-        queryKey: levelQuizKeys.infinite(),
-        queryFn: ({ pageParam, signal }) =>
-            levelQuizzesApi.getList({ page: pageParam as number }, signal),
-        initialPageParam: 1,
-        getNextPageParam: (lastPage) => {
-            const { currentPage, lastPage: totalPages } = lastPage;
-            return currentPage < totalPages ? currentPage + 1 : undefined;
-        },
     });
 }
 

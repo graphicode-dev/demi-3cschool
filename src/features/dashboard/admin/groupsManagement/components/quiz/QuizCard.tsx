@@ -35,6 +35,7 @@ interface QuizCardProps {
     onCancelAddQuestion: () => void;
     onNewQuestionChange: (question: NewQuestionFormData) => void;
     onSaveQuestion: () => void;
+    onEditQuestion: (questionId: string) => void;
     onDeleteQuestion: (questionId: string) => void;
     isPending?: boolean;
     isQuestionPending?: boolean;
@@ -54,6 +55,7 @@ export function QuizCard({
     onCancelAddQuestion,
     onNewQuestionChange,
     onSaveQuestion,
+    onEditQuestion,
     onDeleteQuestion,
     isPending = false,
     isQuestionPending = false,
@@ -212,6 +214,7 @@ export function QuizCard({
                                     onToggleExpand={() =>
                                         onToggleQuestionExpand(question.id)
                                     }
+                                    onEdit={() => onEditQuestion(question.id)}
                                     onDelete={() =>
                                         onDeleteQuestion(question.id)
                                     }

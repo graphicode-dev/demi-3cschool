@@ -24,7 +24,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { levelQuizKeys } from "./level-quizzes.keys";
 import { levelQuizzesApi } from "./level-quizzes.api";
 import { LevelQuiz } from "../../types";
-import { LevelQuizCreatePayload, LevelQuizUpdatePayload } from "../../types/level-quizzes.types";
+import {
+    LevelQuizCreatePayload,
+    LevelQuizUpdatePayload,
+} from "../../types/level-quizzes.types";
 import { ApiError } from "@/shared/api";
 
 // ============================================================================
@@ -51,10 +54,15 @@ import { ApiError } from "@/shared/api";
 export function useCreateLevelQuiz() {
     const queryClient = useQueryClient();
 
-    return useMutation<LevelQuiz[], ApiError, LevelQuizCreatePayload>({
+    return useMutation<LevelQuiz, ApiError, LevelQuizCreatePayload>({
         mutationFn: levelQuizzesApi.create,
-        onSuccess: () => {
+        onSuccess: (newQuiz) => {
             queryClient.invalidateQueries({ queryKey: levelQuizKeys.all });
+            if (newQuiz.level?.id) {
+                queryClient.invalidateQueries({
+                    queryKey: levelQuizKeys.byLevel(String(newQuiz.level.id)),
+                });
+            }
         },
     });
 }
@@ -91,11 +99,18 @@ export function useUpdateLevelQuiz() {
         { id: string; data: LevelQuizUpdatePayload }
     >({
         mutationFn: ({ id, data }) => levelQuizzesApi.update(id, data),
-        onSuccess: (_, variables) => {
-            queryClient.invalidateQueries({ queryKey: levelQuizKeys.lists() });
+        onSuccess: (updatedQuiz, variables) => {
+            queryClient.invalidateQueries({ queryKey: levelQuizKeys.all });
             queryClient.invalidateQueries({
                 queryKey: levelQuizKeys.detail(variables.id),
             });
+            if (updatedQuiz.level?.id) {
+                queryClient.invalidateQueries({
+                    queryKey: levelQuizKeys.byLevel(
+                        String(updatedQuiz.level.id)
+                    ),
+                });
+            }
         },
     });
 }

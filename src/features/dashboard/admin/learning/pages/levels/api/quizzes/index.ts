@@ -40,8 +40,7 @@ export { levelQuizzesApi } from "./level-quizzes.api";
 // Query Hooks
 export {
     useLevelQuizzesMetadata,
-    useLevelQuizzesList,
-    useLevelQuizzesInfinite,
+    useLevelQuizzesByLevel,
     useLevelQuiz,
 } from "./level-quizzes.queries";
 

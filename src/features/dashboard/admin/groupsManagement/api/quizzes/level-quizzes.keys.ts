@@ -9,8 +9,8 @@
  * // Invalidate all level quizzes data
  * queryClient.invalidateQueries({ queryKey: levelQuizKeys.all });
  *
- * // Invalidate only lists (keeps detail cache)
- * queryClient.invalidateQueries({ queryKey: levelQuizKeys.lists() });
+ * // Invalidate quizzes by level
+ * queryClient.invalidateQueries({ queryKey: levelQuizKeys.byLevel(levelId) });
  *
  * // Invalidate specific level quiz
  * queryClient.invalidateQueries({ queryKey: levelQuizKeys.detail(levelQuizId) });
@@ -19,15 +19,14 @@
 
 import { LevelQuizzesListParams } from "../../types/level-quizzes.types";
 
-
 /**
  * Query key factory for level quizzes
  *
  * Hierarchy:
  * - all: ['level-quizzes']
  * - metadata: ['level-quizzes', 'metadata']
- * - lists: ['level-quizzes', 'list']
- * - list(params): ['level-quizzes', 'list', params]
+ * - byLevelRoot: ['level-quizzes', 'by-level']
+ * - byLevel(levelId, params): ['level-quizzes', 'by-level', levelId, params]
  * - details: ['level-quizzes', 'detail']
  * - detail(id): ['level-quizzes', 'detail', id]
  */
@@ -43,25 +42,23 @@ export const levelQuizKeys = {
     metadata: () => [...levelQuizKeys.all, "metadata"] as const,
 
     /**
-     * Key for all list queries
+     * Key for all by-level queries
      */
-    lists: () => [...levelQuizKeys.all, "list"] as const,
+    byLevelRoot: () => [...levelQuizKeys.all, "by-level"] as const,
 
     /**
-     * Key for specific list with params
+     * Key for quizzes by level ID with optional params
      */
-    list: (params?: LevelQuizzesListParams) =>
+    byLevel: (levelId: string, params?: LevelQuizzesListParams) =>
         params
-            ? ([...levelQuizKeys.lists(), params] as const)
-            : levelQuizKeys.lists(),
+            ? ([...levelQuizKeys.byLevelRoot(), levelId, params] as const)
+            : ([...levelQuizKeys.byLevelRoot(), levelId] as const),
 
     /**
-     * Key for infinite list queries
+     * Key for infinite list queries by level
      */
-    infinite: (params?: Omit<LevelQuizzesListParams, "page">) =>
-        params
-            ? ([...levelQuizKeys.all, "infinite", params] as const)
-            : ([...levelQuizKeys.all, "infinite"] as const),
+    infiniteByLevel: (levelId: string) =>
+        [...levelQuizKeys.all, "infinite", levelId] as const,
 
     /**
      * Key for all detail queries
@@ -80,8 +77,8 @@ export const levelQuizKeys = {
 export type LevelQuizQueryKey =
     | typeof levelQuizKeys.all
     | ReturnType<typeof levelQuizKeys.metadata>
-    | ReturnType<typeof levelQuizKeys.lists>
-    | ReturnType<typeof levelQuizKeys.list>
-    | ReturnType<typeof levelQuizKeys.infinite>
+    | ReturnType<typeof levelQuizKeys.byLevelRoot>
+    | ReturnType<typeof levelQuizKeys.byLevel>
+    | ReturnType<typeof levelQuizKeys.infiniteByLevel>
     | ReturnType<typeof levelQuizKeys.details>
     | ReturnType<typeof levelQuizKeys.detail>;

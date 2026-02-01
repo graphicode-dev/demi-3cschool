@@ -72,6 +72,15 @@ const gradesRoutes: RouteConfig[] = [
         meta: { titleKey: "learning:lessons.form.view.title" },
         handle: { crumb: "learning:lessons.form.view.title" },
     },
+    // Lesson Quizzes
+    {
+        path: "grades/:gradeId/levels/:levelId/lessons/quiz/:id",
+        lazy: () =>
+            import("@/features/dashboard/admin/learning/pages/lessons/pages/LessonsQuizDetail"),
+        permissions: [lesson.view],
+        meta: { titleKey: "learning:lessons.quiz.title" },
+        handle: { crumb: "learning:lessons.quiz.title" },
+    },
 ];
 
 export const learningRoutes: FeatureRouteModule = {

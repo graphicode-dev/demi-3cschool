@@ -18,7 +18,6 @@ import type { Roles } from "@/router/routes.types";
 export type NavSection =
     | "Curriculum Management"
     | "Groups Management"
-    | "Sales Analysis"
     | "Account"
     | "Tickets Management"
     | "Classroom"
@@ -203,13 +202,6 @@ export const NAV_SECTIONS: NavSectionConfig[] = [
         labelKey: "sidebar.sections.groupsManagement",
         label: "Groups Management",
         order: 2,
-        showHeader: true,
-    },
-    {
-        id: "Sales Analysis",
-        labelKey: "sidebar.sections.salesAnalysis",
-        label: "Sales Analysis",
-        order: 3,
         showHeader: true,
     },
     {

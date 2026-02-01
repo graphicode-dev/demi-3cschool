@@ -97,7 +97,7 @@ export interface SessionsListParams {
     course_id?: number;
     level_id?: number;
     group_id?: number;
-    location_type?: "online" | "offline" | "hybrid";
+    location_type?: "online" | "offline";
     is_active?: boolean;
     max_capacity?: number;
     created_at?: string;
@@ -119,6 +119,11 @@ export interface SessionsListParams {
 // ============================================================================
 
 /**
+ * Location type for sessions
+ */
+export type LocationType = "online" | "offline";
+
+/**
  * Create session payload
  */
 export interface GroupSessionCreatePayload {
@@ -127,6 +132,8 @@ export interface GroupSessionCreatePayload {
     session_date: string; // YYYY-MM-DD format
     start_time: string; // HH:mm format
     end_time: string; // HH:mm format
+    location_type: LocationType;
+    offline_location?: string; // Required when location_type is "offline"
 }
 
 /**

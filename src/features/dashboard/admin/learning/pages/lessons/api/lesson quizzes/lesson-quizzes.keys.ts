@@ -19,7 +19,6 @@
 
 import { LessonQuizzesListParams } from "../../types";
 
-
 /**
  * Query key factory for lesson quizzes
  *
@@ -59,10 +58,13 @@ export const lessonQuizKeys = {
     /**
      * Key for infinite list queries
      */
-    infinite: (params?: Omit<LessonQuizzesListParams, "page">) =>
-        params
-            ? ([...lessonQuizKeys.all, "infinite", params] as const)
-            : ([...lessonQuizKeys.all, "infinite"] as const),
+    infinite: () => [...lessonQuizKeys.all, "infinite"] as const,
+
+    /**
+     * Key for quizzes by level ID
+     */
+    byLevel: (levelId: string) =>
+        [...lessonQuizKeys.all, "byLevel", levelId] as const,
 
     /**
      * Key for all detail queries

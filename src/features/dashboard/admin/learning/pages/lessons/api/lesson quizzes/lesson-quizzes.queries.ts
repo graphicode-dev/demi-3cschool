@@ -24,7 +24,12 @@ import {
 } from "@tanstack/react-query";
 import { lessonQuizKeys } from "./lesson-quizzes.keys";
 import { lessonQuizzesApi } from "./lesson-quizzes.api";
-import { LessonQuiz, LessonQuizzesListParams, LessonQuizzesMetadata, PaginatedData } from "../../types";
+import {
+    LessonQuiz,
+    LessonQuizzesListParams,
+    LessonQuizzesMetadata,
+    PaginatedData,
+} from "../../types";
 
 // ============================================================================
 // Metadata Query
@@ -93,6 +98,41 @@ export function useLessonQuizzesList(
     return useQuery({
         queryKey: lessonQuizKeys.list(params),
         queryFn: ({ signal }) => lessonQuizzesApi.getList(params, signal),
+        ...options,
+    });
+}
+
+/**
+ * Hook to fetch list of lesson quizzes by level ID
+ *
+ * @param levelId - Level ID to fetch quizzes for
+ * @param options - Additional query options
+ *
+ * @example
+ * ```tsx
+ * const { data, isLoading, error } = useLessonQuizzesByLevel(levelId);
+ *
+ * if (isLoading) return <Spinner />;
+ * if (error) return <ErrorMessage error={error} />;
+ *
+ * return (
+ *     <ul>
+ *         {data?.map(quiz => (
+ *             <li key={quiz.id}>{quiz.lesson.title} - {quiz.timeLimit}min</li>
+ *         ))}
+ *     </ul>
+ * );
+ * ```
+ */
+export function useLessonQuizzesByLevel(
+    levelId: string | undefined | null,
+    options?: Partial<UseQueryOptions<LessonQuiz[], Error>>
+) {
+    return useQuery({
+        queryKey: lessonQuizKeys.byLevel(levelId ?? ""),
+        queryFn: ({ signal }) =>
+            lessonQuizzesApi.getByLevelId(levelId!, undefined, signal),
+        enabled: !!levelId,
         ...options,
     });
 }

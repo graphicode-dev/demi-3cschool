@@ -22,7 +22,7 @@ export type GroupType = "regular" | "semi_private" | "private";
 /**
  * Location type enum
  */
-export type LocationType = "online" | "offline" | "hybrid";
+export type LocationType = "online" | "offline";
 
 /**
  * Day of week enum

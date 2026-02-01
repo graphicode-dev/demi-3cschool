@@ -7,7 +7,7 @@
  */
 
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { LoadingState, ErrorState, EmptyState } from "@/design-system";
 import { useLevelsByGrade } from "../../levels";
@@ -77,6 +77,7 @@ function getTermDisplayName(
 export default function LevelsList() {
     const { t } = useTranslation();
     const { gradeId } = useParams<{ gradeId: string }>();
+    const navigate = useNavigate();
 
     const {
         data: levels,
@@ -87,6 +88,10 @@ export default function LevelsList() {
 
     // Get grade name from first level
     const gradeName = levels?.[0]?.grade?.name || `Grade ${gradeId}`;
+
+    const handleQuiz = (levelId: string | number) => {
+        navigate(`/admin/grades/${gradeId}/levels/${levelId}/quiz`);
+    };
 
     if (isLoading) {
         return <LoadingState message={t("common.loading", "Loading...")} />;
@@ -152,6 +157,7 @@ export default function LevelsList() {
                         icon={<LevelIcon index={index} />}
                         iconBg={getIconBg(index)}
                         testId={`level-card-${level.id}`}
+                        onQuiz={() => handleQuiz(level.id)}
                     />
                 ))}
             </CardGrid>

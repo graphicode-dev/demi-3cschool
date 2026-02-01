@@ -6,6 +6,7 @@
 import { useTranslation } from "react-i18next";
 import {
     Trash2,
+    Edit3,
     ChevronDown,
     ChevronUp,
     CheckCircle,
@@ -18,6 +19,7 @@ interface QuestionCardProps {
     index: number;
     isExpanded: boolean;
     onToggleExpand: () => void;
+    onEdit: () => void;
     onDelete: () => void;
     isPending?: boolean;
 }
@@ -27,6 +29,7 @@ export function QuestionCard({
     index,
     isExpanded,
     onToggleExpand,
+    onEdit,
     onDelete,
 }: QuestionCardProps) {
     const { t } = useTranslation();
@@ -82,6 +85,17 @@ export function QuestionCard({
                         </div>
                     </div>
                     <div className="flex items-center gap-1">
+                        <button
+                            type="button"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onEdit();
+                            }}
+                            className="p-1.5 text-gray-400 hover:text-brand-500 transition-colors"
+                            title={t("common.edit", "Edit")}
+                        >
+                            <Edit3 className="w-4 h-4" />
+                        </button>
                         <button
                             type="button"
                             onClick={(e) => {
