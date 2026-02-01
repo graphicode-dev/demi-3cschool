@@ -2,29 +2,28 @@
  * Regular Group Attendance Page
  *
  * Complete attendance management page for regular groups.
- * Features summary cards, session details, and student attendance table.
+ * Features summary cards, current session info, and sessions table with View Details action.
  */
 
-import { useState, useMemo, useEffect } from "react";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import React, { useMemo } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { EmptyState } from "@/design-system/components/EmptyState";
 import { AttendanceSummaryCards } from "../components/AttendanceSummaryCards";
 import { CurrentSessionDetails } from "../components/CurrentSessionDetails";
-import { StudentAttendanceTable } from "../components/StudentAttendanceTable";
+import { DynamicTable } from "@/design-system/components/table";
+import type { TableColumn, TableData } from "@/shared/types/table.types";
 import type {
     AttendanceSummary,
     CurrentSession,
-    StudentAttendance,
-    AttendanceStatus,
 } from "../types/attendance.types";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useTranslation } from "react-i18next";
 import {
     useStudentAttendanceQuery,
     useTeacherAttendanceQuery,
-    useUpdateStudentAttendanceMutation,
     useSessionsListQuery,
 } from "../api";
+import { Users, CheckCircle, Clock, TrendingUp } from "lucide-react";
 
 // Helper to format date for display
 const formatDateForDisplay = (dateString: string): string => {
@@ -54,6 +53,48 @@ const formatTimeForDisplay = (timeString: string): string => {
     }
 };
 
+// Status badge component for sessions table
+const SessionStatusBadge: React.FC<{ status: string }> = ({ status }) => {
+    const getStatusConfig = (status: string) => {
+        switch (status) {
+            case "completed":
+                return {
+                    label: "Completed",
+                    className:
+                        "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400",
+                };
+            case "pending":
+                return {
+                    label: "Pending",
+                    className:
+                        "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/20 dark:text-yellow-400",
+                };
+            case "upcoming":
+                return {
+                    label: "Upcoming",
+                    className:
+                        "bg-blue-100 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400",
+                };
+            default:
+                return {
+                    label: status,
+                    className:
+                        "bg-gray-100 text-gray-700 dark:bg-gray-800/20 dark:text-gray-400",
+                };
+        }
+    };
+
+    const config = getStatusConfig(status);
+
+    return (
+        <span
+            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.className}`}
+        >
+            {config.label}
+        </span>
+    );
+};
+
 export const AttendancePage = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -62,13 +103,6 @@ export const AttendancePage = () => {
         levelId: string;
         id: string;
     }>();
-    const [searchParams, setSearchParams] = useSearchParams();
-    const sessionIdFromUrl = searchParams.get("sessionId");
-    const [selectedSessionId, setSelectedSessionId] = useState<string | null>(
-        sessionIdFromUrl
-    );
-
-    const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([]);
 
     // Fetch sessions for this group
     const { data: sessionsData, isLoading: isLoadingSessions } =
@@ -77,215 +111,194 @@ export const AttendancePage = () => {
             { enabled: !!groupId }
         );
 
-    // Auto-select first session if none selected
-    useEffect(() => {
-        if (!selectedSessionId && sessionsData && sessionsData.length > 0) {
-            const firstSessionId = String(sessionsData[0].id);
-            setSelectedSessionId(firstSessionId);
-            setSearchParams({ sessionId: firstSessionId });
-        }
-    }, [sessionsData, selectedSessionId, setSearchParams]);
+    // Get the first/current session for display
+    const currentSession = sessionsData?.[0];
+    const currentSessionId = currentSession ? String(currentSession.id) : null;
 
-    // Handle session selection change
-    const handleSessionChange = (newSessionId: string) => {
-        setSelectedSessionId(newSessionId);
-        setSearchParams({ sessionId: newSessionId });
-    };
-
-    // Fetch student attendance data
-    const {
-        data: studentAttendanceData,
-        isLoading: isLoadingStudents,
-        isError: isStudentError,
-    } = useStudentAttendanceQuery(selectedSessionId || "", {
-        enabled: !!selectedSessionId,
-    });
+    // Fetch student attendance data for current session
+    const { data: studentAttendanceData, isLoading: isLoadingStudents } =
+        useStudentAttendanceQuery(currentSessionId || "", {
+            enabled: !!currentSessionId,
+        });
 
     // Fetch teacher attendance data (for session details)
     const { data: teacherAttendanceData, isLoading: isLoadingTeachers } =
-        useTeacherAttendanceQuery(selectedSessionId || "", {
-            enabled: !!selectedSessionId,
+        useTeacherAttendanceQuery(currentSessionId || "", {
+            enabled: !!currentSessionId,
         });
 
-    // Mutation for updating student attendance
-    const updateStudentAttendance = useUpdateStudentAttendanceMutation();
-
-    // Transform API data to component format
-    const displayStudents: StudentAttendance[] = useMemo(() => {
-        if (!studentAttendanceData) return [];
-
-        return studentAttendanceData.map((record) => ({
-            id: String(record.id),
-            studentAvatar: "",
-            studentName: record.student.name,
-            status: record.status as AttendanceStatus,
-            attendanceDate: formatDateForDisplay(record.createdAt),
-            attendanceTime:
-                record.status === "present"
-                    ? formatTimeForDisplay(record.createdAt.split(" ")[1] || "")
-                    : "--:--",
-            primaryTeacher: {
-                name: teacherAttendanceData?.[0]?.teacher.name || "-",
-            },
-            selected: selectedStudentIds.includes(String(record.id)),
-        }));
-    }, [studentAttendanceData, teacherAttendanceData, selectedStudentIds]);
-
-    // Calculate summary from student data
+    // Calculate summary from sessions data
     const displaySummary: AttendanceSummary = useMemo(() => {
-        const total = displayStudents.length;
-        const presentCount = displayStudents.filter(
-            (s) => s.status === "present"
-        ).length;
-        const absentCount = displayStudents.filter(
-            (s) => s.status === "absent"
-        ).length;
-        const attendanceRate = total > 0 ? (presentCount / total) * 100 : 0;
+        const totalSessions = sessionsData?.length || 0;
+        const completedSessions =
+            sessionsData?.filter((s) => {
+                const sessionDate = new Date(s.sessionDate);
+                return sessionDate < new Date();
+            }).length || 0;
+        const pendingSessions = totalSessions - completedSessions;
+
+        // Calculate attendance rate from student data
+        const totalStudents = studentAttendanceData?.length || 0;
+        const presentCount =
+            studentAttendanceData?.filter((s) => s.status === "present")
+                .length || 0;
+        const attendanceRate =
+            totalStudents > 0 ? (presentCount / totalStudents) * 100 : 0;
 
         return {
-            totalStudents: total,
-            presentCount,
-            absentCount,
+            totalStudents: totalSessions,
+            presentCount: completedSessions,
+            absentCount: pendingSessions,
             attendanceRate,
         };
-    }, [displayStudents]);
+    }, [sessionsData, studentAttendanceData]);
 
-    // Build session details from teacher attendance data
+    // Build current session details from teacher attendance data
     const displaySession: CurrentSession = useMemo(() => {
         const firstTeacher = teacherAttendanceData?.[0];
-        const session = firstTeacher?.groupSession;
+        const session = firstTeacher?.groupSession || currentSession;
+        const totalStudents = studentAttendanceData?.length || 0;
 
         return {
             date: session?.sessionDate || "-",
             startTime: session?.startTime || "-",
             endTime: session?.endTime || "-",
-            totalEnrolled: String(displayStudents.length),
+            totalEnrolled: String(totalStudents),
             instructor: {
                 name: firstTeacher?.teacher.name || "-",
             },
         };
-    }, [teacherAttendanceData, displayStudents.length]);
+    }, [teacherAttendanceData, currentSession, studentAttendanceData]);
 
-    // Handle selection change
-    const handleSelectionChange = (selectedIds: string[]) => {
-        setSelectedStudentIds(selectedIds);
+    // Navigate to session details
+    const handleViewDetails = (sessionId: string) => {
+        navigate(`session/${sessionId}`);
     };
 
-    // Handle status update - returns Promise for ConfirmDialog loading state
-    const handleStatusUpdate = async (
-        studentId: string,
-        status: AttendanceStatus
-    ): Promise<void> => {
-        if (!selectedSessionId) return;
+    // Convert sessions to table data
+    const tableData: TableData[] = useMemo(() => {
+        if (!sessionsData) return [];
 
-        const student = studentAttendanceData?.find(
-            (s) => String(s.id) === studentId
-        );
-        if (!student) return;
+        return sessionsData.map((session, index) => {
+            const sessionDate = new Date(session.sessionDate);
+            const isPast = sessionDate < new Date();
+            const status = isPast ? "completed" : "pending";
 
-        await updateStudentAttendance.mutateAsync({
-            sessionId: selectedSessionId,
-            data: {
-                attendances: [
-                    {
-                        student_id: student.student.id,
-                        status,
-                        note: student.note,
-                    },
-                ],
-            },
+            return {
+                id: String(session.id),
+                columns: {
+                    sessionName:
+                        session.lesson?.title || `Session ${index + 1}`,
+                    status,
+                    sessionDate: session.sessionDate,
+                    sessionTime: `${session.startTime}`,
+                    instructor: session.lesson?.title || "-",
+                    attendance: "18/18",
+                },
+            };
         });
-    };
+    }, [sessionsData]);
 
-    const isLoading = isLoadingStudents || isLoadingTeachers;
+    // Define table columns matching Figma design
+    const columns: TableColumn[] = [
+        {
+            id: "sessionName",
+            header: t("attendance.sessionName", "Session Name"),
+            accessorKey: "sessionName",
+            sortable: true,
+            cell: ({ row }: { row: TableData }) => (
+                <span className="font-medium text-gray-900 dark:text-white">
+                    {row.columns.sessionName}
+                </span>
+            ),
+        },
+        {
+            id: "status",
+            header: t("attendance.status", "Status"),
+            accessorKey: "status",
+            sortable: true,
+            cell: ({ row }: { row: TableData }) => (
+                <SessionStatusBadge status={row.columns.status as string} />
+            ),
+        },
+        {
+            id: "sessionDate",
+            header: t("attendance.sessionDate", "Session Date"),
+            accessorKey: "sessionDate",
+            sortable: true,
+            cell: ({ row }: { row: TableData }) => (
+                <div className="text-sm">
+                    <div className="text-gray-900 dark:text-white">
+                        {formatDateForDisplay(
+                            row.columns.sessionDate as string
+                        )}
+                    </div>
+                    <div className="text-gray-500 dark:text-gray-400">
+                        {formatTimeForDisplay(
+                            row.columns.sessionTime as string
+                        )}
+                    </div>
+                </div>
+            ),
+        },
+        {
+            id: "instructor",
+            header: t("attendance.instructor", "Instructor"),
+            accessorKey: "instructor",
+            sortable: true,
+            cell: ({ row }: { row: TableData }) => (
+                <span className="text-sm text-gray-900 dark:text-white">
+                    {row.columns.instructor}
+                </span>
+            ),
+        },
+        {
+            id: "attendance",
+            header: t("attendance.attendance", "Attendance"),
+            accessorKey: "attendance",
+            sortable: true,
+            cell: ({ row }: { row: TableData }) => (
+                <div className="text-sm">
+                    <span className="text-gray-900 dark:text-white">
+                        {row.columns.attendance}
+                    </span>
+                    <span className="text-gray-500 dark:text-gray-400 ml-1">
+                        Student
+                    </span>
+                </div>
+            ),
+        },
+        {
+            id: "actions",
+            header: t("common.action", "Action"),
+            accessorKey: "actions",
+            sortable: false,
+            cell: ({ row }: { row: TableData }) => (
+                <button
+                    onClick={() => handleViewDetails(row.id)}
+                    className="px-4 py-2 text-sm font-medium text-white bg-brand-500 rounded-lg hover:bg-brand-600 transition-colors"
+                >
+                    {t("attendance.viewDetails", "View Details")}
+                </button>
+            ),
+        },
+    ];
+
+    const isLoading =
+        isLoadingStudents || isLoadingTeachers || isLoadingSessions;
 
     return (
         <PageWrapper
             pageHeaderProps={{
-                title: t("groups.attendance.title", "Group Attendance"),
+                title: t("groups.attendance.title", "Attendance"),
                 subtitle: t(
                     "groups.attendance.subtitle",
-                    "Track and manage student attendance for the Regular group"
+                    "Track and manage attendance for scheduled group sessions."
                 ),
                 backButton: true,
             }}
         >
             <div className="space-y-6">
-                {/* Session Selector */}
-                {sessionsData && sessionsData.length > 0 && (
-                    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            {t(
-                                "groups.attendance.selectSession",
-                                "Select Session"
-                            )}
-                        </label>
-                        <select
-                            value={selectedSessionId || ""}
-                            onChange={(e) =>
-                                handleSessionChange(e.target.value)
-                            }
-                            className="w-full md:w-auto px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
-                        >
-                            <option value="" disabled>
-                                {t(
-                                    "groups.attendance.chooseSession",
-                                    "Choose a session..."
-                                )}
-                            </option>
-                            {sessionsData.map((session) => (
-                                <option
-                                    key={session.id}
-                                    value={String(session.id)}
-                                >
-                                    {session.sessionDate} -{" "}
-                                    {session.lesson?.title || "Session"} (
-                                    {session.startTime} - {session.endTime})
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-                )}
-
-                {/* No Sessions Available Warning */}
-                {!isLoadingSessions &&
-                    (!sessionsData || sessionsData.length === 0) && (
-                        <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
-                            <p className="text-yellow-800 dark:text-yellow-200">
-                                {t(
-                                    "groups.attendance.noSessions",
-                                    "No sessions found for this group."
-                                )}
-                            </p>
-                        </div>
-                    )}
-
-                {/* No Session Selected Warning */}
-                {sessionsData &&
-                    sessionsData.length > 0 &&
-                    !selectedSessionId && (
-                        <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
-                            <p className="text-yellow-800 dark:text-yellow-200">
-                                {t(
-                                    "groups.attendance.noSessionSelected",
-                                    "No session selected. Please select a session to view attendance."
-                                )}
-                            </p>
-                        </div>
-                    )}
-
-                {/* Error State */}
-                {isStudentError && (
-                    <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
-                        <p className="text-red-800 dark:text-red-200">
-                            {t(
-                                "groups.attendance.loadError",
-                                "Failed to load attendance data. Please try again."
-                            )}
-                        </p>
-                    </div>
-                )}
-
                 {/* Attendance Summary Cards */}
                 <AttendanceSummaryCards
                     summary={displaySummary}
@@ -298,34 +311,38 @@ export const AttendancePage = () => {
                     loading={isLoading}
                 />
 
-                {/* Student Attendance Table */}
+                {/* Attendance Details Table */}
                 <div>
                     <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
                         {t(
-                            "groups.attendance.studentDetails",
-                            "Student Attendance Details"
+                            "groups.attendance.attendanceDetails",
+                            "Attendance Details"
                         )}
                     </h2>
+
                     {isLoading ? (
                         <div className="flex justify-center py-8">
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500" />
                         </div>
-                    ) : displayStudents.length > 0 ? (
-                        <StudentAttendanceTable
-                            students={displayStudents}
-                            loading={isLoading}
-                            onSelectionChange={handleSelectionChange}
-                            onStatusUpdate={handleStatusUpdate}
-                        />
+                    ) : tableData.length > 0 ? (
+                        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+                            <DynamicTable
+                                data={tableData}
+                                columns={columns}
+                                hideToolbar
+                                noPadding
+                                disableRowClick
+                            />
+                        </div>
                     ) : (
                         <EmptyState
                             title={t(
-                                "groups.attendance.noStudents",
-                                "No students found"
+                                "groups.attendance.noSessions",
+                                "No sessions found"
                             )}
                             message={t(
-                                "groups.attendance.noStudentsMessage",
-                                "There are no students enrolled in this group or no attendance records for the current session."
+                                "groups.attendance.noSessionsMessage",
+                                "There are no sessions scheduled for this group yet."
                             )}
                         />
                     )}

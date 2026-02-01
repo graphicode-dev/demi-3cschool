@@ -227,6 +227,24 @@ const groupsManagementRoutes: RouteConfig[] = [
         meta: { titleKey: "groupsManagement:groups.attendance.title" },
         handle: { crumb: "groupsManagement:groups.attendance.title" },
     },
+    // Session Attendance Details
+    {
+        path: "groups/grades/:gradeId/levels/:levelId/group/:id/attendance/session/:sessionId",
+        lazy: () =>
+            import("@/features/dashboard/admin/groupsManagement/pages/sessionAttendance"),
+        permissions: [studentAttendance.viewAny],
+        meta: { titleKey: "groupsManagement:groups.sessionAttendance.title" },
+        handle: { crumb: "groupsManagement:groups.sessionAttendance.title" },
+    },
+    // Attendance Audit Log
+    {
+        path: "groups/grades/:gradeId/levels/:levelId/group/:id/attendance/audit-log",
+        lazy: () =>
+            import("@/features/dashboard/admin/groupsManagement/pages/attendanceAuditLog"),
+        permissions: [studentAttendance.viewAny],
+        meta: { titleKey: "groupsManagement:groups.attendanceAuditLog.title" },
+        handle: { crumb: "groupsManagement:groups.attendanceAuditLog.title" },
+    },
     // Group Instructor
     {
         path: "groups/grades/:gradeId/levels/:levelId/group/:id/instructor",

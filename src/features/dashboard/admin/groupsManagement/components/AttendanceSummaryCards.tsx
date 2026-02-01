@@ -2,77 +2,13 @@
  * Attendance Summary Cards Component
  *
  * Displays attendance statistics in card format with icons.
- * Shows total students, present count, absent count, and attendance rate.
+ * Shows total sessions, completed, pending, and attendance rate.
  */
 
 import React from "react";
 import { useTranslation } from "react-i18next";
+import { Users, CheckCircle, Clock, TrendingUp } from "lucide-react";
 import type { AttendanceSummary } from "../types/attendance.types";
-
-// Icon components moved outside of render function
-const TotalStudentsIcon: React.FC = () => (
-    <svg
-        className="w-5 h-5"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-    >
-        <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
-        />
-    </svg>
-);
-
-const PresentIcon: React.FC = () => (
-    <svg
-        className="w-5 h-5"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-    >
-        <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-    </svg>
-);
-
-const AbsentIcon: React.FC = () => (
-    <svg
-        className="w-5 h-5"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-    >
-        <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-    </svg>
-);
-
-const AttendanceRateIcon: React.FC = () => (
-    <svg
-        className="w-5 h-5"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-    >
-        <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-        />
-    </svg>
-);
 
 interface AttendanceSummaryCardsProps {
     summary: AttendanceSummary;
@@ -147,30 +83,30 @@ export const AttendanceSummaryCards: React.FC<AttendanceSummaryCardsProps> = ({
             className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 ${className}`}
         >
             <SummaryCard
-                title={t("attendance.totalStudents", "Total Students")}
+                title={t("attendance.totalSessions", "Total Sessions")}
                 value={summary.totalStudents}
-                icon={<TotalStudentsIcon />}
+                icon={<Users className="w-5 h-5" />}
                 color="blue"
                 loading={loading}
             />
             <SummaryCard
-                title={t("attendance.present", "Present")}
+                title={t("attendance.completed", "Completed")}
                 value={summary.presentCount}
-                icon={<PresentIcon />}
+                icon={<CheckCircle className="w-5 h-5" />}
                 color="green"
                 loading={loading}
             />
             <SummaryCard
-                title={t("attendance.absent", "Absent")}
+                title={t("attendance.pending", "Pending")}
                 value={summary.absentCount}
-                icon={<AbsentIcon />}
+                icon={<Clock className="w-5 h-5" />}
                 color="red"
                 loading={loading}
             />
             <SummaryCard
                 title={t("attendance.attendanceRate", "Attendance Rate")}
                 value={`${summary.attendanceRate.toFixed(1)}%`}
-                icon={<AttendanceRateIcon />}
+                icon={<TrendingUp className="w-5 h-5" />}
                 color="purple"
                 loading={loading}
             />
