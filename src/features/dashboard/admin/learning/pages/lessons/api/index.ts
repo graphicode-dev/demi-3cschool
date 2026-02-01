@@ -46,3 +46,6 @@ export * from "./lesson quiz options";
 export * from "./lesson quiz questions";
 export * from "./lesson quizzes";
 export * from "./lesson videos";
+export * from "./lesson video quizzes";
+export * from "./lesson video quiz questions";
+export * from "./lesson video quiz options";

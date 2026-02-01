@@ -5,15 +5,17 @@
  * Integrates with lesson videos API.
  */
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { arrayMove } from "@dnd-kit/sortable";
 import ContentList from "../ContentList";
 import ContentListItem from "../ContentListItem";
 import EmptyState from "../EmptyState";
 import VideoEditor from "../editors/VideoEditor";
-import {  useLessonVideosList } from "../../../api";
+import VideoQuizEditor from "../editors/VideoQuizEditor";
+import { useLessonVideosList } from "../../../api";
 import { LessonVideo } from "../../../types";
+
+type EditorMode = "video" | "quiz" | "none";
 
 interface VideosTabProps {
     lessonId: string;
@@ -25,36 +27,40 @@ export default function VideosTab({ lessonId }: VideosTabProps) {
         null
     );
     const [isCreating, setIsCreating] = useState(false);
+    const [editorMode, setEditorMode] = useState<EditorMode>("none");
+    const [quizVideoId, setQuizVideoId] = useState<string | null>(null);
 
     const { data: allVideos = [], isLoading } = useLessonVideosList();
 
-    const filteredVideos = useMemo(
+    const videos = useMemo(
         () => allVideos.filter((video) => video.lesson?.id === lessonId),
         [allVideos, lessonId]
     );
 
-    const [videos, setVideos] = useState<LessonVideo[]>([]);
-
-    useEffect(() => {
-        setVideos(filteredVideos);
-    }, [filteredVideos]);
-
     const handleAddVideo = () => {
         setSelectedVideo(null);
         setIsCreating(true);
+        setEditorMode("video");
+        setQuizVideoId(null);
     };
 
     const handleSelectVideo = (video: LessonVideo) => {
         setSelectedVideo(video);
         setIsCreating(false);
+        setEditorMode("video");
+        setQuizVideoId(null);
+    };
+
+    const handleQuizClick = (video: LessonVideo) => {
+        setSelectedVideo(null);
+        setIsCreating(false);
+        setEditorMode("quiz");
+        setQuizVideoId(video.id);
     };
 
     const handleReorder = (activeId: string, overId: string) => {
-        setVideos((items) => {
-            const oldIndex = items.findIndex((item) => item.id === activeId);
-            const newIndex = items.findIndex((item) => item.id === overId);
-            return arrayMove(items, oldIndex, newIndex);
-        });
+        // TODO: Implement reorder via API
+        console.log("Reorder:", activeId, "->", overId);
     };
 
     const renderDragOverlay = (activeId: string) => {
@@ -72,13 +78,51 @@ export default function VideosTab({ lessonId }: VideosTabProps) {
     };
 
     const handleSave = () => {
-        // Will be implemented with API integration
         setIsCreating(false);
+        setEditorMode("none");
     };
 
     const handleCancel = () => {
         setSelectedVideo(null);
         setIsCreating(false);
+        setEditorMode("none");
+        setQuizVideoId(null);
+    };
+
+    const handleQuizSave = () => {
+        setEditorMode("none");
+        setQuizVideoId(null);
+    };
+
+    const handleQuizCancel = () => {
+        setEditorMode("none");
+        setQuizVideoId(null);
+    };
+
+    const renderEditor = () => {
+        if (editorMode === "quiz" && quizVideoId) {
+            return (
+                <VideoQuizEditor
+                    videoId={quizVideoId}
+                    onSave={handleQuizSave}
+                    onCancel={handleQuizCancel}
+                />
+            );
+        }
+
+        if (editorMode === "video" && (selectedVideo || isCreating)) {
+            return (
+                <VideoEditor
+                    lessonId={lessonId}
+                    video={selectedVideo}
+                    onSave={handleSave}
+                    onCancel={handleCancel}
+                    onDelete={handleCancel}
+                />
+            );
+        }
+
+        return <EmptyState />;
     };
 
     return (
@@ -101,25 +145,22 @@ export default function VideosTab({ lessonId }: VideosTabProps) {
                         type="video"
                         duration={video.duration}
                         isPublished={video.isActive === 1}
-                        isSelected={selectedVideo?.id === video.id}
+                        isSelected={
+                            editorMode === "video" &&
+                            selectedVideo?.id === video.id
+                        }
                         onClick={() => handleSelectVideo(video)}
+                        onQuizClick={() => handleQuizClick(video)}
+                        isQuizSelected={
+                            editorMode === "quiz" && quizVideoId === video.id
+                        }
                     />
                 ))}
             </ContentList>
 
-            {/* Video Editor */}
+            {/* Editor Panel */}
             <div className="w-2/3 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
-                {selectedVideo || isCreating ? (
-                    <VideoEditor
-                        lessonId={lessonId}
-                        video={selectedVideo}
-                        onSave={handleSave}
-                        onCancel={handleCancel}
-                        onDelete={handleCancel}
-                    />
-                ) : (
-                    <EmptyState />
-                )}
+                {renderEditor()}
             </div>
         </div>
     );

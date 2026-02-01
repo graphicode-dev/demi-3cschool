@@ -25,6 +25,8 @@ export interface ContentListItemProps {
     isPublished?: boolean;
     isSelected?: boolean;
     onClick?: () => void;
+    onQuizClick?: () => void;
+    isQuizSelected?: boolean;
 }
 
 const typeIcons: Record<ContentListItemProps["type"], ReactNode> = {
@@ -49,6 +51,8 @@ export default function ContentListItem({
     isPublished = false,
     isSelected = false,
     onClick,
+    onQuizClick,
+    isQuizSelected = false,
 }: ContentListItemProps) {
     const { t } = useTranslation();
     const {
@@ -118,6 +122,25 @@ export default function ContentListItem({
                     </span>
                 </div>
             </div>
+
+            {/* Quiz Button - Only for videos */}
+            {type === "video" && onQuizClick && (
+                <button
+                    type="button"
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        onQuizClick();
+                    }}
+                    className={`p-2 rounded-lg transition-colors ${
+                        isQuizSelected
+                            ? "text-purple-600 bg-purple-100 dark:bg-purple-500/20"
+                            : "text-gray-400 hover:text-purple-500 hover:bg-purple-50 dark:hover:bg-purple-500/10"
+                    }`}
+                    title={t("lessons:content.videoQuiz", "Video Quiz")}
+                >
+                    <HelpCircle className="w-4 h-4" />
+                </button>
+            )}
         </div>
     );
 }
