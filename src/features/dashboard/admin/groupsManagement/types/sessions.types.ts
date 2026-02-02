@@ -2,6 +2,8 @@
  * Group Sessions Management Feature - Domain Types
  */
 
+import { LocationType } from "./groups.types";
+
 // ============================================================================
 // Entity Types
 // ============================================================================
@@ -117,11 +119,6 @@ export interface SessionsListParams {
 // ============================================================================
 // Payload Types
 // ============================================================================
-
-/**
- * Location type for sessions
- */
-export type LocationType = "online" | "offline";
 
 /**
  * Create session payload

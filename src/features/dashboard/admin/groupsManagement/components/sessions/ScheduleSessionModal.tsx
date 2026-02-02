@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { X, Info, Monitor, MapPin } from "lucide-react";
 import { Form } from "@/design-system/components/form";
-import type { LocationType } from "../../types/sessions.types";
+import { LocationType } from "../../types";
 
 const scheduleSessionSchema = z
     .object({

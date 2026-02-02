@@ -24,7 +24,10 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { levelQuizKeys } from "./level-quizzes.keys";
 import { levelQuizzesApi } from "./level-quizzes.api";
 import { LevelQuiz } from "../../types";
-import { LevelQuizCreatePayload, LevelQuizUpdatePayload } from "../../types/level-quizzes.types";
+import {
+    LevelQuizCreatePayload,
+    LevelQuizUpdatePayload,
+} from "../../types/level-quizzes.types";
 import { ApiError } from "@/shared/api";
 
 // ============================================================================
@@ -51,7 +54,7 @@ import { ApiError } from "@/shared/api";
 export function useCreateLevelQuiz() {
     const queryClient = useQueryClient();
 
-    return useMutation<LevelQuiz[], ApiError, LevelQuizCreatePayload>({
+    return useMutation<LevelQuiz, ApiError, LevelQuizCreatePayload>({
         mutationFn: levelQuizzesApi.create,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: levelQuizKeys.all });
