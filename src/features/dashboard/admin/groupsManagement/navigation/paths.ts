@@ -79,6 +79,25 @@ export const groupsPaths = {
         id: string | number = ":id"
     ) =>
         `${BasePath}/grades/${gradeId}/levels/${levelId}/group/${id}/instructor/assign-teacher`,
+    teacherManagement: (
+        gradeId: string | number = ":gradeId",
+        levelId: string | number = ":levelId",
+        id: string | number = ":id"
+    ) =>
+        `${BasePath}/grades/${gradeId}/levels/${levelId}/group/${id}/teacher-management`,
+    reassignTeacher: (
+        gradeId: string | number = ":gradeId",
+        levelId: string | number = ":levelId",
+        id: string | number = ":id"
+    ) =>
+        `${BasePath}/grades/${gradeId}/levels/${levelId}/group/${id}/teacher-management/reassign`,
+    changeSessionTeacher: (
+        gradeId: string | number = ":gradeId",
+        levelId: string | number = ":levelId",
+        id: string | number = ":id",
+        sessionId: string | number = ":sessionId"
+    ) =>
+        `${BasePath}/grades/${gradeId}/levels/${levelId}/group/${id}/teacher-management/session/${sessionId}/change-teacher`,
     sessionsList: () => `${BasePath}/sessions`,
 } as const;
 
@@ -98,6 +117,9 @@ export const groupsManagementPaths = registerFeaturePaths("groupsManagement", {
     regularSessions: groupsPaths.regularSessions,
     regularFinalQuiz: groupsPaths.regularFinalQuiz,
     regularAssignTeacher: groupsPaths.regularAssignTeacher,
+    teacherManagement: groupsPaths.teacherManagement,
+    reassignTeacher: groupsPaths.reassignTeacher,
+    changeSessionTeacher: groupsPaths.changeSessionTeacher,
     sessionsList: groupsPaths.sessionsList,
 });
 

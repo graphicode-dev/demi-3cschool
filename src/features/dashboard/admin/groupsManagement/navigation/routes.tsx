@@ -150,6 +150,35 @@ const groupsRoutes: RouteConfig[] = [
         meta: { titleKey: "groupsManagement:groups.finalQuiz.title" },
         handle: { crumb: "groupsManagement:groups.finalQuiz.title" },
     },
+    // Teacher Session Management
+    {
+        path: "grades/:gradeId/levels/:levelId/group/:id/teacher-management",
+        lazy: () =>
+            import("@/features/dashboard/admin/groupsManagement/pages/teacherSessionManagement"),
+        permissions: [group.update],
+        meta: { titleKey: "groupsManagement:teacherManagement.title" },
+        handle: { crumb: "groupsManagement:teacherManagement.title" },
+    },
+    // Reassign Primary Teacher
+    {
+        path: "grades/:gradeId/levels/:levelId/group/:id/teacher-management/reassign",
+        lazy: () =>
+            import("@/features/dashboard/admin/groupsManagement/pages/reassignTeacher"),
+        permissions: [group.update],
+        meta: { titleKey: "groupsManagement:groups.reassignTeacher.title" },
+        handle: { crumb: "groupsManagement:groups.reassignTeacher.title" },
+    },
+    // Change Session Teacher
+    {
+        path: "grades/:gradeId/levels/:levelId/group/:id/teacher-management/session/:sessionId/change-teacher",
+        lazy: () =>
+            import("@/features/dashboard/admin/groupsManagement/pages/changeSessionTeacher"),
+        permissions: [group.update],
+        meta: {
+            titleKey: "groupsManagement:groups.changeSessionTeacher.title",
+        },
+        handle: { crumb: "groupsManagement:groups.changeSessionTeacher.title" },
+    },
 ];
 
 // ============================================================================
