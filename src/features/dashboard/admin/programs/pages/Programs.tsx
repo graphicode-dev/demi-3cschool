@@ -1,11 +1,10 @@
 /**
  * Programs Page
  *
- * Displays a list of educational programs with their statistics.
+ * Displays a list of programs curriculum with toggle buttons for status.
  */
 
-import { ProgramCard } from "../components";
-import { mockPrograms } from "../mockData";
+import { ProgramsCurriculumList } from "../components";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useTranslation } from "react-i18next";
 
@@ -18,11 +17,7 @@ function ProgramsPage() {
                 subtitle: t("programs:programs.description"),
             }}
         >
-            <div className="space-y-4">
-                {mockPrograms.map((program) => (
-                    <ProgramCard key={program.id} program={program} />
-                ))}
-            </div>
+            <ProgramsCurriculumList />
         </PageWrapper>
     );
 }

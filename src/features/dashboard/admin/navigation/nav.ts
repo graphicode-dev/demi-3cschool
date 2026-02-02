@@ -14,7 +14,14 @@
  */
 
 import type { FeatureNavModule } from "@/navigation/nav.types";
-import { Settings, BookOpen, ChartColumnIcon, ShieldCheck } from "lucide-react";
+import {
+    Settings,
+    BookOpen,
+    ChartColumnIcon,
+    ShieldCheck,
+    GraduationCap,
+    Users,
+} from "lucide-react";
 import { adminSharedNavItems } from "@/features/dashboard/shared/navigation";
 import { ticketsManagementNavItem } from "../ticketsManagement/navigation/nav";
 import { communityManagementPaths } from "../communityManagement/navigation/paths";
@@ -25,7 +32,6 @@ import {
     eligibleStudentsPermissions,
 } from "@/auth";
 import { gradesPaths } from "../learning/navigation/paths";
-import { programsPaths } from "../programs/navigation/paths";
 import { groupsPaths } from "../groupsManagement/navigation/paths";
 import { groupsAnalyticsPaths } from "../groupsAnalytics/navigation/paths";
 
@@ -39,22 +45,13 @@ export const adminNav: FeatureNavModule = {
     section: "Admin",
     order: 100,
     items: [
-        // Programs Management
-        {
-            order: 1,
-            key: "programs-management",
-            labelKey: "programs:programs.breadcrumb",
-            label: "Programs Management",
-            href: programsPaths.list(),
-            icon: BookOpen,
-            permissions: [course.viewAny],
-        },
         // Grades (Learning)
         {
             key: "grades",
             labelKey: "learning:grades.navTitle",
             label: "Grades",
             href: gradesPaths.list(),
+            icon: GraduationCap,
             order: 2,
             permissions: [lesson.viewAny],
         },
@@ -74,6 +71,7 @@ export const adminNav: FeatureNavModule = {
             labelKey: "groupsManagement:groups.title",
             label: "Groups Management",
             href: groupsPaths.gradesList(),
+            icon: Users,
             order: 5,
             permissions: [group.viewAny],
         },

@@ -7,12 +7,15 @@
 
 import type { NavItem } from "@/navigation/nav.types";
 import { ticketsPaths } from "./paths";
+import { Ticket } from "lucide-react";
 
 export const ticketsManagementNavItem: NavItem = {
     key: "tickets-management",
     label: "Tickets Management",
     labelKey: "sidebar.sections.ticketsManagement",
     href: ticketsPaths.overview(),
+    icon: Ticket,
+    order: 6,
     children: [
         {
             key: "overview",

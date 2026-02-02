@@ -20,7 +20,7 @@ const programsRoutes: RouteConfig[] = [
         index: true,
         lazy: () =>
             import("@/features/dashboard/admin/programs/pages/Programs"),
-        permissions: [course.viewAny],
+        // permissions: [course.viewAny],
         meta: { titleKey: "programs:programs.title" },
         handle: { crumb: "programs:programs.title" },
     },

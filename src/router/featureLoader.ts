@@ -123,7 +123,6 @@ export const loadFeatureNavigation = (): void => {
             "!../features/dashboard/admin/learning/**",
             "!../features/dashboard/admin/groupsManagement/**",
             "!../features/dashboard/admin/groupsAnalytics/**",
-            "!../features/dashboard/admin/programs/**",
             "!../features/dashboard/admin/overview/**",
             "!../features/dashboard/admin/sales_subscription/**",
             "!../features/dashboard/admin/settings/**",

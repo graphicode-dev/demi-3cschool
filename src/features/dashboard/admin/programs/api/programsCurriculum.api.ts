@@ -56,12 +56,12 @@ export const programsCurriculumApi = {
     },
 
     /**
-     * Get paginated list of all programs curriculums
+     * Get list of all programs curriculums
      */
     getList: async (
         params?: ProgramsCurriculumListParams,
         signal?: AbortSignal
-    ): Promise<ProgramCurriculumPaginatedData<ProgramCurriculum>> => {
+    ): Promise<ProgramCurriculum[]> => {
         const { search, ...restParams } = params ?? {};
 
         // Build query params, only include non-empty values
@@ -71,22 +71,19 @@ export const programsCurriculumApi = {
             queryParams.search = search.trim();
         }
 
-        const response = await api.get<
-            ProgramCurriculumPaginatedResponse<ProgramCurriculum>
-        >(BASE_URL, {
-            params: queryParams,
-            signal,
-        });
+        const response = await api.get<ApiResponse<ProgramCurriculum[]>>(
+            BASE_URL,
+            {
+                params: queryParams,
+                signal,
+            }
+        );
 
         if (response.error) {
             throw response.error;
         }
 
-        if (!response.data?.data) {
-            throw new Error("No data returned from server");
-        }
-
-        return response.data.data;
+        return response.data?.data ?? [];
     },
 
     /**

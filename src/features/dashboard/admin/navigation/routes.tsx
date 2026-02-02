@@ -46,7 +46,7 @@ const overviewRoutes: RouteConfig[] = [
         path: "overview",
         lazy: () =>
             import("@/features/dashboard/admin/overview/pages/Dashboard"),
-        permissions: [dashboardPermissions.view],
+        // permissions: [dashboardPermissions.view],
         meta: { titleKey: "common:dashboard" },
         handle: { crumb: "common:dashboard" },
     },
@@ -62,7 +62,7 @@ const gradesRoutes: RouteConfig[] = [
         path: "grades",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/grades/pages/GradesList"),
-        permissions: [lesson.viewAny],
+        // permissions: [lesson.viewAny],
         meta: { titleKey: "learning:grades.title" },
         handle: { crumb: "learning:grades.title" },
     },
@@ -71,7 +71,7 @@ const gradesRoutes: RouteConfig[] = [
         path: "grades/:gradeId/levels",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/grades/pages/LevelsList"),
-        permissions: [lesson.viewAny],
+        // permissions: [lesson.viewAny],
         meta: { titleKey: "learning:levels.title" },
         handle: { crumb: "learning:levels.title" },
     },
@@ -80,7 +80,7 @@ const gradesRoutes: RouteConfig[] = [
         path: "grades/:gradeId/levels/:levelId/lessons",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/lessons/pages/LessonsList"),
-        permissions: [lesson.viewAny],
+        // permissions: [lesson.viewAny],
         meta: { titleKey: "learning:lessons.title" },
         handle: { crumb: "learning:lessons.title" },
     },
@@ -89,7 +89,7 @@ const gradesRoutes: RouteConfig[] = [
         path: "grades/:gradeId/levels/:levelId/lessons/create",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/lessons/pages/LessonsCreate"),
-        permissions: [lesson.create],
+        // permissions: [lesson.create],
         meta: { titleKey: "learning:lessons.form.create.title" },
         handle: { crumb: "learning:lessons.form.create.title" },
     },
@@ -98,7 +98,7 @@ const gradesRoutes: RouteConfig[] = [
         path: "grades/:gradeId/levels/:levelId/lessons/edit/:id",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/lessons/pages/LessonsEdit"),
-        permissions: [lesson.update],
+        // permissions: [lesson.update],
         meta: { titleKey: "learning:lessons.form.edit.title" },
         handle: { crumb: "learning:lessons.form.edit.title" },
     },
@@ -107,7 +107,7 @@ const gradesRoutes: RouteConfig[] = [
         path: "grades/:gradeId/levels/:levelId/lessons/view/:id",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/lessons/pages/LessonsDetail"),
-        permissions: [lesson.view],
+        // permissions: [lesson.view],
         meta: { titleKey: "learning:lessons.form.view.title" },
         handle: { crumb: "learning:lessons.form.view.title" },
     },
@@ -116,7 +116,7 @@ const gradesRoutes: RouteConfig[] = [
         path: "grades/:gradeId/levels/:levelId/lessons/quiz/:id",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/lessons/pages/LessonsQuizDetail"),
-        permissions: [lesson.view],
+        // permissions: [lesson.view],
         meta: { titleKey: "learning:lessons.quiz.title" },
         handle: { crumb: "learning:lessons.quiz.title" },
     },
@@ -125,7 +125,7 @@ const gradesRoutes: RouteConfig[] = [
         path: "grades/:gradeId/levels/:levelId/quiz",
         lazy: () =>
             import("@/features/dashboard/admin/learning/pages/levels/pages/LevelsDetail"),
-        permissions: [lesson.view],
+        // permissions: [lesson.view],
         meta: { titleKey: "learning:levels.quiz.title" },
         handle: { crumb: "learning:levels.quiz.title" },
     },
@@ -140,7 +140,7 @@ const programsRoutes: RouteConfig[] = [
         path: "programs",
         lazy: () =>
             import("@/features/dashboard/admin/programs/pages/Programs"),
-        permissions: [course.viewAny],
+        // permissions: [course.viewAny],
         meta: { titleKey: "programs:programs.title" },
         handle: { crumb: "programs:programs.title" },
     },
@@ -161,7 +161,7 @@ const groupsManagementRoutes: RouteConfig[] = [
         path: "groups/grades",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/grades/GradesList"),
-        permissions: [group.viewAny],
+        // permissions: [group.viewAny],
         meta: { titleKey: "groupsManagement:groups.grades.title" },
         handle: { crumb: "groupsManagement:groups.grades.title" },
     },
@@ -170,7 +170,7 @@ const groupsManagementRoutes: RouteConfig[] = [
         path: "groups/grades/:gradeId/levels",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/grades/LevelsList"),
-        permissions: [group.viewAny],
+        // permissions: [group.viewAny],
         meta: { titleKey: "groupsManagement:groups.levels.title" },
         handle: { crumb: "groupsManagement:groups.levels.title" },
     },
@@ -179,7 +179,7 @@ const groupsManagementRoutes: RouteConfig[] = [
         path: "groups/grades/:gradeId/levels/:levelId/group",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/list"),
-        permissions: [group.viewAny],
+        // permissions: [group.viewAny],
         meta: { titleKey: "groupsManagement:groups.regularListBreadcrumb" },
         handle: { crumb: "groupsManagement:groups.regularListBreadcrumb" },
     },
@@ -188,7 +188,7 @@ const groupsManagementRoutes: RouteConfig[] = [
         path: "groups/grades/:gradeId/levels/:levelId/group/create",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/create"),
-        permissions: [group.create],
+        // permissions: [group.create],
         meta: { titleKey: "groupsManagement:groups.form.create.title" },
         handle: { crumb: "groupsManagement:groups.form.create.title" },
     },
@@ -197,7 +197,7 @@ const groupsManagementRoutes: RouteConfig[] = [
         path: "groups/grades/:gradeId/levels/:levelId/group/view/:id",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/view"),
-        permissions: [group.view],
+        // permissions: [group.view],
         meta: { titleKey: "groupsManagement:groups.form.view.title" },
         handle: { crumb: "groupsManagement:groups.form.view.title" },
     },
@@ -206,7 +206,7 @@ const groupsManagementRoutes: RouteConfig[] = [
         path: "groups/grades/:gradeId/levels/:levelId/group/edit/:id",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/edit"),
-        permissions: [group.update],
+        // permissions: [group.update],
         meta: { titleKey: "groupsManagement:groups.edit.title" },
         handle: { crumb: "groupsManagement:groups.edit.title" },
     },
@@ -215,7 +215,7 @@ const groupsManagementRoutes: RouteConfig[] = [
         path: "groups/grades/:gradeId/levels/:levelId/group/:id/assign",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/assign"),
-        permissions: [group.update],
+        // permissions: [group.update],
         meta: { titleKey: "groupsManagement:groups.assignStudent.title" },
         handle: { crumb: "groupsManagement:groups.assignStudent.title" },
     },
@@ -224,7 +224,7 @@ const groupsManagementRoutes: RouteConfig[] = [
         path: "groups/grades/:gradeId/levels/:levelId/group/:id/attendance",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/attendance"),
-        permissions: [studentAttendance.viewAny],
+        // permissions: [studentAttendance.viewAny],
         meta: { titleKey: "groupsManagement:groups.attendance.title" },
         handle: { crumb: "groupsManagement:groups.attendance.title" },
     },
@@ -233,7 +233,7 @@ const groupsManagementRoutes: RouteConfig[] = [
         path: "groups/grades/:gradeId/levels/:levelId/group/:id/attendance/session/:sessionId",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/sessionAttendance"),
-        permissions: [studentAttendance.viewAny],
+        // permissions: [studentAttendance.viewAny],
         meta: { titleKey: "groupsManagement:groups.sessionAttendance.title" },
         handle: { crumb: "groupsManagement:groups.sessionAttendance.title" },
     },
@@ -242,7 +242,7 @@ const groupsManagementRoutes: RouteConfig[] = [
         path: "groups/grades/:gradeId/levels/:levelId/group/:id/attendance/audit-log",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/attendanceAuditLog"),
-        permissions: [studentAttendance.viewAny],
+        // permissions: [studentAttendance.viewAny],
         meta: { titleKey: "groupsManagement:groups.attendanceAuditLog.title" },
         handle: { crumb: "groupsManagement:groups.attendanceAuditLog.title" },
     },
@@ -251,7 +251,7 @@ const groupsManagementRoutes: RouteConfig[] = [
         path: "groups/grades/:gradeId/levels/:levelId/group/:id/instructor",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/instructor"),
-        permissions: [group.update],
+        // permissions: [group.update],
         meta: { titleKey: "groupsManagement:groups.instructor.title" },
         handle: { crumb: "groupsManagement:groups.instructor.title" },
     },
@@ -260,7 +260,7 @@ const groupsManagementRoutes: RouteConfig[] = [
         path: "groups/grades/:gradeId/levels/:levelId/group/:id/sessions",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/sessions"),
-        permissions: [groupSession.viewAny],
+        // permissions: [groupSession.viewAny],
         meta: { titleKey: "groupsManagement:groups.sessions.title" },
         handle: { crumb: "groupsManagement:groups.sessions.title" },
     },
@@ -269,7 +269,7 @@ const groupsManagementRoutes: RouteConfig[] = [
         path: "groups/grades/:gradeId/levels/:levelId/group/:id/final-quiz",
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/finalLevelQuiz"),
-        permissions: [group.view],
+        // permissions: [group.view],
         meta: { titleKey: "groupsManagement:groups.finalQuiz.title" },
         handle: { crumb: "groupsManagement:groups.finalQuiz.title" },
     },
@@ -284,7 +284,7 @@ const groupsAnalyticsRoutes: RouteConfig[] = [
         path: "groups-analytics",
         lazy: () =>
             import("@/features/dashboard/admin/groupsAnalytics/pages/GroupsAnalytics"),
-        permissions: [group.viewAny],
+        // permissions: [group.viewAny],
         meta: { titleKey: "groupsAnalytics:groups.title" },
         handle: { crumb: "groupsAnalytics:groups.title" },
     },

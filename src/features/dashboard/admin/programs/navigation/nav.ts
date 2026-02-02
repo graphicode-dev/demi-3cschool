@@ -14,23 +14,20 @@
 
 import { BookOpen } from "lucide-react";
 import type { FeatureNavModule } from "@/navigation/nav.types";
-import { learningPermissions } from "@/auth";
 import { programsPaths } from "./paths";
-
-const { course } = learningPermissions;
 
 export const programsManagementNav: FeatureNavModule = {
     featureId: "programsManagement",
-    section: "Curriculum Management",
+    section: "Admin",
+    order: 0,
     items: [
         {
-            order: 1,
+            order: 0,
             key: "programs-management",
             labelKey: "programs:programs.breadcrumb",
             label: "Programs Management",
             href: programsPaths.list(),
             icon: BookOpen,
-            permissions: [course.viewAny],
         },
     ],
 };

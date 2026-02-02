@@ -107,10 +107,8 @@ export function EnrollmentsGroupPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     // Set initial curriculum when data loads
-    // API returns array directly in data, or paginated with items
-    const curriculums = Array.isArray(curriculumData)
-        ? curriculumData
-        : (curriculumData?.items ?? []);
+    // API returns array directly
+    const curriculums = curriculumData ?? [];
 
     // Auto-select first active curriculum if none selected
     if (!selectedCurriculumId && curriculums.length > 0) {
@@ -126,42 +124,21 @@ export function EnrollmentsGroupPage() {
     const terms: Term[] = useMemo(() => {
         if (!curriculums.length) return [];
 
-        // Find the selected curriculum index to determine status
-        const selectedIndex = curriculums.findIndex(
-            (c) => c.id === selectedCurriculumId
-        );
+        return curriculums.map((curriculum) => {
+            // Simply lock inactive programs, active ones are available (current)
+            const isActive = Boolean(curriculum.isActive);
+            const isSelected = curriculum.id === selectedCurriculumId;
 
-        return curriculums.map((curriculum, index) => {
             let status: TermStatus;
-
-            // If all are active, use position-based logic relative to selected
-            if (selectedIndex >= 0) {
-                if (index < selectedIndex) {
-                    status = "completed";
-                } else if (index === selectedIndex) {
-                    status = "current";
-                } else {
-                    // Mark as locked only if not active, otherwise current
-                    status = curriculum.isActive ? "current" : "locked";
-                }
+            if (!isActive) {
+                // Inactive programs are always locked
+                status = "locked";
+            } else if (isSelected) {
+                // Selected active program is current
+                status = "current";
             } else {
-                // Fallback: first active is current, before are completed, after are locked
-                const firstActiveIndex = curriculums.findIndex(
-                    (c) => c.isActive
-                );
-                if (
-                    index < firstActiveIndex ||
-                    (firstActiveIndex === -1 && index === 0)
-                ) {
-                    status = "completed";
-                } else if (
-                    curriculum.isActive &&
-                    (firstActiveIndex === index || firstActiveIndex === -1)
-                ) {
-                    status = "current";
-                } else {
-                    status = curriculum.isActive ? "current" : "locked";
-                }
+                // Other active programs are available (show as current/clickable)
+                status = "current";
             }
 
             return {

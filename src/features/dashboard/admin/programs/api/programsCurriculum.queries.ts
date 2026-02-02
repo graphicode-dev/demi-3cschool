@@ -53,25 +53,20 @@ export function useProgramsCurriculumMetadata(
 }
 
 /**
- * Hook to fetch paginated list of programs curriculums
+ * Hook to fetch list of programs curriculums
  *
- * @param params - Query parameters for filtering/pagination
+ * @param params - Query parameters for filtering
  * @param options - Additional query options
  *
  * @example
  * ```tsx
- * const { data, isLoading } = useProgramsCurriculumList({ page: 1 });
- * const items = data?.items ?? [];
+ * const { data, isLoading } = useProgramsCurriculumList();
+ * const programs = data ?? [];
  * ```
  */
 export function useProgramsCurriculumList(
     params?: ProgramsCurriculumListParams,
-    options?: Partial<
-        UseQueryOptions<
-            ProgramCurriculumPaginatedData<ProgramCurriculum>,
-            Error
-        >
-    >
+    options?: Partial<UseQueryOptions<ProgramCurriculum[], Error>>
 ) {
     return useQuery({
         queryKey: programsCurriculumKeys.list(params),
