@@ -21,6 +21,7 @@ import {
     ShieldCheck,
     GraduationCap,
     Users,
+    FolderOpen,
 } from "lucide-react";
 import { adminSharedNavItems } from "@/features/dashboard/shared/navigation";
 import { ticketsManagementNavItem } from "../ticketsManagement/navigation/nav";
@@ -74,6 +75,15 @@ export const adminNav: FeatureNavModule = {
             icon: Users,
             order: 5,
             permissions: [group.viewAny],
+        },
+        // Resources
+        {
+            key: "resources",
+            labelKey: "resources:title",
+            label: "Resources",
+            href: "/admin/resources",
+            icon: FolderOpen,
+            order: 6,
         },
         // Tickets Management
         ticketsManagementNavItem,

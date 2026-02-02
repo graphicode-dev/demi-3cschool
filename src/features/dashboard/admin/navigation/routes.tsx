@@ -300,6 +300,61 @@ const groupsAnalyticsRoutes: RouteConfig[] = [
 ];
 
 // ============================================================================
+// Resources Management Routes
+// ============================================================================
+
+const resourcesRoutes: RouteConfig[] = [
+    // Resources Management (Folders List)
+    {
+        path: "resources",
+        lazy: () =>
+            import("@/features/dashboard/admin/resources/pages/ResourcesManagement"),
+        meta: { titleKey: "resources:title" },
+        handle: { crumb: "resources:title" },
+    },
+    // Create Folder
+    {
+        path: "resources/folder/create",
+        lazy: () =>
+            import("@/features/dashboard/admin/resources/pages/CreateFolder"),
+        meta: { titleKey: "resources:folder.create" },
+        handle: { crumb: "resources:folder.create" },
+    },
+    // Folder Details (Resources List)
+    {
+        path: "resources/folder/:folderId",
+        lazy: () =>
+            import("@/features/dashboard/admin/resources/pages/FolderDetails"),
+        meta: { titleKey: "resources:title" },
+        handle: { crumb: "resources:folder.title" },
+    },
+    // Edit Folder
+    {
+        path: "resources/folder/:folderId/edit",
+        lazy: () =>
+            import("@/features/dashboard/admin/resources/pages/EditFolder"),
+        meta: { titleKey: "resources:folder.edit" },
+        handle: { crumb: "resources:folder.edit" },
+    },
+    // Add Resource
+    {
+        path: "resources/folder/:folderId/resource/create",
+        lazy: () =>
+            import("@/features/dashboard/admin/resources/pages/AddResource"),
+        meta: { titleKey: "resources:resource.add" },
+        handle: { crumb: "resources:resource.add" },
+    },
+    // Edit Resource
+    {
+        path: "resources/folder/:folderId/resource/:resourceId/edit",
+        lazy: () =>
+            import("@/features/dashboard/admin/resources/pages/EditResource"),
+        meta: { titleKey: "resources:resource.edit" },
+        handle: { crumb: "resources:resource.edit" },
+    },
+];
+
+// ============================================================================
 // Admin Shared Routes (profile, chat, certificates, reports)
 // ============================================================================
 
@@ -329,6 +384,8 @@ export const adminRouteModule: FeatureRouteModule = {
             ...groupsManagementRoutes,
             // Groups Analytics
             ...groupsAnalyticsRoutes,
+            // Resources Management
+            ...resourcesRoutes,
             // Tickets Management
             ...ticketsManagementRoutes.map((route) => ({
                 ...route,
