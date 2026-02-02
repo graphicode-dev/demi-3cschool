@@ -13,6 +13,7 @@ import {
     LessonVideoQuizOptionsMetadata,
     LessonVideoQuizOptionsPaginatedResponse,
 } from "../../types";
+import { PaginatedData } from "@/shared/api";
 
 /**
  * Hook to fetch lesson video quiz options metadata
@@ -41,6 +42,34 @@ export function useLessonVideoQuizOptionsList(
         queryKey: lessonVideoQuizOptionKeys.list(params),
         queryFn: ({ signal }) =>
             lessonVideoQuizOptionsApi.getList(params, signal),
+        ...options,
+    });
+}
+
+/**
+ * Hook to fetch paginated list of lesson video quiz options by question ID
+ */
+export function useLessonVideoQuizOptionsByQuestion(
+    questionId: string | undefined | null,
+    params?: LessonVideoQuizOptionsListParams,
+    options?: Partial<
+        UseQueryOptions<PaginatedData<LessonVideoQuizOption>, Error>
+    >
+) {
+    return useQuery({
+        queryKey: [
+            ...lessonVideoQuizOptionKeys.all,
+            "byQuestion",
+            questionId,
+            params,
+        ] as const,
+        queryFn: ({ signal }) =>
+            lessonVideoQuizOptionsApi.getListByQuestionId(
+                questionId!,
+                params,
+                signal
+            ),
+        enabled: !!questionId,
         ...options,
     });
 }

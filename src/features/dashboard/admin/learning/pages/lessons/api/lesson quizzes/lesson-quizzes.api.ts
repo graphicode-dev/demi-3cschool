@@ -81,14 +81,41 @@ export const lessonQuizzesApi = {
     },
 
     /**
-     * Get list of lesson quizzes by level ID
+     * Get paginated list of lesson quizzes by lesson ID
      */
-    getByLevelId: async (
+    getListByLessonId: async (
+        lessonId: string,
+        params?: LessonQuizzesListParams,
+        signal?: AbortSignal
+    ): Promise<PaginatedData<LessonQuiz>> => {
+        const response = await api.get<ApiResponse<PaginatedData<LessonQuiz>>>(
+            `${BASE_URL}/lesson/${lessonId}`,
+            {
+                params: params as Record<string, unknown> | undefined,
+                signal,
+            }
+        );
+
+        if (response.error) {
+            throw response.error;
+        }
+
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
+        }
+
+        return response.data.data;
+    },
+
+    /**
+     * Get paginated list of lesson quizzes by level ID
+     */
+    getListByLevelId: async (
         levelId: string,
         params?: LessonQuizzesListParams,
         signal?: AbortSignal
-    ): Promise<LessonQuiz[]> => {
-        const response = await api.get<ApiResponse<LessonQuiz[]>>(
+    ): Promise<PaginatedData<LessonQuiz>> => {
+        const response = await api.get<ApiResponse<PaginatedData<LessonQuiz>>>(
             `${BASE_URL}/level/${levelId}`,
             {
                 params: params as Record<string, unknown> | undefined,
@@ -100,7 +127,11 @@ export const lessonQuizzesApi = {
             throw response.error;
         }
 
-        return response.data?.data ?? [];
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
+        }
+
+        return response.data.data;
     },
 
     /**

@@ -61,8 +61,8 @@ export const levelQuizzesApi = {
         levelId: string,
         params?: LevelQuizzesListParams,
         signal?: AbortSignal
-    ): Promise<LevelQuiz[]> => {
-        const response = await api.get<ApiResponse<LevelQuiz[]>>(
+    ): Promise<PaginatedData<LevelQuiz>> => {
+        const response = await api.get<PaginatedData<LevelQuiz>>(
             `${BASE_URL}/${levelId}/quizzes`,
             {
                 params: params as Record<string, unknown> | undefined,
@@ -74,7 +74,11 @@ export const levelQuizzesApi = {
             throw response.error;
         }
 
-        return response.data?.data ?? [];
+        if (!response.data) {
+            throw new Error("No data returned from server");
+        }
+
+        return response.data;
     },
 
     /**

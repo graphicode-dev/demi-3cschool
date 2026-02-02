@@ -40,6 +40,7 @@ export type {
     RequestOptions,
     HttpMethod,
     ListQueryParams,
+    PaginatedData,
     QueryParams,
 } from "@/shared/api/types";
 

@@ -442,7 +442,7 @@ export const api = {
             return {
                 success: false,
                 message: apiError.message,
-                data: null,
+                data: {} as T,
                 error: apiError,
             };
         }
@@ -473,7 +473,7 @@ export const api = {
             return {
                 success: false,
                 message: apiError.message,
-                data: null,
+                data: {} as T,
                 error: apiError,
             };
         }
@@ -500,7 +500,7 @@ export const api = {
             return {
                 success: false,
                 message: apiError.message,
-                data: null,
+                data: {} as T,
                 error: apiError,
             };
         }
@@ -531,7 +531,7 @@ export const api = {
             return {
                 success: false,
                 message: apiError.message,
-                data: null,
+                data: {} as T,
                 error: apiError,
             };
         }
@@ -557,7 +557,7 @@ export const api = {
             return {
                 success: false,
                 message: apiError.message,
-                data: null,
+                data: {} as T,
                 error: apiError,
             };
         }

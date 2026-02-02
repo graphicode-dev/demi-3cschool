@@ -55,7 +55,8 @@ export default function LearningCoursesCreate() {
 
     const { mutateAsync, isPending } = useCreateCourse();
     const { execute } = useMutationHandler();
-    const { data: grades = [], isLoading: isLoadingGrades } = useGrades();
+    const { data: gradesData, isLoading: isLoadingGrades } = useGrades();
+    const grades = gradesData?.items ?? [];
 
     const {
         control,

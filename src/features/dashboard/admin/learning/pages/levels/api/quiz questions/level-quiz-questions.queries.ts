@@ -65,6 +65,7 @@ export function useLevelQuizQuestionsMetadata(
     });
 }
 
+
 // ============================================================================
 // List Queries
 // ============================================================================
@@ -101,6 +102,44 @@ export function useLevelQuizQuestionsList(
         ...options,
     });
 }
+
+/**
+ * Hook to fetch paginated list of level quiz questions by quiz ID
+ *
+ * @param quizId - Quiz ID to fetch questions for
+ * @param params - Query parameters for pagination
+ * @param options - Additional query options
+ *
+ * @example
+ * ```tsx
+ * const { data, isLoading, error } = useLevelQuizQuestionsByQuiz(quizId, { page: 1 });
+ *
+ * if (isLoading) return <Spinner />;
+ * if (error) return <ErrorMessage error={error} />;
+ *
+ * return (
+ *     <ul>
+ *         {data.items.map(question => (
+ *             <li key={question.id}>{question.question}</li>
+ *         ))}
+ *     </ul>
+ * );
+ * ```
+ */
+export function useLevelQuizQuestionsByQuiz(
+    quizId: string | undefined | null,
+    params?: LevelQuizQuestionsListParams,
+    options?: Partial<UseQueryOptions<PaginatedData<LevelQuizQuestion>, Error>>
+) {
+    return useQuery({
+        queryKey: levelQuizQuestionKeys.listsByQuiz(params),
+        queryFn: ({ signal }) =>
+            levelQuizQuestionsApi.getByQuizId(quizId!, params, signal),
+        enabled: !!quizId,
+        ...options,
+    });
+}
+
 
 /**
  * Hook to fetch infinite list of all level quiz questions (for infinite scroll)

@@ -47,22 +47,13 @@ export default function LearningLessonsEdit() {
     const { mutateAsync, isPending } = useUpdateLesson();
     const { execute } = useMutationHandler();
     const { data: levelsData } = useLevelsList({
-        type: "group",
+        page: 1,
         programs_curriculum: curriculumType,
     });
 
-    // Extract levels from grouped data
+    // Extract levels from paginated data
     const levels = useMemo(() => {
-        const levelGroups = (levelsData as LevelGroup[]) ?? [];
-        if (levelGroups.length === 0) return [];
-
-        const allLevels: Level[] = [];
-        levelGroups.forEach((group: LevelGroup) => {
-            group.levels.forEach((level: Level) => {
-                allLevels.push(level);
-            });
-        });
-        return allLevels;
+        return levelsData?.items ?? [];
     }, [levelsData]);
 
     const {

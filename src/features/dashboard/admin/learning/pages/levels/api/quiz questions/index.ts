@@ -31,6 +31,7 @@ export {
     useLevelQuizQuestionsList,
     useLevelQuizQuestionsInfinite,
     useLevelQuizQuestion,
+    useLevelQuizQuestionsByQuiz,
 } from "./level-quiz-questions.queries";
 
 // Mutation Hooks

@@ -27,6 +27,7 @@ export { lessonAssignmentsApi } from "./lesson-assignments.api";
 // Query Hooks
 export {
     useLessonAssignmentsList,
+    useLessonAssignmentsByLesson,
     useLessonAssignment,
 } from "./lesson-assignments.queries";
 

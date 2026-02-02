@@ -23,15 +23,11 @@ import { useMutationHandler } from "@/shared/api";
 import type { ApiError } from "@/shared/api/types";
 import {
     useCreateLessonQuiz,
-    useCreateLessonQuizOption,
     useCreateLessonQuizQuestion,
     useDeleteLessonQuiz,
-    useDeleteLessonQuizOption,
     useDeleteLessonQuizQuestion,
-    useLessonQuizOptionsList,
-    useLessonQuizQuestionsList,
+    useLessonQuizQuestionsByQuiz,
     useUpdateLessonQuiz,
-    useUpdateLessonQuizOption,
     useUpdateLessonQuizQuestion,
 } from "../../../api";
 import {
@@ -40,6 +36,7 @@ import {
     LessonQuizOption,
     LessonQuizQuestion,
 } from "../../../types";
+import QuestionOptionsLoader from "./QuestionOptionsLoader";
 
 interface QuizEditorProps {
     lessonId: string;
@@ -77,42 +74,23 @@ export default function QuizEditor({
         useUpdateLessonQuizQuestion();
     const { mutateAsync: deleteQuestionAsync, isPending: isDeletingQuestion } =
         useDeleteLessonQuizQuestion();
-    const { mutateAsync: createOptionAsync, isPending: isCreatingOption } =
-        useCreateLessonQuizOption();
-    const { mutateAsync: updateOptionAsync, isPending: isUpdatingOption } =
-        useUpdateLessonQuizOption();
-    const { mutateAsync: deleteOptionAsync, isPending: isDeletingOption } =
-        useDeleteLessonQuizOption();
 
-    // Fetch questions for the selected quiz
+    // Fetch questions for the selected quiz - lazy loaded when quiz is selected
     const { data: questionsData, isLoading: isLoadingQuestions } =
-        useLessonQuizQuestionsList(undefined, {
-            enabled: !!quiz,
+        useLessonQuizQuestionsByQuiz(quiz?.id ? String(quiz.id) : null, {
+            page: 1,
         });
 
-    // Fetch all options
-    const { data: optionsData, isLoading: isLoadingOptions } =
-        useLessonQuizOptionsList(undefined, {
-            enabled: !!quiz,
-        });
-
-    // Filter questions by quiz ID and merge with options
+    // Transform questions data - options will be loaded lazily when expanded
     const quizQuestions = useMemo(() => {
         if (!quiz || !questionsData?.items) return [];
 
-        const filteredQuestions = questionsData.items.filter(
-            (q) => String(q.quiz?.id) === String(quiz.id)
-        );
-
-        return filteredQuestions.map((question) => ({
+        return questionsData.items.map((question) => ({
             ...question,
             isExpanded: false,
-            options:
-                optionsData?.items?.filter(
-                    (opt) => String(opt.question?.id) === String(question.id)
-                ) || [],
+            options: [] as LessonQuizOption[], // Options loaded lazily when expanded
         }));
-    }, [quiz, questionsData, optionsData]);
+    }, [quiz, questionsData]);
 
     const [formData, setFormData] = useState({
         title: "",
@@ -155,40 +133,18 @@ export default function QuizEditor({
         explanation: "",
     });
 
-    // Option editing state
-    const [editingOptionId, setEditingOptionId] = useState<string | null>(null);
-    const [editingOptionData, setEditingOptionData] = useState<{
-        optionText: string;
-        isCorrect: boolean;
-    } | null>(null);
-
-    // New option form state (tracks which question is adding a new option)
-    const [addingOptionToQuestionId, setAddingOptionToQuestionId] = useState<
-        string | null
-    >(null);
-    const [newOptionData, setNewOptionData] = useState<{
-        optionText: string;
-        isCorrect: boolean;
-    }>({
-        optionText: "",
-        isCorrect: false,
-    });
-
     // Delete confirmation state
     const [deleteQuestionId, setDeleteQuestionId] = useState<string | null>(
         null
     );
-    const [deleteOptionId, setDeleteOptionId] = useState<string | null>(null);
     const [showDeleteQuestionDialog, setShowDeleteQuestionDialog] =
         useState(false);
-    const [showDeleteOptionDialog, setShowDeleteOptionDialog] = useState(false);
     const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
     const isSaving = isCreatingQuiz || isUpdatingQuiz;
     const isDeleting = isDeletingQuiz;
-    const isLoadingData = isLoadingQuestions || isLoadingOptions;
+    const isLoadingData = isLoadingQuestions;
     const isSavingQuestion = isCreatingQuestion || isUpdatingQuestion;
-    const isSavingOption = isCreatingOption || isUpdatingOption;
 
     // Update questions when data changes
     useEffect(() => {
@@ -341,147 +297,6 @@ export default function QuizEditor({
                 onSuccess: () => cancelEditQuestion(),
             }
         );
-    };
-
-    // Option handlers
-    const handleShowAddOptionForm = (questionId: string) => {
-        setAddingOptionToQuestionId(questionId);
-        setNewOptionData({
-            optionText: "",
-            isCorrect: false,
-        });
-    };
-
-    const handleCancelAddOption = () => {
-        setAddingOptionToQuestionId(null);
-        setNewOptionData({
-            optionText: "",
-            isCorrect: false,
-        });
-    };
-
-    const handleSubmitNewOption = () => {
-        if (!addingOptionToQuestionId) return;
-
-        const question = questions.find(
-            (q) => String(q.id) === addingOptionToQuestionId
-        );
-        const optionCount = question?.options?.length || 0;
-
-        execute(
-            () =>
-                createOptionAsync({
-                    questionId: addingOptionToQuestionId,
-                    optionText: newOptionData.optionText,
-                    isCorrect: newOptionData.isCorrect,
-                    order: optionCount + 1,
-                }),
-            {
-                successMessage: t(
-                    "lessons:content.quizzes.toast.optionAddedMessage",
-                    "New option has been added"
-                ),
-                onSuccess: () => handleCancelAddOption(),
-            }
-        );
-    };
-
-    const confirmDeleteOption = (id: string) => {
-        setDeleteOptionId(id);
-        setShowDeleteOptionDialog(true);
-    };
-
-    const handleDeleteOption = () => {
-        if (!deleteOptionId) return;
-
-        execute(() => deleteOptionAsync(deleteOptionId), {
-            successMessage: t(
-                "lessons:content.quizzes.toast.optionDeletedMessage",
-                "Option has been deleted"
-            ),
-            onSuccess: () => {
-                setShowDeleteOptionDialog(false);
-                setDeleteOptionId(null);
-            },
-        });
-    };
-
-    // Edit option handlers
-    const startEditOption = (option: LessonQuizOption) => {
-        setEditingOptionId(String(option.id));
-        setEditingOptionData({
-            optionText: option.optionText,
-            isCorrect: Boolean(option.isCorrect),
-        });
-    };
-
-    const cancelEditOption = () => {
-        setEditingOptionId(null);
-        setEditingOptionData(null);
-    };
-
-    const saveEditOption = () => {
-        if (!editingOptionId || !editingOptionData) return;
-
-        execute(
-            () =>
-                updateOptionAsync({
-                    id: editingOptionId,
-                    data: editingOptionData,
-                }),
-            {
-                successMessage: t(
-                    "lessons:content.quizzes.toast.optionUpdatedMessage",
-                    "Option has been updated"
-                ),
-                onSuccess: () => cancelEditOption(),
-            }
-        );
-    };
-
-    const toggleOptionCorrect = async (
-        option: LessonQuizOption,
-        question: QuizQuestionWithOptions
-    ) => {
-        // For single_choice or true_false, only one option can be correct
-        if (
-            question.type === "single_choice" ||
-            question.type === "true_false"
-        ) {
-            // If already correct, don't allow unchecking (must have one correct)
-            if (option.isCorrect) return;
-
-            // Set all other options to incorrect first
-            const otherOptions =
-                question.options?.filter(
-                    (opt) =>
-                        String(opt.id) !== String(option.id) && opt.isCorrect
-                ) || [];
-
-            execute(async () => {
-                for (const otherOpt of otherOptions) {
-                    await updateOptionAsync({
-                        id: String(otherOpt.id),
-                        data: { isCorrect: false },
-                    });
-                }
-                // Set this option as correct
-                await updateOptionAsync({
-                    id: String(option.id),
-                    data: { isCorrect: true },
-                });
-            }, {});
-        } else {
-            // For multiple_choice, toggle freely
-            execute(
-                () =>
-                    updateOptionAsync({
-                        id: String(option.id),
-                        data: { isCorrect: !option.isCorrect },
-                    }),
-                {}
-            );
-        }
     };
 
     const toggleQuestionExpand = (id: string) => {
@@ -1094,265 +909,12 @@ export default function QuizEditor({
                                         </div>
                                     )}
 
-                                {/* Question Options */}
+                                {/* Question Options - Lazy loaded when expanded */}
                                 {isQuestionExpanded(String(question.id)) && (
-                                    <div className="p-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700">
-                                        <div className="flex items-center justify-between mb-3">
-                                            <p className="text-xs font-medium text-gray-500 dark:text-gray-400">
-                                                {t(
-                                                    "lessons:content.quizzes.options",
-                                                    "Options"
-                                                )}
-                                                :
-                                            </p>
-                                            <button
-                                                onClick={() =>
-                                                    handleShowAddOptionForm(
-                                                        String(question.id)
-                                                    )
-                                                }
-                                                disabled={isSavingOption}
-                                                className="flex items-center gap-1 px-2 py-1 text-xs font-medium text-brand-500 hover:bg-brand-50 dark:hover:bg-brand-500/10 rounded-lg transition-colors disabled:opacity-50"
-                                            >
-                                                <Plus className="w-3 h-3" />
-                                                {t(
-                                                    "lessons:content.quizzes.addOption",
-                                                    "Add Option"
-                                                )}
-                                            </button>
-                                        </div>
-
-                                        {/* New Option Form */}
-                                        {addingOptionToQuestionId ===
-                                            String(question.id) && (
-                                            <div className="mb-3 p-3 bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/30 rounded-lg">
-                                                <div className="flex items-center gap-2">
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={
-                                                            newOptionData.isCorrect
-                                                        }
-                                                        onChange={(e) =>
-                                                            setNewOptionData({
-                                                                ...newOptionData,
-                                                                isCorrect:
-                                                                    e.target
-                                                                        .checked,
-                                                            })
-                                                        }
-                                                        className="w-4 h-4 text-green-500 rounded"
-                                                    />
-                                                    <input
-                                                        type="text"
-                                                        value={
-                                                            newOptionData.optionText
-                                                        }
-                                                        onChange={(e) =>
-                                                            setNewOptionData({
-                                                                ...newOptionData,
-                                                                optionText:
-                                                                    e.target
-                                                                        .value,
-                                                            })
-                                                        }
-                                                        className="flex-1 px-2 py-1 text-sm rounded border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                                                        placeholder={t(
-                                                            "lessons:content.quizzes.optionPlaceholder",
-                                                            "Enter option text..."
-                                                        )}
-                                                        autoFocus
-                                                    />
-                                                    <button
-                                                        onClick={
-                                                            handleCancelAddOption
-                                                        }
-                                                        className="p-1 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
-                                                    >
-                                                        <X className="w-4 h-4" />
-                                                    </button>
-                                                    <button
-                                                        onClick={
-                                                            handleSubmitNewOption
-                                                        }
-                                                        disabled={
-                                                            isSavingOption ||
-                                                            !newOptionData.optionText.trim()
-                                                        }
-                                                        className="p-1 text-brand-500 hover:bg-brand-50 dark:hover:bg-brand-500/10 rounded disabled:opacity-50"
-                                                    >
-                                                        {isSavingOption ? (
-                                                            <Loader2 className="w-4 h-4 animate-spin" />
-                                                        ) : (
-                                                            <Plus className="w-4 h-4" />
-                                                        )}
-                                                    </button>
-                                                </div>
-                                                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 ml-6">
-                                                    {t(
-                                                        "lessons:content.quizzes.markCorrectHint",
-                                                        "Check the box if this is a correct answer"
-                                                    )}
-                                                </p>
-                                            </div>
-                                        )}
-
-                                        {question.options &&
-                                        question.options.length > 0 ? (
-                                            <div className="space-y-2">
-                                                {question.options
-                                                    .sort(
-                                                        (a, b) =>
-                                                            a.order - b.order
-                                                    )
-                                                    .map((option, optIndex) => (
-                                                        <div key={option.id}>
-                                                            {editingOptionId ===
-                                                                String(
-                                                                    option.id
-                                                                ) &&
-                                                            editingOptionData ? (
-                                                                <div className="flex items-center gap-2 p-2 rounded-lg bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/30">
-                                                                    <input
-                                                                        type="checkbox"
-                                                                        checked={
-                                                                            editingOptionData.isCorrect
-                                                                        }
-                                                                        onChange={(
-                                                                            e
-                                                                        ) =>
-                                                                            setEditingOptionData(
-                                                                                {
-                                                                                    ...editingOptionData,
-                                                                                    isCorrect:
-                                                                                        e
-                                                                                            .target
-                                                                                            .checked,
-                                                                                }
-                                                                            )
-                                                                        }
-                                                                        className="w-4 h-4 text-green-500 rounded"
-                                                                    />
-                                                                    <input
-                                                                        type="text"
-                                                                        value={
-                                                                            editingOptionData.optionText
-                                                                        }
-                                                                        onChange={(
-                                                                            e
-                                                                        ) =>
-                                                                            setEditingOptionData(
-                                                                                {
-                                                                                    ...editingOptionData,
-                                                                                    optionText:
-                                                                                        e
-                                                                                            .target
-                                                                                            .value,
-                                                                                }
-                                                                            )
-                                                                        }
-                                                                        className="flex-1 px-2 py-1 text-sm rounded border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                                                                        placeholder={t(
-                                                                            "lessons:content.quizzes.optionPlaceholder",
-                                                                            "Enter option text..."
-                                                                        )}
-                                                                    />
-                                                                    <button
-                                                                        onClick={
-                                                                            cancelEditOption
-                                                                        }
-                                                                        className="p-1 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
-                                                                    >
-                                                                        <X className="w-4 h-4" />
-                                                                    </button>
-                                                                    <button
-                                                                        onClick={
-                                                                            saveEditOption
-                                                                        }
-                                                                        disabled={
-                                                                            isSavingOption
-                                                                        }
-                                                                        className="p-1 text-brand-500 hover:bg-brand-50 dark:hover:bg-brand-500/10 rounded disabled:opacity-50"
-                                                                    >
-                                                                        {isSavingOption ? (
-                                                                            <Loader2 className="w-4 h-4 animate-spin" />
-                                                                        ) : (
-                                                                            <Save className="w-4 h-4" />
-                                                                        )}
-                                                                    </button>
-                                                                </div>
-                                                            ) : (
-                                                                <div
-                                                                    className={`flex items-center gap-2 p-2 rounded-lg ${
-                                                                        option.isCorrect
-                                                                            ? "bg-green-50 dark:bg-green-500/10 border border-green-200 dark:border-green-500/30"
-                                                                            : "bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600"
-                                                                    }`}
-                                                                >
-                                                                    <button
-                                                                        onClick={() =>
-                                                                            toggleOptionCorrect(
-                                                                                option,
-                                                                                question
-                                                                            )
-                                                                        }
-                                                                        className={`flex items-center justify-center w-6 h-6 text-xs font-medium rounded ${
-                                                                            option.isCorrect
-                                                                                ? "bg-green-500 text-white"
-                                                                                : "bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-400"
-                                                                        }`}
-                                                                    >
-                                                                        {option.isCorrect ? (
-                                                                            <Check className="w-4 h-4" />
-                                                                        ) : (
-                                                                            String.fromCharCode(
-                                                                                65 +
-                                                                                    optIndex
-                                                                            )
-                                                                        )}
-                                                                    </button>
-                                                                    <span className="flex-1 text-sm text-gray-900 dark:text-gray-100">
-                                                                        {option.optionText ||
-                                                                            t(
-                                                                                "lessons:content.quizzes.emptyOption",
-                                                                                "(empty)"
-                                                                            )}
-                                                                    </span>
-                                                                    <button
-                                                                        onClick={() =>
-                                                                            startEditOption(
-                                                                                option
-                                                                            )
-                                                                        }
-                                                                        className="p-1 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-600 rounded"
-                                                                    >
-                                                                        <Edit2 className="w-3 h-3" />
-                                                                    </button>
-                                                                    <button
-                                                                        onClick={() =>
-                                                                            confirmDeleteOption(
-                                                                                String(
-                                                                                    option.id
-                                                                                )
-                                                                            )
-                                                                        }
-                                                                        className="p-1 text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded"
-                                                                    >
-                                                                        <Trash2 className="w-3 h-3" />
-                                                                    </button>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                    ))}
-                                            </div>
-                                        ) : (
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">
-                                                {t(
-                                                    "lessons:content.quizzes.noOptions",
-                                                    "No options added yet"
-                                                )}
-                                            </p>
-                                        )}
-                                    </div>
+                                    <QuestionOptionsLoader
+                                        question={question}
+                                        questionType={question.type}
+                                    />
                                 )}
                             </div>
                         ))
@@ -1438,28 +1000,6 @@ export default function QuizEditor({
                 cancelText={t("common.cancel", "Cancel")}
                 onConfirm={handleDeleteQuestion}
                 loading={isDeletingQuestion}
-            />
-
-            {/* Delete Option Confirmation Dialog */}
-            <ConfirmDialog
-                isOpen={showDeleteOptionDialog}
-                onClose={() => {
-                    setShowDeleteOptionDialog(false);
-                    setDeleteOptionId(null);
-                }}
-                variant="danger"
-                title={t(
-                    "lessons:content.quizzes.deleteOptionDialog.title",
-                    "Delete Option"
-                )}
-                message={t(
-                    "lessons:content.quizzes.deleteOptionDialog.message",
-                    "Are you sure you want to delete this option?"
-                )}
-                confirmText={t("common.delete", "Delete")}
-                cancelText={t("common.cancel", "Cancel")}
-                onConfirm={handleDeleteOption}
-                loading={isDeletingOption}
             />
         </div>
     );

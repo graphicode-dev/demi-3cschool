@@ -88,32 +88,33 @@ export const lessonsApi = {
     /**
      * Get list of lessons by level ID (paginated or grouped based on type param)
      */
-    getByLevel: async <T extends LessonsByLevelParams>(
-        params: T,
+    getByLevel: async (
+        params: LessonsByLevelParams,
         signal?: AbortSignal
-    ): Promise<
-        T extends { type: "group" } ? LessonGroup[] : PaginatedData<Lesson>
-    > => {
-        const { levelId, page, type, programs_curriculum } = params;
+    ): Promise<PaginatedData<Lesson>> => {
+        const { levelId, page = 1, type, programs_curriculum } = params;
 
-        const response = await api.get<
-            PaginatedResponse<Lesson> | GroupedResponse<LessonGroup>
-        >(`${BASE_URL}/level/${levelId}`, {
-            params: {
-                ...(page && { page }),
-                ...(type && { type }),
-                ...(programs_curriculum && { programs_curriculum }),
-            } as Record<string, unknown>,
-            signal,
-        });
+        const response = await api.get<ApiResponse<PaginatedData<Lesson>>>(
+            `${BASE_URL}/level/${levelId}`,
+            {
+                params: {
+                    page,
+                    ...(type && { type }),
+                    ...(programs_curriculum && { programs_curriculum }),
+                } as Record<string, unknown>,
+                signal,
+            }
+        );
 
         if (response.error) {
             throw response.error;
         }
 
-        return response.data!.data as T extends { type: "group" }
-            ? LessonGroup[]
-            : PaginatedData<Lesson>;
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
+        }
+
+        return response.data.data;
     },
 
     /**

@@ -27,6 +27,7 @@ export { lessonVideosApi } from "./lesson-videos.api";
 // Query Hooks
 export {
     useLessonVideosList,
+    useLessonVideosByLesson,
     useLessonVideo,
     useLessonVideosByLevel,
 } from "./lesson-videos.queries";

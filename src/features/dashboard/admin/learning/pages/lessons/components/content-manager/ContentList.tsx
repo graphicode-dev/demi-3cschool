@@ -27,7 +27,7 @@ import {
     restrictToVerticalAxis,
     restrictToParentElement,
 } from "@dnd-kit/modifiers";
-import { Plus } from "lucide-react";
+import { Plus, ChevronLeft, ChevronRight } from "lucide-react";
 import type { ReactNode } from "react";
 
 interface ContentListProps {
@@ -39,6 +39,10 @@ interface ContentListProps {
     onAddItem?: () => void;
     isLoading?: boolean;
     renderDragOverlay?: (activeId: string) => ReactNode;
+    // Pagination props
+    currentPage?: number;
+    lastPage?: number;
+    onPageChange?: (page: number) => void;
 }
 
 export default function ContentList({
@@ -50,6 +54,9 @@ export default function ContentList({
     onAddItem,
     isLoading = false,
     renderDragOverlay,
+    currentPage,
+    lastPage,
+    onPageChange,
 }: ContentListProps) {
     const { t } = useTranslation();
     const [activeId, setActiveId] = useState<string | null>(null);
@@ -128,6 +135,31 @@ export default function ContentList({
                                 : null}
                         </DragOverlay>
                     </DndContext>
+                )}
+
+                {/* Pagination */}
+                {currentPage && lastPage && onPageChange && (
+                    <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
+                        <button
+                            onClick={() => onPageChange(currentPage - 1)}
+                            disabled={currentPage <= 1}
+                            className="flex items-center gap-1 px-2 py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-brand-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        >
+                            <ChevronLeft className="w-4 h-4" />
+                            {t("common:pagination.previous", "Previous")}
+                        </button>
+                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                            {currentPage} / {lastPage}
+                        </span>
+                        <button
+                            onClick={() => onPageChange(currentPage + 1)}
+                            disabled={currentPage >= lastPage}
+                            className="flex items-center gap-1 px-2 py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-brand-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        >
+                            {t("common:pagination.next", "Next")}
+                            <ChevronRight className="w-4 h-4" />
+                        </button>
+                    </div>
                 )}
 
                 {/* Add Item Button */}

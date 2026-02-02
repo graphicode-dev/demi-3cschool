@@ -7,7 +7,7 @@
  */
 
 import { api } from "@/shared/api/client";
-import { ApiResponse } from "@/shared/api";
+import { ApiResponse, PaginatedData } from "@/shared/api";
 import {
     LessonVideoQuizQuestion,
     LessonVideoQuizQuestionCreatePayload,
@@ -115,6 +115,45 @@ export const lessonVideoQuizQuestionsApi = {
         return {
             data: [],
             pagination: { currentPage: 1, lastPage: 1, perPage: 15, total: 0 },
+        };
+    },
+
+    /**
+     * Get paginated list of lesson video quiz questions by quiz ID
+     */
+    getListByQuizId: async (
+        quizId: string,
+        params?: LessonVideoQuizQuestionsListParams,
+        signal?: AbortSignal
+    ): Promise<PaginatedData<LessonVideoQuizQuestion>> => {
+        const response = await api.get<
+            ApiResponse<{
+                currentPage: number;
+                perPage: number;
+                lastPage: number;
+                nextPageUrl: string | null;
+                items: LessonVideoQuizQuestion[];
+            }>
+        >(`${BASE_URL}/quiz/${quizId}`, {
+            params: params as Record<string, unknown> | undefined,
+            signal,
+        });
+
+        if (response.error) {
+            throw response.error;
+        }
+
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
+        }
+
+        const apiData = response.data.data;
+        return {
+            items: apiData.items,
+            currentPage: apiData.currentPage,
+            perPage: apiData.perPage,
+            lastPage: apiData.lastPage,
+            nextPageUrl: apiData.nextPageUrl,
         };
     },
 

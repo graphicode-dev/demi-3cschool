@@ -84,6 +84,36 @@ export const levelQuizQuestionsApi = {
     },
 
     /**
+     * Get list of level quiz questions by quiz ID
+     */
+    getByQuizId: async (
+        quizId: string,
+        params?: LevelQuizQuestionsListParams,
+        signal?: AbortSignal
+    ): Promise<PaginatedData<LevelQuizQuestion>> => {
+        const response = await api.get<ApiResponse<LevelQuizQuestion[]>>(
+            `${BASE_URL}/quiz/${quizId}`,
+            {
+                params: params as Record<string, unknown> | undefined,
+                signal,
+            }
+        );
+
+        if (response.error) {
+            throw response.error;
+        }
+
+        const items = response.data!.data!;
+        return {
+            items,
+            perPage: items.length,
+            currentPage: 1,
+            lastPage: 1,
+            nextPageUrl: null,
+        };
+    },
+
+    /**
      * Get single level quiz question by ID
      */
     getById: async (

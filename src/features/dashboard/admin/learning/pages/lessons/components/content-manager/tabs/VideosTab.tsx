@@ -5,14 +5,14 @@
  * Integrates with lesson videos API.
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import ContentList from "../ContentList";
 import ContentListItem from "../ContentListItem";
 import EmptyState from "../EmptyState";
 import VideoEditor from "../editors/VideoEditor";
 import VideoQuizEditor from "../editors/VideoQuizEditor";
-import { useLessonVideosByLevel } from "../../../api";
+import { useLessonVideosByLesson } from "../../../api";
 import { LessonVideo } from "../../../types";
 
 type EditorMode = "video" | "quiz" | "none";
@@ -30,8 +30,17 @@ export default function VideosTab({ lessonId, levelId }: VideosTabProps) {
     const [isCreating, setIsCreating] = useState(false);
     const [editorMode, setEditorMode] = useState<EditorMode>("none");
     const [quizVideoId, setQuizVideoId] = useState<string | null>(null);
+    const [currentPage, setCurrentPage] = useState(1);
 
-    const { data: videos = [], isLoading } = useLessonVideosByLevel(levelId);
+    const { data: videosData, isLoading } = useLessonVideosByLesson(lessonId, {
+        page: currentPage,
+    });
+
+    const [videos, setVideos] = useState<LessonVideo[]>([]);
+
+    useEffect(() => {
+        setVideos(videosData?.items || []);
+    }, [videosData]);
 
     const handleAddVideo = () => {
         setSelectedVideo(null);
@@ -126,12 +135,15 @@ export default function VideosTab({ lessonId, levelId }: VideosTabProps) {
             {/* Video List */}
             <ContentList
                 title={t("lessons:content.videos.listTitle", "Video List")}
-                count={videos.length}
+                count={videosData?.items?.length || 0}
                 itemIds={videos.map((v) => v.id)}
                 onReorder={handleReorder}
                 onAddItem={handleAddVideo}
                 isLoading={isLoading}
                 renderDragOverlay={renderDragOverlay}
+                currentPage={videosData?.currentPage}
+                lastPage={videosData?.lastPage}
+                onPageChange={setCurrentPage}
             >
                 {videos.map((video) => (
                     <ContentListItem

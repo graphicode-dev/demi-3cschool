@@ -32,11 +32,11 @@ import {
     useCreateLevelQuizQuestion,
     useDeleteLevelQuizQuestion,
     useUpdateLevelQuizQuestion,
-    useLevelQuizQuestionsList,
+    useLevelQuizQuestionsByQuiz,
 } from "../api/quiz questions";
 import {
     useCreateLevelQuizOption,
-    useLevelQuizOptionsList,
+    useLevelQuizOptionsByQuestion,
 } from "../api/quiz options";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useMutationHandler } from "@/shared/api";
@@ -121,17 +121,7 @@ export default function LearningLevelsDetail() {
         data: quizzesData,
         isLoading: quizzesLoading,
         refetch: refetchQuizzes,
-    } = useLevelQuizzesByLevel(resolvedId);
-    const {
-        data: questionsData,
-        isLoading: questionsLoading,
-        refetch: refetchQuestions,
-    } = useLevelQuizQuestionsList();
-    const {
-        data: optionsData,
-        isLoading: optionsLoading,
-        refetch: refetchOptions,
-    } = useLevelQuizOptionsList();
+    } = useLevelQuizzesByLevel(resolvedId, { page: 1 });
 
     const { mutateAsync: createQuizAsync, isPending: isCreatingQuiz } =
         useCreateLevelQuiz();
@@ -185,7 +175,40 @@ export default function LearningLevelsDetail() {
         questionId: string | null;
     }>({ isOpen: false, quizId: null, questionId: null });
 
-    const quizzes = quizzesData || [];
+    const quizzes = quizzesData?.items || [];
+
+    // Get the first expanded quiz ID for fetching questions
+    const firstExpandedQuizId = expandedQuizzes[0] || null;
+
+    // Fetch questions only for expanded quizzes
+    const {
+        data: questionsData,
+        isLoading: questionsLoading,
+        refetch: refetchQuestions,
+    } = useLevelQuizQuestionsByQuiz(
+        firstExpandedQuizId,
+        { page: 1 },
+        {
+            enabled: !!firstExpandedQuizId,
+        }
+    );
+
+    // Get the first expanded question ID for fetching options
+    const firstExpandedQuestionId = expandedQuestions[0] || null;
+
+    // Fetch options only for expanded questions
+    const {
+        data: optionsData,
+        isLoading: optionsLoading,
+        refetch: refetchOptions,
+    } = useLevelQuizOptionsByQuestion(
+        firstExpandedQuestionId,
+        { page: 1 },
+        {
+            enabled: !!firstExpandedQuestionId,
+        }
+    );
+
     const questions = questionsData?.items || [];
     const options = optionsData?.items || [];
 

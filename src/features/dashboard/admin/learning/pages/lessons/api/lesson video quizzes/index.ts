@@ -32,6 +32,7 @@ export { lessonVideoQuizzesApi } from "./lesson-video-quizzes.api";
 export {
     useLessonVideoQuizzesMetadata,
     useLessonVideoQuizzesList,
+    useLessonVideoQuizzesByVideo,
     useLessonVideoQuiz,
 } from "./lesson-video-quizzes.queries";
 

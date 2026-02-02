@@ -17,7 +17,11 @@
 import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
 import { lessonAssignmentKeys } from "./lesson-assignments.keys";
 import { lessonAssignmentsApi } from "./lesson-assignments.api";
-import { LessonAssignment } from "../../types/lesson-assignments.types";
+import {
+    LessonAssignment,
+    LessonAssignmentsListParams,
+} from "../../types/lesson-assignments.types";
+import { PaginatedData } from "@/shared/api";
 
 // ============================================================================
 // List Queries
@@ -50,6 +54,32 @@ export function useLessonAssignmentsList(
     return useQuery({
         queryKey: lessonAssignmentKeys.lists(),
         queryFn: ({ signal }) => lessonAssignmentsApi.getList(signal),
+        ...options,
+    });
+}
+
+/**
+ * Hook to fetch paginated list of lesson assignments by lesson ID
+ *
+ * @param lessonId - Lesson ID to fetch assignments for
+ * @param params - Query parameters for pagination
+ * @param options - Additional query options
+ */
+export function useLessonAssignmentsByLesson(
+    lessonId: string | undefined | null,
+    params?: LessonAssignmentsListParams,
+    options?: Partial<UseQueryOptions<PaginatedData<LessonAssignment>, Error>>
+) {
+    return useQuery({
+        queryKey: [
+            ...lessonAssignmentKeys.all,
+            "byLesson",
+            lessonId,
+            params,
+        ] as const,
+        queryFn: ({ signal }) =>
+            lessonAssignmentsApi.getListByLessonId(lessonId!, params, signal),
+        enabled: !!lessonId,
         ...options,
     });
 }

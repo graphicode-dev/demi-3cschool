@@ -17,8 +17,16 @@
 export interface ApiResponse<T = unknown> {
     success: boolean;
     message: string;
-    data: T | null;
+    data: T;
     error: ApiError | null;
+}
+
+export interface PaginatedData<T> {
+    perPage: number;
+    currentPage: number;
+    lastPage: number;
+    nextPageUrl: string | null;
+    items: T[];
 }
 
 /**

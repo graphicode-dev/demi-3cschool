@@ -27,6 +27,7 @@ import {
 } from "../types";
 import { studentKeys, gradeKeys } from "./systemManagement.keys";
 import { studentsApi, gradesApi } from "./systemManagement.api";
+import { PaginatedData } from "@/shared/api";
 
 // ============================================================================
 // Student List Queries
@@ -99,7 +100,9 @@ export function useStudent(
  * const { data: grades } = useGrades();
  * ```
  */
-export function useGrades(options?: Partial<UseQueryOptions<Grade[], Error>>) {
+export function useGrades(
+    options?: Partial<UseQueryOptions<PaginatedData<Grade>, Error>>
+) {
     return useQuery({
         queryKey: gradeKeys.list(),
         queryFn: ({ signal }) => gradesApi.getList(signal),

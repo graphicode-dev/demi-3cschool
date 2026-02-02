@@ -87,20 +87,24 @@ export default function GradesList() {
             }}
         >
             <CardGrid columns={3}>
-                {grades?.map((grade, index) => (
-                    <NavigationCard
-                        key={grade.id}
-                        title={grade.name}
-                        description={t(
-                            "learning:grades.cardDescription",
-                            `Explore learning content for ${grade.name} students`
-                        )}
-                        href={`/admin/grades/${grade.id}/levels`}
-                        icon={<GradeIcon gradeCode={grade.code} />}
-                        iconBg={getIconBg(index)}
-                        testId={`grade-card-${grade.id}`}
-                    />
-                ))}
+                {grades?.items?.map((grade, index) => {
+                    console.log(JSON.stringify(grade, null, 2));
+
+                    return (
+                        <NavigationCard
+                            key={grade.id}
+                            title={grade.name}
+                            description={t(
+                                "learning:grades.cardDescription",
+                                `Explore learning content for ${grade.name} students`
+                            )}
+                            href={`/admin/grades/${grade.id}/levels`}
+                            icon={<GradeIcon gradeCode={grade.code} />}
+                            iconBg={getIconBg(index)}
+                            testId={`grade-card-${grade.id}`}
+                        />
+                    );
+                })}
             </CardGrid>
         </PageWrapper>
     );

@@ -26,6 +26,7 @@ export { lessonQuizzesApi } from "./lesson-quizzes.api";
 export {
     useLessonQuizzesMetadata,
     useLessonQuizzesList,
+    useLessonQuizzesByLesson,
     useLessonQuizzesByLevel,
     useLessonQuizzesInfinite,
     useLessonQuiz,

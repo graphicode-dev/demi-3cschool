@@ -69,3 +69,11 @@ export interface LessonAssignmentUpdatePayload {
     title?: string;
     file?: File;
 }
+
+/**
+ * List params for lesson assignments
+ */
+export interface LessonAssignmentsListParams {
+    page?: number;
+    perPage?: number;
+}

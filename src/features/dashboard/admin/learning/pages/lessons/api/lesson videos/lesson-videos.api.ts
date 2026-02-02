@@ -16,11 +16,12 @@
  */
 
 import { api } from "@/shared/api/client";
-import { ApiResponse, ListResponse } from "@/shared/api";
+import { ApiResponse, ListResponse, PaginatedData } from "@/shared/api";
 import {
     LessonVideo,
     LessonVideoCreatePayload,
     LessonVideoUpdatePayload,
+    LessonVideosListParams,
 } from "../../types";
 
 const BASE_URL = "/lesson-videos";
@@ -69,6 +70,45 @@ export const lessonVideosApi = {
         }
 
         return response.data.data;
+    },
+
+    /**
+     * Get paginated list of lesson videos by lesson ID
+     */
+    getListByLessonId: async (
+        lessonId: string,
+        params?: LessonVideosListParams,
+        signal?: AbortSignal
+    ): Promise<PaginatedData<LessonVideo>> => {
+        const response = await api.get<
+            ApiResponse<{
+                currentPage: number;
+                perPage: number;
+                lastPage: number;
+                nextPageUrl: string | null;
+                items: LessonVideo[];
+            }>
+        >(`${BASE_URL}/lesson/${lessonId}`, {
+            params: params as Record<string, unknown> | undefined,
+            signal,
+        });
+
+        if (response.error) {
+            throw response.error;
+        }
+
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
+        }
+
+        const apiData = response.data.data;
+        return {
+            items: apiData.items,
+            currentPage: apiData.currentPage,
+            perPage: apiData.perPage,
+            lastPage: apiData.lastPage,
+            nextPageUrl: apiData.nextPageUrl,
+        };
     },
 
     /**

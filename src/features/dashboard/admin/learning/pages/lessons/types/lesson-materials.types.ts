@@ -56,3 +56,11 @@ export interface LessonMaterialUpdatePayload {
     title?: string;
     file?: File;
 }
+
+/**
+ * List params for lesson materials
+ */
+export interface LessonMaterialsListParams {
+    page?: number;
+    perPage?: number;
+}

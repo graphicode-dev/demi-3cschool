@@ -27,6 +27,7 @@ export { lessonMaterialsApi } from "./lesson-materials.api";
 // Query Hooks
 export {
     useLessonMaterialsList,
+    useLessonMaterialsByLesson,
     useLessonMaterial,
 } from "./lesson-materials.queries";
 

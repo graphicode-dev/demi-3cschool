@@ -12,7 +12,7 @@ import ContentList from "../ContentList";
 import ContentListItem from "../ContentListItem";
 import EmptyState from "../EmptyState";
 import MaterialEditor from "../editors/MaterialEditor";
-import {  useLessonMaterialsList } from "../../../api";
+import { useLessonMaterialsByLesson } from "../../../api";
 import { LessonMaterial } from "../../../types";
 
 interface MaterialsTabProps {
@@ -24,14 +24,18 @@ export default function MaterialsTab({ lessonId }: MaterialsTabProps) {
     const [selectedMaterial, setSelectedMaterial] =
         useState<LessonMaterial | null>(null);
     const [isCreating, setIsCreating] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
 
-    const { data: apiMaterials = [], isLoading } = useLessonMaterialsList();
+    const { data: materialsData, isLoading } = useLessonMaterialsByLesson(
+        lessonId,
+        { page: currentPage }
+    );
 
     const [materials, setMaterials] = useState<LessonMaterial[]>([]);
 
     useEffect(() => {
-        setMaterials(apiMaterials);
-    }, [apiMaterials]);
+        setMaterials(materialsData?.items || []);
+    }, [materialsData]);
 
     const handleAddMaterial = () => {
         setSelectedMaterial(null);
@@ -81,12 +85,15 @@ export default function MaterialsTab({ lessonId }: MaterialsTabProps) {
                     "lessons:content.materials.listTitle",
                     "Material List"
                 )}
-                count={materials.length}
+                count={materialsData?.items?.length || 0}
                 itemIds={materials.map((m) => m.id)}
                 onReorder={handleReorder}
                 onAddItem={handleAddMaterial}
                 isLoading={isLoading}
                 renderDragOverlay={renderDragOverlay}
+                currentPage={materialsData?.currentPage}
+                lastPage={materialsData?.lastPage}
+                onPageChange={setCurrentPage}
             >
                 {materials.map((material) => (
                     <ContentListItem

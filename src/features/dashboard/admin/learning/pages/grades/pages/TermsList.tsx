@@ -107,15 +107,17 @@ export default function TermsList() {
     const { gradeId } = useParams<{ gradeId: string }>();
 
     const {
-        data: levels,
+        data: levelsData,
         isLoading,
         error,
         refetch,
     } = useLevelsByGrade(gradeId);
 
+    const levels = levelsData?.items ?? [];
+
     // Group levels by programsCurriculum (term)
     const termStats = useMemo(() => {
-        if (!levels) return {};
+        if (levels.length === 0) return {};
 
         const stats: Record<string, { count: number; gradeName: string }> = {};
         levels.forEach((level) => {
@@ -129,7 +131,7 @@ export default function TermsList() {
     }, [levels]);
 
     // Get grade name from first level
-    const gradeName = levels?.[0]?.grade?.name || `Grade ${gradeId}`;
+    const gradeName = levels[0]?.grade?.name || `Grade ${gradeId}`;
 
     // Available terms based on API data
     const availableTerms = useMemo(() => {

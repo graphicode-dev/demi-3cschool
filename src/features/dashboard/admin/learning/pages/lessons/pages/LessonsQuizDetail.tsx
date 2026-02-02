@@ -188,7 +188,7 @@ export default function LessonsQuizDetail() {
         questionId: string | null;
     }>({ isOpen: false, quizId: null, questionId: null });
 
-    const quizzes: LessonQuiz[] = quizzesData || [];
+    const quizzes: LessonQuiz[] = quizzesData?.items || [];
     const questions = questionsData?.items || [];
     const options = optionsData?.items || [];
 

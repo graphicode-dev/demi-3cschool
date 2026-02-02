@@ -97,6 +97,28 @@ export const lessonQuizOptionsApi = {
     },
 
     /**
+     * Get paginated list of lesson quiz options by question ID
+     */
+    getListByQuestionId: async (
+        questionId: string,
+        params?: LessonQuizOptionsListParams,
+        signal?: AbortSignal
+    ): Promise<PaginatedData<LessonQuizOption>> => {
+        const response = await api.get<
+            ApiResponse<PaginatedData<LessonQuizOption>>
+        >(`${BASE_URL}/question/${questionId}`, {
+            params: params as Record<string, unknown> | undefined,
+            signal,
+        });
+
+        if (response.error) {
+            throw response.error;
+        }
+
+        return response.data.data;
+    },
+
+    /**
      * Get single lesson quiz option by ID
      */
     getById: async (

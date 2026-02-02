@@ -61,7 +61,8 @@ function getIconBg(index: number): string {
  */
 export default function GroupsGradesList() {
     const { t } = useTranslation();
-    const { data: grades, isLoading, error, refetch } = useGrades();
+    const { data: gradesData, isLoading, error, refetch } = useGrades();
+    const grades = gradesData?.items ?? [];
 
     if (isLoading) {
         return <LoadingState message={t("common.loading", "Loading...")} />;

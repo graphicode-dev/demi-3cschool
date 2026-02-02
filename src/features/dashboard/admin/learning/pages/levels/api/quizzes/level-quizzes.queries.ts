@@ -95,7 +95,7 @@ export function useLevelQuizzesMetadata(
 export function useLevelQuizzesByLevel(
     levelId: string | undefined | null,
     params?: LevelQuizzesListParams,
-    options?: Partial<UseQueryOptions<LevelQuiz[], Error>>
+    options?: Partial<UseQueryOptions<PaginatedData<LevelQuiz>, Error>>
 ) {
     return useQuery({
         queryKey: levelQuizKeys.byLevel(levelId ?? "", params),

@@ -16,11 +16,12 @@
  */
 
 import { api } from "@/shared/api/client";
-import { ApiResponse } from "@/shared/api";
+import { ApiResponse, PaginatedData } from "@/shared/api";
 import {
     LessonAssignment,
     LessonAssignmentCreatePayload,
     LessonAssignmentUpdatePayload,
+    LessonAssignmentsListParams,
 } from "../../types/lesson-assignments.types";
 import { ListResponse } from "@/features/dashboard/admin/groupsManagement/api";
 
@@ -71,6 +72,45 @@ export const lessonAssignmentsApi = {
         }
 
         return response.data.data;
+    },
+
+    /**
+     * Get paginated list of lesson assignments by lesson ID
+     */
+    getListByLessonId: async (
+        lessonId: string,
+        params?: LessonAssignmentsListParams,
+        signal?: AbortSignal
+    ): Promise<PaginatedData<LessonAssignment>> => {
+        const response = await api.get<
+            ApiResponse<{
+                currentPage: number;
+                perPage: number;
+                lastPage: number;
+                nextPageUrl: string | null;
+                data: LessonAssignment[];
+            }>
+        >(`${BASE_URL}/lesson/${lessonId}`, {
+            params: params as Record<string, unknown> | undefined,
+            signal,
+        });
+
+        if (response.error) {
+            throw response.error;
+        }
+
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
+        }
+
+        const apiData = response.data.data;
+        return {
+            items: apiData.data,
+            currentPage: apiData.currentPage,
+            perPage: apiData.perPage,
+            lastPage: apiData.lastPage,
+            nextPageUrl: apiData.nextPageUrl,
+        };
     },
 
     /**

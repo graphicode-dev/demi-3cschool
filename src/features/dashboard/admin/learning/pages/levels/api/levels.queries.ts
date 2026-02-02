@@ -93,14 +93,9 @@ export function useLevelsMetadata(
  * const { data } = useLevelsList({ type: "group", programs_curriculum: "standard" });
  * ```
  */
-export function useLevelsList<T extends LevelsListParams | undefined>(
-    params?: T,
-    options?: Partial<
-        UseQueryOptions<
-            T extends { type: "group" } ? LevelGroup[] : PaginatedData<Level>,
-            Error
-        >
-    >
+export function useLevelsList(
+    params?: LevelsListParams,
+    options?: Partial<UseQueryOptions<PaginatedData<Level>, Error>>
 ) {
     return useQuery({
         queryKey: levelKeys.list(params),
@@ -265,7 +260,7 @@ export function useLevel(
  */
 export function useLevelsByGrade(
     gradeId: string | number | undefined | null,
-    options?: Partial<UseQueryOptions<LevelByGrade[], Error>>
+    options?: Partial<UseQueryOptions<PaginatedData<LevelByGrade>, Error>>
 ) {
     return useQuery({
         queryKey: levelKeys.byGrade(gradeId ?? ""),

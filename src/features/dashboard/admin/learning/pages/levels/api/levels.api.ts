@@ -63,28 +63,25 @@ export const levelsApi = {
     getList: async <T extends LevelsListParams | undefined>(
         params?: T,
         signal?: AbortSignal
-    ): Promise<
-        T extends { type: "group" } ? LevelGroup[] : PaginatedData<Level>
-    > => {
+    ): Promise<PaginatedData<Level>> => {
         const { programs_curriculum, ...restParams } = params ?? {};
 
-        const response = await api.get<
-            PaginatedResponse<Level> | GroupedResponse<LevelGroup>
-        >(BASE_URL, {
-            params: {
-                ...restParams,
-                ...(programs_curriculum && { programs_curriculum }),
-            } as Record<string, unknown>,
-            signal,
-        });
+        const response = await api.get<ApiResponse<PaginatedData<Level>>>(
+            BASE_URL,
+            {
+                params: {
+                    ...restParams,
+                    ...(programs_curriculum && { programs_curriculum }),
+                } as Record<string, unknown>,
+                signal,
+            }
+        );
 
         if (response.error) {
             throw response.error;
         }
 
-        return response.data!.data as T extends { type: "group" }
-            ? LevelGroup[]
-            : PaginatedData<Level>;
+        return response.data.data;
     },
 
     /**
@@ -207,8 +204,8 @@ export const levelsApi = {
     getByGrade: async (
         gradeId: string | number,
         signal?: AbortSignal
-    ): Promise<LevelByGrade[]> => {
-        const response = await api.get<ApiResponse<LevelByGrade[]>>(
+    ): Promise<PaginatedData<LevelByGrade>> => {
+        const response = await api.get<ApiResponse<PaginatedData<LevelByGrade>>>(
             `${BASE_URL}/grade/${gradeId}`,
             { signal }
         );

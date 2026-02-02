@@ -11,14 +11,8 @@
  * - courseId=<id> in URL: fetch levels for that specific course grouped
  */
 
-import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import {
-    useLocation,
-    useNavigate,
-    useSearchParams,
-    Link,
-} from "react-router-dom";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
 
 import {
     LoadingState,
@@ -26,16 +20,11 @@ import {
     EmptyState,
     useConfirmDialog,
 } from "@/design-system";
-import {
-    CourseFilterDropdown,
-    LevelListItem,
-    LevelGroupCard,
-} from "../components";
+import { CourseFilterDropdown, LevelListItem } from "../components";
 import { learningPaths } from "@/features/dashboard/admin/learning/navigation/paths";
-import { Course, useCoursesByProgram } from "../../courses";
+import { useCoursesByProgram } from "../../courses";
 import {
     Level,
-    LevelGroup,
     useDeleteLevel,
     useLevelsByCourse,
     useLevelsList,
@@ -62,15 +51,9 @@ export default function LearningLevelsList() {
               ? learningPaths.secondTerm
               : learningPaths.summerCamp;
 
-    // Fetch courses for dropdown (filtered by curriculum type)
-    const { data: coursesData, isLoading: isCoursesLoading } =
-        useCoursesByProgram({
-            programType: curriculumType,
-        });
-
     // Fetch all levels grouped (when "all" is selected)
     const {
-        data: allLevelsData,
+        data: levelsData,
         isLoading: isAllLevelsLoading,
         error: allLevelsError,
         refetch: refetchAllLevels,
@@ -84,39 +67,10 @@ export default function LearningLevelsList() {
         }
     );
 
-    // Fetch levels by course (when specific courseId is selected)
-    const {
-        data: courseLevelsData,
-        isLoading: isCourseLevelsLoading,
-        error: courseLevelsError,
-        refetch: refetchCourseLevels,
-    } = useLevelsByCourse(
-        {
-            courseId: isSpecificCourse ? courseIdFromUrl : "",
-            type: "group",
-            programs_curriculum: curriculumType,
-        },
-        {
-            enabled: !!isSpecificCourse,
-        }
-    );
-
     // Determine which data/loading/error to use based on URL
-    const levelsData = isSpecificCourse ? courseLevelsData : allLevelsData;
-    const isLevelsLoading = isSpecificCourse
-        ? isCourseLevelsLoading
-        : isAllLevelsLoading;
-    const error = isSpecificCourse ? courseLevelsError : allLevelsError;
-    const refetch = isSpecificCourse ? refetchCourseLevels : refetchAllLevels;
-
-    // Map courses for dropdown - API returns array directly
-    const courses = useMemo(() => {
-        if (!coursesData || coursesData.length === 0) return [];
-        return coursesData.map((course: Course) => ({
-            id: String(course.id),
-            title: course.title,
-        }));
-    }, [coursesData]);
+    const isLevelsLoading = isAllLevelsLoading;
+    const error = allLevelsError;
+    const refetch = refetchAllLevels;
 
     // Handle dropdown change - update URL
     const handleCourseChange = (courseId: string | null) => {
@@ -161,8 +115,7 @@ export default function LearningLevelsList() {
         }
     };
 
-    const levelGroups = (levelsData as LevelGroup[]) ?? [];
-    const isLoading = isCoursesLoading || isLevelsLoading;
+    const isLoading = isLevelsLoading;
 
     if (isLoading && !levelsData) {
         return <LoadingState message={t("common.loading", "Loading...")} />;
@@ -214,15 +167,7 @@ export default function LearningLevelsList() {
                 ),
             }}
         >
-            <CourseFilterDropdown
-                courses={courses}
-                selectedCourseId={courseIdFromUrl}
-                onChange={handleCourseChange}
-                isLoading={isCoursesLoading}
-                className="max-w-xs"
-            />
-
-            {levelGroups.length === 0 ? (
+            {levelsData?.items?.length === 0 ? (
                 <EmptyState
                     title={t("levels:levels.empty.title", "No levels found")}
                     message={t(
@@ -232,63 +177,27 @@ export default function LearningLevelsList() {
                 />
             ) : (
                 <div className="space-y-6">
-                    {levelGroups.map((group: LevelGroup) => (
-                        <div
-                            key={group.course.id}
-                            className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden"
-                        >
-                            <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-                                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                                    {group.course.title}
-                                </h2>
-                                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                                    {t(
-                                        "levels:levels.levelsCount",
-                                        "{{count}} Levels",
-                                        { count: group.levels.length }
-                                    )}
-                                </p>
-                            </div>
-
-                            {group.levels.length === 0 ? (
-                                <div className="p-6 text-sm text-gray-500 dark:text-gray-400">
-                                    {t(
-                                        "levels:levels.empty.noLevelsInCourse",
-                                        "No levels in this course"
-                                    )}
-                                </div>
-                            ) : (
-                                <div className="px-6 pt-6">
-                                    {group.levels.map((level, index) => (
-                                        <LevelListItem
-                                            key={level.id}
-                                            orderNumber={index + 1}
-                                            title={level.title}
-                                            description={level.description}
-                                            createdAt={level.createdAt}
-                                            updatedAt={level.updatedAt}
-                                            onEdit={() => handleEdit(level.id)}
-                                            onDelete={() => handleDelete(level)}
-                                            onQuiz={() =>
-                                                navigate(
-                                                    paths.levels.view(level.id)
-                                                )
-                                            }
-                                            onClick={() =>
-                                                navigate(
-                                                    paths.lessons.listByLevel(
-                                                        level.id
-                                                    )
-                                                )
-                                            }
-                                            isLast={
-                                                index ===
-                                                group.levels.length - 1
-                                            }
-                                        />
-                                    ))}
-                                </div>
-                            )}
+                    {levelsData?.items?.map((level, index) => (
+                        <div className="px-6 pt-6">
+                            <LevelListItem
+                                key={level.id}
+                                orderNumber={index + 1}
+                                title={level.title}
+                                description={level.description}
+                                createdAt={level.createdAt}
+                                updatedAt={level.updatedAt}
+                                onEdit={() => handleEdit(level.id)}
+                                onDelete={() => handleDelete(level)}
+                                onQuiz={() =>
+                                    navigate(paths.levels.view(level.id))
+                                }
+                                onClick={() =>
+                                    navigate(
+                                        paths.lessons.listByLevel(level.id)
+                                    )
+                                }
+                                isLast={index === levelsData.items.length - 1}
+                            />
                         </div>
                     ))}
                 </div>

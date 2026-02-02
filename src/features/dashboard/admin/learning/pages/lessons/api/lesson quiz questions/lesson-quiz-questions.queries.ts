@@ -24,7 +24,12 @@ import {
 } from "@tanstack/react-query";
 import { lessonQuizQuestionKeys } from "./lesson-quiz-questions.keys";
 import { lessonQuizQuestionsApi } from "./lesson-quiz-questions.api";
-import { LessonQuizQuestion, LessonQuizQuestionsListParams, LessonQuizQuestionsMetadata, PaginatedData } from "../../types";
+import {
+    LessonQuizQuestion,
+    LessonQuizQuestionsListParams,
+    LessonQuizQuestionsMetadata,
+    PaginatedData,
+} from "../../types";
 
 // ============================================================================
 // Metadata Query
@@ -93,6 +98,48 @@ export function useLessonQuizQuestionsList(
     return useQuery({
         queryKey: lessonQuizQuestionKeys.list(params),
         queryFn: ({ signal }) => lessonQuizQuestionsApi.getList(params, signal),
+        ...options,
+    });
+}
+
+/**
+ * Hook to fetch paginated list of lesson quiz questions by quiz ID
+ *
+ * @param quizId - Quiz ID to fetch questions for
+ * @param params - Query parameters for pagination
+ * @param options - Additional query options
+ *
+ * @example
+ * ```tsx
+ * const { data, isLoading, error } = useLessonQuizQuestionsByQuiz(quizId, { page: 1 });
+ *
+ * if (isLoading) return <Spinner />;
+ * if (error) return <ErrorMessage error={error} />;
+ *
+ * return (
+ *     <ul>
+ *         {data.items.map(question => (
+ *             <li key={question.id}>{question.question}</li>
+ *         ))}
+ *     </ul>
+ * );
+ * ```
+ */
+export function useLessonQuizQuestionsByQuiz(
+    quizId: string | undefined | null,
+    params?: LessonQuizQuestionsListParams,
+    options?: Partial<UseQueryOptions<PaginatedData<LessonQuizQuestion>, Error>>
+) {
+    return useQuery({
+        queryKey: [
+            ...lessonQuizQuestionKeys.all,
+            "byQuiz",
+            quizId,
+            params,
+        ] as const,
+        queryFn: ({ signal }) =>
+            lessonQuizQuestionsApi.getListByQuizId(quizId!, params, signal),
+        enabled: !!quizId,
         ...options,
     });
 }

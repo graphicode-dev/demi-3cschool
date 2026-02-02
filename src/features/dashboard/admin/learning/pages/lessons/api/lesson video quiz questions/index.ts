@@ -33,6 +33,7 @@ export { lessonVideoQuizQuestionsApi } from "./lesson-video-quiz-questions.api";
 export {
     useLessonVideoQuizQuestionsMetadata,
     useLessonVideoQuizQuestionsList,
+    useLessonVideoQuizQuestionsByQuiz,
     useLessonVideoQuizQuestion,
 } from "./lesson-video-quiz-questions.queries";
 

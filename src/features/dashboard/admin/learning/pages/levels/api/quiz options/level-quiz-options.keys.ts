@@ -47,6 +47,14 @@ export const levelQuizOptionKeys = {
     lists: () => [...levelQuizOptionKeys.all, "list"] as const,
 
     /**
+     * Key for all list queries by question ID
+     */
+    listsByQuestionId: (params?: LevelQuizOptionsListParams) =>
+        params
+            ? ([...levelQuizOptionKeys.lists(), params] as const)
+            : levelQuizOptionKeys.lists(),
+
+    /**
      * Key for specific list with params
      */
     list: (params?: LevelQuizOptionsListParams) =>
@@ -80,6 +88,7 @@ export type LevelQuizOptionQueryKey =
     | typeof levelQuizOptionKeys.all
     | ReturnType<typeof levelQuizOptionKeys.metadata>
     | ReturnType<typeof levelQuizOptionKeys.lists>
+    | ReturnType<typeof levelQuizOptionKeys.listsByQuestionId>
     | ReturnType<typeof levelQuizOptionKeys.list>
     | ReturnType<typeof levelQuizOptionKeys.infinite>
     | ReturnType<typeof levelQuizOptionKeys.details>

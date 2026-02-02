@@ -103,6 +103,52 @@ export function useLessonQuizOptionsList(
 }
 
 /**
+ * Hook to fetch paginated list of lesson quiz options by question ID
+ *
+ * @param questionId - Question ID to fetch options for
+ * @param params - Query parameters for pagination
+ * @param options - Additional query options
+ *
+ * @example
+ * ```tsx
+ * const { data, isLoading, error } = useLessonQuizOptionsByQuestion(questionId, { page: 1 });
+ *
+ * if (isLoading) return <Spinner />;
+ * if (error) return <ErrorMessage error={error} />;
+ *
+ * return (
+ *     <ul>
+ *         {data.items.map(option => (
+ *             <li key={option.id}>{option.optionText}</li>
+ *         ))}
+ *     </ul>
+ * );
+ * ```
+ */
+export function useLessonQuizOptionsByQuestion(
+    questionId: string | undefined | null,
+    params?: LessonQuizOptionsListParams,
+    options?: Partial<UseQueryOptions<PaginatedData<LessonQuizOption>, Error>>
+) {
+    return useQuery({
+        queryKey: [
+            ...lessonQuizOptionKeys.all,
+            "byQuestion",
+            questionId,
+            params,
+        ] as const,
+        queryFn: ({ signal }) =>
+            lessonQuizOptionsApi.getListByQuestionId(
+                questionId!,
+                params,
+                signal
+            ),
+        enabled: !!questionId,
+        ...options,
+    });
+}
+
+/**
  * Hook to fetch infinite list of all lesson quiz options (for infinite scroll)
  *
  * @example

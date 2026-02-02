@@ -103,6 +103,43 @@ export function useLevelQuizOptionsList(
 }
 
 /**
+ * Hook to fetch paginated list of level quiz options by question ID
+ *
+ * @param questionId - Question ID to fetch options for
+ * @param params - Query parameters for pagination
+ * @param options - Additional query options
+ *
+ * @example
+ * ```tsx
+ * const { data, isLoading, error } = useLevelQuizOptionsByQuestion(questionId, { page: 1 });
+ *
+ * if (isLoading) return <Spinner />;
+ * if (error) return <ErrorMessage error={error} />;
+ *
+ * return (
+ *     <ul>
+ *         {data.items.map(option => (
+ *             <li key={option.id}>{option.optionText}</li>
+ *         ))}
+ *     </ul>
+ * );
+ * ```
+ */
+export function useLevelQuizOptionsByQuestion(
+    questionId: string | undefined | null,
+    params?: LevelQuizOptionsListParams,
+    options?: Partial<UseQueryOptions<PaginatedData<LevelQuizOption>, Error>>
+) {
+    return useQuery({
+        queryKey: levelQuizOptionKeys.listsByQuestionId(params),
+        queryFn: ({ signal }) =>
+            levelQuizOptionsApi.getByQuestionId(questionId!, params, signal),
+        enabled: !!questionId,
+        ...options,
+    });
+}
+
+/**
  * Hook to fetch infinite list of all level quiz options (for infinite scroll)
  *
  * @example

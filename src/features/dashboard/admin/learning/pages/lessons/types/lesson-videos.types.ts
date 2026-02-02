@@ -80,3 +80,11 @@ export interface LessonVideoUpdatePayload {
     videoReferenceEn?: string;
     isActive?: number;
 }
+
+/**
+ * List params for lesson videos
+ */
+export interface LessonVideosListParams {
+    page?: number;
+    perPage?: number;
+}

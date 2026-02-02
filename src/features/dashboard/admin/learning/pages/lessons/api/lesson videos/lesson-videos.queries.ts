@@ -17,7 +17,8 @@
 import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
 import { lessonVideoKeys } from "./lesson-videos.keys";
 import { lessonVideosApi } from "./lesson-videos.api";
-import { LessonVideo } from "../../types";
+import { LessonVideo, LessonVideosListParams } from "../../types";
+import { PaginatedData } from "@/shared/api";
 
 // ============================================================================
 // List Queries
@@ -50,6 +51,32 @@ export function useLessonVideosList(
     return useQuery({
         queryKey: lessonVideoKeys.lists(),
         queryFn: ({ signal }) => lessonVideosApi.getList(signal),
+        ...options,
+    });
+}
+
+/**
+ * Hook to fetch paginated list of lesson videos by lesson ID
+ *
+ * @param lessonId - Lesson ID to fetch videos for
+ * @param params - Query parameters for pagination
+ * @param options - Additional query options
+ */
+export function useLessonVideosByLesson(
+    lessonId: string | undefined | null,
+    params?: LessonVideosListParams,
+    options?: Partial<UseQueryOptions<PaginatedData<LessonVideo>, Error>>
+) {
+    return useQuery({
+        queryKey: [
+            ...lessonVideoKeys.all,
+            "byLesson",
+            lessonId,
+            params,
+        ] as const,
+        queryFn: ({ signal }) =>
+            lessonVideosApi.getListByLessonId(lessonId!, params, signal),
+        enabled: !!lessonId,
         ...options,
     });
 }

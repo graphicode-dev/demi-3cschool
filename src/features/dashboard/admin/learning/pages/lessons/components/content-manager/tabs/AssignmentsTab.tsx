@@ -12,7 +12,7 @@ import ContentList from "../ContentList";
 import ContentListItem from "../ContentListItem";
 import EmptyState from "../EmptyState";
 import AssignmentEditor from "../editors/AssignmentEditor";
-import {  useLessonAssignmentsList } from "../../../api";
+import { useLessonAssignmentsByLesson } from "../../../api";
 import { LessonAssignment } from "../../../types/lesson-assignments.types";
 
 interface AssignmentsTabProps {
@@ -24,14 +24,18 @@ export default function AssignmentsTab({ lessonId }: AssignmentsTabProps) {
     const [selectedAssignment, setSelectedAssignment] =
         useState<LessonAssignment | null>(null);
     const [isCreating, setIsCreating] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
 
-    const { data: apiAssignments = [], isLoading } = useLessonAssignmentsList();
+    const { data: assignmentsData, isLoading } = useLessonAssignmentsByLesson(
+        lessonId,
+        { page: currentPage }
+    );
 
     const [assignments, setAssignments] = useState<LessonAssignment[]>([]);
 
     useEffect(() => {
-        setAssignments(apiAssignments);
-    }, [apiAssignments]);
+        setAssignments(assignmentsData?.items || []);
+    }, [assignmentsData]);
 
     const handleAddAssignment = () => {
         setSelectedAssignment(null);
@@ -81,12 +85,15 @@ export default function AssignmentsTab({ lessonId }: AssignmentsTabProps) {
                     "lessons:content.assignments.listTitle",
                     "Assignment List"
                 )}
-                count={assignments.length}
+                count={assignmentsData?.items?.length || 0}
                 itemIds={assignments.map((a) => a.id)}
                 onReorder={handleReorder}
                 onAddItem={handleAddAssignment}
                 isLoading={isLoading}
                 renderDragOverlay={renderDragOverlay}
+                currentPage={assignmentsData?.currentPage}
+                lastPage={assignmentsData?.lastPage}
+                onPageChange={setCurrentPage}
             >
                 {assignments.map((assignment) => (
                     <ContentListItem

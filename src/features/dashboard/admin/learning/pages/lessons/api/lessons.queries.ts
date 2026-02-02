@@ -125,12 +125,7 @@ export function useLessonsList<T extends LessonsListParams | undefined>(
  */
 export function useLessonsByLevel<T extends LessonsByLevelParams>(
     params: T,
-    options?: Partial<
-        UseQueryOptions<
-            T extends { type: "group" } ? LessonGroup[] : PaginatedData<Lesson>,
-            Error
-        >
-    >
+    options?: Partial<UseQueryOptions<PaginatedData<Lesson>, Error>>
 ) {
     return useQuery({
         queryKey: lessonKeys.byLevel(params),

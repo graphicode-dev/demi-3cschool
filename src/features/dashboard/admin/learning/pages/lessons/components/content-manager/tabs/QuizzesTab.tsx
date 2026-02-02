@@ -12,7 +12,7 @@ import ContentList from "../ContentList";
 import ContentListItem from "../ContentListItem";
 import EmptyState from "../EmptyState";
 import QuizEditor from "../editors/QuizEditor";
-import { useLessonQuizzesList } from "../../../api";
+import { useLessonQuizzesByLesson } from "../../../api";
 import { LessonQuiz } from "../../../types";
 
 interface QuizzesTabProps {
@@ -23,22 +23,18 @@ export default function QuizzesTab({ lessonId }: QuizzesTabProps) {
     const { t } = useTranslation();
     const [selectedQuiz, setSelectedQuiz] = useState<LessonQuiz | null>(null);
     const [isCreating, setIsCreating] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
 
-    const { data: quizzesData, isLoading } = useLessonQuizzesList();
-
-    const filteredQuizzes = useMemo(
-        () =>
-            (quizzesData?.items || []).filter(
-                (quiz) => String(quiz.lesson?.id) === String(lessonId)
-            ),
-        [quizzesData, lessonId]
+    const { data: quizzesData, isLoading } = useLessonQuizzesByLesson(
+        lessonId,
+        { page: currentPage }
     );
 
     const [quizzes, setQuizzes] = useState<LessonQuiz[]>([]);
 
     useEffect(() => {
-        setQuizzes(filteredQuizzes);
-    }, [filteredQuizzes]);
+        setQuizzes(quizzesData?.items || []);
+    }, [quizzesData]);
 
     const handleAddQuiz = () => {
         setSelectedQuiz(null);
@@ -86,12 +82,15 @@ export default function QuizzesTab({ lessonId }: QuizzesTabProps) {
             {/* Quiz List */}
             <ContentList
                 title={t("lessons:content.quizzes.listTitle", "Quiz List")}
-                count={quizzes.length}
+                count={quizzesData?.items?.length || 0}
                 itemIds={quizzes.map((q) => String(q.id))}
                 onReorder={handleReorder}
                 onAddItem={handleAddQuiz}
                 isLoading={isLoading}
                 renderDragOverlay={renderDragOverlay}
+                currentPage={quizzesData?.currentPage}
+                lastPage={quizzesData?.lastPage}
+                onPageChange={setCurrentPage}
             >
                 {quizzes.map((quiz) => (
                     <ContentListItem

@@ -87,7 +87,7 @@ export default function LevelsList() {
     } = useLevelsByGrade(gradeId);
 
     // Get grade name from first level
-    const gradeName = levels?.[0]?.grade?.name || `Grade ${gradeId}`;
+    const gradeName = levels?.items?.[0]?.grade?.name || `Grade ${gradeId}`;
 
     const handleQuiz = (levelId: string | number) => {
         navigate(`/admin/grades/${gradeId}/levels/${levelId}/quiz`);
@@ -109,7 +109,7 @@ export default function LevelsList() {
         );
     }
 
-    if (!levels || levels.length === 0) {
+    if (!levels || levels?.items?.length === 0) {
         return (
             <PageWrapper
                 pageHeaderProps={{
@@ -148,7 +148,7 @@ export default function LevelsList() {
             </div>
 
             <CardGrid columns={3}>
-                {levels.map((level, index) => (
+                {levels?.items?.map((level, index) => (
                     <NavigationCard
                         key={level.id}
                         title={level.title}
@@ -168,7 +168,7 @@ export default function LevelsList() {
                     {t("learning:levels.overview", "Levels Overview")}
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {levels.map((level, index) => (
+                    {levels?.items?.map((level, index) => (
                         <div
                             key={level.id}
                             className="flex items-center gap-3 p-3 bg-white dark:bg-gray-800 rounded-xl"

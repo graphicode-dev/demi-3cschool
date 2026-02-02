@@ -16,7 +16,7 @@
  */
 
 import { api } from "@/shared/api/client";
-import { ApiResponse } from "@/shared/api";
+import { ApiResponse, PaginatedData } from "@/shared/api";
 import {
     PaginatedStudentData,
     Student,
@@ -93,17 +93,14 @@ export const gradesApi = {
     /**
      * Get list of all grades
      */
-    getList: async (signal?: AbortSignal): Promise<Grade[]> => {
-        const response = await api.get<ApiResponse<Grade[]>>(GRADES_BASE_URL, {
-            signal,
-        });
+    getList: async (signal?: AbortSignal): Promise<PaginatedData<Grade>> => {
+        const response = await api.get<ApiResponse<PaginatedData<Grade>>>(
+            GRADES_BASE_URL,
+            { signal }
+        );
 
         if (response.error) {
             throw response.error;
-        }
-
-        if (!response.data?.data) {
-            throw new Error("No data returned from server");
         }
 
         return response.data.data;

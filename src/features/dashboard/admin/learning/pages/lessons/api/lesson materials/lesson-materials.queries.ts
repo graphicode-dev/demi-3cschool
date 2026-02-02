@@ -17,7 +17,11 @@
 import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
 import { lessonMaterialKeys } from "./lesson-materials.keys";
 import { lessonMaterialsApi } from "./lesson-materials.api";
-import { LessonMaterial } from "../../types";
+import {
+    LessonMaterial,
+    LessonMaterialsListParams,
+    PaginatedData,
+} from "../../types";
 
 // ============================================================================
 // List Queries
@@ -50,6 +54,32 @@ export function useLessonMaterialsList(
     return useQuery({
         queryKey: lessonMaterialKeys.lists(),
         queryFn: ({ signal }) => lessonMaterialsApi.getList(signal),
+        ...options,
+    });
+}
+
+/**
+ * Hook to fetch paginated list of lesson materials by lesson ID
+ *
+ * @param lessonId - Lesson ID to fetch materials for
+ * @param params - Query parameters for pagination
+ * @param options - Additional query options
+ */
+export function useLessonMaterialsByLesson(
+    lessonId: string | undefined | null,
+    params?: LessonMaterialsListParams,
+    options?: Partial<UseQueryOptions<PaginatedData<LessonMaterial>, Error>>
+) {
+    return useQuery({
+        queryKey: [
+            ...lessonMaterialKeys.all,
+            "byLesson",
+            lessonId,
+            params,
+        ] as const,
+        queryFn: ({ signal }) =>
+            lessonMaterialsApi.getListByLessonId(lessonId!, params, signal),
+        enabled: !!lessonId,
         ...options,
     });
 }

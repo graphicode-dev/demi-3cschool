@@ -103,6 +103,48 @@ export function useLessonQuizzesList(
 }
 
 /**
+ * Hook to fetch paginated list of lesson quizzes by lesson ID
+ *
+ * @param lessonId - Lesson ID to fetch quizzes for
+ * @param params - Query parameters for pagination
+ * @param options - Additional query options
+ *
+ * @example
+ * ```tsx
+ * const { data, isLoading, error } = useLessonQuizzesByLesson(lessonId, { page: 1 });
+ *
+ * if (isLoading) return <Spinner />;
+ * if (error) return <ErrorMessage error={error} />;
+ *
+ * return (
+ *     <ul>
+ *         {data.items.map(quiz => (
+ *             <li key={quiz.id}>{quiz.lesson.title} - {quiz.timeLimit}min</li>
+ *         ))}
+ *     </ul>
+ * );
+ * ```
+ */
+export function useLessonQuizzesByLesson(
+    lessonId: string | undefined | null,
+    params?: LessonQuizzesListParams,
+    options?: Partial<UseQueryOptions<PaginatedData<LessonQuiz>, Error>>
+) {
+    return useQuery({
+        queryKey: [
+            ...lessonQuizKeys.all,
+            "byLesson",
+            lessonId,
+            params,
+        ] as const,
+        queryFn: ({ signal }) =>
+            lessonQuizzesApi.getListByLessonId(lessonId!, params, signal),
+        enabled: !!lessonId,
+        ...options,
+    });
+}
+
+/**
  * Hook to fetch list of lesson quizzes by level ID
  *
  * @param levelId - Level ID to fetch quizzes for
@@ -126,12 +168,12 @@ export function useLessonQuizzesList(
  */
 export function useLessonQuizzesByLevel(
     levelId: string | undefined | null,
-    options?: Partial<UseQueryOptions<LessonQuiz[], Error>>
+    options?: Partial<UseQueryOptions<PaginatedData<LessonQuiz>, Error>>
 ) {
     return useQuery({
         queryKey: lessonQuizKeys.byLevel(levelId ?? ""),
         queryFn: ({ signal }) =>
-            lessonQuizzesApi.getByLevelId(levelId!, undefined, signal),
+            lessonQuizzesApi.getListByLevelId(levelId!, undefined, signal),
         enabled: !!levelId,
         ...options,
     });
