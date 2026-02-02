@@ -1,113 +1,103 @@
 {
-    "resources": {
-        "title": "الموارد",
-        "description": "إدارة وتنظيم الموارد التعليمية لجميع الصفوف والفصول والجلسات.",
-        "filters": "الفلاتر",
-        "allGrades": "جميع الصفوف",
-        "allTerms": "جميع الفصول",
-        "createNewFolder": "إنشاء مجلد جديد",
+    "title": "الموارد",
+    "description": "إدارة وتنظيم الموارد التعليمية لجميع الصفوف والفصول والجلسات.",
+    "filters": "الفلاتر",
+    "allGrades": "جميع الصفوف",
+    "allTerms": "جميع الفصول",
+    "createNewFolder": "إنشاء مجلد جديد",
+    "resources": "الموارد",
+    "noFolders": "لا توجد مجلدات",
+    "noFoldersDescription": "أنشئ مجلداً جديداً لبدء تنظيم مواردك.",
+    "breadcrumb": {
         "resources": "الموارد",
-        "noFolders": "لا توجد مجلدات",
-        "noFoldersDescription": "أنشئ مجلداً جديداً لبدء تنظيم مواردك.",
-
-        "breadcrumb": {
-            "resources": "الموارد",
-            "folder": "مجلد",
-            "create": "إنشاء",
-            "edit": "تعديل",
-            "resource": "مورد"
-        },
-
-        "folder": {
-            "title": "مجلد",
-            "create": "إنشاء مجلد جديد",
-            "edit": "تعديل المجلد",
-            "delete": "حذف المجلد",
-            "information": "معلومات المجلد",
-            "updateInformation": "تحديث معلومات المجلد",
-            "name": "اسم المجلد",
-            "namePlaceholder": "مثال: المجلد 1: مقدمة في الرياضيات",
-            "selectGrade": "اختر الصف",
-            "selectTerm": "اختر الفصل",
-            "description": "الوصف (اختياري)",
-            "descriptionPlaceholder": "أضف وصفاً موجزاً لهذا المجلد...",
-            "saveFolder": "حفظ المجلد",
-            "updateFolder": "تحديث المجلد",
-            "cancel": "إلغاء",
-            "deleteConfirmTitle": "حذف المجلد",
-            "deleteConfirmMessage": "هل أنت متأكد من حذف هذا المجلد وجميع موارده؟ لا يمكن التراجع عن هذا الإجراء.",
-            "confirmDelete": "تأكيد الحذف"
-        },
-
-        "resource": {
-            "add": "إضافة مورد جديد",
-            "edit": "تعديل المورد",
-            "delete": "حذف المورد",
-            "information": "معلومات المورد",
-            "updateInformation": "تحديث معلومات المورد",
-            "title": "عنوان المورد",
-            "titlePlaceholder": "مثال: فيديو مقدمة في الجبر",
-            "description": "الوصف",
-            "descriptionPlaceholder": "قدم وصفاً موجزاً لهذا المورد...",
-            "type": "نوع المورد",
-            "uploadFile": "رفع ملف",
-            "dragAndDrop": "اسحب وأفلت ملفك هنا، أو انقر للتصفح",
-            "chooseFile": "اختر ملف",
-            "supportedFormats": "يدعم الفيديو والصوت وPDF والصور",
-            "clickToUpload": "انقر لرفع ملف",
-            "saveResource": "حفظ المورد",
-            "updateResource": "تحديث المورد",
-            "cancel": "إلغاء",
-            "deleteConfirmTitle": "حذف المورد",
-            "deleteConfirmMessage": "هل أنت متأكد من حذف هذا المورد؟ لا يمكن التراجع عن هذا الإجراء.",
-            "confirmDelete": "تأكيد الحذف",
-            "assignedTo": "مخصص لـ:",
-            "move": "نقل المورد",
-            "moveTitle": "نقل المورد إلى مجلد آخر",
-            "currentInformation": "المعلومات الحالية",
-            "resourceName": "اسم المورد:",
-            "currentGrade": "الصف الحالي:",
-            "currentTerm": "الفصل الحالي:",
-            "currentFolder": "المجلد الحالي:",
-            "selectTargetFolder": "اختر المجلد المستهدف",
-            "selectFolderPlaceholder": "اختر مجلداً...",
-            "folderHint": "يتم عرض المجلدات من نفس الصف والفصل فقط",
-            "confirmMove": "تأكيد النقل"
-        },
-
-        "tabs": {
-            "all": "الكل",
-            "videos": "فيديوهات",
-            "files": "ملفات",
-            "images": "صور",
-            "audio": "صوتيات"
-        },
-
-        "table": {
-            "id": "المعرف",
-            "resourceName": "اسم المورد",
-            "type": "النوع",
-            "uploadDate": "تاريخ الرفع",
-            "action": "الإجراء"
-        },
-
-        "types": {
-            "video": "فيديو",
-            "file": "ملف",
-            "image": "صورة",
-            "audio": "صوت"
-        },
-
-        "empty": {
-            "title": "لا توجد موارد",
-            "description": "لا توجد {{type}} في هذا المجلد.",
-            "allDescription": "لا توجد موارد في هذا المجلد."
-        },
-
-        "preview": {
-            "title": "معاينة المورد",
-            "uploaded": "تم الرفع:",
-            "videoPreview": "معاينة الفيديو:"
-        }
+        "folder": "مجلد",
+        "create": "إنشاء",
+        "edit": "تعديل",
+        "resource": "مورد"
+    },
+    "folder": {
+        "title": "مجلد",
+        "create": "إنشاء مجلد جديد",
+        "edit": "تعديل المجلد",
+        "delete": "حذف المجلد",
+        "information": "معلومات المجلد",
+        "updateInformation": "تحديث معلومات المجلد",
+        "name": "اسم المجلد",
+        "namePlaceholder": "مثال: المجلد 1: مقدمة في الرياضيات",
+        "selectGrade": "اختر الصف",
+        "selectTerm": "اختر الفصل",
+        "description": "الوصف (اختياري)",
+        "descriptionPlaceholder": "أضف وصفاً موجزاً لهذا المجلد...",
+        "saveFolder": "حفظ المجلد",
+        "updateFolder": "تحديث المجلد",
+        "cancel": "إلغاء",
+        "deleteConfirmTitle": "حذف المجلد",
+        "deleteConfirmMessage": "هل أنت متأكد من حذف هذا المجلد وجميع موارده؟ لا يمكن التراجع عن هذا الإجراء.",
+        "confirmDelete": "تأكيد الحذف"
+    },
+    "resource": {
+        "add": "إضافة مورد جديد",
+        "edit": "تعديل المورد",
+        "delete": "حذف المورد",
+        "information": "معلومات المورد",
+        "updateInformation": "تحديث معلومات المورد",
+        "title": "عنوان المورد",
+        "titlePlaceholder": "مثال: فيديو مقدمة في الجبر",
+        "description": "الوصف",
+        "descriptionPlaceholder": "قدم وصفاً موجزاً لهذا المورد...",
+        "type": "نوع المورد",
+        "uploadFile": "رفع ملف",
+        "dragAndDrop": "اسحب وأفلت ملفك هنا، أو انقر للتصفح",
+        "chooseFile": "اختر ملف",
+        "supportedFormats": "يدعم الفيديو والصوت وPDF والصور",
+        "clickToUpload": "انقر لرفع ملف",
+        "saveResource": "حفظ المورد",
+        "updateResource": "تحديث المورد",
+        "cancel": "إلغاء",
+        "deleteConfirmTitle": "حذف المورد",
+        "deleteConfirmMessage": "هل أنت متأكد من حذف هذا المورد؟ لا يمكن التراجع عن هذا الإجراء.",
+        "confirmDelete": "تأكيد الحذف",
+        "assignedTo": "مخصص لـ:",
+        "move": "نقل المورد",
+        "moveTitle": "نقل المورد إلى مجلد آخر",
+        "currentInformation": "المعلومات الحالية",
+        "resourceName": "اسم المورد:",
+        "currentGrade": "الصف الحالي:",
+        "currentTerm": "الفصل الحالي:",
+        "currentFolder": "المجلد الحالي:",
+        "selectTargetFolder": "اختر المجلد المستهدف",
+        "selectFolderPlaceholder": "اختر مجلداً...",
+        "folderHint": "يتم عرض المجلدات من نفس الصف والفصل فقط",
+        "confirmMove": "تأكيد النقل"
+    },
+    "tabs": {
+        "all": "الكل",
+        "videos": "فيديوهات",
+        "files": "ملفات",
+        "images": "صور",
+        "audio": "صوتيات"
+    },
+    "table": {
+        "id": "المعرف",
+        "resourceName": "اسم المورد",
+        "type": "النوع",
+        "uploadDate": "تاريخ الرفع",
+        "action": "الإجراء"
+    },
+    "types": {
+        "video": "فيديو",
+        "file": "ملف",
+        "image": "صورة",
+        "audio": "صوت"
+    },
+    "empty": {
+        "title": "لا توجد موارد",
+        "description": "لا توجد {{type}} في هذا المجلد.",
+        "allDescription": "لا توجد موارد في هذا المجلد."
+    },
+    "preview": {
+        "title": "معاينة المورد",
+        "uploaded": "تم الرفع:",
+        "videoPreview": "معاينة الفيديو:"
     }
 }

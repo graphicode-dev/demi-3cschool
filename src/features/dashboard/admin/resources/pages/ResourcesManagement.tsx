@@ -17,7 +17,7 @@ import { MOCK_GRADES, MOCK_TERMS } from "../mocks";
 import type { ResourceFolder } from "../types";
 
 export function ResourcesManagement() {
-    const { t } = useTranslation("resources");
+    const { t } = useTranslation("adminResources");
     const navigate = useNavigate();
     const [selectedGrade, setSelectedGrade] = useState<string>("");
     const [selectedTerm, setSelectedTerm] = useState<string>("");

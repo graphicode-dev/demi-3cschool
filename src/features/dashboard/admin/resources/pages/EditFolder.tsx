@@ -14,7 +14,7 @@ import { useFolder, useUpdateFolder } from "../api";
 import { MOCK_GRADES, MOCK_TERMS } from "../mocks";
 
 export function EditFolder() {
-    const { t } = useTranslation("resources");
+    const { t } = useTranslation("adminResources");
     const navigate = useNavigate();
     const { folderId } = useParams<{ folderId: string }>();
     const { data: folder, isLoading } = useFolder(folderId || "");

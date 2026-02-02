@@ -1,0 +1,27 @@
+{
+    "title": "Slots",
+    "description": "View daily available time slots",
+    "tabs": {
+        "online": "Online Sessions",
+        "offline": "Offline Sessions"
+    },
+    "table": {
+        "from": "From",
+        "to": "To"
+    },
+    "days": {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday"
+    },
+    "empty": {
+        "noSlots": "No time slots available",
+        "noSlotsDescription": "There are no time slots configured for this day."
+    },
+    "loading": "Loading time slots...",
+    "error": "Failed to load time slots"
+}

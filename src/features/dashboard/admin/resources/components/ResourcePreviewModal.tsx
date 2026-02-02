@@ -20,7 +20,7 @@ export function ResourcePreviewModal({
     onClose,
     resource,
 }: ResourcePreviewModalProps) {
-    const { t } = useTranslation("resources");
+    const { t } = useTranslation("adminResources");
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {

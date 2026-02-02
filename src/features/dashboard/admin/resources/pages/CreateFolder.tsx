@@ -13,7 +13,7 @@ import { useCreateFolder } from "../api";
 import { MOCK_GRADES, MOCK_TERMS } from "../mocks";
 
 export function CreateFolder() {
-    const { t } = useTranslation("resources");
+    const { t } = useTranslation("adminResources");
     const navigate = useNavigate();
     const createFolder = useCreateFolder();
 

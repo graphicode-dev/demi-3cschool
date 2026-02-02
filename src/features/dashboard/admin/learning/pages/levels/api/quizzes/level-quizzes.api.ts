@@ -70,7 +70,7 @@ export const levelQuizzesApi = {
                 nextPageUrl: string | null;
                 items: LevelQuiz[];
             }>
-        >(`${BASE_URL}/level/${levelId}`, {
+        >(`${BASE_URL}/${levelId}/quizzes`, {
             params: params as Record<string, unknown> | undefined,
             signal,
         });

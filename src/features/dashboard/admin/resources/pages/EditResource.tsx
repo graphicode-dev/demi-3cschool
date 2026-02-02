@@ -21,7 +21,7 @@ const RESOURCE_TYPES: { value: ResourceType; label: string }[] = [
 ];
 
 export function EditResource() {
-    const { t } = useTranslation("resources");
+    const { t } = useTranslation("adminResources");
     const navigate = useNavigate();
     const { folderId, resourceId } = useParams<{
         folderId: string;

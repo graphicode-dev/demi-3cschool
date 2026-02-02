@@ -20,7 +20,7 @@ const RESOURCE_TYPES: { value: ResourceType; label: string }[] = [
 ];
 
 export function AddResource() {
-    const { t } = useTranslation("resources");
+    const { t } = useTranslation("adminResources");
     const navigate = useNavigate();
     const { folderId } = useParams<{ folderId: string }>();
     const fileInputRef = useRef<HTMLInputElement>(null);

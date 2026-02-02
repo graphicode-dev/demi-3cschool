@@ -23,7 +23,7 @@ export function MoveResourceModal({
     resource,
     currentFolder,
 }: MoveResourceModalProps) {
-    const { t } = useTranslation("resources");
+    const { t } = useTranslation("adminResources");
     const [selectedFolderId, setSelectedFolderId] = useState<string>("");
     const [isVisible, setIsVisible] = useState(false);
 

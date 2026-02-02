@@ -13,7 +13,7 @@ const globalLocales = import.meta.glob<LocaleModule>("./locales/*/*.json", {
     eager: true,
 });
 
-// Feature locales: src/features/*/locales/{lang}.json, src/features/dashboard/*/locales/{lang}.json, src/features/dashboard/shared/*/locales/{lang}.json, src/features/dashboard/classroom/*/locales/{lang}.json, and src/features/dashboard/admin/*/locales/{lang}.json
+// Feature locales: src/features/*/locales/{lang}.json, src/features/dashboard/*/locales/{lang}.json, src/features/dashboard/shared/*/locales/{lang}.json, src/features/dashboard/classroom/*/locales/{lang}.json, src/features/dashboard/admin/*/locales/{lang}.json, and nested admin features
 const featureLocales = import.meta.glob<LocaleModule>(
     [
         "../features/*/locales/*.json",
@@ -21,6 +21,7 @@ const featureLocales = import.meta.glob<LocaleModule>(
         "../features/dashboard/shared/*/locales/*.json",
         "../features/dashboard/classroom/*/locales/*.json",
         "../features/dashboard/admin/*/locales/*.json",
+        "../features/dashboard/admin/*/*/locales/*.json",
     ],
     { eager: true }
 );
@@ -73,18 +74,43 @@ Object.entries(globalLocales).forEach(([path, module]) => {
     }
 });
 
-// Process feature locales: ../features/{feature}/locales/{lang}.json or ../features/dashboard/{feature}/locales/{lang}.json or ../features/dashboard/shared/{feature}/locales/{lang}.json or ../features/dashboard/classroom/{feature}/locales/{lang}.json or ../features/dashboard/admin/{feature}/locales/{lang}.json → resources.{lang}.{feature}
+// Process feature locales with namespace collision handling
+// For admin/classroom features with same name, prefix with parent folder
 Object.entries(featureLocales).forEach(([path, module]) => {
-    // Extract: ../features/{feature}/locales/{lang}.json or ../features/dashboard/{feature}/locales/{lang}.json or ../features/dashboard/shared/{feature}/locales/{lang}.json or ../features/dashboard/classroom/{feature}/locales/{lang}.json or ../features/dashboard/admin/{feature}/locales/{lang}.json
-    const match = path.match(
-        /\.\.\/features\/(?:dashboard\/)?(?:shared\/|classroom\/|admin\/)?([^/]+)\/locales\/(\w+)\.json$/
+    // Check for admin or classroom specific features to handle collisions
+    const adminMatch = path.match(
+        /\/dashboard\/admin\/([^/]+)\/locales\/(\w+)\.json$/
     );
-    if (match) {
-        const [, feature, lang] = match;
-        if (resources[lang]) {
-            resources[lang][feature] =
-                (module as { default?: LocaleModule }).default || module;
-        }
+    const classroomMatch = path.match(
+        /\/dashboard\/classroom\/([^/]+)\/locales\/(\w+)\.json$/
+    );
+
+    let feature: string;
+    let lang: string;
+
+    if (adminMatch) {
+        const [, featureName, langCode] = adminMatch;
+        // Prefix admin features that might collide with classroom (e.g., resources -> adminResources)
+        const collisionFeatures = ["resources", "ticketsManagement"];
+        feature = collisionFeatures.includes(featureName)
+            ? `admin${featureName.charAt(0).toUpperCase()}${featureName.slice(1)}`
+            : featureName;
+        lang = langCode;
+    } else if (classroomMatch) {
+        const [, featureName, langCode] = classroomMatch;
+        // Keep classroom features as-is (they were first)
+        feature = featureName;
+        lang = langCode;
+    } else {
+        // Default: extract feature name (folder before /locales/) and language
+        const match = path.match(/\/([^/]+)\/locales\/(\w+)\.json$/);
+        if (!match) return;
+        [, feature, lang] = match;
+    }
+
+    if (resources[lang]) {
+        resources[lang][feature] =
+            (module as { default?: LocaleModule }).default || module;
     }
 });
 

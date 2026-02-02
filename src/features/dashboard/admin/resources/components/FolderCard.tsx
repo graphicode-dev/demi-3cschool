@@ -18,7 +18,7 @@ interface FolderCardProps {
 }
 
 export function FolderCard({ folder, index }: FolderCardProps) {
-    const { t } = useTranslation("resources");
+    const { t } = useTranslation("adminResources");
     const navigate = useNavigate();
     const [showMenu, setShowMenu] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);

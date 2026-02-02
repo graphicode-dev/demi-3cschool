@@ -22,6 +22,7 @@ import {
     GraduationCap,
     Users,
     FolderOpen,
+    Clock,
 } from "lucide-react";
 import { adminSharedNavItems } from "@/features/dashboard/shared/navigation";
 import { ticketsManagementNavItem } from "../ticketsManagement/navigation/nav";
@@ -35,6 +36,9 @@ import {
 import { gradesPaths } from "../learning/navigation/paths";
 import { groupsPaths } from "../groupsManagement/navigation/paths";
 import { groupsAnalyticsPaths } from "../groupsAnalytics/navigation/paths";
+import { slotsPaths } from "../settings/slots/navigation/paths";
+import { slotsNavItem } from "../settings/slots/navigation/nav";
+import { resourcesNavItem } from "../resources/navigation/nav";
 
 const { course, level, lesson } = learningPermissions;
 const { group, groupSession } = groupsPermissions;
@@ -77,14 +81,7 @@ export const adminNav: FeatureNavModule = {
             permissions: [group.viewAny],
         },
         // Resources
-        {
-            key: "resources",
-            labelKey: "resources:title",
-            label: "Resources",
-            href: "/admin/resources",
-            icon: FolderOpen,
-            order: 6,
-        },
+        resourcesNavItem,
         // Tickets Management
         ticketsManagementNavItem,
         // Community Management
@@ -104,6 +101,7 @@ export const adminNav: FeatureNavModule = {
             href: "/admin/settings",
             icon: Settings,
             order: 100,
+            children: [slotsNavItem],
         },
         // Shared features (profile, chat, certificates, reports)
         ...adminSharedNavItems,

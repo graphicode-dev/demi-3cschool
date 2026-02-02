@@ -46,7 +46,7 @@ const TYPE_COLORS: Record<ResourceType, string> = {
 };
 
 export function FolderDetails() {
-    const { t } = useTranslation("resources");
+    const { t } = useTranslation("adminResources");
     const navigate = useNavigate();
     const { folderId } = useParams<{ folderId: string }>();
     const [activeTab, setActiveTab] = useState<TabType>("all");

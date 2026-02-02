@@ -69,7 +69,10 @@ function transformQuizToUI(
     options: LevelQuizOption[]
 ): LevelQuizWithQuestions {
     const quizIdStr = String(quiz.id);
-    const quizQuestions = questions.filter(
+    // Ensure questions and options are arrays
+    const safeQuestions = Array.isArray(questions) ? questions : [];
+    const safeOptions = Array.isArray(options) ? options : [];
+    const quizQuestions = safeQuestions.filter(
         (q) => String(q.quiz.id) === quizIdStr
     );
 
@@ -83,7 +86,7 @@ function transformQuizToUI(
         showAnswers: quiz.showAnswers === 1,
         questions: quizQuestions.map((q) => {
             const questionIdStr = String(q.id);
-            const questionOptions = options.filter(
+            const questionOptions = safeOptions.filter(
                 (o) => String(o.question.id) === questionIdStr
             );
             return {

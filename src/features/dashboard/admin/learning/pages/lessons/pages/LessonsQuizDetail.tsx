@@ -28,17 +28,17 @@ import {
     useCreateLessonQuiz,
     useDeleteLessonQuiz,
     useUpdateLessonQuiz,
-    useLessonQuizzesByLevel,
+    useLessonQuizzesByLesson,
 } from "../api/lesson quizzes";
 import {
     useCreateLessonQuizQuestion,
     useDeleteLessonQuizQuestion,
     useUpdateLessonQuizQuestion,
-    useLessonQuizQuestionsList,
+    useLessonQuizQuestionsByQuiz,
 } from "../api/lesson quiz questions";
 import {
     useCreateLessonQuizOption,
-    useLessonQuizOptionsList,
+    useLessonQuizOptionsByQuestion,
 } from "../api/lesson quiz options";
 import { useLesson } from "../api";
 import PageWrapper from "@/design-system/components/PageWrapper";
@@ -72,7 +72,10 @@ function transformQuizToUI(
     options: LessonQuizOption[]
 ): LessonQuizWithQuestions {
     const quizIdStr = String(quiz.id);
-    const quizQuestions = questions.filter(
+    // Ensure questions and options are arrays
+    const safeQuestions = Array.isArray(questions) ? questions : [];
+    const safeOptions = Array.isArray(options) ? options : [];
+    const quizQuestions = safeQuestions.filter(
         (q) => String(q.quiz.id) === quizIdStr
     );
 
@@ -87,7 +90,7 @@ function transformQuizToUI(
         showAnswers: quiz.showAnswers === 1 || quiz.showAnswers === true,
         questions: quizQuestions.map((q) => {
             const questionIdStr = String(q.id);
-            const questionOptions = options.filter(
+            const questionOptions = safeOptions.filter(
                 (o) => String(o.question.id) === questionIdStr
             );
             return {
@@ -124,17 +127,7 @@ export default function LessonsQuizDetail() {
         data: quizzesData,
         isLoading: quizzesLoading,
         refetch: refetchQuizzes,
-    } = useLessonQuizzesByLevel(id);
-    const {
-        data: questionsData,
-        isLoading: questionsLoading,
-        refetch: refetchQuestions,
-    } = useLessonQuizQuestionsList();
-    const {
-        data: optionsData,
-        isLoading: optionsLoading,
-        refetch: refetchOptions,
-    } = useLessonQuizOptionsList();
+    } = useLessonQuizzesByLesson(id);
 
     const { mutateAsync: createQuizAsync, isPending: isCreatingQuiz } =
         useCreateLessonQuiz();
@@ -189,6 +182,38 @@ export default function LessonsQuizDetail() {
     }>({ isOpen: false, quizId: null, questionId: null });
 
     const quizzes: LessonQuiz[] = quizzesData?.items || [];
+
+    // Get the first expanded quiz ID for fetching questions
+    const firstExpandedQuizId = expandedQuizzes[0] || null;
+
+    // Fetch questions only for expanded quizzes
+    const {
+        data: questionsData,
+        isLoading: questionsLoading,
+        refetch: refetchQuestions,
+    } = useLessonQuizQuestionsByQuiz(
+        firstExpandedQuizId,
+        { page: 1 },
+        {
+            enabled: !!firstExpandedQuizId,
+        }
+    );
+
+    // Get the first expanded question ID for fetching options
+    const firstExpandedQuestionId = expandedQuestions[0] || null;
+
+    // Fetch options only for expanded questions
+    const {
+        data: optionsData,
+        isLoading: optionsLoading,
+        refetch: refetchOptions,
+    } = useLessonQuizOptionsByQuestion(
+        firstExpandedQuestionId,
+        { page: 1 },
+        {
+            enabled: !!firstExpandedQuestionId,
+        }
+    );
     const questions = questionsData?.items || [];
     const options = optionsData?.items || [];
 

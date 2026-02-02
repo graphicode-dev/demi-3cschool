@@ -4,7 +4,10 @@
         "chat": "Chat",
         "certificates": "Certificates",
         "reports": "Reports",
-        "settings": "Settings"
+        "settings": "Settings",
+        "slots": "Slots",
+        "resources": "Resources",
+        "grades": "Grades"
     },
     "title": "Admin"
 }

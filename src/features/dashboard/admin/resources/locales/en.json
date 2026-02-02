@@ -1,113 +1,103 @@
 {
-    "resources": {
-        "title": "Resources",
-        "description": "Manage and organize educational resources for all grades, terms, and sessions.",
-        "filters": "Filters",
-        "allGrades": "All Grades",
-        "allTerms": "All Terms",
-        "createNewFolder": "Create New Folder",
+    "title": "Resources",
+    "description": "Manage and organize educational resources for all grades, terms, and sessions.",
+    "filters": "Filters",
+    "allGrades": "All Grades",
+    "allTerms": "All Terms",
+    "createNewFolder": "Create New Folder",
+    "resources": "Resources",
+    "noFolders": "No folders found",
+    "noFoldersDescription": "Create a new folder to start organizing your resources.",
+    "breadcrumb": {
         "resources": "Resources",
-        "noFolders": "No folders found",
-        "noFoldersDescription": "Create a new folder to start organizing your resources.",
-
-        "breadcrumb": {
-            "resources": "Resources",
-            "folder": "Folder",
-            "create": "Create",
-            "edit": "Edit",
-            "resource": "Resource"
-        },
-
-        "folder": {
-            "title": "Folder",
-            "create": "Create New Folder",
-            "edit": "Edit Folder",
-            "delete": "Delete Folder",
-            "information": "Folder Information",
-            "updateInformation": "Update Folder Information",
-            "name": "Folder Name",
-            "namePlaceholder": "e.g., Folder 1: Introduction to Mathematics",
-            "selectGrade": "Select Grade",
-            "selectTerm": "Select Term",
-            "description": "Description (Optional)",
-            "descriptionPlaceholder": "Add a brief description of this folder...",
-            "saveFolder": "Save Folder",
-            "updateFolder": "Update Folder",
-            "cancel": "Cancel",
-            "deleteConfirmTitle": "Delete Folder",
-            "deleteConfirmMessage": "Are you sure you want to delete this folder and all its resources? This action cannot be undone.",
-            "confirmDelete": "Confirm Delete"
-        },
-
-        "resource": {
-            "add": "Add New Resource",
-            "edit": "Edit Resource",
-            "delete": "Delete Resource",
-            "information": "Resource Information",
-            "updateInformation": "Update Resource Information",
-            "title": "Resource Title",
-            "titlePlaceholder": "e.g., Introduction to Algebra Video",
-            "description": "Description",
-            "descriptionPlaceholder": "Provide a brief description of this resource...",
-            "type": "Resource Type",
-            "uploadFile": "Upload File",
-            "dragAndDrop": "Drag and drop your file here, or click to browse",
-            "chooseFile": "Choose File",
-            "supportedFormats": "Supports Video, Audio, PDF, Images",
-            "clickToUpload": "Click to upload file",
-            "saveResource": "Save Resource",
-            "updateResource": "Update Resource",
-            "cancel": "Cancel",
-            "deleteConfirmTitle": "Delete Resource",
-            "deleteConfirmMessage": "Are you sure you want to delete this resource? This action cannot be undone.",
-            "confirmDelete": "Confirm Delete",
-            "assignedTo": "Assigned to:",
-            "move": "Move Resource",
-            "moveTitle": "Move Resource to Another Folder",
-            "currentInformation": "Current Information",
-            "resourceName": "Resource Name:",
-            "currentGrade": "Current Grade:",
-            "currentTerm": "Current Term:",
-            "currentFolder": "Current Folder:",
-            "selectTargetFolder": "Select Target Folder",
-            "selectFolderPlaceholder": "Select a folder...",
-            "folderHint": "Only folders from the same grade and term are shown",
-            "confirmMove": "Confirm Move"
-        },
-
-        "tabs": {
-            "all": "All",
-            "videos": "Videos",
-            "files": "Files",
-            "images": "Images",
-            "audio": "Audio"
-        },
-
-        "table": {
-            "id": "ID",
-            "resourceName": "Resource Name",
-            "type": "Type",
-            "uploadDate": "Upload Date",
-            "action": "Action"
-        },
-
-        "types": {
-            "video": "VIDEO",
-            "file": "FILE",
-            "image": "IMAGE",
-            "audio": "AUDIO"
-        },
-
-        "empty": {
-            "title": "No resources found",
-            "description": "No {{type}} found in this folder.",
-            "allDescription": "No resources found in this folder."
-        },
-
-        "preview": {
-            "title": "Resource Preview",
-            "uploaded": "Uploaded:",
-            "videoPreview": "Video Preview:"
-        }
+        "folder": "Folder",
+        "create": "Create",
+        "edit": "Edit",
+        "resource": "Resource"
+    },
+    "folder": {
+        "title": "Folder",
+        "create": "Create New Folder",
+        "edit": "Edit Folder",
+        "delete": "Delete Folder",
+        "information": "Folder Information",
+        "updateInformation": "Update Folder Information",
+        "name": "Folder Name",
+        "namePlaceholder": "e.g., Folder 1: Introduction to Mathematics",
+        "selectGrade": "Select Grade",
+        "selectTerm": "Select Term",
+        "description": "Description (Optional)",
+        "descriptionPlaceholder": "Add a brief description of this folder...",
+        "saveFolder": "Save Folder",
+        "updateFolder": "Update Folder",
+        "cancel": "Cancel",
+        "deleteConfirmTitle": "Delete Folder",
+        "deleteConfirmMessage": "Are you sure you want to delete this folder and all its resources? This action cannot be undone.",
+        "confirmDelete": "Confirm Delete"
+    },
+    "resource": {
+        "add": "Add New Resource",
+        "edit": "Edit Resource",
+        "delete": "Delete Resource",
+        "information": "Resource Information",
+        "updateInformation": "Update Resource Information",
+        "title": "Resource Title",
+        "titlePlaceholder": "e.g., Introduction to Algebra Video",
+        "description": "Description",
+        "descriptionPlaceholder": "Provide a brief description of this resource...",
+        "type": "Resource Type",
+        "uploadFile": "Upload File",
+        "dragAndDrop": "Drag and drop your file here, or click to browse",
+        "chooseFile": "Choose File",
+        "supportedFormats": "Supports Video, Audio, PDF, Images",
+        "clickToUpload": "Click to upload file",
+        "saveResource": "Save Resource",
+        "updateResource": "Update Resource",
+        "cancel": "Cancel",
+        "deleteConfirmTitle": "Delete Resource",
+        "deleteConfirmMessage": "Are you sure you want to delete this resource? This action cannot be undone.",
+        "confirmDelete": "Confirm Delete",
+        "assignedTo": "Assigned to:",
+        "move": "Move Resource",
+        "moveTitle": "Move Resource to Another Folder",
+        "currentInformation": "Current Information",
+        "resourceName": "Resource Name:",
+        "currentGrade": "Current Grade:",
+        "currentTerm": "Current Term:",
+        "currentFolder": "Current Folder:",
+        "selectTargetFolder": "Select Target Folder",
+        "selectFolderPlaceholder": "Select a folder...",
+        "folderHint": "Only folders from the same grade and term are shown",
+        "confirmMove": "Confirm Move"
+    },
+    "tabs": {
+        "all": "All",
+        "videos": "Videos",
+        "files": "Files",
+        "images": "Images",
+        "audio": "Audio"
+    },
+    "table": {
+        "id": "ID",
+        "resourceName": "Resource Name",
+        "type": "Type",
+        "uploadDate": "Upload Date",
+        "action": "Action"
+    },
+    "types": {
+        "video": "VIDEO",
+        "file": "FILE",
+        "image": "IMAGE",
+        "audio": "AUDIO"
+    },
+    "empty": {
+        "title": "No resources found",
+        "description": "No {{type}} found in this folder.",
+        "allDescription": "No resources found in this folder."
+    },
+    "preview": {
+        "title": "Resource Preview",
+        "uploaded": "Uploaded:",
+        "videoPreview": "Video Preview:"
     }
 }

@@ -71,19 +71,20 @@ export const programsCurriculumApi = {
             queryParams.search = search.trim();
         }
 
-        const response = await api.get<ApiResponse<ProgramCurriculum[]>>(
-            BASE_URL,
-            {
-                params: queryParams,
-                signal,
-            }
-        );
+        const response = await api.get<
+            ApiResponse<ProgramCurriculumPaginatedData<ProgramCurriculum>>
+        >(BASE_URL, {
+            params: queryParams,
+            signal,
+        });
 
         if (response.error) {
             throw response.error;
         }
 
-        return response.data?.data ?? [];
+        // API returns paginated response with items array
+        const data = response.data?.data;
+        return data?.items ?? [];
     },
 
     /**

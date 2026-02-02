@@ -19,9 +19,9 @@
 import { Navigate } from "react-router-dom";
 import type { FeatureRouteModule, RouteConfig } from "@/router/routes.types";
 import { adminSharedRoutes } from "@/features/dashboard/shared/navigation";
-import { settingsRoutes } from "../settings/navigation";
 import { ticketsManagementRoutes } from "../ticketsManagement/navigation";
 import { communityManagementRoutes } from "../communityManagement/navigation";
+import { slotsRoutes } from "../settings/slots/navigation";
 
 // Import admin feature route arrays
 import {
@@ -395,8 +395,8 @@ export const adminRouteModule: FeatureRouteModule = {
                       ? undefined
                       : "tickets",
             })),
-            // Settings (relative paths, basePath is /admin)
-            ...settingsRoutes,
+            // Slots (under settings)
+            ...slotsRoutes,
             // Shared features (profile, chat, certificates, reports)
             ...adminOnlySharedRoutes,
             // Community Management
