@@ -91,3 +91,25 @@ export function useLessonVideo(
         ...options,
     });
 }
+
+// ============================================================================
+// Level-based Queries
+// ============================================================================
+
+/**
+ * Hook to fetch lesson videos by level ID
+ *
+ * @param levelId - Level ID to fetch videos for
+ * @param options - Additional query options
+ */
+export function useLessonVideosByLevel(
+    levelId: string | undefined | null,
+    options?: Partial<UseQueryOptions<LessonVideo[], Error>>
+) {
+    return useQuery({
+        queryKey: lessonVideoKeys.byLevel(levelId ?? ""),
+        queryFn: ({ signal }) => lessonVideosApi.getByLevelId(levelId!, signal),
+        enabled: !!levelId,
+        ...options,
+    });
+}

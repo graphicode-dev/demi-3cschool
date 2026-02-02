@@ -65,6 +65,11 @@ export default function VideoEditor({
 
     useEffect(() => {
         if (video) {
+            console.log("VideoEditor - video data:", video);
+            console.log(
+                "VideoEditor - videoReferenceEn:",
+                video.videoReferenceEn
+            );
             setFormData({
                 title: video.title || "",
                 description: video.description || "",
@@ -283,12 +288,12 @@ export default function VideoEditor({
                     </div>
                 </div>
 
-                {/* Video Reference AR */}
+                {/* Video ID (Arabic) */}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         {t(
-                            "lessons:content.fields.videoRefAr",
-                            "Video Reference"
+                            "lessons:content.fields.videoIdAr",
+                            "Video ID (Arabic)"
                         )}
                     </label>
                     <input
@@ -297,8 +302,8 @@ export default function VideoEditor({
                         onChange={(e) =>
                             handleChange("videoReferenceAr", e.target.value)
                         }
-                        placeholder="https://..."
-                        className={`w-full px-4 py-2.5 rounded-xl border bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none ${fieldErrors.videoReferenceAr ? "border-red-500" : "border-gray-200 dark:border-gray-600"}`}
+                        placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                        className={`w-full px-4 py-2.5 rounded-xl border bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none font-mono text-sm ${fieldErrors.videoReferenceAr ? "border-red-500" : "border-gray-200 dark:border-gray-600"}`}
                     />
                     {fieldErrors.videoReferenceAr && (
                         <p className="mt-1 text-sm text-red-500">
@@ -307,12 +312,12 @@ export default function VideoEditor({
                     )}
                 </div>
 
-                {/* Video Reference EN */}
+                {/* Video ID (English) */}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         {t(
-                            "lessons:content.fields.videoRefEn",
-                            "Video Reference (English)"
+                            "lessons:content.fields.videoIdEn",
+                            "Video ID (English)"
                         )}
                     </label>
                     <input
@@ -321,8 +326,8 @@ export default function VideoEditor({
                         onChange={(e) =>
                             handleChange("videoReferenceEn", e.target.value)
                         }
-                        placeholder="https://..."
-                        className={`w-full px-4 py-2.5 rounded-xl border bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none ${fieldErrors.videoReferenceEn ? "border-red-500" : "border-gray-200 dark:border-gray-600"}`}
+                        placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                        className={`w-full px-4 py-2.5 rounded-xl border bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none font-mono text-sm ${fieldErrors.videoReferenceEn ? "border-red-500" : "border-gray-200 dark:border-gray-600"}`}
                     />
                     {fieldErrors.videoReferenceEn && (
                         <p className="mt-1 text-sm text-red-500">

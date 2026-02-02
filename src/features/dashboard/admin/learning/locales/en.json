@@ -153,6 +153,8 @@
             "provider": "Video Provider",
             "videoRefAr": "Video Reference (Arabic)",
             "videoRefEn": "Video Reference (English)",
+            "videoIdAr": "Video ID (Arabic)",
+            "videoIdEn": "Video ID (English)",
             "active": "Active",
             "videoPreview": "Video Preview",
             "arabicVideo": "Arabic Video",

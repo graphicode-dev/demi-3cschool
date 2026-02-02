@@ -46,6 +46,12 @@ export const lessonVideoKeys = {
      * Key for specific lesson video detail
      */
     detail: (id: string) => [...lessonVideoKeys.details(), id] as const,
+
+    /**
+     * Key for lesson videos by level
+     */
+    byLevel: (levelId: string) =>
+        [...lessonVideoKeys.all, "level", levelId] as const,
 };
 
 /**

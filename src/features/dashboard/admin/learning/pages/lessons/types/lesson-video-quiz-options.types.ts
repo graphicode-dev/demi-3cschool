@@ -96,6 +96,20 @@ export interface LessonVideoQuizOptionsMetadata {
  */
 export interface LessonVideoQuizOptionsListParams {
     page?: number;
+    perPage?: number;
+}
+
+/**
+ * Paginated response for lesson video quiz options list
+ */
+export interface LessonVideoQuizOptionsPaginatedResponse {
+    data: LessonVideoQuizOption[];
+    pagination: {
+        currentPage: number;
+        lastPage: number;
+        perPage: number;
+        total: number;
+    };
 }
 
 // ============================================================================

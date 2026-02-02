@@ -14,7 +14,7 @@ import {
     LessonVideoQuizUpdatePayload,
     LessonVideoQuizzesListParams,
     LessonVideoQuizzesMetadata,
-    PaginatedData,
+    LessonVideoQuizzesPaginatedResponse,
 } from "../../types";
 
 const BASE_URL = "/lesson-video-quizzes";
@@ -46,19 +46,23 @@ export const lessonVideoQuizzesApi = {
     },
 
     /**
-     * Get list of all lesson video quizzes
+     * Get list of all lesson video quizzes (paginated)
      */
     getList: async (
         params?: LessonVideoQuizzesListParams,
         signal?: AbortSignal
-    ): Promise<LessonVideoQuiz[]> => {
-        const response = await api.get<ApiResponse<LessonVideoQuiz[]>>(
-            BASE_URL,
-            {
-                params: params as Record<string, unknown> | undefined,
-                signal,
-            }
-        );
+    ): Promise<LessonVideoQuizzesPaginatedResponse> => {
+        // Convert params to snake_case for API
+        const apiParams: Record<string, unknown> = {};
+        if (params?.page) apiParams.page = params.page;
+        if (params?.perPage) apiParams.per_page = params.perPage;
+        if (params?.lessonVideoId)
+            apiParams.lesson_video_id = params.lessonVideoId;
+
+        const response = await api.get<ApiResponse<unknown>>(BASE_URL, {
+            params: Object.keys(apiParams).length > 0 ? apiParams : undefined,
+            signal,
+        });
 
         if (response.error) {
             throw response.error;
@@ -68,7 +72,78 @@ export const lessonVideoQuizzesApi = {
             throw new Error("No data returned from server");
         }
 
-        return response.data.data;
+        // Handle both array and paginated response formats
+        const responseData = response.data.data;
+
+        // Check if response is already paginated (has items array)
+        if (
+            responseData &&
+            typeof responseData === "object" &&
+            "items" in responseData
+        ) {
+            const paginatedData = responseData as {
+                items: LessonVideoQuiz[];
+                perPage?: number;
+                currentPage?: number;
+                lastPage?: number;
+                total?: number;
+            };
+
+            const perPage = paginatedData.perPage ?? 100;
+            const lastPage = paginatedData.lastPage ?? 1;
+            const itemsCount = paginatedData.items?.length ?? 0;
+            // Calculate total: if on last page, use (lastPage-1)*perPage + itemsCount, otherwise estimate
+            const total = paginatedData.total ?? lastPage * perPage;
+
+            return {
+                data: paginatedData.items ?? [],
+                pagination: {
+                    currentPage: paginatedData.currentPage ?? params?.page ?? 1,
+                    lastPage: lastPage,
+                    perPage: perPage,
+                    total: total,
+                },
+            };
+        }
+
+        // If response is an array, wrap it
+        if (Array.isArray(responseData)) {
+            return {
+                data: responseData as LessonVideoQuiz[],
+                pagination: {
+                    currentPage: params?.page ?? 1,
+                    lastPage: 1,
+                    perPage: 15,
+                    total: responseData.length,
+                },
+            };
+        }
+
+        // Fallback - try to extract from meta
+        const rawResponse = response.data as unknown as {
+            data: LessonVideoQuiz[];
+            meta?: {
+                current_page?: number;
+                last_page?: number;
+                per_page?: number;
+                total?: number;
+            };
+        };
+
+        const dataArray = Array.isArray(rawResponse.data)
+            ? rawResponse.data
+            : [];
+
+        return {
+            data: dataArray,
+            pagination: {
+                currentPage:
+                    rawResponse.meta?.current_page ?? params?.page ?? 1,
+                lastPage: rawResponse.meta?.last_page ?? 1,
+                perPage: rawResponse.meta?.per_page ?? 15,
+                total: rawResponse.meta?.total ?? dataArray.length,
+            },
+        };
     },
 
     /**

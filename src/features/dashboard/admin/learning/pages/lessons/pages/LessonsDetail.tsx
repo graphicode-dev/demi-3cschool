@@ -15,7 +15,7 @@ import PageWrapper from "@/design-system/components/PageWrapper";
 
 export default function LearningLessonsDetail() {
     const { t } = useTranslation();
-    const { id } = useParams<{ id: string }>();
+    const { id, levelId } = useParams<{ id: string; levelId: string }>();
 
     const { data: lesson, isLoading, error, refetch } = useLesson(id);
 
@@ -37,16 +37,14 @@ export default function LearningLessonsDetail() {
 
     return (
         <PageWrapper
-        pageHeaderProps={{
-title:lesson?.title,
-                subtitle:t(
+            pageHeaderProps={{
+                title: lesson?.title,
+                subtitle: t(
                     "lessons:content.subtitle",
                     "Manage videos, quizzes, assignments, and materials"
-                )
-
-        }}
+                ),
+            }}
         >
-
             <ViewCard
                 headerTitle="Lesson Overview"
                 data={{
@@ -63,7 +61,7 @@ title:lesson?.title,
                 }}
             />
 
-            <LessonContentManager lessonId={lesson.id} />
+            <LessonContentManager lessonId={lesson.id} levelId={levelId!} />
         </PageWrapper>
     );
 }

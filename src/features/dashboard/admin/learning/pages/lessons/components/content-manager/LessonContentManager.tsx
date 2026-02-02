@@ -20,6 +20,7 @@ export type ContentTabType = "videos" | "quizzes" | "assignments" | "materials";
 
 interface LessonContentManagerProps {
     lessonId: string;
+    levelId: string;
 }
 
 const tabs: { key: ContentTabType; labelKey: string; fallback: string }[] = [
@@ -55,6 +56,7 @@ function TabLoader() {
 
 export default function LessonContentManager({
     lessonId,
+    levelId,
 }: LessonContentManagerProps) {
     const { t } = useTranslation();
     const [searchParams, setSearchParams] = useSearchParams();
@@ -84,7 +86,7 @@ export default function LessonContentManager({
             <Tabs.Content>
                 <Tabs.Panel value="videos">
                     <Suspense fallback={<TabLoader />}>
-                        <VideosTab lessonId={lessonId} />
+                        <VideosTab lessonId={lessonId} levelId={levelId} />
                     </Suspense>
                 </Tabs.Panel>
                 <Tabs.Panel value="quizzes">

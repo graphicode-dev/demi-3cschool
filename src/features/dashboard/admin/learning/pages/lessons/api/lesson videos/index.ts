@@ -25,7 +25,11 @@ export {
 export { lessonVideosApi } from "./lesson-videos.api";
 
 // Query Hooks
-export { useLessonVideosList, useLessonVideo } from "./lesson-videos.queries";
+export {
+    useLessonVideosList,
+    useLessonVideo,
+    useLessonVideosByLevel,
+} from "./lesson-videos.queries";
 
 // Mutation Hooks
 export {

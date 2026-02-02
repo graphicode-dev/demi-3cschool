@@ -5,23 +5,24 @@
  * Integrates with lesson videos API.
  */
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import ContentList from "../ContentList";
 import ContentListItem from "../ContentListItem";
 import EmptyState from "../EmptyState";
 import VideoEditor from "../editors/VideoEditor";
 import VideoQuizEditor from "../editors/VideoQuizEditor";
-import { useLessonVideosList } from "../../../api";
+import { useLessonVideosByLevel } from "../../../api";
 import { LessonVideo } from "../../../types";
 
 type EditorMode = "video" | "quiz" | "none";
 
 interface VideosTabProps {
     lessonId: string;
+    levelId: string;
 }
 
-export default function VideosTab({ lessonId }: VideosTabProps) {
+export default function VideosTab({ lessonId, levelId }: VideosTabProps) {
     const { t } = useTranslation();
     const [selectedVideo, setSelectedVideo] = useState<LessonVideo | null>(
         null
@@ -30,12 +31,7 @@ export default function VideosTab({ lessonId }: VideosTabProps) {
     const [editorMode, setEditorMode] = useState<EditorMode>("none");
     const [quizVideoId, setQuizVideoId] = useState<string | null>(null);
 
-    const { data: allVideos = [], isLoading } = useLessonVideosList();
-
-    const videos = useMemo(
-        () => allVideos.filter((video) => video.lesson?.id === lessonId),
-        [allVideos, lessonId]
-    );
+    const { data: videos = [], isLoading } = useLessonVideosByLevel(levelId);
 
     const handleAddVideo = () => {
         setSelectedVideo(null);

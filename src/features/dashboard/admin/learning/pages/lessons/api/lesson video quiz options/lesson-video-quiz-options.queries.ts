@@ -11,6 +11,7 @@ import {
     LessonVideoQuizOption,
     LessonVideoQuizOptionsListParams,
     LessonVideoQuizOptionsMetadata,
+    LessonVideoQuizOptionsPaginatedResponse,
 } from "../../types";
 
 /**
@@ -28,11 +29,13 @@ export function useLessonVideoQuizOptionsMetadata(
 }
 
 /**
- * Hook to fetch list of lesson video quiz options
+ * Hook to fetch list of lesson video quiz options (paginated)
  */
 export function useLessonVideoQuizOptionsList(
     params?: LessonVideoQuizOptionsListParams,
-    options?: Partial<UseQueryOptions<LessonVideoQuizOption[], Error>>
+    options?: Partial<
+        UseQueryOptions<LessonVideoQuizOptionsPaginatedResponse, Error>
+    >
 ) {
     return useQuery({
         queryKey: lessonVideoQuizOptionKeys.list(params),

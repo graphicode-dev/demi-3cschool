@@ -107,6 +107,20 @@ export interface LessonVideoQuizQuestionsMetadata {
  */
 export interface LessonVideoQuizQuestionsListParams {
     page?: number;
+    perPage?: number;
+}
+
+/**
+ * Paginated response for lesson video quiz questions list
+ */
+export interface LessonVideoQuizQuestionsPaginatedResponse {
+    data: LessonVideoQuizQuestion[];
+    pagination: {
+        currentPage: number;
+        lastPage: number;
+        perPage: number;
+        total: number;
+    };
 }
 
 // ============================================================================

@@ -49,6 +49,29 @@ export const lessonVideosApi = {
     },
 
     /**
+     * Get lesson videos by level ID
+     */
+    getByLevelId: async (
+        levelId: string,
+        signal?: AbortSignal
+    ): Promise<LessonVideo[]> => {
+        const response = await api.get<ListResponse<LessonVideo>>(
+            `${BASE_URL}/level/${levelId}`,
+            { signal }
+        );
+
+        if (response.error) {
+            throw response.error;
+        }
+
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
+        }
+
+        return response.data.data;
+    },
+
+    /**
      * Get single lesson video by ID
      */
     getById: async (id: string, signal?: AbortSignal): Promise<LessonVideo> => {

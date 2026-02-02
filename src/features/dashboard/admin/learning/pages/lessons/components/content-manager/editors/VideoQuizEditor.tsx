@@ -18,6 +18,7 @@ import {
     X,
 } from "lucide-react";
 import { ConfirmDialog } from "@/design-system/components/ConfirmDialog";
+import Pagination from "@/design-system/components/table/Pagination";
 import {
     useCreateLessonVideoQuiz,
     useDeleteLessonVideoQuiz,
@@ -56,49 +57,54 @@ export default function VideoQuizEditor({
 }: VideoQuizEditorProps) {
     const { t } = useTranslation();
 
-    // Quiz data
-    const { data: quizzesData, isLoading: isLoadingQuizzes } =
-        useLessonVideoQuizzesList();
+    // Pagination state for quizzes
+    const [quizPage, setQuizPage] = useState(1);
+
+    // Quiz data (paginated)
+    const { data: quizzesResponse, isLoading: isLoadingQuizzes } =
+        useLessonVideoQuizzesList({ page: quizPage });
 
     const existingQuiz = useMemo(() => {
-        const quizzes = quizzesData ?? [];
+        const quizzes = quizzesResponse?.data ?? [];
         return (
-            quizzes.find(
+            quizzes?.find(
                 (q) => String(q.lessonVideo?.id) === String(videoId)
             ) ?? null
         );
-    }, [quizzesData, videoId]);
+    }, [quizzesResponse, videoId]);
+
+    const quizPagination = quizzesResponse?.pagination;
 
     const isEditing = !!existingQuiz;
 
     // Questions data
-    const { data: questionsData, isLoading: isLoadingQuestions } =
+    const { data: questionsResponse, isLoading: isLoadingQuestions } =
         useLessonVideoQuizQuestionsList(undefined, {
             enabled: !!existingQuiz,
         });
 
     // Options data
-    const { data: optionsData, isLoading: isLoadingOptions } =
+    const { data: optionsResponse, isLoading: isLoadingOptions } =
         useLessonVideoQuizOptionsList(undefined, {
             enabled: !!existingQuiz,
         });
 
     // Filter questions by quiz ID and merge with options
     const quizQuestions = useMemo(() => {
-        if (!existingQuiz || !questionsData) return [];
+        if (!existingQuiz || !questionsResponse?.data) return [];
 
-        const filteredQuestions = questionsData.filter(
+        const filteredQuestions = questionsResponse.data.filter(
             (q) => String(q.quiz?.id) === String(existingQuiz.id)
         );
 
         return filteredQuestions.map((question) => ({
             ...question,
             options:
-                optionsData?.filter(
+                optionsResponse?.data?.filter(
                     (opt) => String(opt.question?.id) === String(question.id)
                 ) || [],
         }));
-    }, [existingQuiz, questionsData, optionsData]);
+    }, [existingQuiz, questionsResponse, optionsResponse]);
 
     // Quiz mutations
     const { mutateAsync: createMutateAsync, isPending: isCreating } =
@@ -546,8 +552,32 @@ export default function VideoQuizEditor({
         );
     }
 
+    // Show pagination when there are multiple pages
+    const showQuizPagination = quizPagination && quizPagination.lastPage > 1;
+
     return (
         <div className="space-y-6">
+            {/* Quiz Pagination */}
+            {showQuizPagination && (
+                <div className="p-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg">
+                    <Pagination
+                        currentPage={quizPagination.currentPage}
+                        totalPages={quizPagination.lastPage}
+                        goToNextPage={() =>
+                            setQuizPage((prev) =>
+                                Math.min(prev + 1, quizPagination.lastPage)
+                            )
+                        }
+                        goToPreviousPage={() =>
+                            setQuizPage((prev) => Math.max(prev - 1, 1))
+                        }
+                        setPage={setQuizPage}
+                        itemsPerPage={quizPagination.perPage}
+                        totalItems={quizPagination.total}
+                    />
+                </div>
+            )}
+
             {/* Header */}
             <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
