@@ -23,6 +23,7 @@ export function MySchedulePage() {
                 title: t("title"),
                 subtitle: t("description"),
             }}
+            containerClassname="bg-transparent! border-none!"
         >
             {/* Filter Tabs */}
             <div className="flex justify-center gap-4">
