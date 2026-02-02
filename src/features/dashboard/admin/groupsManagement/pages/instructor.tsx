@@ -5,41 +5,58 @@
  * Features summary cards, primary teacher details, and sessions table.
  */
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { InstructorSummaryCards } from "../components/InstructorSummaryCards";
 import { PrimaryTeacherCard } from "../components/PrimaryTeacherCard";
 import { InstructorSessionsTable } from "../components/InstructorSessionsTable";
 import type {
-    Instructor,
     InstructorSummary,
     InstructorSession,
 } from "../types/instructor.types";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useTranslation } from "react-i18next";
+import { useGroup } from "../api";
+import { ErrorState, LoadingState } from "@/design-system";
+import { paths } from "@/router";
 
 export const InstructorPage = () => {
     const { t } = useTranslation("groupsManagement");
+    const navigate = useNavigate();
+    const {
+        gradeId,
+        levelId,
+        id: groupId,
+    } = useParams<{
+        gradeId: string;
+        levelId: string;
+        id: string;
+    }>();
 
-    // Handle change primary teacher
+    const {
+        data: groupData,
+        isLoading: groupLoading,
+        error: groupError,
+        refetch: refetchGroup,
+    } = useGroup(groupId);
+
+    // Handle change primary teacher - navigate to teacher selection page
     const handleChangeTeacher = () => {
-        // TODO: Implement change teacher functionality
-        console.log("Change primary teacher clicked");
+        navigate(
+            paths.dashboard.groupsManagement.regularAssignTeacher(
+                gradeId,
+                levelId,
+                groupId
+            )
+        );
     };
 
-    // Generate mock data for development
+    // Generate mock data for development (sessions and summary)
     const displaySummary: InstructorSummary = {
         totalStudents: 6,
         totalGroups: 18,
         totalSessions: 5,
         teachingHours: 12.5,
         averageRating: 4.8,
-    };
-
-    const displayInstructor: Instructor = {
-        id: "instructor-1",
-        name: "Teacher #3",
-        role: "Primary Instructor",
-        assignedSince: "March 15, 2025",
     };
 
     const displaySessions: InstructorSession[] = [
@@ -69,19 +86,43 @@ export const InstructorPage = () => {
         },
     ];
 
+    if (groupError) {
+        return (
+            <ErrorState
+                message={
+                    groupError.message ||
+                    t("errors.fetchFailed", "Failed to load data")
+                }
+                onRetry={refetchGroup}
+            />
+        );
+    }
+
+    if (groupLoading) {
+        return <LoadingState />;
+    }
+
     return (
         <PageWrapper
             pageHeaderProps={{
-                title: t("Teacher Session Management"),
-                subtitle: t("View and manage all sessions with the teacher"),
+                title: t("instructor.title", "Teacher Session Management"),
+                subtitle: t(
+                    "instructor.subtitle",
+                    "View and manage all sessions with the teacher"
+                ),
                 backButton: true,
             }}
         >
             <div className="space-y-6">
                 {/* Primary Teacher Card */}
                 <PrimaryTeacherCard
-                    instructor={displayInstructor}
-                    loading={false}
+                    primaryTeacher={
+                        groupData?.primaryTeacher as {
+                            id: number;
+                            name: string;
+                        } | null
+                    }
+                    loading={groupLoading}
                     onChangeTeacher={handleChangeTeacher}
                 />
 

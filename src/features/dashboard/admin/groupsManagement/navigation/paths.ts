@@ -73,6 +73,12 @@ export const groupsPaths = {
         id: string | number = ":id"
     ) =>
         `${BasePath}/grades/${gradeId}/levels/${levelId}/group/${id}/final-quiz`,
+    regularAssignTeacher: (
+        gradeId: string | number = ":gradeId",
+        levelId: string | number = ":levelId",
+        id: string | number = ":id"
+    ) =>
+        `${BasePath}/grades/${gradeId}/levels/${levelId}/group/${id}/instructor/assign-teacher`,
     sessionsList: () => `${BasePath}/sessions`,
 } as const;
 
@@ -91,6 +97,7 @@ export const groupsManagementPaths = registerFeaturePaths("groupsManagement", {
     regularInstructor: groupsPaths.regularInstructor,
     regularSessions: groupsPaths.regularSessions,
     regularFinalQuiz: groupsPaths.regularFinalQuiz,
+    regularAssignTeacher: groupsPaths.regularAssignTeacher,
     sessionsList: groupsPaths.sessionsList,
 });
 

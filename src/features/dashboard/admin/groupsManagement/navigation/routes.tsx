@@ -114,6 +114,15 @@ const groupsRoutes: RouteConfig[] = [
         meta: { titleKey: "groupsManagement:groups.attendanceAuditLog.title" },
         handle: { crumb: "groupsManagement:groups.attendanceAuditLog.title" },
     },
+    // Assign Primary Teacher (must be before instructor route for proper matching)
+    {
+        path: "grades/:gradeId/levels/:levelId/group/:id/instructor/assign-teacher",
+        lazy: () =>
+            import("@/features/dashboard/admin/groupsManagement/pages/assignTeacher"),
+        permissions: [group.update],
+        meta: { titleKey: "groupsManagement:groups.assignTeacher.title" },
+        handle: { crumb: "groupsManagement:groups.assignTeacher.title" },
+    },
     // Group Instructor
     {
         path: "grades/:gradeId/levels/:levelId/group/:id/instructor",
