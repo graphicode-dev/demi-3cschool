@@ -182,6 +182,45 @@ export const levelQuizQuestionsApi = {
             throw response.error;
         }
     },
+
+    /**
+     * Get paginated list of level quiz questions by quiz ID
+     */
+    getListByQuizId: async (
+        quizId: string,
+        params?: LevelQuizQuestionsListParams,
+        signal?: AbortSignal
+    ): Promise<PaginatedData<LevelQuizQuestion>> => {
+        const response = await api.get<
+            ApiResponse<{
+                currentPage: number;
+                perPage: number;
+                lastPage: number;
+                nextPageUrl: string | null;
+                items: LevelQuizQuestion[];
+            }>
+        >(`${BASE_URL}/quiz/${quizId}`, {
+            params: params as Record<string, unknown> | undefined,
+            signal,
+        });
+
+        if (response.error) {
+            throw response.error;
+        }
+
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
+        }
+
+        const apiData = response.data.data;
+        return {
+            items: apiData.items,
+            currentPage: apiData.currentPage,
+            perPage: apiData.perPage,
+            lastPage: apiData.lastPage,
+            nextPageUrl: apiData.nextPageUrl,
+        };
+    },
 };
 
 export default levelQuizQuestionsApi;

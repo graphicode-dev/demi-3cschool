@@ -10,7 +10,6 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { LoadingState, ErrorState, ConfirmDialog } from "@/design-system";
-import { learningPaths } from "@/features/dashboard/admin/learning/navigation/paths";
 import { AlertTriangle, Plus } from "lucide-react";
 import type {
     NewQuizData,
@@ -21,7 +20,6 @@ import type {
     LevelQuizOption,
     QuizQuestionWithOptions,
 } from "../types";
-import { ProgramsCurriculum } from "@/features/dashboard/admin/learning/types";
 import { QuizCard, QuizForm, QuestionForm } from "../components";
 import {
     useCreateLevelQuiz,
@@ -33,11 +31,11 @@ import {
     useCreateLevelQuizQuestion,
     useDeleteLevelQuizQuestion,
     useUpdateLevelQuizQuestion,
-    useLevelQuizQuestionsList,
+    useLevelQuizQuestionsByQuiz,
 } from "../api/quiz questions";
 import {
     useCreateLevelQuizOption,
-    useLevelQuizOptionsList,
+    useLevelQuizOptionsByQuestion,
 } from "../api/quiz options";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useMutationHandler } from "@/shared/api";
@@ -123,16 +121,24 @@ export default function FinalLevelQuizPage() {
         isLoading: quizzesLoading,
         refetch: refetchQuizzes,
     } = useLevelQuizzesByLevel(id);
+
+    // Selected quiz for fetching questions
+    const [selectedQuizId, setSelectedQuizId] = useState<string | null>(null);
+    // Selected question for fetching options
+    const [selectedQuestionId, setSelectedQuestionId] = useState<string | null>(
+        null
+    );
+
     const {
         data: questionsData,
         isLoading: questionsLoading,
         refetch: refetchQuestions,
-    } = useLevelQuizQuestionsList();
+    } = useLevelQuizQuestionsByQuiz(selectedQuizId);
     const {
         data: optionsData,
         isLoading: optionsLoading,
         refetch: refetchOptions,
-    } = useLevelQuizOptionsList();
+    } = useLevelQuizOptionsByQuestion(selectedQuestionId);
 
     const { mutateAsync: createQuizAsync, isPending: isCreatingQuiz } =
         useCreateLevelQuiz();
@@ -186,7 +192,12 @@ export default function FinalLevelQuizPage() {
         questionId: string | null;
     }>({ isOpen: false, quizId: null, questionId: null });
 
-    const quizzes: LevelQuiz[] = quizzesData || [];
+    // Extract quizzes array from paginated response
+    const quizzes: LevelQuiz[] = (() => {
+        if (!quizzesData) return [];
+        const items = "items" in quizzesData ? quizzesData.items : quizzesData;
+        return Array.isArray(items) ? items : [];
+    })();
     const questions = questionsData?.items || [];
     const options = optionsData?.items || [];
 
@@ -195,19 +206,37 @@ export default function FinalLevelQuizPage() {
     );
 
     const toggleQuizExpand = (quizId: string) => {
-        setExpandedQuizzes((prev) =>
-            prev.includes(quizId)
-                ? prev.filter((qid) => qid !== quizId)
-                : [...prev, quizId]
-        );
+        setExpandedQuizzes((prev) => {
+            const isExpanding = !prev.includes(quizId);
+            if (isExpanding) {
+                // Set selected quiz to fetch its questions
+                setSelectedQuizId(quizId);
+                return [...prev, quizId];
+            } else {
+                // Clear selected quiz when collapsing
+                if (selectedQuizId === quizId) {
+                    setSelectedQuizId(null);
+                }
+                return prev.filter((qid) => qid !== quizId);
+            }
+        });
     };
 
     const toggleQuestionExpand = (questionId: string) => {
-        setExpandedQuestions((prev) =>
-            prev.includes(questionId)
-                ? prev.filter((qid) => qid !== questionId)
-                : [...prev, questionId]
-        );
+        setExpandedQuestions((prev) => {
+            const isExpanding = !prev.includes(questionId);
+            if (isExpanding) {
+                // Set selected question to fetch its options
+                setSelectedQuestionId(questionId);
+                return [...prev, questionId];
+            } else {
+                // Clear selected question when collapsing
+                if (selectedQuestionId === questionId) {
+                    setSelectedQuestionId(null);
+                }
+                return prev.filter((qid) => qid !== questionId);
+            }
+        });
     };
 
     const resetNewQuiz = () => setNewQuiz(DEFAULT_NEW_QUIZ);

@@ -105,7 +105,10 @@ function SessionsPage() {
     // Process sessions data
     const sessions: SessionWithStatus[] = useMemo(() => {
         if (!sessionsData) return [];
-        return sessionsData.map((session, index) => ({
+        const items =
+            "items" in sessionsData ? sessionsData.items : sessionsData;
+        const sessionsArray = Array.isArray(items) ? items : [];
+        return sessionsArray.map((session, index) => ({
             ...session,
             sessionNumber: index + 1,
             status: session.lesson?.id ? "assigned" : "not_assigned",

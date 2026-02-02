@@ -111,8 +111,16 @@ export const AttendancePage = () => {
             { enabled: !!groupId }
         );
 
+    // Extract sessions array from paginated response
+    const sessions = useMemo(() => {
+        if (!sessionsData) return [];
+        const items =
+            "items" in sessionsData ? sessionsData.items : sessionsData;
+        return Array.isArray(items) ? items : [];
+    }, [sessionsData]);
+
     // Get the first/current session for display
-    const currentSession = sessionsData?.[0];
+    const currentSession = sessions?.[0];
     const currentSessionId = currentSession ? String(currentSession.id) : null;
 
     // Fetch student attendance data for current session
@@ -129,9 +137,9 @@ export const AttendancePage = () => {
 
     // Calculate summary from sessions data
     const displaySummary: AttendanceSummary = useMemo(() => {
-        const totalSessions = sessionsData?.length || 0;
+        const totalSessions = sessions?.length || 0;
         const completedSessions =
-            sessionsData?.filter((s) => {
+            sessions?.filter((s) => {
                 const sessionDate = new Date(s.sessionDate);
                 return sessionDate < new Date();
             }).length || 0;
@@ -151,7 +159,7 @@ export const AttendancePage = () => {
             absentCount: pendingSessions,
             attendanceRate,
         };
-    }, [sessionsData, studentAttendanceData]);
+    }, [sessions, studentAttendanceData]);
 
     // Build current session details from teacher attendance data
     const displaySession: CurrentSession = useMemo(() => {
@@ -177,9 +185,9 @@ export const AttendancePage = () => {
 
     // Convert sessions to table data
     const tableData: TableData[] = useMemo(() => {
-        if (!sessionsData) return [];
+        if (!sessions || sessions.length === 0) return [];
 
-        return sessionsData.map((session, index) => {
+        return sessions.map((session, index) => {
             const sessionDate = new Date(session.sessionDate);
             const isPast = sessionDate < new Date();
             const status = isPast ? "completed" : "pending";
@@ -197,7 +205,7 @@ export const AttendancePage = () => {
                 },
             };
         });
-    }, [sessionsData]);
+    }, [sessions]);
 
     // Define table columns matching Figma design
     const columns: TableColumn[] = [

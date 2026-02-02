@@ -181,3 +181,24 @@ export function useLevelQuizQuestion(
         ...options,
     });
 }
+
+/**
+ * Hook to fetch paginated list of level quiz questions by quiz ID
+ *
+ * @param quizId - Quiz ID to fetch questions for
+ * @param params - Query parameters for pagination
+ * @param options - Additional query options
+ */
+export function useLevelQuizQuestionsByQuiz(
+    quizId: string | undefined | null,
+    params?: LevelQuizQuestionsListParams,
+    options?: Partial<UseQueryOptions<PaginatedData<LevelQuizQuestion>, Error>>
+) {
+    return useQuery({
+        queryKey: ["level-quiz-questions", "by-quiz", quizId, params],
+        queryFn: ({ signal }) =>
+            levelQuizQuestionsApi.getListByQuizId(quizId!, params, signal),
+        enabled: !!quizId,
+        ...options,
+    });
+}

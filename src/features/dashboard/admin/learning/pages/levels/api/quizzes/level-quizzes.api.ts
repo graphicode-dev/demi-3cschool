@@ -62,23 +62,35 @@ export const levelQuizzesApi = {
         params?: LevelQuizzesListParams,
         signal?: AbortSignal
     ): Promise<PaginatedData<LevelQuiz>> => {
-        const response = await api.get<PaginatedData<LevelQuiz>>(
-            `${BASE_URL}/${levelId}/quizzes`,
-            {
-                params: params as Record<string, unknown> | undefined,
-                signal,
-            }
-        );
+        const response = await api.get<
+            ApiResponse<{
+                currentPage: number;
+                perPage: number;
+                lastPage: number;
+                nextPageUrl: string | null;
+                items: LevelQuiz[];
+            }>
+        >(`${BASE_URL}/level/${levelId}`, {
+            params: params as Record<string, unknown> | undefined,
+            signal,
+        });
 
         if (response.error) {
             throw response.error;
         }
 
-        if (!response.data) {
+        if (!response.data?.data) {
             throw new Error("No data returned from server");
         }
 
-        return response.data;
+        const apiData = response.data.data;
+        return {
+            items: apiData.items,
+            currentPage: apiData.currentPage,
+            perPage: apiData.perPage,
+            lastPage: apiData.lastPage,
+            nextPageUrl: apiData.nextPageUrl,
+        };
     },
 
     /**
