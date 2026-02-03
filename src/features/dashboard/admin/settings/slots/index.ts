@@ -3,10 +3,10 @@
  */
 
 // Types
-export type { TimeSlot, DaySlots, SessionType } from "./types";
+export type { TimeSlot, DaySlots, SessionType ,GroupedTimeSlotsResponse} from "./types";
 
 // API
-export { slotsApi, slotsKeys, useGroupedSlots } from "./api";
+export { slotsApi, slotsKeys, useGroupedSlots} from "./api";
 
 // Components
 export { SlotsView, DayCard } from "./components";

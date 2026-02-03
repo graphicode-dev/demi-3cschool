@@ -18,6 +18,7 @@ interface SimilarGroupsModalProps {
     onClose: () => void;
     groups: RecommendedGroup[];
     matchCount?: number;
+    onViewDetails?: (id: string) => void;
 }
 
 const CloseIcon = () => (
@@ -41,6 +42,7 @@ export function SimilarGroupsModal({
     onClose,
     groups,
     matchCount,
+    onViewDetails,
 }: SimilarGroupsModalProps) {
     const { t, i18n } = useTranslation("groupsManagement");
     const isRtl = i18n.dir() === "rtl";
@@ -118,7 +120,7 @@ export function SimilarGroupsModal({
                                     group={group}
                                     isRecommended={index === 0}
                                     onViewDetails={(id) =>
-                                        console.log("View details:", id)
+                                        onViewDetails?.(id)
                                     }
                                 />
                             ))}

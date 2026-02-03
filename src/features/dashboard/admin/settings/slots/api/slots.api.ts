@@ -8,11 +8,24 @@ import type { DaySlots, SessionType, TimeSlot } from "../types";
 
 interface ApiSlot {
     id: number;
+    day: string;
     type: string;
     startTime: string;
     endTime: string;
     isActive: boolean;
+    createdAt: string;
+    updatedAt: string;
 }
+
+export type GroupScheduleSlot = {
+    startTime: string;
+    endTime: string;
+};
+
+export type GroupScheduleSlotsParams = {
+    day: string;
+    type: "online" | "offline";
+};
 
 const SLOTS_BASE_URL = "/system-managements/time-slots";
 
@@ -52,6 +65,34 @@ export const slotsApi = {
                     to: slot.endTime,
                 })
             ),
+        }));
+    },
+
+    getByDay: async (
+        params: GroupScheduleSlotsParams,
+        signal?: AbortSignal
+    ): Promise<GroupScheduleSlot[]> => {
+        const response = await api.get<
+            ApiResponse<{
+                perPage: number;
+                currentPage: number;
+                lastPage: number;
+                nextPageUrl: string | null;
+                items: ApiSlot[];
+            }>
+        >(`${SLOTS_BASE_URL}/day/${params.day}/type/${params.type}`, { signal });
+
+        if (response.error) {
+            throw response.error;
+        }
+
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
+        }
+
+        return response.data.data.items.map((slot) => ({
+            startTime: slot.startTime.slice(0, 5),
+            endTime: slot.endTime.slice(0, 5),
         }));
     },
 };

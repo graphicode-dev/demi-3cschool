@@ -19,6 +19,7 @@ import {
 } from "../api";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useMutationHandler } from "@/shared/api";
+import { useGroupScheduleSlots } from "../../settings/slots/api/slots.queries";
 
 const groupFormSchema = z.object({
     groupName: z.string().min(1, "Group name is required").max(255),
@@ -39,14 +40,14 @@ const STEPS = [
         label: "Basic Information",
     },
     {
-        id: "schedule",
-        labelKey: "groups.form.steps.schedule",
-        label: "Schedule",
-    },
-    {
         id: "capacity",
         labelKey: "groups.form.steps.capacity",
         label: "Capacity & Location",
+    },
+    {
+        id: "schedule",
+        labelKey: "groups.form.steps.schedule",
+        label: "Schedule",
     },
     {
         id: "confirmation",
@@ -135,12 +136,33 @@ export default function RegularGroupCreate() {
     const stepFields: Record<number, (keyof GroupFormData)[]> = useMemo(
         () => ({
             0: ["groupName"],
-            1: ["days", "startTime", "endTime"],
-            2: ["capacity", "locationType"],
+            1: ["capacity", "locationType"],
+            2: ["days", "startTime", "endTime"],
             3: [], // Confirmation step has no new fields
         }),
         []
     );
+
+    const selectedDay = watch("days");
+    const selectedStartTime = watch("startTime");
+    const selectedEndTime = watch("endTime");
+    const selectedLocationType = watch("locationType");
+
+    const scheduleSlotsParams = useMemo(() => {
+        if (!selectedDay) return null;
+        return {
+            day: selectedDay,
+            type: selectedLocationType,
+        };
+    }, [selectedDay, selectedLocationType]);
+
+    const { data: scheduleSlotsData, isLoading: isSlotsLoading } =
+        useGroupScheduleSlots(scheduleSlotsParams);
+
+    useEffect(() => {
+        setValue("startTime", "");
+        setValue("endTime", "");
+    }, [selectedDay, selectedLocationType, setValue]);
 
     // Use getValues for accessing form values without reactivity warnings
     const formValues = getValues();
@@ -211,7 +233,14 @@ export default function RegularGroupCreate() {
         }
     };
 
+    const handleViewSimilarGroupDetails = (id: string) => {
+        navigate(`${basePath}/group/view/${id}`);
+        setIsSimilarGroupsModalOpen(false);
+    };
+
     const onSubmit = (data: GroupFormData) => {
+        const normalizeTimeToHHmm = (value: string) => value.slice(0, 5);
+
         const payload = {
             level_id: parseInt(levelId || "0", 10),
             name: data.groupName,
@@ -221,8 +250,8 @@ export default function RegularGroupCreate() {
             groupSchedules: [
                 {
                     day_of_week: data.days as any,
-                    startTime: data.startTime,
-                    endTime: data.endTime,
+                    startTime: normalizeTimeToHHmm(data.startTime),
+                    endTime: normalizeTimeToHHmm(data.endTime),
                 },
             ],
             ...(data.locationType === "offline" && data.trainerId
@@ -288,10 +317,101 @@ export default function RegularGroupCreate() {
             case 1:
                 return (
                     <FormSection
+                        title={t(
+                            "groups.form.sections.capacityLocation",
+                            "Capacity & Location"
+                        )}
+                    >
+                        <div className="space-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <Form.Input
+                                    name="capacity"
+                                    type={{
+                                        type: "number",
+                                        placeholder: t(
+                                            "groups.form.fields.capacity.placeholder",
+                                            "Enter maximum capacity"
+                                        ),
+                                        min: 1,
+                                        max: 100,
+                                    }}
+                                    label={{
+                                        text: t(
+                                            "groups.form.fields.capacity.label",
+                                            "Maximum Capacity"
+                                        ),
+                                        required: true,
+                                    }}
+                                    style={{ size: "md" }}
+                                />
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        {t(
+                                            "groups.form.fields.locationType.label",
+                                            "Location Type"
+                                        )}
+                                        <span className="text-red-500 ml-1">
+                                            *
+                                        </span>
+                                    </label>
+                                    <Controller
+                                        name="locationType"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <select
+                                                {...field}
+                                                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                                            >
+                                                {LOCATION_TYPES.map((option) => (
+                                                    <option
+                                                        key={option.value}
+                                                        value={option.value}
+                                                    >
+                                                        {option.label}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                        )}
+                                    />
+                                    {errors.locationType && (
+                                        <p className="mt-1 text-sm text-red-600 dark:text-red-400">
+                                            {errors.locationType.message}
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+
+                            {watch("locationType") === "offline" && (
+                                <Form.Input
+                                    name="trainerId"
+                                    type={{
+                                        type: "text",
+                                        placeholder: t(
+                                            "groups.form.fields.trainerId.placeholder",
+                                            "Enter trainer ID"
+                                        ),
+                                    }}
+                                    label={{
+                                        text: t(
+                                            "groups.form.fields.trainerId.label",
+                                            "Trainer ID"
+                                        ),
+                                        required: false,
+                                    }}
+                                    style={{ size: "md" }}
+                                />
+                            )}
+                        </div>
+                    </FormSection>
+                );
+
+            case 2:
+                return (
+                    <FormSection
                         title={t("groups.form.sections.schedule", "Schedule")}
                     >
                         <div className="space-y-6">
-                            {/* Days Dropdown - Using Controller */}
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                     {t("groups.form.fields.days.label", "Days")}
@@ -329,140 +449,67 @@ export default function RegularGroupCreate() {
                                 )}
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <Form.Input
-                                    name="startTime"
-                                    type={{
-                                        type: "time",
-                                        placeholder: t(
-                                            "groups.form.fields.startTime.placeholder",
-                                            "Select start time"
-                                        ),
-                                    }}
-                                    label={{
-                                        text: t(
-                                            "groups.form.fields.startTime.label",
-                                            "Start Time"
-                                        ),
-                                        required: true,
-                                    }}
-                                    style={{ size: "md" }}
-                                />
-                                <Form.Input
-                                    name="endTime"
-                                    type={{
-                                        type: "time",
-                                        placeholder: t(
-                                            "groups.form.fields.endTime.placeholder",
-                                            "Select end time"
-                                        ),
-                                    }}
-                                    label={{
-                                        text: t(
-                                            "groups.form.fields.endTime.label",
-                                            "End Time"
-                                        ),
-                                        required: true,
-                                    }}
-                                    style={{ size: "md" }}
-                                />
-                            </div>
-                        </div>
-                    </FormSection>
-                );
+                            {selectedDay ? (
+                                <div className="space-y-3">
+                                    {isSlotsLoading ? (
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                                            {t(
+                                                "groups.form.fields.slots.loading",
+                                                "Loading available slots..."
+                                            )}
+                                        </p>
+                                    ) : (scheduleSlotsData?.length ?? 0) === 0 ? (
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                                            {t(
+                                                "groups.form.fields.slots.empty",
+                                                "No slots available"
+                                            )}
+                                        </p>
+                                    ) : (
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                            {scheduleSlotsData!.map((slot) => {
+                                                const isSelected =
+                                                    selectedStartTime ===
+                                                        slot.startTime &&
+                                                    selectedEndTime ===
+                                                        slot.endTime;
+                                                return (
+                                                    <button
+                                                        key={`${slot.startTime}-${slot.endTime}`}
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setValue(
+                                                                "startTime",
+                                                                slot.startTime
+                                                            );
+                                                            setValue(
+                                                                "endTime",
+                                                                slot.endTime
+                                                            );
+                                                        }}
+                                                        className={`px-4 py-3 rounded-lg border text-sm transition-colors text-left ${
+                                                            isSelected
+                                                                ? "border-brand-500 bg-brand-50 dark:bg-brand-900/20 text-brand-700 dark:text-brand-300"
+                                                                : "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700"
+                                                        }`}
+                                                    >
+                                                        {slot.startTime} - {slot.endTime}
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
 
-            case 2:
-                return (
-                    <FormSection
-                        title={t(
-                            "groups.form.sections.capacityLocation",
-                            "Capacity & Location"
-                        )}
-                    >
-                        <div className="space-y-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <Form.Input
-                                    name="capacity"
-                                    type={{
-                                        type: "number",
-                                        placeholder: t(
-                                            "groups.form.fields.capacity.placeholder",
-                                            "Enter maximum capacity"
-                                        ),
-                                        min: 1,
-                                        max: 100,
-                                    }}
-                                    label={{
-                                        text: t(
-                                            "groups.form.fields.capacity.label",
-                                            "Maximum Capacity"
-                                        ),
-                                        required: true,
-                                    }}
-                                    style={{ size: "md" }}
-                                />
-
-                                {/* Location Type Dropdown */}
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                        {t(
-                                            "groups.form.fields.locationType.label",
-                                            "Location Type"
-                                        )}
-                                        <span className="text-red-500 ml-1">
-                                            *
-                                        </span>
-                                    </label>
-                                    <Controller
-                                        name="locationType"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <select
-                                                {...field}
-                                                className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-500 focus:border-transparent"
-                                            >
-                                                {LOCATION_TYPES.map(
-                                                    (option) => (
-                                                        <option
-                                                            key={option.value}
-                                                            value={option.value}
-                                                        >
-                                                            {option.label}
-                                                        </option>
-                                                    )
-                                                )}
-                                            </select>
-                                        )}
-                                    />
-                                    {errors.locationType && (
+                                    {(errors.startTime || errors.endTime) && (
                                         <p className="mt-1 text-sm text-red-600 dark:text-red-400">
-                                            {errors.locationType.message}
+                                            {t(
+                                                "groups.form.fields.slots.required",
+                                                "Please select a time slot"
+                                            )}
                                         </p>
                                     )}
                                 </div>
-                            </div>
-
-                            {/* Trainer ID - only shown when offline */}
-                            {watch("locationType") === "offline" && (
-                                <Form.Input
-                                    name="trainerId"
-                                    type={{
-                                        type: "text",
-                                        placeholder: t(
-                                            "groups.form.fields.trainerId.placeholder",
-                                            "Enter trainer ID"
-                                        ),
-                                    }}
-                                    label={{
-                                        text: t(
-                                            "groups.form.fields.trainerId.label",
-                                            "Trainer ID"
-                                        ),
-                                        required: false,
-                                    }}
-                                    style={{ size: "md" }}
-                                />
-                            )}
+                            ) : null}
                         </div>
                     </FormSection>
                 );
@@ -627,6 +674,7 @@ export default function RegularGroupCreate() {
                 onClose={() => setIsSimilarGroupsModalOpen(false)}
                 groups={recommendedGroups}
                 matchCount={recommendationsData?.totalFound}
+                onViewDetails={handleViewSimilarGroupDetails}
             />
         </PageWrapper>
     );

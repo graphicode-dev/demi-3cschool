@@ -41,7 +41,7 @@ function getInitials(name: string): string {
 
 interface TeacherCardProps {
     teacher: AvailableTeacher;
-    colorIndex: number;
+    colorIndex: number;  
     onSelect: (teacherId: number) => void;
     isSelecting: boolean;
     buttonText: string;
