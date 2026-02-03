@@ -14,12 +14,14 @@ import {
 import {
     useCreateGroup,
     useGroupRecommendations,
+    useAvailableTeachersQuery,
     type GroupRecommendPayload,
     type GroupRecommendation,
 } from "../api";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useMutationHandler } from "@/shared/api";
 import { useGroupScheduleSlots } from "../../settings/slots/api/slots.queries";
+import { useTrainingCentersList } from "../../settings";
 
 const groupFormSchema = z.object({
     groupName: z.string().min(1, "Group name is required").max(255),
@@ -148,6 +150,18 @@ export default function RegularGroupCreate() {
     const selectedEndTime = watch("endTime");
     const selectedLocationType = watch("locationType");
 
+    const { data: availableTeachersData, isLoading: isTeachersLoading } =
+        useTrainingCentersList()
+
+    const trainerOptions = useMemo(
+        () =>
+            (availableTeachersData ?? []).map((teacher) => ({
+                label: teacher.name,
+                value: String(teacher.id),
+            })),
+        [availableTeachersData]
+    );
+
     const scheduleSlotsParams = useMemo(() => {
         if (!selectedDay) return null;
         return {
@@ -163,6 +177,12 @@ export default function RegularGroupCreate() {
         setValue("startTime", "");
         setValue("endTime", "");
     }, [selectedDay, selectedLocationType, setValue]);
+
+    useEffect(() => {
+        if (selectedLocationType !== "offline") {
+            setValue("trainerId", "");
+        }
+    }, [selectedLocationType, setValue]);
 
     // Use getValues for accessing form values without reactivity warnings
     const formValues = getValues();
@@ -363,14 +383,16 @@ export default function RegularGroupCreate() {
                                                 {...field}
                                                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-500 focus:border-transparent"
                                             >
-                                                {LOCATION_TYPES.map((option) => (
-                                                    <option
-                                                        key={option.value}
-                                                        value={option.value}
-                                                    >
-                                                        {option.label}
-                                                    </option>
-                                                ))}
+                                                {LOCATION_TYPES.map(
+                                                    (option) => (
+                                                        <option
+                                                            key={option.value}
+                                                            value={option.value}
+                                                        >
+                                                            {option.label}
+                                                        </option>
+                                                    )
+                                                )}
                                             </select>
                                         )}
                                     />
@@ -386,11 +408,13 @@ export default function RegularGroupCreate() {
                                 <Form.Input
                                     name="trainerId"
                                     type={{
-                                        type: "text",
+                                        type: "dropdown",
+                                        options: trainerOptions,
                                         placeholder: t(
                                             "groups.form.fields.trainerId.placeholder",
-                                            "Enter trainer ID"
+                                            "Select trainer"
                                         ),
+                                        disabled: isTeachersLoading,
                                     }}
                                     label={{
                                         text: t(
@@ -458,7 +482,8 @@ export default function RegularGroupCreate() {
                                                 "Loading available slots..."
                                             )}
                                         </p>
-                                    ) : (scheduleSlotsData?.length ?? 0) === 0 ? (
+                                    ) : (scheduleSlotsData?.length ?? 0) ===
+                                      0 ? (
                                         <p className="text-sm text-gray-500 dark:text-gray-400">
                                             {t(
                                                 "groups.form.fields.slots.empty",
@@ -493,7 +518,8 @@ export default function RegularGroupCreate() {
                                                                 : "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700"
                                                         }`}
                                                     >
-                                                        {slot.startTime} - {slot.endTime}
+                                                        {slot.startTime} -{" "}
+                                                        {slot.endTime}
                                                     </button>
                                                 );
                                             })}
