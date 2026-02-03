@@ -32,25 +32,25 @@ export function DayCard({ daySlots, variant = "online" }: DayCardProps) {
     const colors = dayColors[variant];
 
     return (
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm overflow-hidden">
             {/* Day Header */}
             <div
-                className={`flex items-center gap-3 px-6 py-5 ${colors.headerBg} border-b-2 ${colors.headerBorder}`}
+                className={`flex items-center gap-2.5 px-4 py-3 ${colors.headerBg} border-b-2 ${colors.headerBorder}`}
             >
                 <div
-                    className={`flex items-center justify-center w-10 h-10 rounded-full ${colors.badge} text-white font-bold text-sm`}
+                    className={`flex items-center justify-center w-8 h-8 rounded-full ${colors.badge} text-white font-bold text-xs`}
                 >
                     {daySlots.dayAbbr}
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 dark:text-white">
+                <h3 className="text-sm font-bold text-gray-900 dark:text-white">
                     {daySlots.day}
                 </h3>
             </div>
 
             {/* Time Slots Table */}
-            <div className="px-6 py-4">
+            <div className="px-4 py-3">
                 {/* Table Header */}
-                <div className="grid grid-cols-2 border-b border-gray-200 dark:border-gray-700 pb-3 mb-2">
+                <div className="grid grid-cols-2 border-b border-gray-200 dark:border-gray-700 pb-2 mb-1">
                     <div className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                         {t("table.from")}
                     </div>
@@ -60,35 +60,29 @@ export function DayCard({ daySlots, variant = "online" }: DayCardProps) {
                 </div>
 
                 {/* Table Body */}
-                <div className="space-y-1">
+                <div className="space-y-0.5">
                     {daySlots.slots.length > 0 ? (
                         daySlots.slots.map((slot, index) => (
                             <div
                                 key={slot.id || index}
-                                className="grid grid-cols-2 py-3 border-b border-gray-100 dark:border-gray-700/50 last:border-0"
+                                className="grid grid-cols-2 py-2 border-b border-gray-100 dark:border-gray-700/50 last:border-0"
                             >
-                                <div className="flex items-center gap-2">
-                                    <Clock
-                                        size={16}
-                                        className={colors.icon}
-                                    />
-                                    <span className="text-base text-gray-900 dark:text-gray-100">
+                                <div className="flex items-center gap-1.5">
+                                    <Clock size={14} className={colors.icon} />
+                                    <span className="text-sm text-gray-900 dark:text-gray-100">
                                         {slot.from}
                                     </span>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                    <Clock
-                                        size={16}
-                                        className={colors.icon}
-                                    />
-                                    <span className="text-base text-gray-900 dark:text-gray-100">
+                                <div className="flex items-center gap-1.5">
+                                    <Clock size={14} className={colors.icon} />
+                                    <span className="text-sm text-gray-900 dark:text-gray-100">
                                         {slot.to}
                                     </span>
                                 </div>
                             </div>
                         ))
                     ) : (
-                        <div className="py-6 text-center text-gray-400 dark:text-gray-500 text-sm">
+                        <div className="py-4 text-center text-gray-400 dark:text-gray-500 text-xs">
                             {t("empty.noSlotsDescription")}
                         </div>
                     )}
