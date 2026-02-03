@@ -30,31 +30,22 @@ export function UnlockOfflineSection({
 
                 {/* Title */}
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
-                    {t("unlockOffline.title", "Unlock Offline Sessions")}
+                    {t("unlockOffline.title")}
                 </h3>
 
                 {/* Description */}
                 <p className="text-sm text-gray-500 dark:text-gray-400 text-center max-w-md mb-8">
-                    {t("unlockOffline.description", {
-                        count: remaining,
-                        defaultValue: `Offline sessions will be available after you complete your first ${remaining} online classes.`,
-                    })}
+                    {t("unlockOffline.description", { count: remaining })}
                 </p>
 
                 {/* Progress Banner */}
                 <div className="flex items-center gap-2 px-5 py-3 bg-brand-50 dark:bg-brand-500/10 border border-brand-200 dark:border-brand-500/30 rounded-xl">
                     <Monitor className="size-5 text-brand-500" />
                     <span className="text-sm text-gray-700 dark:text-gray-300">
-                        {t(
-                            "unlockOffline.keepLearning",
-                            "Keep learning online —"
-                        )}
+                        {t("unlockOffline.keepLearning")}
                         <span className="font-semibold text-warning-500">
                             {" "}
-                            {t(
-                                "unlockOffline.unlockSoon",
-                                "your offline session will unlock soon!"
-                            )}
+                            {t("unlockOffline.unlockSoon")}
                         </span>
                     </span>
                 </div>

@@ -24,6 +24,41 @@
     "successOffline": "Your offline session is booked",
     "offlineUnlockBanner": "Offline session will unlock after completing {{count}} online sessions.",
     "offlineReminder": "Don't forget to bring your laptop!",
+    "noGroupsAvailable": "No groups available",
+    "toasts": {
+        "enroll_success": "Enrolled successfully",
+        "enroll_error": "Enrollment failed"
+    },
+    "placeholders": {
+        "na": "—"
+    },
+    "labels": {
+        "group": "Group",
+        "when": "When",
+        "type": "Type",
+        "program_and_level": "Program & Level"
+    },
+    "actions": {
+        "more_details": "More details",
+        "hide_details": "Hide details"
+    },
+    "details": {
+        "enrollment": {
+            "title": "Enrollment Details",
+            "id": "Enrollment ID",
+            "enrolled_at": "Enrolled At",
+            "created_at": "Created At",
+            "updated_at": "Updated At"
+        },
+        "group": {
+            "title": "Group Details",
+            "capacity": "Capacity",
+            "grade": "Grade",
+            "schedule": "Schedule",
+            "group_id": "Group ID",
+            "no_schedule": "No schedule available"
+        }
+    },
     "days": {
         "sunday": "Sunday",
         "monday": "Monday",

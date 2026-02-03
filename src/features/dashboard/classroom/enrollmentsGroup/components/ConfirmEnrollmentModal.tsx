@@ -54,11 +54,8 @@ export function ConfirmEnrollmentModal({
                 {/* Title */}
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white text-center mb-2">
                     {isOffline
-                        ? t(
-                              "confirmModal.titleOffline",
-                              "Confirm your offline session"
-                          )
-                        : t("confirmModal.titleOnline", "Confirm your group")}
+                        ? t("confirmModal.titleOffline")
+                        : t("confirmModal.titleOnline")}
                 </h2>
 
                 {/* Subtitle */}
@@ -66,11 +63,9 @@ export function ConfirmEnrollmentModal({
                     {isOffline
                         ? t("confirmModal.subtitleOffline", {
                               day: t(`days.${group.day}`),
-                              defaultValue: `You Are About To Join The ${t(`days.${group.day}`)} Offline Session.`,
                           })
                         : t("confirmModal.subtitleOnline", {
                               day: t(`days.${group.day}`),
-                              defaultValue: `You Are About To Join The ${t(`days.${group.day}`)} Group.`,
                           })}
                 </p>
 
@@ -79,7 +74,7 @@ export function ConfirmEnrollmentModal({
                     {isOffline && group.location && (
                         <div className="flex justify-between py-3 border-b border-gray-100 dark:border-gray-700">
                             <span className="text-sm text-gray-500 dark:text-gray-400">
-                                {t("center", "Center")}
+                                {t("center")}
                             </span>
                             <span className="text-sm font-semibold text-gray-900 dark:text-white">
                                 {group.location}
@@ -88,17 +83,15 @@ export function ConfirmEnrollmentModal({
                     )}
                     <div className="flex justify-between py-3 border-b border-gray-100 dark:border-gray-700">
                         <span className="text-sm text-gray-500 dark:text-gray-400">
-                            {t("sessionType", "Session Type")}
+                            {t("sessionType")}
                         </span>
                         <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                            {isOffline
-                                ? t("offline", "Offline")
-                                : t("online", "Online")}
+                            {isOffline ? t("offline") : t("online")}
                         </span>
                     </div>
                     <div className="flex justify-between py-3 border-b border-gray-100 dark:border-gray-700">
                         <span className="text-sm text-gray-500 dark:text-gray-400">
-                            {t("day", "Day")}
+                            {t("day")}
                         </span>
                         <span className="text-sm font-semibold text-gray-900 dark:text-white capitalize">
                             {t(`days.${group.day}`)}
@@ -106,7 +99,7 @@ export function ConfirmEnrollmentModal({
                     </div>
                     <div className="flex justify-between py-3">
                         <span className="text-sm text-gray-500 dark:text-gray-400">
-                            {t("time", "Time")}
+                            {t("time")}
                         </span>
                         <span className="text-sm font-semibold text-gray-900 dark:text-white">
                             {group.startTime} - {group.endTime}
@@ -120,20 +113,11 @@ export function ConfirmEnrollmentModal({
                     <div className="flex flex-col">
                         <span className="text-sm text-gray-700 dark:text-gray-300">
                             {isOffline
-                                ? t(
-                                      "confirmModal.warningOffline",
-                                      "Please arrive 10 minutes early at the center. Bring your laptop and charger!"
-                                  )
-                                : t(
-                                      "confirmModal.warningOnline",
-                                      "Please make sure this time works for you."
-                                  )}
+                                ? t("confirmModal.warningOffline")
+                                : t("confirmModal.warningOnline")}
                         </span>
                         <span className="text-sm font-semibold text-warning-600 dark:text-warning-400">
-                            {t(
-                                "confirmModal.cantChange",
-                                "You can't change your group after joining."
-                            )}
+                            {t("confirmModal.cantChange")}
                         </span>
                     </div>
                 </div>
@@ -144,13 +128,13 @@ export function ConfirmEnrollmentModal({
                         onClick={onConfirm}
                         className="w-full py-3.5 bg-brand-500 hover:bg-brand-600 text-white font-semibold rounded-xl transition-colors"
                     >
-                        {t("confirmModal.confirmButton", "Confirm & Join")}
+                        {t("confirmModal.confirmButton")}
                     </button>
                     <button
                         onClick={onClose}
                         className="w-full py-3.5 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-xl hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors"
                     >
-                        {t("confirmModal.backButton", "Back")}
+                        {t("confirmModal.backButton")}
                     </button>
                 </div>
             </div>

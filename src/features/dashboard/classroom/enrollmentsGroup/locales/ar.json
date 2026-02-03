@@ -24,6 +24,41 @@
     "successOffline": "تم حجز جلستك الحضورية",
     "offlineUnlockBanner": "ستفتح الجلسات الحضورية بعد إكمال {{count}} جلسات أونلاين.",
     "offlineReminder": "لا تنسَ إحضار حاسوبك المحمول!",
+    "noGroupsAvailable": "لا توجد مجموعات متاحة",
+    "toasts": {
+        "enroll_success": "تم التسجيل بنجاح",
+        "enroll_error": "فشل التسجيل"
+    },
+    "placeholders": {
+        "na": "—"
+    },
+    "labels": {
+        "group": "المجموعة",
+        "when": "الموعد",
+        "type": "النوع",
+        "program_and_level": "البرنامج والمستوى"
+    },
+    "actions": {
+        "more_details": "مزيد من التفاصيل",
+        "hide_details": "إخفاء التفاصيل"
+    },
+    "details": {
+        "enrollment": {
+            "title": "تفاصيل التسجيل",
+            "id": "رقم التسجيل",
+            "enrolled_at": "تاريخ التسجيل",
+            "created_at": "تاريخ الإنشاء",
+            "updated_at": "آخر تحديث"
+        },
+        "group": {
+            "title": "تفاصيل المجموعة",
+            "capacity": "السعة",
+            "grade": "الصف",
+            "schedule": "الجدول",
+            "group_id": "رقم المجموعة",
+            "no_schedule": "لا يوجد جدول متاح"
+        }
+    },
     "days": {
         "sunday": "الأحد",
         "monday": "الاثنين",

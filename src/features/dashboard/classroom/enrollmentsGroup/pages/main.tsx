@@ -47,8 +47,8 @@ const mapApiGroupToEnrollmentGroup = (
         id: apiGroup.id,
         sessionType: apiGroup.type,
         day: apiGroup.day,
-        startTime: apiGroup.startTime ? formatTime(apiGroup.startTime) : "TBD",
-        endTime: apiGroup.endTime ? formatTime(apiGroup.endTime) : "TBD",
+        startTime: apiGroup.startTime ? formatTime(apiGroup.startTime) : "",
+        endTime: apiGroup.endTime ? formatTime(apiGroup.endTime) : "",
         isEnrolled,
     };
 };
@@ -64,8 +64,8 @@ const mapApiGroupToEnrolledGroup = (
         id: apiGroup.id,
         sessionType: apiGroup.locationType,
         day: schedule?.dayOfWeek || "friday",
-        startTime: schedule?.startTime ? formatTime(schedule.startTime) : "TBD",
-        endTime: schedule?.endTime ? formatTime(schedule.endTime) : "TBD",
+        startTime: schedule?.startTime ? formatTime(schedule.startTime) : "",
+        endTime: schedule?.endTime ? formatTime(schedule.endTime) : "",
         location: apiGroup.location?.name,
         address: apiGroup.location?.address,
         isEnrolled: true,
@@ -253,7 +253,7 @@ export function EnrollmentsGroupPage() {
 
             addToast({
                 type: "success",
-                message: t("enrollSuccess", "Enrolled successfully"),
+                message: t("toasts.enroll_success"),
             });
 
             setIsModalOpen(false);
@@ -267,7 +267,7 @@ export function EnrollmentsGroupPage() {
         } catch (error) {
             addToast({
                 type: "error",
-                message: t("enrollError", "Enrollment failed"),
+                message: t("toasts.enroll_error"),
             });
             console.error("Enrollment failed:", error);
         }
@@ -310,51 +310,53 @@ export function EnrollmentsGroupPage() {
             <div className="space-y-4 rounded-2xl border-2 border-success-300 dark:border-success-500/40">
                 <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
                     <h3 className="text-base font-bold text-gray-900 dark:text-white">
-                        {t("yourGroup", "Your Group")}
+                        {t("yourGroup")}
                     </h3>
 
                     <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="p-5 rounded-2xl bg-brand-50 dark:bg-brand-500/10 border border-brand-200 dark:border-brand-500/30">
                             <div className="text-xs font-semibold text-brand-700 dark:text-brand-300">
-                                {t("group", "Group")}
+                                {t("labels.group")}
                             </div>
                             <div className="mt-1 text-lg font-extrabold text-gray-900 dark:text-white">
-                                {group?.name ?? "-"}
+                                {group?.name ?? t("placeholders.na")}
                             </div>
                         </div>
 
                         <div className="p-5 rounded-2xl bg-gray-50 dark:bg-gray-800/40 border border-gray-200 dark:border-gray-700">
                             <div className="text-xs font-semibold text-gray-600 dark:text-gray-300">
-                                {t("when", "When")}
+                                {t("labels.when")}
                             </div>
                             <div className="mt-1 text-lg font-extrabold text-gray-900 dark:text-white capitalize">
-                                {dayOfWeek ? t(`days.${dayOfWeek}`) : "-"}
+                                {dayOfWeek
+                                    ? t(`days.${dayOfWeek}`)
+                                    : t("placeholders.na")}
                             </div>
                             <div className="mt-1 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                                {timeRange ?? "-"}
+                                {timeRange ?? t("placeholders.na")}
                             </div>
                         </div>
 
                         <div className="p-5 rounded-2xl bg-gray-50 dark:bg-gray-800/40 border border-gray-200 dark:border-gray-700">
                             <div className="text-xs font-semibold text-gray-600 dark:text-gray-300">
-                                {t("type", "Type")}
+                                {t("labels.type")}
                             </div>
                             <div className="mt-1 text-lg font-extrabold text-gray-900 dark:text-white capitalize">
-                                {group?.locationType ?? "-"}
+                                {group?.locationType ?? t("placeholders.na")}
                             </div>
                         </div>
 
                         <div className="p-5 rounded-2xl bg-gray-50 dark:bg-gray-800/40 border border-gray-200 dark:border-gray-700">
                             <div className="text-xs font-semibold text-gray-600 dark:text-gray-300">
-                                {t("programAndLevel", "Program & Level")}
+                                {t("labels.program_and_level")}
                             </div>
                             <div className="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
                                 {group?.programsCurriculum?.caption ??
                                     group?.programsCurriculum?.name ??
-                                    "-"}
+                                    t("placeholders.na")}
                             </div>
                             <div className="mt-1 text-sm font-semibold text-gray-700 dark:text-gray-300">
-                                {group?.level?.title ?? "-"}
+                                {group?.level?.title ?? t("placeholders.na")}
                             </div>
                         </div>
                     </div>
@@ -366,8 +368,8 @@ export function EnrollmentsGroupPage() {
                             className="text-sm font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300"
                         >
                             {showMoreDetails
-                                ? t("hideDetails", "Hide details")
-                                : t("moreDetails", "More details")}
+                                ? t("actions.hide_details")
+                                : t("actions.more_details")}
                         </button>
                     </div>
                 </div>
@@ -377,10 +379,7 @@ export function EnrollmentsGroupPage() {
                         <div className="lg:col-span-1 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
                             <div className="flex items-center justify-between gap-3">
                                 <h3 className="text-base font-bold text-gray-900 dark:text-white">
-                                    {t(
-                                        "enrollmentDetails",
-                                        "Enrollment Details"
-                                    )}
+                                    {t("details.enrollment.title")}
                                 </h3>
                                 {enrollment?.status && (
                                     <span className="px-3 py-1 rounded-full text-xs font-semibold bg-success-50 dark:bg-success-500/10 text-success-700 dark:text-success-400 border border-success-200 dark:border-success-500/30">
@@ -392,34 +391,37 @@ export function EnrollmentsGroupPage() {
                             <div className="mt-4 space-y-3">
                                 <div className="flex items-center justify-between gap-3">
                                     <span className="text-sm text-gray-500 dark:text-gray-400">
-                                        {t("enrollmentId", "Enrollment ID")}
+                                        {t("details.enrollment.id")}
                                     </span>
                                     <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                                        {enrollment?.id ?? "-"}
+                                        {enrollment?.id ?? t("placeholders.na")}
                                     </span>
                                 </div>
                                 <div className="flex items-center justify-between gap-3">
                                     <span className="text-sm text-gray-500 dark:text-gray-400">
-                                        {t("enrolledAt", "Enrolled At")}
+                                        {t("details.enrollment.enrolled_at")}
                                     </span>
                                     <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                                        {enrollment?.enrolledAt ?? "-"}
+                                        {enrollment?.enrolledAt ??
+                                            t("placeholders.na")}
                                     </span>
                                 </div>
                                 <div className="flex items-center justify-between gap-3">
                                     <span className="text-sm text-gray-500 dark:text-gray-400">
-                                        {t("createdAt", "Created At")}
+                                        {t("details.enrollment.created_at")}
                                     </span>
                                     <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                                        {enrollment?.createdAt ?? "-"}
+                                        {enrollment?.createdAt ??
+                                            t("placeholders.na")}
                                     </span>
                                 </div>
                                 <div className="flex items-center justify-between gap-3">
                                     <span className="text-sm text-gray-500 dark:text-gray-400">
-                                        {t("updatedAt", "Updated At")}
+                                        {t("details.enrollment.updated_at")}
                                     </span>
                                     <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                                        {enrollment?.updatedAt ?? "-"}
+                                        {enrollment?.updatedAt ??
+                                            t("placeholders.na")}
                                     </span>
                                 </div>
                             </div>
@@ -427,25 +429,27 @@ export function EnrollmentsGroupPage() {
 
                         <div className="lg:col-span-2 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
                             <h3 className="text-base font-bold text-gray-900 dark:text-white">
-                                {t("groupDetails", "Group Details")}
+                                {t("details.group.title")}
                             </h3>
 
                             <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div className="p-4 rounded-xl bg-gray-50 dark:bg-gray-800/40 border border-gray-200 dark:border-gray-700">
                                     <div className="text-xs text-gray-500 dark:text-gray-400">
-                                        {t("capacity", "Capacity")}
+                                        {t("details.group.capacity")}
                                     </div>
                                     <div className="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
-                                        {group?.maxCapacity ?? "-"}
+                                        {group?.maxCapacity ??
+                                            t("placeholders.na")}
                                     </div>
                                 </div>
 
                                 <div className="p-4 rounded-xl bg-gray-50 dark:bg-gray-800/40 border border-gray-200 dark:border-gray-700">
                                     <div className="text-xs text-gray-500 dark:text-gray-400">
-                                        {t("grade", "Grade")}
+                                        {t("details.group.grade")}
                                     </div>
                                     <div className="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
-                                        {group?.grade?.name ?? "-"}
+                                        {group?.grade?.name ??
+                                            t("placeholders.na")}
                                     </div>
                                 </div>
                             </div>
@@ -453,11 +457,11 @@ export function EnrollmentsGroupPage() {
                             <div className="mt-4 p-4 rounded-xl bg-gray-50 dark:bg-gray-800/40 border border-gray-200 dark:border-gray-700">
                                 <div className="flex items-center justify-between gap-3">
                                     <div className="text-xs text-gray-500 dark:text-gray-400">
-                                        {t("schedule", "Schedule")}
+                                        {t("details.group.schedule")}
                                     </div>
                                     <div className="text-xs text-gray-500 dark:text-gray-400">
-                                        {t("groupId", "Group ID")}:{" "}
-                                        {group?.id ?? "-"}
+                                        {t("details.group.group_id")}:{" "}
+                                        {group?.id ?? t("placeholders.na")}
                                     </div>
                                 </div>
                                 <div className="mt-3 space-y-2">
@@ -478,10 +482,7 @@ export function EnrollmentsGroupPage() {
 
                                     {(group?.schedules?.length ?? 0) === 0 && (
                                         <div className="text-sm text-gray-500 dark:text-gray-400">
-                                            {t(
-                                                "noSchedule",
-                                                "No schedule available"
-                                            )}
+                                            {t("details.group.no_schedule")}
                                         </div>
                                     )}
                                 </div>
@@ -498,8 +499,7 @@ export function EnrollmentsGroupPage() {
         <div className="space-y-6">
             {/* Success Message */}
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                {t("successOnline", "You have successfully joined this group")}{" "}
-                🎉
+                {t("successOnline")} 🎉
             </h2>
 
             {/* {enrolledOnlineGroup && (
@@ -520,11 +520,7 @@ export function EnrollmentsGroupPage() {
                         <MapPin className="size-4 text-warning-500" />
                     </div>
                     <p className="text-sm text-gray-700 dark:text-gray-300">
-                        {t(
-                            "offlineUnlockBanner",
-                            "Offline session will unlock after completing {{count}} online sessions.",
-                            { count: 8 }
-                        )}
+                        {t("offlineUnlockBanner", { count: 8 })}
                     </p>
                 </div>
             )}
@@ -536,7 +532,7 @@ export function EnrollmentsGroupPage() {
         <div className="space-y-6">
             {/* Success Message */}
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                {t("successOffline", "Your offline session is booked")} 🎉
+                {t("successOffline")} 🎉
             </h2>
 
             {enrolledOfflineGroup && (
@@ -556,7 +552,7 @@ export function EnrollmentsGroupPage() {
                     <Monitor className="size-4 text-warning-500" />
                 </div>
                 <p className="text-sm text-gray-700 dark:text-gray-300">
-                    {t("offlineReminder", "Don't forget to bring your laptop!")}
+                    {t("offlineReminder")}
                 </p>
             </div>
         </div>
@@ -569,10 +565,7 @@ export function EnrollmentsGroupPage() {
             <div className="flex items-center gap-2 px-4 py-3 bg-brand-50 dark:bg-brand-500/10 border border-brand-200 dark:border-brand-500/30 rounded-xl">
                 <Star className="size-5 text-warning-500" />
                 <span className="text-sm text-gray-700 dark:text-gray-300">
-                    {t(
-                        "chooseGroupBanner",
-                        "You will choose your group once to begin your journey"
-                    )}
+                    {t("chooseGroupBanner")}
                 </span>
             </div>
 
@@ -617,7 +610,7 @@ export function EnrollmentsGroupPage() {
 
                     {filteredOnlineGroups.length === 0 && (
                         <div className="text-center py-8 text-gray-500">
-                            {t("noGroupsAvailable", "No groups available")}
+                            {t("noGroupsAvailable")}
                         </div>
                     )}
                 </div>
@@ -650,7 +643,7 @@ export function EnrollmentsGroupPage() {
 
                     {filteredOfflineGroups.length === 0 && (
                         <div className="text-center py-8 text-gray-500">
-                            {t("noGroupsAvailable", "No groups available")}
+                            {t("noGroupsAvailable")}
                         </div>
                     )}
                 </div>
@@ -666,11 +659,8 @@ export function EnrollmentsGroupPage() {
     return (
         <PageWrapper
             pageHeaderProps={{
-                title: t("title", "Enrollments Group"),
-                subtitle: t(
-                    "description",
-                    "Pick the time that works best for you to start learning programming."
-                ),
+                title: t("title"),
+                subtitle: t("description"),
             }}
         >
             <div className="space-y-6">
@@ -700,7 +690,7 @@ export function EnrollmentsGroupPage() {
                         }`}
                     >
                         <Monitor className="size-4" />
-                        {t("onlineSessions", "Online Sessions")}
+                        {t("onlineSessions")}
                     </button>
                     <button
                         onClick={() => setActiveTab("offline")}
@@ -711,7 +701,7 @@ export function EnrollmentsGroupPage() {
                         }`}
                     >
                         <MapPin className="size-4" />
-                        {t("offlineSessions", "Offline Sessions")}
+                        {t("offlineSessions")}
                     </button>
                 </div>
 
