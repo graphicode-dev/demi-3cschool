@@ -37,9 +37,46 @@ export interface EnrollmentState {
     requiredOnlineSessions: number;
 }
 
+export type EnrollVariables = {
+    groupId: number | string;
+    programId: number | string;
+};
+
 // ============================================================================
 // API Response Types
 // ============================================================================
+
+export interface SlotProgramRef {
+    id: number;
+    name: string;
+}
+
+export interface AvailableSlot {
+    id: number;
+    day: DayOfWeek;
+    type: SessionType;
+    startTime: string;
+    endTime: string;
+    totalCapacity: number;
+    enrolledCount: number;
+    availableSlots: number;
+    program: SlotProgramRef;
+}
+
+export interface EnrollmentGroupRef {
+    id: number;
+    name: string;
+}
+
+export interface Enrollment {
+    id: number;
+    enrolledAt: string;
+    status: string;
+    student: Record<string, unknown>;
+    group: EnrollmentGroupRef;
+    createdAt: string;
+    updatedAt: string;
+}
 
 /**
  * Schedule entity from API
@@ -130,8 +167,9 @@ export interface AvailableGroup {
  */
 export interface MyProgramGroupsData {
     enrolled: boolean;
-    group: AvailableGroup | null;
-    available: AvailableGroup[];
+    slots?: AvailableSlot[];
+    enrollment?: Enrollment;
+    group?: AvailableGroup;
 }
 
 /**

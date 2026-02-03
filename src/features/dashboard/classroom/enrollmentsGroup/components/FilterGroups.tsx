@@ -28,16 +28,7 @@ export function FilterGroups({
     const { t } = useTranslation("enrollmentsGroup");
     const isOffline = sessionType === "offline";
 
-    const days: (DayOfWeek | "all")[] = [
-        "all",
-        "sunday",
-        "monday",
-        "tuesday",
-        "wednesday",
-        "thursday",
-        "friday",
-        "saturday",
-    ];
+    const days: (DayOfWeek | "all")[] = ["all", "friday", "saturday"];
 
     return (
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 p-5">

@@ -9,6 +9,7 @@ import { useState, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Monitor, MapPin, Star, Loader2 } from "lucide-react";
 import PageWrapper from "@/design-system/components/PageWrapper";
+import { useToast } from "@/design-system/hooks/useToast";
 import {
     GroupCard,
     EnrolledGroupCard,
@@ -28,6 +29,7 @@ import { useProgramsCurriculumList } from "@/features/dashboard/admin/programs/a
 import type {
     EnrollmentGroup,
     DayOfWeek,
+    AvailableSlot,
     AvailableGroup,
     EnrolledGroup,
 } from "../types";
@@ -35,21 +37,18 @@ import type {
 type TabType = "online" | "offline";
 
 /**
- * Helper to convert API AvailableGroup to UI EnrollmentGroup
+ * Helper to convert API AvailableSlot to UI EnrollmentGroup
  */
 const mapApiGroupToEnrollmentGroup = (
-    apiGroup: AvailableGroup,
+    apiGroup: AvailableSlot,
     isEnrolled: boolean = false
 ): EnrollmentGroup => {
-    const schedule = apiGroup.schedules[0];
     return {
         id: apiGroup.id,
-        sessionType: apiGroup.locationType,
-        day: schedule?.dayOfWeek || "friday",
-        startTime: schedule?.startTime ? formatTime(schedule.startTime) : "TBD",
-        endTime: schedule?.endTime ? formatTime(schedule.endTime) : "TBD",
-        location: apiGroup.location?.name,
-        address: apiGroup.location?.address,
+        sessionType: apiGroup.type,
+        day: apiGroup.day,
+        startTime: apiGroup.startTime ? formatTime(apiGroup.startTime) : "TBD",
+        endTime: apiGroup.endTime ? formatTime(apiGroup.endTime) : "TBD",
         isEnrolled,
     };
 };
@@ -87,6 +86,7 @@ const formatTime = (time: string): string => {
 
 export function EnrollmentsGroupPage() {
     const { t } = useTranslation("enrollmentsGroup");
+    const { addToast } = useToast();
 
     // Fetch curriculum list for term stepper
     const { data: curriculumData, isLoading: isLoadingCurriculum } =
@@ -105,6 +105,7 @@ export function EnrollmentsGroupPage() {
         null
     );
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [showMoreDetails, setShowMoreDetails] = useState(false);
 
     // Set initial curriculum when data loads
     // API returns array directly
@@ -175,52 +176,60 @@ export function EnrollmentsGroupPage() {
     const isEnrolledOffline = offlineData?.enrolled ?? false;
     const enrolledOnlineGroup = onlineData?.group;
     const enrolledOfflineGroup = offlineData?.group;
-    const availableOnlineGroups = onlineData?.available ?? [];
-    const availableOfflineGroups = offlineData?.available ?? [];
+    const enrolledOnlineEnrollment = onlineData?.enrollment;
+    const enrolledOfflineEnrollment = offlineData?.enrollment;
+    const availableOnlineSlots = onlineData?.slots ?? [];
+    const availableOfflineSlots = offlineData?.slots ?? [];
 
     // Determine if offline is unlocked (user must be enrolled in online first)
     const offlineUnlocked = isEnrolledOnline;
 
     // Get unique locations for filter
     const locations = useMemo(() => {
-        const uniqueLocations = new Set(
-            availableOfflineGroups
-                .map((g) => g.location?.name)
-                .filter(Boolean) as string[]
-        );
+        const uniqueLocations = new Set([] as string[]);
         return Array.from(uniqueLocations);
-    }, [availableOfflineGroups]);
+    }, []);
 
     // Filter groups
     const filteredOnlineGroups = useMemo(() => {
-        return availableOnlineGroups.filter((group) => {
+        return availableOnlineSlots.filter((group) => {
             if (selectedDay !== "all") {
-                const hasMatchingSchedule = group.schedules.some(
-                    (s) => s.dayOfWeek === selectedDay
-                );
-                if (!hasMatchingSchedule) return false;
+                if (group.day !== selectedDay) return false;
             }
             return true;
         });
-    }, [availableOnlineGroups, selectedDay]);
+    }, [availableOnlineSlots, selectedDay]);
 
     const filteredOfflineGroups = useMemo(() => {
-        return availableOfflineGroups.filter((group) => {
+        return availableOfflineSlots.filter((group) => {
             if (selectedDay !== "all") {
-                const hasMatchingSchedule = group.schedules.some(
-                    (s) => s.dayOfWeek === selectedDay
-                );
-                if (!hasMatchingSchedule) return false;
-            }
-            if (
-                selectedLocation !== "all" &&
-                group.location?.name !== selectedLocation
-            ) {
-                return false;
+                if (group.day !== selectedDay) return false;
             }
             return true;
         });
-    }, [availableOfflineGroups, selectedDay, selectedLocation]);
+    }, [availableOfflineSlots, selectedDay]);
+
+    const groupedOnlineByDay = useMemo(() => {
+        return filteredOnlineGroups.reduce(
+            (acc, slot) => {
+                (acc[slot.day] ||= []).push(slot);
+                return acc;
+            },
+            {} as Record<DayOfWeek, AvailableSlot[]>
+        );
+    }, [filteredOnlineGroups]);
+
+    const groupedOfflineByDay = useMemo(() => {
+        return filteredOfflineGroups.reduce(
+            (acc, slot) => {
+                (acc[slot.day] ||= []).push(slot);
+                return acc;
+            },
+            {} as Record<DayOfWeek, AvailableSlot[]>
+        );
+    }, [filteredOfflineGroups]);
+
+    const dayOrder: DayOfWeek[] = useMemo(() => ["friday", "saturday"], []);
 
     // Handlers
     const handleTermSelect = useCallback((termId: number | string) => {
@@ -234,9 +243,19 @@ export function EnrollmentsGroupPage() {
 
     const handleConfirmEnrollment = async () => {
         if (!selectedGroup) return;
+        if (!selectedCurriculumId) return;
 
         try {
-            await enrollMutation.mutateAsync(selectedGroup.id);
+            await enrollMutation.mutateAsync({
+                groupId: selectedGroup.id,
+                programId: selectedCurriculumId,
+            });
+
+            addToast({
+                type: "success",
+                message: t("enrollSuccess", "Enrolled successfully"),
+            });
+
             setIsModalOpen(false);
             setSelectedGroup(null);
             // Refetch data after enrollment
@@ -246,6 +265,10 @@ export function EnrollmentsGroupPage() {
                 refetchOffline();
             }
         } catch (error) {
+            addToast({
+                type: "error",
+                message: t("enrollError", "Enrollment failed"),
+            });
             console.error("Enrollment failed:", error);
         }
     };
@@ -265,6 +288,211 @@ export function EnrollmentsGroupPage() {
         </div>
     );
 
+    const renderEnrollmentDetails = (
+        enrollment?: {
+            id: number;
+            enrolledAt: string;
+            status: string;
+            createdAt: string;
+            updatedAt: string;
+        },
+        group?: AvailableGroup
+    ) => {
+        if (!enrollment && !group) return null;
+
+        const schedule = group?.schedules?.[0];
+        const dayOfWeek = schedule?.dayOfWeek;
+        const timeRange = schedule?.startTime
+            ? `${formatTime(schedule.startTime)} - ${formatTime(schedule.endTime)}`
+            : undefined;
+
+        return (
+            <div className="space-y-4 rounded-2xl border-2 border-success-300 dark:border-success-500/40">
+                <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
+                    <h3 className="text-base font-bold text-gray-900 dark:text-white">
+                        {t("yourGroup", "Your Group")}
+                    </h3>
+
+                    <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="p-5 rounded-2xl bg-brand-50 dark:bg-brand-500/10 border border-brand-200 dark:border-brand-500/30">
+                            <div className="text-xs font-semibold text-brand-700 dark:text-brand-300">
+                                {t("group", "Group")}
+                            </div>
+                            <div className="mt-1 text-lg font-extrabold text-gray-900 dark:text-white">
+                                {group?.name ?? "-"}
+                            </div>
+                        </div>
+
+                        <div className="p-5 rounded-2xl bg-gray-50 dark:bg-gray-800/40 border border-gray-200 dark:border-gray-700">
+                            <div className="text-xs font-semibold text-gray-600 dark:text-gray-300">
+                                {t("when", "When")}
+                            </div>
+                            <div className="mt-1 text-lg font-extrabold text-gray-900 dark:text-white capitalize">
+                                {dayOfWeek ? t(`days.${dayOfWeek}`) : "-"}
+                            </div>
+                            <div className="mt-1 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                {timeRange ?? "-"}
+                            </div>
+                        </div>
+
+                        <div className="p-5 rounded-2xl bg-gray-50 dark:bg-gray-800/40 border border-gray-200 dark:border-gray-700">
+                            <div className="text-xs font-semibold text-gray-600 dark:text-gray-300">
+                                {t("type", "Type")}
+                            </div>
+                            <div className="mt-1 text-lg font-extrabold text-gray-900 dark:text-white capitalize">
+                                {group?.locationType ?? "-"}
+                            </div>
+                        </div>
+
+                        <div className="p-5 rounded-2xl bg-gray-50 dark:bg-gray-800/40 border border-gray-200 dark:border-gray-700">
+                            <div className="text-xs font-semibold text-gray-600 dark:text-gray-300">
+                                {t("programAndLevel", "Program & Level")}
+                            </div>
+                            <div className="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
+                                {group?.programsCurriculum?.caption ??
+                                    group?.programsCurriculum?.name ??
+                                    "-"}
+                            </div>
+                            <div className="mt-1 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                {group?.level?.title ?? "-"}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="mt-4 flex items-center justify-end">
+                        <button
+                            type="button"
+                            onClick={() => setShowMoreDetails((v) => !v)}
+                            className="text-sm font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300"
+                        >
+                            {showMoreDetails
+                                ? t("hideDetails", "Hide details")
+                                : t("moreDetails", "More details")}
+                        </button>
+                    </div>
+                </div>
+
+                {showMoreDetails && (
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                        <div className="lg:col-span-1 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
+                            <div className="flex items-center justify-between gap-3">
+                                <h3 className="text-base font-bold text-gray-900 dark:text-white">
+                                    {t(
+                                        "enrollmentDetails",
+                                        "Enrollment Details"
+                                    )}
+                                </h3>
+                                {enrollment?.status && (
+                                    <span className="px-3 py-1 rounded-full text-xs font-semibold bg-success-50 dark:bg-success-500/10 text-success-700 dark:text-success-400 border border-success-200 dark:border-success-500/30">
+                                        {enrollment.status}
+                                    </span>
+                                )}
+                            </div>
+
+                            <div className="mt-4 space-y-3">
+                                <div className="flex items-center justify-between gap-3">
+                                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                                        {t("enrollmentId", "Enrollment ID")}
+                                    </span>
+                                    <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                                        {enrollment?.id ?? "-"}
+                                    </span>
+                                </div>
+                                <div className="flex items-center justify-between gap-3">
+                                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                                        {t("enrolledAt", "Enrolled At")}
+                                    </span>
+                                    <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                                        {enrollment?.enrolledAt ?? "-"}
+                                    </span>
+                                </div>
+                                <div className="flex items-center justify-between gap-3">
+                                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                                        {t("createdAt", "Created At")}
+                                    </span>
+                                    <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                                        {enrollment?.createdAt ?? "-"}
+                                    </span>
+                                </div>
+                                <div className="flex items-center justify-between gap-3">
+                                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                                        {t("updatedAt", "Updated At")}
+                                    </span>
+                                    <span className="text-sm font-semibold text-gray-900 dark:text-white">
+                                        {enrollment?.updatedAt ?? "-"}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="lg:col-span-2 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 p-5">
+                            <h3 className="text-base font-bold text-gray-900 dark:text-white">
+                                {t("groupDetails", "Group Details")}
+                            </h3>
+
+                            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div className="p-4 rounded-xl bg-gray-50 dark:bg-gray-800/40 border border-gray-200 dark:border-gray-700">
+                                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                                        {t("capacity", "Capacity")}
+                                    </div>
+                                    <div className="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
+                                        {group?.maxCapacity ?? "-"}
+                                    </div>
+                                </div>
+
+                                <div className="p-4 rounded-xl bg-gray-50 dark:bg-gray-800/40 border border-gray-200 dark:border-gray-700">
+                                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                                        {t("grade", "Grade")}
+                                    </div>
+                                    <div className="mt-1 text-sm font-semibold text-gray-900 dark:text-white">
+                                        {group?.grade?.name ?? "-"}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="mt-4 p-4 rounded-xl bg-gray-50 dark:bg-gray-800/40 border border-gray-200 dark:border-gray-700">
+                                <div className="flex items-center justify-between gap-3">
+                                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                                        {t("schedule", "Schedule")}
+                                    </div>
+                                    <div className="text-xs text-gray-500 dark:text-gray-400">
+                                        {t("groupId", "Group ID")}:{" "}
+                                        {group?.id ?? "-"}
+                                    </div>
+                                </div>
+                                <div className="mt-3 space-y-2">
+                                    {(group?.schedules ?? []).map((s) => (
+                                        <div
+                                            key={s.id}
+                                            className="flex items-center justify-between gap-3 px-3 py-2 rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700"
+                                        >
+                                            <div className="text-sm font-semibold text-gray-900 dark:text-white capitalize">
+                                                {t(`days.${s.dayOfWeek}`)}
+                                            </div>
+                                            <div className="text-sm text-gray-700 dark:text-gray-300">
+                                                {formatTime(s.startTime)} -{" "}
+                                                {formatTime(s.endTime)}
+                                            </div>
+                                        </div>
+                                    ))}
+
+                                    {(group?.schedules?.length ?? 0) === 0 && (
+                                        <div className="text-sm text-gray-500 dark:text-gray-400">
+                                            {t(
+                                                "noSchedule",
+                                                "No schedule available"
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        );
+    };
+
     // Render enrolled view for online
     const renderEnrolledOnlineView = () => (
         <div className="space-y-6">
@@ -274,11 +502,15 @@ export function EnrollmentsGroupPage() {
                 🎉
             </h2>
 
-            {/* Enrolled Card */}
-            {enrolledOnlineGroup && (
+            {/* {enrolledOnlineGroup && (
                 <EnrolledGroupCard
                     group={mapApiGroupToEnrolledGroup(enrolledOnlineGroup)}
                 />
+            )} */}
+
+            {renderEnrollmentDetails(
+                enrolledOnlineEnrollment,
+                enrolledOnlineGroup
             )}
 
             {/* Offline Unlock Banner */}
@@ -290,7 +522,8 @@ export function EnrollmentsGroupPage() {
                     <p className="text-sm text-gray-700 dark:text-gray-300">
                         {t(
                             "offlineUnlockBanner",
-                            "Offline session will unlock after completing 8 online sessions."
+                            "Offline session will unlock after completing {{count}} online sessions.",
+                            { count: 8 }
                         )}
                     </p>
                 </div>
@@ -306,11 +539,15 @@ export function EnrollmentsGroupPage() {
                 {t("successOffline", "Your offline session is booked")} 🎉
             </h2>
 
-            {/* Enrolled Card */}
             {enrolledOfflineGroup && (
                 <EnrolledGroupCard
                     group={mapApiGroupToEnrolledGroup(enrolledOfflineGroup)}
                 />
+            )}
+
+            {renderEnrollmentDetails(
+                enrolledOfflineEnrollment,
+                enrolledOfflineGroup
             )}
 
             {/* Reminder Banner */}
@@ -353,32 +590,66 @@ export function EnrollmentsGroupPage() {
             {isLoading ? (
                 renderLoading()
             ) : activeTab === "online" ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    {filteredOnlineGroups.map((group) => (
-                        <GroupCard
-                            key={group.id}
-                            group={mapApiGroupToEnrollmentGroup(group)}
-                            onEnroll={handleEnroll}
-                        />
-                    ))}
+                <div className="space-y-6">
+                    {dayOrder.map((day) => {
+                        const daySlots = groupedOnlineByDay[day] ?? [];
+                        if (daySlots.length === 0) return null;
+
+                        return (
+                            <div key={day} className="space-y-3">
+                                <h3 className="text-base font-semibold text-gray-900 dark:text-white capitalize">
+                                    {t(`days.${day}`)}
+                                </h3>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                                    {daySlots.map((slot) => (
+                                        <GroupCard
+                                            key={slot.id}
+                                            group={mapApiGroupToEnrollmentGroup(
+                                                slot
+                                            )}
+                                            onEnroll={handleEnroll}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        );
+                    })}
+
                     {filteredOnlineGroups.length === 0 && (
-                        <div className="col-span-full text-center py-8 text-gray-500">
+                        <div className="text-center py-8 text-gray-500">
                             {t("noGroupsAvailable", "No groups available")}
                         </div>
                     )}
                 </div>
             ) : offlineUnlocked ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                    {filteredOfflineGroups.map((group) => (
-                        <GroupCard
-                            key={group.id}
-                            group={mapApiGroupToEnrollmentGroup(group)}
-                            onEnroll={handleEnroll}
-                            onViewMap={handleViewMap}
-                        />
-                    ))}
+                <div className="space-y-6">
+                    {dayOrder.map((day) => {
+                        const daySlots = groupedOfflineByDay[day] ?? [];
+                        if (daySlots.length === 0) return null;
+
+                        return (
+                            <div key={day} className="space-y-3">
+                                <h3 className="text-base font-semibold text-gray-900 dark:text-white capitalize">
+                                    {t(`days.${day}`)}
+                                </h3>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                                    {daySlots.map((slot) => (
+                                        <GroupCard
+                                            key={slot.id}
+                                            group={mapApiGroupToEnrollmentGroup(
+                                                slot
+                                            )}
+                                            onEnroll={handleEnroll}
+                                            onViewMap={handleViewMap}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        );
+                    })}
+
                     {filteredOfflineGroups.length === 0 && (
-                        <div className="col-span-full text-center py-8 text-gray-500">
+                        <div className="text-center py-8 text-gray-500">
                             {t("noGroupsAvailable", "No groups available")}
                         </div>
                     )}

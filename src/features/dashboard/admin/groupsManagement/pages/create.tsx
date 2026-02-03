@@ -28,7 +28,10 @@ const groupFormSchema = z.object({
     days: z.string().min(1, "Day is required"),
     startTime: z.string().min(1, "Start time is required"),
     endTime: z.string().min(1, "End time is required"),
-    capacity: z.string().min(1, "Capacity is required"),
+    capacity: z
+        .number()
+        .min(1, "Capacity is required")
+        .max(25, "Capacity must be at most 25"),
     locationType: z.enum(["online", "offline"]),
     trainerId: z.string().optional(),
 });
@@ -121,7 +124,7 @@ export default function RegularGroupCreate() {
             days: "",
             startTime: "",
             endTime: "",
-            capacity: "10",
+            capacity: 10,
             locationType: "online",
             trainerId: "",
         },
@@ -151,7 +154,7 @@ export default function RegularGroupCreate() {
     const selectedLocationType = watch("locationType");
 
     const { data: availableTeachersData, isLoading: isTeachersLoading } =
-        useTrainingCentersList()
+        useTrainingCentersList();
 
     const trainerOptions = useMemo(
         () =>
@@ -201,7 +204,7 @@ export default function RegularGroupCreate() {
             return {
                 course_id: "", // Not needed when we have levelId
                 level_id: levelId,
-                capacity: parseInt(formValues.capacity, 10),
+                capacity: formValues.capacity,
                 limit: 10,
             };
         }
@@ -230,7 +233,7 @@ export default function RegularGroupCreate() {
                 : [],
             startTime: formValues.startTime,
             endTime: formValues.endTime,
-            capacity: parseInt(formValues.capacity, 10) || 0,
+            capacity: formValues.capacity || 0,
             locationType:
                 formValues.locationType === "online" ? "Online" : "Offline",
         };
@@ -265,7 +268,7 @@ export default function RegularGroupCreate() {
             level_id: parseInt(levelId || "0", 10),
             name: data.groupName,
             grade_id: parseInt(gradeId || "0", 10),
-            maxCapacity: parseInt(data.capacity, 10),
+            maxCapacity: data.capacity,
             location_type: data.locationType as "online" | "offline",
             groupSchedules: [
                 {
@@ -353,7 +356,7 @@ export default function RegularGroupCreate() {
                                             "Enter maximum capacity"
                                         ),
                                         min: 1,
-                                        max: 100,
+                                        max: 25,
                                     }}
                                     label={{
                                         text: t(
@@ -575,7 +578,7 @@ export default function RegularGroupCreate() {
             />
 
             <div>
-                <Form
+                <Form<GroupFormData>
                     control={control}
                     errors={errors}
                     onSubmit={handleSubmit(onSubmit)}

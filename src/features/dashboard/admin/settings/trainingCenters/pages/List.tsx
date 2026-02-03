@@ -114,7 +114,6 @@ export default function TrainingCentersListPage() {
             pageHeaderProps={{
                 title: t("title", "Training Centers"),
                 subtitle: t("description", "Manage training centers"),
-                backButton: true,
             }}
         >
             <div className="flex justify-end mb-4">

@@ -19,14 +19,14 @@ const GROUPS_BASE_URL = "/groups";
 export const enrollmentsGroupApi = {
     /**
      * Get online groups for a program curriculum
-     * GET /groups/my-program/:curriculumId/online
+     * GET /groups/my-program/:programId/online
      */
     getOnlineGroups: async (
-        curriculumId: number | string,
+        programId: number | string,
         signal?: AbortSignal
     ): Promise<MyProgramGroupsData> => {
         const response = await api.get<MyProgramGroupsResponse>(
-            `${GROUPS_BASE_URL}/my-program/${curriculumId}/online`,
+            `${GROUPS_BASE_URL}/available-slots/${programId}/online`,
             { signal }
         );
 
@@ -43,14 +43,14 @@ export const enrollmentsGroupApi = {
 
     /**
      * Get offline groups for a program curriculum
-     * GET /groups/my-program/:curriculumId/offline
+     * GET /groups/my-program/:programId/offline
      */
     getOfflineGroups: async (
-        curriculumId: number | string,
+        programId: number | string,
         signal?: AbortSignal
     ): Promise<MyProgramGroupsData> => {
         const response = await api.get<MyProgramGroupsResponse>(
-            `${GROUPS_BASE_URL}/my-program/${curriculumId}/offline`,
+            `${GROUPS_BASE_URL}/available-slots/${programId}/offline`,
             { signal }
         );
 
@@ -67,11 +67,11 @@ export const enrollmentsGroupApi = {
 
     /**
      * Enroll in a group
-     * POST /groups/:groupId/enroll
+     * POST /groups/enroll-slot/:slotId/:programId
      */
-    enroll: async (groupId: number | string): Promise<EnrollResponse> => {
+    enroll: async (slotId: number | string,programId: number | string): Promise<EnrollResponse> => {
         const response = await api.post<EnrollResponse>(
-            `${GROUPS_BASE_URL}/${groupId}/enroll`
+            `${GROUPS_BASE_URL}/enroll-slot/${slotId}/${programId}`
         );
 
         if (response.error) {
