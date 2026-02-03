@@ -33,4 +33,5 @@ export interface InstructorSession {
     time: string;
     group: string;
     currentTeacher: string;
+    originalSessionId?: number;
 }

@@ -50,8 +50,6 @@ export type {
     SetSessionTeacherPayload,
     GroupWithPrimaryTeacher,
     SessionWithTeacher,
-    AvailableTeachersParams,
-    AvailableTeacher,
 } from "../../types/assignTeacher.types";
 
 // Re-export shared types from groups.types

@@ -19,11 +19,20 @@ import type {
     SetSessionTeacherPayload,
     GroupWithPrimaryTeacher,
     SessionWithTeacher,
-    AvailableTeachersParams,
-    AvailableTeacher,
 } from "../../types/assignTeacher.types";
 import type { ListResponse } from "../../types/groups.types";
 import { ApiResponse } from "@/shared/api";
+import type { Teacher } from "@/features/dashboard/admin/settings/teachers/types";
+
+interface AvailableTeachersParams {
+    groupId?: number;
+    sessionId?: number;
+    courseId?: number;
+    levelId?: number;
+    search?: string;
+    page?: number;
+    limit?: number;
+}
 
 const GROUPS_BASE_URL = "/groups";
 const SESSIONS_BASE_URL = "/group-sessions";
@@ -96,8 +105,8 @@ export const assignTeacherApi = {
     getAvailableTeachers: async (
         params: AvailableTeachersParams,
         signal?: AbortSignal
-    ): Promise<AvailableTeacher[]> => {
-        const response = await api.get<ListResponse<AvailableTeacher>>(
+    ): Promise<Teacher[]> => {
+        const response = await api.get<ListResponse<Teacher>>(
             `${GROUPS_BASE_URL}/available-teachers`,
             {
                 params: params as Record<string, unknown>,
@@ -118,13 +127,13 @@ export const assignTeacherApi = {
     getAvailableTeachersForGroup: async (
         groupId: number,
         additionalParams?: Omit<AvailableTeachersParams, "groupId">
-    ): Promise<AvailableTeacher[]> => {
+    ): Promise<Teacher[]> => {
         const params: AvailableTeachersParams = {
             groupId,
             ...additionalParams,
         };
 
-        const response = await api.get<ListResponse<AvailableTeacher>>(
+        const response = await api.get<ListResponse<Teacher>>(
             `${GROUPS_BASE_URL}/${groupId}/available-teachers`,
             {
                 params: params as Record<string, unknown>,
@@ -144,13 +153,13 @@ export const assignTeacherApi = {
     getAvailableTeachersForSession: async (
         sessionId: number,
         additionalParams?: Omit<AvailableTeachersParams, "sessionId">
-    ): Promise<AvailableTeacher[]> => {
+    ): Promise<Teacher[]> => {
         const params: AvailableTeachersParams = {
             sessionId,
             ...additionalParams,
         };
 
-        const response = await api.get<ListResponse<AvailableTeacher>>(
+        const response = await api.get<ListResponse<Teacher>>(
             `${SESSIONS_BASE_URL}/${sessionId}/available-teachers`,
             {
                 params: params as Record<string, unknown>,

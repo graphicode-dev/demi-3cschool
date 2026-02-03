@@ -15,9 +15,9 @@ import type {
 } from "../types/instructor.types";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useTranslation } from "react-i18next";
-import { useGroup } from "../api";
+import { useGroup, useGroupSessionsQuery } from "../api";
 import { ErrorState, LoadingState } from "@/design-system";
-import { paths } from "@/router";
+import { groupsPaths } from "../navigation/paths";
 
 export const InstructorPage = () => {
     const { t } = useTranslation("groupsManagement");
@@ -39,13 +39,28 @@ export const InstructorPage = () => {
         refetch: refetchGroup,
     } = useGroup(groupId);
 
+    const groupIdNum = Number(groupId);
+    const {
+        data: sessionsData,
+        isLoading: sessionsLoading,
+        error: sessionsError,
+        refetch: refetchSessions,
+    } = useGroupSessionsQuery(groupIdNum);
+
     // Handle change primary teacher - navigate to teacher selection page
     const handleChangeTeacher = () => {
         navigate(
-            paths.dashboard.groupsManagement.regularAssignTeacher(
-                gradeId,
-                levelId,
-                groupId
+            groupsPaths.regularAssignTeacher(gradeId!, levelId!, groupId!)
+        );
+    };
+
+    const handleChangeSessionTeacher = (sessionId: number) => {
+        navigate(
+            groupsPaths.changeSessionTeacher(
+                gradeId!,
+                levelId!,
+                groupId!,
+                String(sessionId)
             )
         );
     };
@@ -86,19 +101,37 @@ export const InstructorPage = () => {
         },
     ];
 
-    if (groupError) {
+    const sessions: InstructorSession[] = Array.isArray(sessionsData)
+        ? sessionsData.map((s) => ({
+              id: String(s.id),
+              sessionName: s.lesson?.title || "-",
+              date: s.sessionDate,
+              time: s.startTime,
+              group: groupData?.name || "-",
+              currentTeacher: s.teacher?.name || "-",
+              originalSessionId: s.id,
+          }))
+        : [];
+
+    const isLoading = groupLoading || sessionsLoading;
+    const error = groupError || sessionsError;
+
+    if (error) {
         return (
             <ErrorState
                 message={
-                    groupError.message ||
+                    error.message ||
                     t("errors.fetchFailed", "Failed to load data")
                 }
-                onRetry={refetchGroup}
+                onRetry={() => {
+                    refetchGroup();
+                    refetchSessions();
+                }}
             />
         );
     }
 
-    if (groupLoading) {
+    if (isLoading) {
         return <LoadingState />;
     }
 
@@ -135,8 +168,9 @@ export const InstructorPage = () => {
                 {/* Sessions Table */}
                 <div>
                     <InstructorSessionsTable
-                        sessions={displaySessions}
-                        loading={false}
+                        sessions={sessions}
+                        loading={sessionsLoading}
+                        onChangeTeacher={handleChangeSessionTeacher}
                     />
                 </div>
             </div>

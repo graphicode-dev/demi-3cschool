@@ -29,6 +29,7 @@ import type {
     PaginatedData,
     ListResponse,
 } from "../types/groups.types";
+import type { GroupSession } from "../types/sessions.types";
 import { ApiResponse } from "@/shared/api";
 
 const BASE_URL = "/groups";
@@ -181,6 +182,29 @@ export const groupsApi = {
         const response = await api.post<ApiResponse<GroupRecommendationsData>>(
             `${BASE_URL}/recommend`,
             payload,
+            { signal }
+        );
+
+        if (response.error) {
+            throw response.error;
+        }
+
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
+        }
+
+        return response.data.data;
+    },
+
+    /**
+     * Get sessions for a specific group
+     */
+    getSessions: async (
+        groupId: number,
+        signal?: AbortSignal
+    ): Promise<GroupSession[]> => {
+        const response = await api.get<ApiResponse<GroupSession[]>>(
+            `${BASE_URL}/${groupId}/sessions`,
             { signal }
         );
 

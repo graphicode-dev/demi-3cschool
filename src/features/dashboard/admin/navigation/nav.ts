@@ -40,6 +40,7 @@ import { slotsPaths } from "../settings/slots/navigation/paths";
 import { slotsNavItem } from "../settings/slots/navigation/nav";
 import { trainingCentersNavItem } from "../settings/trainingCenters/navigation/nav";
 import { resourcesNavItem } from "../resources/navigation/nav";
+import { teachersNavItem } from "../settings/teachers/navigation/nav";
 
 const { course, level, lesson } = learningPermissions;
 const { group, groupSession } = groupsPermissions;
@@ -102,7 +103,7 @@ export const adminNav: FeatureNavModule = {
             href: "/admin/settings",
             icon: Settings,
             order: 100,
-            children: [slotsNavItem, trainingCentersNavItem],
+            children: [slotsNavItem, trainingCentersNavItem, teachersNavItem],
         },
         // Shared features (profile, chat, certificates, reports)
         ...adminSharedNavItems,

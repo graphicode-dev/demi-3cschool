@@ -83,36 +83,3 @@ export interface SessionWithTeacher {
     createdAt: string;
     updatedAt: string;
 }
-
-// ============================================================================
-// Query Parameters (for fetching available teachers)
-// ============================================================================
-
-/**
- * Parameters for fetching available teachers
- */
-export interface AvailableTeachersParams {
-    groupId?: number;
-    sessionId?: number;
-    courseId?: number;
-    levelId?: number;
-    search?: string;
-    page?: number;
-    limit?: number;
-}
-
-/**
- * Available teacher entity
- */
-export interface AvailableTeacher {
-    id: number;
-    name: string;
-    email?: string;
-    avatar?: string;
-    specialization?: string[];
-    experience?: number;
-    rating?: number;
-    availability?: {
-        [date: string]: boolean; // Date -> availability
-    };
-}

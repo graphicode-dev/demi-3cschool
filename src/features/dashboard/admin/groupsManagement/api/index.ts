@@ -64,8 +64,6 @@ export type {
     SetSessionTeacherPayload,
     GroupWithPrimaryTeacher,
     SessionWithTeacher,
-    AvailableTeachersParams,
-    AvailableTeacher,
 } from "../types/assignTeacher.types";
 
 // Query Keys
@@ -93,6 +91,7 @@ export {
     useGroupsList,
     useGroupsInfinite,
     useGroup,
+    useGroupSessionsQuery,
     useGroupRecommendations,
     useGroupsByLevel,
 } from "./groups.queries";

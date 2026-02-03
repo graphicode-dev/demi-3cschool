@@ -40,6 +40,7 @@ import type {
     PaginatedData,
     GroupType,
 } from "../types/groups.types";
+import type { GroupSession } from "../types/sessions.types";
 
 // ============================================================================
 // Metadata Query
@@ -182,6 +183,27 @@ export function useGroup(
         queryKey: groupKeys.detail(id ?? ""),
         queryFn: ({ signal }) => groupsApi.getById(id!, signal),
         enabled: !!id,
+        ...options,
+    });
+}
+
+// =========================================================================
+// Group Sessions
+// =========================================================================
+
+export function useGroupSessionsQuery(
+    groupId: number | undefined | null,
+    options?: Partial<UseQueryOptions<GroupSession[], Error>>
+) {
+    const groupIdNum = typeof groupId === "number" ? groupId : Number(groupId);
+    const defaultEnabled = Number.isFinite(groupIdNum) && groupIdNum > 0;
+    const enabled = options?.enabled ?? defaultEnabled;
+
+    return useQuery({
+        queryKey: groupKeys.sessionsByGroup(groupIdNum || 0),
+        queryFn: ({ signal }) => groupsApi.getSessions(groupIdNum, signal),
+        enabled,
+        staleTime: 5 * 60 * 1000,
         ...options,
     });
 }

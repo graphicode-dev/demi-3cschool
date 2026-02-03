@@ -21,6 +21,9 @@ export interface GroupSession {
     sessionDate: string; // YYYY-MM-DD format
     startTime: string; // HH:mm:ss format
     endTime: string; // HH:mm:ss format
+    locationType?: LocationType;
+    effectiveLocationType?: LocationType;
+    offlineLocation?: string | null;
     status: SessionStatus | null;
     reason: string | null;
     isManual: boolean;
@@ -32,11 +35,19 @@ export interface GroupSession {
         id: number;
         name: string;
     };
-    teacher?: {
+    teacher?:
+        | {
         id: number;
         name: string;
         email?: string;
-    };
+        }
+        | null;
+    bbbMeetingId?: string | null;
+    bbbIsRunning?: boolean;
+    bbbRecord?: boolean;
+    bbbStartedAt?: string | null;
+    bbbEndedAt?: string | null;
+    hasMeeting?: boolean;
     createdAt: string;
     updatedAt: string;
 }

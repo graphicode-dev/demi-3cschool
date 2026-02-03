@@ -105,6 +105,13 @@ export const groupKeys = {
      */
     byLevel: (params: GroupsByLevelParams) =>
         [...groupKeys.byLevels(), params.levelId, params] as const,
+
+    /**
+     * Key for group sessions
+     */
+    sessions: () => [...groupKeys.all, "sessions"] as const,
+    sessionsByGroup: (groupId: number) =>
+        [...groupKeys.sessions(), groupId] as const,
 };
 
 /**
@@ -122,4 +129,6 @@ export type GroupQueryKey =
     | ReturnType<typeof groupKeys.recommendations>
     | ReturnType<typeof groupKeys.recommend>
     | ReturnType<typeof groupKeys.byLevels>
-    | ReturnType<typeof groupKeys.byLevel>;
+    | ReturnType<typeof groupKeys.byLevel>
+    | ReturnType<typeof groupKeys.sessions>
+    | ReturnType<typeof groupKeys.sessionsByGroup>;

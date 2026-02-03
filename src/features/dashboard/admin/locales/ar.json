@@ -8,7 +8,8 @@
         "slots": "الفترات الزمنية",
         "trainingCenters": "مراكز التدريب",
         "resources": "إدارة الموارد",
-        "grades": "المراحل"
+        "grades": "المراحل",
+        "teachers": "المدرسين"
     },
     "title": "الإدارة"
 }

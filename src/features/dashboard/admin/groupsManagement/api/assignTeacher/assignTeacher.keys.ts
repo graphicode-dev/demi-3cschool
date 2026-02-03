@@ -14,7 +14,15 @@
  * ```
  */
 
-import type { AvailableTeachersParams } from "../../types/assignTeacher.types";
+interface AvailableTeachersParams {
+    groupId?: number;
+    sessionId?: number;
+    courseId?: number;
+    levelId?: number;
+    search?: string;
+    page?: number;
+    limit?: number;
+}
 
 /**
  * Query key factory for teacher assignment

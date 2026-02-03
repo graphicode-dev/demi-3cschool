@@ -154,7 +154,7 @@ const groupsRoutes: RouteConfig[] = [
     {
         path: "grades/:gradeId/levels/:levelId/group/:id/teacher-management",
         lazy: () =>
-            import("@/features/dashboard/admin/groupsManagement/pages/teacherSessionManagement"),
+            import("@/features/dashboard/admin/groupsManagement/pages/instructor"),
         permissions: [group.update],
         meta: { titleKey: "groupsManagement:teacherManagement.title" },
         handle: { crumb: "groupsManagement:teacherManagement.title" },

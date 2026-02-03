@@ -12,12 +12,13 @@ import type { InstructorSession } from "../types/instructor.types";
 import ActionsDropdown, {
     DropdownAction,
 } from "@/design-system/components/ActionsDropdown";
-import { Edit, Lock, Trash2 } from "lucide-react";
+import { UserCog } from "lucide-react";
 
 interface InstructorSessionsTableProps {
     sessions: InstructorSession[];
     loading?: boolean;
     className?: string;
+    onChangeTeacher?: (sessionId: number) => void;
 }
 
 // Group badge component
@@ -31,35 +32,8 @@ const GroupBadge: React.FC<{ group: string }> = ({ group }) => {
 
 export const InstructorSessionsTable: React.FC<
     InstructorSessionsTableProps
-> = ({ sessions, loading = false, className = "" }) => {
+> = ({ sessions, loading = false, className = "", onChangeTeacher }) => {
     const { t } = useTranslation();
-
-    const handleAction = (action: string, itemId: string) => {
-        alert(`${action} clicked for item: ${itemId}`);
-    };
-    const userActions: DropdownAction[] = [
-        {
-            id: "edit",
-            label: "Edit User",
-            onClick: (id) => handleAction("Edit User", id),
-            icon: <Edit size={16} />,
-        },
-        {
-            id: "permissions",
-            label: "Manage Permissions",
-            onClick: (id) => handleAction("Manage Permissions", id),
-            icon: <Lock size={16} />,
-        },
-        {
-            id: "delete",
-            label: "Delete User",
-            onClick: (id) => handleAction("Delete User", id),
-            icon: <Trash2 size={16} />,
-            className:
-                "text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20",
-            divider: true,
-        },
-    ];
 
     // Convert session data to table format
     const tableData: TableData[] = sessions.map((session) => ({
@@ -71,6 +45,7 @@ export const InstructorSessionsTable: React.FC<
             group: session.group,
             currentTeacher: session.currentTeacher,
         },
+        original: { originalSessionId: session.originalSessionId },
     }));
 
     // Define table columns
@@ -122,11 +97,28 @@ export const InstructorSessionsTable: React.FC<
             header: t("instructor.actions", "Actions"),
             accessorKey: "actions",
             sortable: false,
-            cell: ({ row }: { row: any }) => (
-                <div className="relative">
-                    <ActionsDropdown itemId={row.id} actions={userActions} />
-                </div>
-            ),
+            cell: ({ row }: { row: any }) => {
+                const sessionId =
+                    Number(row?.original?.originalSessionId ?? row?.id) || 0;
+
+                const actions: DropdownAction[] = [
+                    {
+                        id: "change-teacher",
+                        label: t("instructor.changeTeacher", "Change Teacher"),
+                        icon: <UserCog className="w-4 h-4" />,
+                        onClick: () => onChangeTeacher?.(sessionId),
+                    },
+                ];
+
+                return (
+                    <div className="relative">
+                        <ActionsDropdown
+                            itemId={String(sessionId)}
+                            actions={actions}
+                        />
+                    </div>
+                );
+            },
         },
     ];
 

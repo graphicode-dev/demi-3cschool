@@ -26,6 +26,8 @@ import type {
     GroupWithPrimaryTeacher,
     SessionWithTeacher,
 } from "../../types/assignTeacher.types";
+import { groupKeys } from "../groups.keys";
+import { teachersKeys } from "@/features/dashboard/admin/settings/teachers/api";
 
 // ============================================================================
 // Primary Teacher Assignment Mutation
@@ -55,10 +57,13 @@ export const useSetPrimaryTeacherMutation = () => {
                 queryKey: assignTeacherKeys.groupDetailById(groupId),
             });
 
-            // Invalidate groups list queries (if they exist in groups API)
+            // Invalidate group detail in groups domain
             queryClient.invalidateQueries({
-                queryKey: ["groups", "detail", groupId],
+                queryKey: groupKeys.detail(String(groupId)),
             });
+
+            // Invalidate teachers list/detail (since teacher assignment changed)
+            queryClient.invalidateQueries({ queryKey: teachersKeys.all });
 
             // Invalidate available teachers queries for this group
             queryClient.invalidateQueries({

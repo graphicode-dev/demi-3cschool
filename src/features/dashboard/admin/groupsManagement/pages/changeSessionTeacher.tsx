@@ -20,11 +20,12 @@ import {
 import { ErrorState, LoadingState } from "@/design-system";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useMutationHandler } from "@/shared/api";
-import { useAvailableTeachersForSessionQuery } from "../api/assignTeacher/assignTeacher.queries";
 import { useSetSessionTeacherMutation } from "../api/assignTeacher/assignTeacher.mutations";
 import { useSessionDetailQuery } from "../api/sessions/sessions.queries";
 import { useGroup } from "../api";
-import type { AvailableTeacher } from "../types/assignTeacher.types";
+import { useTeachersList } from "@/features/dashboard/admin/settings/teachers/api";
+import type { Teacher } from "@/features/dashboard/admin/settings/teachers/types";
+import { useDebounce } from "@/shared/observability";
 
 const AVATAR_COLORS = [
     "bg-purple-500",
@@ -49,7 +50,7 @@ function getInitials(name: string): string {
 }
 
 interface TeacherCardProps {
-    teacher: AvailableTeacher;
+    teacher: Teacher;
     colorIndex: number;
     onSelect: (teacherId: number) => void;
     isSelecting: boolean;
@@ -64,60 +65,62 @@ function TeacherCard({
     const { t } = useTranslation("groupsManagement");
 
     return (
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 flex flex-col items-center text-center hover:shadow-lg transition-shadow">
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-5 flex flex-col items-center text-center shadow-sm hover:shadow-md transition-shadow">
             <div
-                className={`w-16 h-16 ${getAvatarColor(colorIndex)} rounded-full flex items-center justify-center mb-4`}
+                className={`w-14 h-14 ${getAvatarColor(colorIndex)} rounded-full flex items-center justify-center mb-3`}
             >
-                {teacher.avatar ? (
+                {teacher.image ? (
                     <img
-                        src={teacher.avatar}
+                        src={teacher.image}
                         alt={teacher.name}
-                        className="w-16 h-16 rounded-full object-cover"
+                        className="w-14 h-14 rounded-full object-cover"
                     />
                 ) : (
-                    <span className="text-xl font-bold text-white">
+                    <span className="text-base font-bold text-white">
                         {getInitials(teacher.name)}
                     </span>
                 )}
             </div>
 
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+            <h3 className="text-base font-semibold text-gray-900 dark:text-white">
                 {teacher.name}
             </h3>
 
-            {teacher.specialization && teacher.specialization.length > 0 && (
-                <span className="px-3 py-1 text-xs font-medium rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 mb-3">
-                    {teacher.specialization[0]}
-                </span>
-            )}
-
-            {teacher.email && (
-                <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-sm mb-2">
-                    <Mail className="w-4 h-4" />
-                    <span className="truncate max-w-[180px]">
-                        {teacher.email}
+            {(teacher.role?.caption || teacher.role?.name) && (
+                <div className="mt-2 mb-4">
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700 dark:bg-green-900/30 dark:text-green-300">
+                        {teacher.role?.caption ?? teacher.role?.name}
                     </span>
                 </div>
             )}
 
-            <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-sm mb-4">
-                <Users className="w-4 h-4" />
-                <span>
-                    5 {t("teacherManagement.activeGroups", "Active Groups")}
-                </span>
+            <div className="w-full space-y-2 mb-4">
+                {teacher.email && (
+                    <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-sm">
+                        <Mail className="w-4 h-4 shrink-0" />
+                        <span className="truncate">{teacher.email}</span>
+                    </div>
+                )}
+
+                <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-sm">
+                    <Users className="w-4 h-4 shrink-0" />
+                    <span>
+                        5 {t("teacherManagement.activeGroups", "Active Groups")}
+                    </span>
+                </div>
             </div>
 
             <button
                 type="button"
                 onClick={() => onSelect(teacher.id)}
                 disabled={isSelecting}
-                className="w-full px-4 py-2.5 bg-brand-500 text-white text-sm font-semibold rounded-lg hover:bg-brand-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full h-10 bg-sky-500 text-white text-sm font-semibold rounded-lg hover:bg-sky-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
                 {isSelecting
                     ? t("common.loading", "Loading...")
                     : t(
-                          "groups.changeSessionTeacher.assignForSession",
-                          "Assign for this session"
+                          "groups.changeSessionTeacher.assignToSession",
+                          "Assign to this session"
                       )}
             </button>
         </div>
@@ -185,17 +188,20 @@ export default function ChangeSessionTeacherPage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
+    const debouncedSearchQuery = useDebounce(searchQuery, 300);
+
     const { data: groupData } = useGroup(groupId);
     const { data: sessionData, isLoading: sessionLoading } =
         useSessionDetailQuery(sessionId ? Number(sessionId) : null);
 
     const {
-        data: teachers = [],
+        data: teachersResponse,
         isLoading: teachersLoading,
         error: teachersError,
         refetch: refetchTeachers,
-    } = useAvailableTeachersForSessionQuery(Number(sessionId), {
-        search: searchQuery || undefined,
+    } = useTeachersList({
+        page: 1,
+        search: debouncedSearchQuery || undefined,
     });
 
     const { mutateAsync: setSessionTeacher, isPending: isAssigning } =
@@ -226,6 +232,8 @@ export default function ChangeSessionTeacherPage() {
         setShowSuccessDialog(false);
         navigate(-1);
     };
+
+    const teachers = teachersResponse?.items ?? [];
 
     const filteredTeachers = teachers.filter((teacher) =>
         teacher.name.toLowerCase().includes(searchQuery.toLowerCase())

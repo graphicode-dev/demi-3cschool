@@ -17,7 +17,16 @@
 import { useQuery } from "@tanstack/react-query";
 import { assignTeacherKeys } from "./assignTeacher.keys";
 import { assignTeacherApi } from "./assignTeacher.api";
-import type { AvailableTeachersParams } from "../../types/assignTeacher.types";
+
+interface AvailableTeachersParams {
+    groupId?: number;
+    sessionId?: number;
+    courseId?: number;
+    levelId?: number;
+    search?: string;
+    page?: number;
+    limit?: number;
+}
 
 // ============================================================================
 // Available Teachers Queries

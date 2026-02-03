@@ -8,7 +8,8 @@
         "slots": "Slots",
         "trainingCenters": "Training Centers",
         "resources": "Resources",
-        "grades": "Grades"
+        "grades": "Grades",
+        "teachers": "Teachers"
     },
     "title": "Admin"
 }

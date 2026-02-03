@@ -23,6 +23,7 @@ import { ticketsManagementRoutes } from "../ticketsManagement/navigation";
 import { communityManagementRoutes } from "../communityManagement/navigation";
 import { slotsRoutes } from "../settings/slots/navigation";
 import { trainingCentersRoutes } from "../settings/trainingCenters/navigation";
+import { teachersRoutes } from "../settings/teachers/navigation";
 
 // Import admin feature route arrays
 import {
@@ -265,6 +266,38 @@ const groupsManagementRoutes: RouteConfig[] = [
         meta: { titleKey: "groupsManagement:groups.instructor.title" },
         handle: { crumb: "groupsManagement:groups.instructor.title" },
     },
+
+    // Teacher Session Management
+    {
+        path: "groups/grades/:gradeId/levels/:levelId/group/:id/teacher-management",
+        lazy: () =>
+            import("@/features/dashboard/admin/groupsManagement/pages/instructor"),
+        // permissions: [group.update],
+        meta: { titleKey: "groupsManagement:teacherManagement.title" },
+        handle: { crumb: "groupsManagement:teacherManagement.title" },
+    },
+
+    // Reassign Primary Teacher
+    {
+        path: "groups/grades/:gradeId/levels/:levelId/group/:id/teacher-management/reassign",
+        lazy: () =>
+            import("@/features/dashboard/admin/groupsManagement/pages/reassignTeacher"),
+        // permissions: [group.update],
+        meta: { titleKey: "groupsManagement:groups.reassignTeacher.title" },
+        handle: { crumb: "groupsManagement:groups.reassignTeacher.title" },
+    },
+
+    // Change Session Teacher
+    {
+        path: "groups/grades/:gradeId/levels/:levelId/group/:id/teacher-management/session/:sessionId/change-teacher",
+        lazy: () =>
+            import("@/features/dashboard/admin/groupsManagement/pages/changeSessionTeacher"),
+        // permissions: [group.update],
+        meta: {
+            titleKey: "groupsManagement:groups.changeSessionTeacher.title",
+        },
+        handle: { crumb: "groupsManagement:groups.changeSessionTeacher.title" },
+    },
     // Group Sessions
     {
         path: "groups/grades/:gradeId/levels/:levelId/group/:id/sessions",
@@ -400,6 +433,8 @@ export const adminRouteModule: FeatureRouteModule = {
             ...slotsRoutes,
             // Training Centers (under settings)
             ...trainingCentersRoutes,
+            // Teachers (under settings)
+            ...teachersRoutes,
             // Shared features (profile, chat, certificates, reports)
             ...adminOnlySharedRoutes,
             // Community Management
