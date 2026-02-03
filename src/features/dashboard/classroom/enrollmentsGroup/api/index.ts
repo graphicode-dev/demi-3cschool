@@ -6,3 +6,5 @@
 
 export * from "./enrollmentsGroup.api";
 export * from "./enrollmentsGroup.queries";
+export * from "./enrollmentsGroup.mutations";
+export * from "./enrollmentsGroup.keys";

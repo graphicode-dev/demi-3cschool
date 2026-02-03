@@ -14,19 +14,24 @@ import {
 import {
     useCreateGroup,
     useGroupRecommendations,
+    useAvailableTeachersQuery,
     type GroupRecommendPayload,
     type GroupRecommendation,
 } from "../api";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useMutationHandler } from "@/shared/api";
 import { useGroupScheduleSlots } from "../../settings/slots/api/slots.queries";
+import { useTrainingCentersList } from "../../settings";
 
 const groupFormSchema = z.object({
     groupName: z.string().min(1, "Group name is required").max(255),
     days: z.string().min(1, "Day is required"),
     startTime: z.string().min(1, "Start time is required"),
     endTime: z.string().min(1, "End time is required"),
-    capacity: z.string().min(1, "Capacity is required"),
+    capacity: z
+        .number()
+        .min(1, "Capacity is required")
+        .max(25, "Capacity must be at most 25"),
     locationType: z.enum(["online", "offline"]),
     trainerId: z.string().optional(),
 });
@@ -119,7 +124,7 @@ export default function RegularGroupCreate() {
             days: "",
             startTime: "",
             endTime: "",
-            capacity: "10",
+            capacity: 10,
             locationType: "online",
             trainerId: "",
         },
@@ -148,6 +153,18 @@ export default function RegularGroupCreate() {
     const selectedEndTime = watch("endTime");
     const selectedLocationType = watch("locationType");
 
+    const { data: availableTeachersData, isLoading: isTeachersLoading } =
+        useTrainingCentersList();
+
+    const trainerOptions = useMemo(
+        () =>
+            (availableTeachersData ?? []).map((teacher) => ({
+                label: teacher.name,
+                value: String(teacher.id),
+            })),
+        [availableTeachersData]
+    );
+
     const scheduleSlotsParams = useMemo(() => {
         if (!selectedDay) return null;
         return {
@@ -163,6 +180,12 @@ export default function RegularGroupCreate() {
         setValue("startTime", "");
         setValue("endTime", "");
     }, [selectedDay, selectedLocationType, setValue]);
+
+    useEffect(() => {
+        if (selectedLocationType !== "offline") {
+            setValue("trainerId", "");
+        }
+    }, [selectedLocationType, setValue]);
 
     // Use getValues for accessing form values without reactivity warnings
     const formValues = getValues();
@@ -181,7 +204,7 @@ export default function RegularGroupCreate() {
             return {
                 course_id: "", // Not needed when we have levelId
                 level_id: levelId,
-                capacity: parseInt(formValues.capacity, 10),
+                capacity: formValues.capacity,
                 limit: 10,
             };
         }
@@ -210,7 +233,7 @@ export default function RegularGroupCreate() {
                 : [],
             startTime: formValues.startTime,
             endTime: formValues.endTime,
-            capacity: parseInt(formValues.capacity, 10) || 0,
+            capacity: formValues.capacity || 0,
             locationType:
                 formValues.locationType === "online" ? "Online" : "Offline",
         };
@@ -245,7 +268,7 @@ export default function RegularGroupCreate() {
             level_id: parseInt(levelId || "0", 10),
             name: data.groupName,
             grade_id: parseInt(gradeId || "0", 10),
-            maxCapacity: parseInt(data.capacity, 10),
+            maxCapacity: data.capacity,
             location_type: data.locationType as "online" | "offline",
             groupSchedules: [
                 {
@@ -333,7 +356,7 @@ export default function RegularGroupCreate() {
                                             "Enter maximum capacity"
                                         ),
                                         min: 1,
-                                        max: 100,
+                                        max: 25,
                                     }}
                                     label={{
                                         text: t(
@@ -363,14 +386,16 @@ export default function RegularGroupCreate() {
                                                 {...field}
                                                 className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-500 focus:border-transparent"
                                             >
-                                                {LOCATION_TYPES.map((option) => (
-                                                    <option
-                                                        key={option.value}
-                                                        value={option.value}
-                                                    >
-                                                        {option.label}
-                                                    </option>
-                                                ))}
+                                                {LOCATION_TYPES.map(
+                                                    (option) => (
+                                                        <option
+                                                            key={option.value}
+                                                            value={option.value}
+                                                        >
+                                                            {option.label}
+                                                        </option>
+                                                    )
+                                                )}
                                             </select>
                                         )}
                                     />
@@ -386,11 +411,13 @@ export default function RegularGroupCreate() {
                                 <Form.Input
                                     name="trainerId"
                                     type={{
-                                        type: "text",
+                                        type: "dropdown",
+                                        options: trainerOptions,
                                         placeholder: t(
                                             "groups.form.fields.trainerId.placeholder",
-                                            "Enter trainer ID"
+                                            "Select trainer"
                                         ),
+                                        disabled: isTeachersLoading,
                                     }}
                                     label={{
                                         text: t(
@@ -458,7 +485,8 @@ export default function RegularGroupCreate() {
                                                 "Loading available slots..."
                                             )}
                                         </p>
-                                    ) : (scheduleSlotsData?.length ?? 0) === 0 ? (
+                                    ) : (scheduleSlotsData?.length ?? 0) ===
+                                      0 ? (
                                         <p className="text-sm text-gray-500 dark:text-gray-400">
                                             {t(
                                                 "groups.form.fields.slots.empty",
@@ -493,7 +521,8 @@ export default function RegularGroupCreate() {
                                                                 : "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700"
                                                         }`}
                                                     >
-                                                        {slot.startTime} - {slot.endTime}
+                                                        {slot.startTime} -{" "}
+                                                        {slot.endTime}
                                                     </button>
                                                 );
                                             })}
@@ -549,7 +578,7 @@ export default function RegularGroupCreate() {
             />
 
             <div>
-                <Form
+                <Form<GroupFormData>
                     control={control}
                     errors={errors}
                     onSubmit={handleSubmit(onSubmit)}
