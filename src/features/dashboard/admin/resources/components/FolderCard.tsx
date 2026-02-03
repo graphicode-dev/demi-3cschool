@@ -51,37 +51,28 @@ export function FolderCard({ folder, index }: FolderCardProps) {
         setShowMenu(!showMenu);
     };
 
-    // Alternate colors for folder icons
-    const iconColors = [
-        "text-amber-400",
-        "text-brand-400",
-        "text-amber-400",
-        "text-amber-400",
-        "text-gray-400",
-    ];
-    const iconColor = iconColors[index % iconColors.length];
+    // Check if folder has resources for styling
+    const hasResources = folder.resourceCount > 0;
 
     return (
         <>
             <div
                 onClick={handleCardClick}
-                className="relative bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer border border-gray-100 dark:border-gray-700 group"
+                className="relative bg-white dark:bg-gray-800 rounded-2xl p-4 shadow-sm hover:shadow-md transition-shadow cursor-pointer border border-gray-200 dark:border-gray-700 overflow-hidden h-[110px]"
             >
-                {/* Decorative corner */}
-                <div className="absolute top-0 right-0 w-12 h-12 overflow-hidden rounded-tr-xl">
-                    <div
-                        className={`absolute top-0 right-0 w-16 h-16 transform rotate-45 translate-x-8 -translate-y-8 ${
-                            index % 2 === 0
-                                ? "bg-amber-100 dark:bg-amber-900/30"
-                                : "bg-brand-100 dark:bg-brand-900/30"
-                        }`}
-                    />
-                </div>
+                {/* Decorative ellipse in bottom-right */}
+                <div
+                    className={`absolute -bottom-4 -right-4 w-16 h-16 rounded-full ${
+                        hasResources
+                            ? "bg-brand-100 dark:bg-brand-900/30"
+                            : "bg-gray-100 dark:bg-gray-700/30"
+                    }`}
+                />
 
                 {/* Menu button */}
                 <button
                     onClick={toggleMenu}
-                    className="absolute top-3 right-3 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors z-10"
+                    className="absolute top-4 right-4 p-0.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors z-10"
                 >
                     <MoreVertical className="size-5 text-gray-400" />
                 </button>
@@ -96,7 +87,7 @@ export function FolderCard({ folder, index }: FolderCardProps) {
                                 setShowMenu(false);
                             }}
                         />
-                        <div className="absolute top-10 right-3 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-30 min-w-[120px]">
+                        <div className="absolute top-10 right-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-30 min-w-[120px]">
                             <button
                                 onClick={handleEdit}
                                 className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -115,20 +106,40 @@ export function FolderCard({ folder, index }: FolderCardProps) {
                     </>
                 )}
 
-                {/* Folder icon */}
-                <div className="mb-3">
-                    <FileText className={`size-8 ${iconColor}`} />
+                {/* Content - Horizontal layout */}
+                <div className="flex gap-4 items-start">
+                    {/* Icon container */}
+                    <div
+                        className={`flex items-center justify-center w-10 h-12 rounded-xl shrink-0 ${
+                            hasResources
+                                ? "bg-brand-500/15 dark:bg-brand-500/20"
+                                : "bg-gray-100 dark:bg-gray-700"
+                        }`}
+                    >
+                        <FileText
+                            className={`size-5 ${
+                                hasResources
+                                    ? "text-brand-500"
+                                    : "text-gray-400"
+                            }`}
+                        />
+                    </div>
+
+                    {/* Text content */}
+                    <div className="flex flex-col gap-1.5 min-w-0 pr-6">
+                        {/* Folder name */}
+                        <h3 className="text-sm font-bold text-gray-900 dark:text-white line-clamp-2 leading-5">
+                            {folder.name}
+                        </h3>
+
+                        {/* Resource count badge */}
+                        <div className="inline-flex">
+                            <span className="bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 text-xs font-semibold px-2.5 py-1 rounded-md">
+                                {folder.resourceCount} {t("resources")}
+                            </span>
+                        </div>
+                    </div>
                 </div>
-
-                {/* Folder name */}
-                <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1 pr-6 line-clamp-1">
-                    {folder.name}
-                </h3>
-
-                {/* Resource count */}
-                <p className="text-xs text-gray-400">
-                    {folder.resourceCount} {t("resources")}
-                </p>
             </div>
 
             {/* Delete confirmation dialog */}
