@@ -10,71 +10,46 @@ import {
     Eye,
     Send,
     Star,
+    Loader2,
 } from "lucide-react";
-import type {
-    Lesson,
-    LessonTabType,
-    LessonMaterial,
-    LessonAssignment,
-    LessonQuizItem,
-} from "../../types";
+import type { Lesson, LessonTabType } from "../../types";
 import { RatingModal } from "./RatingModal";
+import {
+    useLessonMaterialsByLesson,
+    useLessonAssignmentsByLesson,
+    useLessonQuizzesByLesson,
+} from "@/features/dashboard/admin/learning/pages/lessons/api";
 
 interface LessonContentProps {
     lesson: Lesson;
     activeTab: LessonTabType;
 }
 
-// Mock data for demonstration
-const MOCK_MATERIALS: LessonMaterial[] = [
-    { id: 1, name: "Lesson Slides", type: "PDF", size: "2.5 MB", url: "#" },
-    {
-        id: 2,
-        name: "Variables Cheat Sheet",
-        type: "IMAGE",
-        size: "2.5 MB",
-        url: "#",
-    },
-];
-
-const MOCK_ASSIGNMENTS: LessonAssignment[] = [
-    {
-        id: 1,
-        title: "Create Your First Variable",
-        description: "Open the code editor and create a variable named 'score'",
-        status: "pending",
-    },
-    {
-        id: 2,
-        title: "Data Types Practice",
-        description: "Fill in the blanks in the provided file",
-        status: "submitted",
-        submittedAt: "2024-01-15",
-    },
-];
-
-const MOCK_QUIZZES: LessonQuizItem[] = [
-    {
-        id: 1,
-        title: "Variables Challenge",
-        questionsCount: 5,
-        duration: 10,
-        status: "completed",
-        score: 5,
-        maxScore: 5,
-    },
-    {
-        id: 2,
-        title: "Variables Challenge",
-        questionsCount: 5,
-        duration: 10,
-        status: "new",
-    },
-];
-
 export function LessonContent({ lesson, activeTab }: LessonContentProps) {
     const { t } = useTranslation("selfStudy");
     const [showRatingModal, setShowRatingModal] = useState(false);
+
+    // Fetch materials only when materials tab is active
+    const { data: materialsData, isLoading: isLoadingMaterials } =
+        useLessonMaterialsByLesson(String(lesson.id), undefined, {
+            enabled: activeTab === "materials",
+        });
+
+    // Fetch assignments only when assignments tab is active
+    const { data: assignmentsData, isLoading: isLoadingAssignments } =
+        useLessonAssignmentsByLesson(String(lesson.id), undefined, {
+            enabled: activeTab === "assignments",
+        });
+
+    // Fetch quizzes only when lessonQuiz tab is active
+    const { data: quizzesData, isLoading: isLoadingQuizzes } =
+        useLessonQuizzesByLesson(String(lesson.id), undefined, {
+            enabled: activeTab === "lessonQuiz",
+        });
+
+    const materials = materialsData?.items ?? [];
+    const assignments = assignmentsData?.items ?? [];
+    const quizzes = quizzesData?.items ?? [];
 
     // About Tab
     if (activeTab === "about") {
@@ -171,7 +146,15 @@ export function LessonContent({ lesson, activeTab }: LessonContentProps) {
 
     // Materials Tab
     if (activeTab === "materials") {
-        if (MOCK_MATERIALS.length === 0) {
+        if (isLoadingMaterials) {
+            return (
+                <div className="flex items-center justify-center py-8">
+                    <Loader2 className="size-6 animate-spin text-brand-500" />
+                </div>
+            );
+        }
+
+        if (materials.length === 0) {
             return (
                 <div className="flex flex-col items-center justify-center py-8">
                     <p className="text-sm text-gray-400 dark:text-gray-500">
@@ -183,7 +166,7 @@ export function LessonContent({ lesson, activeTab }: LessonContentProps) {
 
         return (
             <div className="flex flex-col gap-3">
-                {MOCK_MATERIALS.map((material) => (
+                {materials.map((material) => (
                     <div
                         key={material.id}
                         className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700"
@@ -191,7 +174,7 @@ export function LessonContent({ lesson, activeTab }: LessonContentProps) {
                         <div className="flex items-center gap-4">
                             {/* Icon */}
                             <div className="size-12 rounded-xl bg-brand-100 dark:bg-brand-500/20 flex items-center justify-center">
-                                {material.type === "PDF" ? (
+                                {material.file?.mimeType?.includes("pdf") ? (
                                     <FileText className="size-6 text-brand-500" />
                                 ) : (
                                     <Image className="size-6 text-brand-500" />
@@ -201,18 +184,23 @@ export function LessonContent({ lesson, activeTab }: LessonContentProps) {
                             {/* Info */}
                             <div>
                                 <h4 className="font-semibold text-gray-900 dark:text-white">
-                                    {material.name}
+                                    {material.title}
                                 </h4>
                                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                                    {material.type} • {material.size}
+                                    {material.file?.humanReadableSize}
                                 </p>
                             </div>
                         </div>
 
                         {/* Download Button */}
-                        <button className="p-2 text-gray-400 hover:text-brand-500 transition-colors">
+                        <a
+                            href={material.file?.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-2 text-gray-400 hover:text-brand-500 transition-colors"
+                        >
                             <Download className="size-5" />
-                        </button>
+                        </a>
                     </div>
                 ))}
             </div>
@@ -221,7 +209,15 @@ export function LessonContent({ lesson, activeTab }: LessonContentProps) {
 
     // Lesson Quiz Tab
     if (activeTab === "lessonQuiz") {
-        if (MOCK_QUIZZES.length === 0) {
+        if (isLoadingQuizzes) {
+            return (
+                <div className="flex items-center justify-center py-8">
+                    <Loader2 className="size-6 animate-spin text-brand-500" />
+                </div>
+            );
+        }
+
+        if (quizzes.length === 0) {
             return (
                 <div className="flex flex-col items-center justify-center py-8">
                     <p className="text-sm text-gray-400 dark:text-gray-500">
@@ -233,86 +229,44 @@ export function LessonContent({ lesson, activeTab }: LessonContentProps) {
 
         return (
             <div className="flex flex-col gap-3">
-                {MOCK_QUIZZES.map((quiz) => (
+                {quizzes.map((quiz) => (
                     <div
                         key={quiz.id}
-                        className={`flex items-center justify-between p-4 rounded-xl border ${
-                            quiz.status === "completed"
-                                ? "bg-success-50 dark:bg-success-500/10 border-success-200 dark:border-success-500/20"
-                                : "bg-warning-50 dark:bg-warning-500/10 border-warning-200 dark:border-warning-500/20"
-                        }`}
+                        className="flex items-center justify-between p-4 rounded-xl border bg-warning-50 dark:bg-warning-500/10 border-warning-200 dark:border-warning-500/20"
                     >
                         <div className="flex items-center gap-4">
                             {/* Icon */}
-                            <div
-                                className={`size-10 rounded-full flex items-center justify-center ${
-                                    quiz.status === "completed"
-                                        ? "bg-success-100 dark:bg-success-500/20"
-                                        : "bg-warning-100 dark:bg-warning-500/20"
-                                }`}
-                            >
-                                {quiz.status === "completed" ? (
-                                    <CheckCircle className="size-5 text-success-500" />
-                                ) : (
-                                    <FileText className="size-5 text-warning-500" />
-                                )}
+                            <div className="size-10 rounded-full flex items-center justify-center bg-warning-100 dark:bg-warning-500/20">
+                                <FileText className="size-5 text-warning-500" />
                             </div>
 
                             {/* Info */}
                             <div>
                                 <div className="flex items-center gap-2">
                                     <h4 className="font-semibold text-gray-900 dark:text-white">
-                                        {quiz.title}
+                                        {t("lesson.quiz.title")}
                                     </h4>
-                                    <span
-                                        className={`px-2 py-0.5 text-xs font-semibold rounded-full ${
-                                            quiz.status === "completed"
-                                                ? "bg-success-100 dark:bg-success-500/20 text-success-600 dark:text-success-400"
-                                                : "bg-warning-100 dark:bg-warning-500/20 text-warning-600 dark:text-warning-500"
-                                        }`}
-                                    >
-                                        {quiz.status === "completed"
-                                            ? t("lesson.quiz.completed")
-                                            : t("lesson.quiz.new")}
+                                    <span className="px-2 py-0.5 text-xs font-semibold rounded-full bg-warning-100 dark:bg-warning-500/20 text-warning-600 dark:text-warning-500">
+                                        {t("lesson.quiz.new")}
                                     </span>
                                 </div>
                                 <div className="flex items-center gap-3 text-xs text-gray-500 dark:text-gray-400 mt-1">
                                     <span>
-                                        {quiz.questionsCount}{" "}
-                                        {t("lesson.quiz.questionsLabel")}
+                                        {quiz.timeLimit}{" "}
+                                        {t("lesson.quiz.minutes")}
                                     </span>
                                     <span>•</span>
-                                    <span>{quiz.duration} mins</span>
-                                    {quiz.status === "completed" &&
-                                        quiz.score !== undefined && (
-                                            <>
-                                                <span>•</span>
-                                                <span className="text-success-600 dark:text-success-400 font-semibold">
-                                                    {t("lesson.quiz.score")}:{" "}
-                                                    {quiz.score}/{quiz.maxScore}
-                                                </span>
-                                            </>
-                                        )}
+                                    <span>
+                                        {t("lesson.quiz.passingScore")}:{" "}
+                                        {quiz.passingScore}%
+                                    </span>
                                 </div>
                             </div>
                         </div>
 
                         {/* Action Button */}
-                        <button
-                            className={`flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-sm transition-colors ${
-                                quiz.status === "completed"
-                                    ? "bg-success-500 hover:bg-success-600 text-white"
-                                    : "bg-warning-500 hover:bg-warning-600 text-white"
-                            }`}
-                        >
-                            {quiz.status === "completed" ? (
-                                <>
-                                    <Eye className="size-4" />
-                                    {t("lesson.quiz.viewResult")}
-                                </>
-                            ) : (
-                                t("lesson.quiz.startQuiz")
-                            )}
+                        <button className="flex items-center gap-2 px-4 py-2 rounded-xl font-semibold text-sm transition-colors bg-warning-500 hover:bg-warning-600 text-white">
+                            {t("lesson.quiz.startQuiz")}
                         </button>
                     </div>
                 ))}
@@ -322,7 +276,15 @@ export function LessonContent({ lesson, activeTab }: LessonContentProps) {
 
     // Assignments Tab
     if (activeTab === "assignments") {
-        if (MOCK_ASSIGNMENTS.length === 0) {
+        if (isLoadingAssignments) {
+            return (
+                <div className="flex items-center justify-center py-8">
+                    <Loader2 className="size-6 animate-spin text-brand-500" />
+                </div>
+            );
+        }
+
+        if (assignments.length === 0) {
             return (
                 <div className="flex flex-col items-center justify-center py-8">
                     <p className="text-sm text-gray-400 dark:text-gray-500">
@@ -334,25 +296,15 @@ export function LessonContent({ lesson, activeTab }: LessonContentProps) {
 
         return (
             <div className="flex flex-col gap-3">
-                {MOCK_ASSIGNMENTS.map((assignment) => (
+                {assignments.map((assignment) => (
                     <div
                         key={assignment.id}
                         className="flex items-center justify-between p-4 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700"
                     >
                         <div className="flex items-center gap-4">
                             {/* Icon */}
-                            <div
-                                className={`size-10 rounded-full flex items-center justify-center ${
-                                    assignment.status === "submitted"
-                                        ? "bg-success-100 dark:bg-success-500/20"
-                                        : "bg-brand-100 dark:bg-brand-500/20"
-                                }`}
-                            >
-                                {assignment.status === "submitted" ? (
-                                    <CheckCircle className="size-5 text-success-500" />
-                                ) : (
-                                    <FileText className="size-5 text-brand-500" />
-                                )}
+                            <div className="size-10 rounded-full flex items-center justify-center bg-brand-100 dark:bg-brand-500/20">
+                                <FileText className="size-5 text-brand-500" />
                             </div>
 
                             {/* Info */}
@@ -361,29 +313,26 @@ export function LessonContent({ lesson, activeTab }: LessonContentProps) {
                                     {assignment.title}
                                 </h4>
                                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-                                    {assignment.description}
+                                    {assignment.file?.humanReadableSize}
                                 </p>
-                                {assignment.status === "submitted" && (
-                                    <span className="inline-flex items-center gap-1 text-xs text-success-600 dark:text-success-400 mt-1">
-                                        <CheckCircle className="size-3" />
-                                        {t("lesson.assignments.submitted")}
-                                    </span>
-                                )}
                             </div>
                         </div>
 
                         {/* Action Buttons */}
                         <div className="flex items-center gap-2">
-                            <button className="flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-semibold text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                            <a
+                                href={assignment.file?.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-2 px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-semibold text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                            >
                                 <Eye className="size-4" />
                                 {t("lesson.assignments.view")}
+                            </a>
+                            <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-semibold text-sm transition-colors">
+                                <Send className="size-4" />
+                                {t("lesson.assignments.submit")}
                             </button>
-                            {assignment.status === "pending" && (
-                                <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-semibold text-sm transition-colors">
-                                    <Send className="size-4" />
-                                    {t("lesson.assignments.submit")}
-                                </button>
-                            )}
                         </div>
                     </div>
                 ))}
