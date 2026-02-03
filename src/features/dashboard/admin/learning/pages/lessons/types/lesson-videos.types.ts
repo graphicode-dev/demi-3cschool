@@ -31,6 +31,8 @@ export interface LessonVideo {
     provider: string;
     videoReferenceAr: string;
     videoReferenceEn: string;
+    embedHtml: string;
+    thumbnail: string;
     isActive: number;
     createdAt: string;
     updatedAt: string;

@@ -393,46 +393,32 @@ export default function VideoEditor({
                             </button>
                         </div>
                     </div>
-                    <div className="aspect-video bg-gray-900 rounded-xl flex flex-col items-center justify-center">
-                        {currentVideoUrl ? (
-                            <div className="text-center">
-                                <button className="w-16 h-16 flex items-center justify-center rounded-full bg-brand-500 text-white mb-3 hover:bg-brand-600 transition-colors">
-                                    <Play className="w-8 h-8 ml-1" />
-                                </button>
-                                <p className="text-sm text-gray-300">
-                                    {t(
-                                        "lessons:content.fields.clickToPreview",
-                                        "Click to preview"
-                                    )}{" "}
-                                    {previewTab === "arabic"
-                                        ? "Arabic"
-                                        : "English"}{" "}
-                                    Video
-                                </p>
-                                <p className="text-xs text-gray-500 mt-1">
-                                    Provider: {formData.provider}
-                                </p>
+                    {video?.embedHtml ? (
+                        <div
+                            className="w-full rounded-xl overflow-hidden"
+                            dangerouslySetInnerHTML={{
+                                __html: video.embedHtml,
+                            }}
+                        />
+                    ) : (
+                        <div className="aspect-video bg-gray-900 rounded-xl flex flex-col items-center justify-center">
+                            <div className="w-16 h-16 flex items-center justify-center rounded-full bg-gray-800 text-gray-500 mb-3">
+                                <Play className="w-8 h-8" />
                             </div>
-                        ) : (
-                            <div className="text-center">
-                                <div className="w-16 h-16 flex items-center justify-center rounded-full bg-gray-800 text-gray-500 mb-3">
-                                    <Play className="w-8 h-8" />
-                                </div>
-                                <p className="text-sm text-gray-400">
-                                    {t(
-                                        "lessons:content.fields.noVideoUploaded",
-                                        "No video uploaded"
-                                    )}
-                                </p>
-                                <p className="text-xs text-gray-500 mt-1">
-                                    {t(
-                                        "lessons:content.fields.addVideoUrl",
-                                        "Add a video URL to preview"
-                                    )}
-                                </p>
-                            </div>
-                        )}
-                    </div>
+                            <p className="text-sm text-gray-400">
+                                {t(
+                                    "lessons:content.fields.noVideoUploaded",
+                                    "No video uploaded"
+                                )}
+                            </p>
+                            <p className="text-xs text-gray-500 mt-1">
+                                {t(
+                                    "lessons:content.fields.addVideoUrl",
+                                    "Add a video URL to preview"
+                                )}
+                            </p>
+                        </div>
+                    )}
                 </div>
             </div>
 

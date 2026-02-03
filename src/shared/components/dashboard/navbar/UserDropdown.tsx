@@ -29,7 +29,9 @@ export default function UserDropdown() {
     const handleLogout = () => {
         execute(() => logout(), {
             showSuccessToast: false,
+            showErrorToast: false,
             onSuccess: () => navigate(paths.auth.login()),
+            onError: () => navigate(paths.auth.login()),
         });
     };
 

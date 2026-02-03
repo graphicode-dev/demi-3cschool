@@ -96,24 +96,32 @@ export function useSignUp(
 
 /**
  * Hook to logout
+ * Always clears local storage and auth state, even if API call fails
  */
 export function useLogout(
     options?: Omit<UseMutationOptions<any, ApiError, void>, "mutationFn">
 ) {
     const queryClient = useQueryClient();
-    const { setUser, setIsAuthenticated } = authStore();
-    const { clearPermissions } = permissionStore();
+
+    const clearAuthState = () => {
+        authStore.getState().setIsAuthenticated(false);
+        authStore.getState().setUser(null);
+        permissionStore.getState().clearPermissions();
+        tokenService.clearTokens();
+        queryClient.invalidateQueries({
+            queryKey: authQueryKeys.all,
+        });
+    };
 
     return useMutation({
         mutationFn: () => authApi.logout(),
         onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: authQueryKeys.all,
-            });
-            setIsAuthenticated(false);
-            setUser(null);
-            clearPermissions();
-            tokenService.clearTokens();
+            clearAuthState();
+        },
+        onError: () => {
+            // Always clear auth state even if logout API fails
+            // (e.g., token already expired, network error, etc.)
+            clearAuthState();
         },
         ...options,
     });
