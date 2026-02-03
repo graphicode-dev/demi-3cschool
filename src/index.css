@@ -10,6 +10,14 @@ layer(base);
     font-display: swap;
 }
 
+@font-face {
+    font-family: "ExpoArabic";
+    src: url("./assets/fonts/ExpoArabic-Book.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
 @import "tailwindcss";
 
 @custom-variant dark (&:is(.dark *));
@@ -19,6 +27,7 @@ layer(base);
     --font-outfit: Outfit, sans-serif;
     --font-poppins: "Poppins", sans-serif;
     --font-segoe-arabic: "segoe ui", sans-serif;
+      --font-expo-arabic: "ExpoArabic", sans-serif;
 
     --breakpoint-*: initial;
     --breakpoint-2xsm: 375px;
@@ -261,9 +270,9 @@ layer(base);
     html[lang="en"] body {
         font-family: var(--font-segoe-arabic);
     }
-    /* html[lang="ar"] body {
+    html[lang="ar"] body {
         font-family: var(--font-expo-arabic);
-    } */
+    }
     .content-editor::-webkit-scrollbar,
     body::-webkit-scrollbar,
     .overflow-x-auto::-webkit-scrollbar,
