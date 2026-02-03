@@ -4,7 +4,7 @@
  * Main page for managing resource folders with filters.
  */
 
-import { useState, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Filter, FolderPlus } from "lucide-react";
@@ -13,19 +13,37 @@ import { EmptyState } from "@/design-system/components/EmptyState";
 import { LoadingState } from "@/design-system/components/LoadingState";
 import { FolderCard } from "../components/FolderCard";
 import { useFoldersList } from "../api";
-import { MOCK_GRADES, MOCK_TERMS } from "../mocks";
+import { useGrades } from "@/features/dashboard/admin/systemManagements/api";
+import { useProgramsCurriculumList } from "@/features/dashboard/admin/programs/api";
 import type { ResourceFolder } from "../types";
 
 export function ResourcesManagement() {
     const { t } = useTranslation("adminResources");
     const navigate = useNavigate();
     const [selectedGrade, setSelectedGrade] = useState<string>("");
-    const [selectedTerm, setSelectedTerm] = useState<string>("");
+    const [selectedProgram, setSelectedProgram] = useState<string>("");
+    const [page, setPage] = useState<number>(1);
 
-    const { data: folders = [], isLoading } = useFoldersList({
-        gradeId: selectedGrade || undefined,
-        termId: selectedTerm || undefined,
+    const { data: gradesData, isLoading: isGradesLoading } = useGrades();
+    const { data: programs = [], isLoading: isProgramsLoading } =
+        useProgramsCurriculumList();
+
+    const gradeId = selectedGrade ? Number(selectedGrade) : undefined;
+    const programId = selectedProgram ? Number(selectedProgram) : undefined;
+
+    const { data: foldersPage, isLoading } = useFoldersList({
+        page,
+        gradeId,
+        programId,
     });
+
+    const folders = foldersPage?.items ?? [];
+    const currentPage = foldersPage?.currentPage ?? page;
+    const lastPage = foldersPage?.lastPage ?? 1;
+
+    useEffect(() => {
+        setPage(1);
+    }, [selectedGrade, selectedProgram]);
 
     // Group folders by grade and term
     const groupedFolders = useMemo(() => {
@@ -34,12 +52,12 @@ export function ResourcesManagement() {
             { grade: string; term: string; folders: ResourceFolder[] }
         > = {};
 
-        folders.forEach((folder) => {
-            const key = `${folder.grade.id}-${folder.term.id}`;
+        folders.forEach((folder: ResourceFolder) => {
+            const key = `${folder.grade.id}-${folder.programsCurriculum.id}`;
             if (!groups[key]) {
                 groups[key] = {
                     grade: folder.grade.name,
-                    term: folder.term.name,
+                    term: folder.programsCurriculum.caption,
                     folders: [],
                 };
             }
@@ -85,10 +103,11 @@ export function ResourcesManagement() {
                             value={selectedGrade}
                             onChange={(e) => setSelectedGrade(e.target.value)}
                             className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                            disabled={isGradesLoading}
                         >
                             <option value="">{t("allGrades")}</option>
-                            {MOCK_GRADES.map((grade) => (
-                                <option key={grade.id} value={grade.id}>
+                            {(gradesData?.items ?? []).map((grade) => (
+                                <option key={grade.id} value={String(grade.id)}>
                                     {grade.name}
                                 </option>
                             ))}
@@ -98,14 +117,18 @@ export function ResourcesManagement() {
                     {/* Term Filter */}
                     <div>
                         <select
-                            value={selectedTerm}
-                            onChange={(e) => setSelectedTerm(e.target.value)}
+                            value={selectedProgram}
+                            onChange={(e) => setSelectedProgram(e.target.value)}
                             className="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                            disabled={isProgramsLoading}
                         >
                             <option value="">{t("allTerms")}</option>
-                            {MOCK_TERMS.map((term) => (
-                                <option key={term.id} value={term.id}>
-                                    {term.name}
+                            {programs.map((program) => (
+                                <option
+                                    key={program.id}
+                                    value={String(program.id)}
+                                >
+                                    {program.caption}
                                 </option>
                             ))}
                         </select>
@@ -147,6 +170,36 @@ export function ResourcesManagement() {
                             </div>
                         </div>
                     ))}
+
+                    {/* Pagination */}
+                    <div className="flex items-center justify-between gap-4 pt-2">
+                        <button
+                            type="button"
+                            onClick={() => setPage((p) => Math.max(1, p - 1))}
+                            disabled={currentPage <= 1}
+                            className="px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {t("pagination.prev")}
+                        </button>
+
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                            {t("pagination.page", {
+                                current: currentPage,
+                                total: lastPage,
+                            })}
+                        </div>
+
+                        <button
+                            type="button"
+                            onClick={() =>
+                                setPage((p) => Math.min(lastPage, p + 1))
+                            }
+                            disabled={currentPage >= lastPage}
+                            className="px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {t("pagination.next")}
+                        </button>
+                    </div>
                 </div>
             )}
         </PageWrapper>

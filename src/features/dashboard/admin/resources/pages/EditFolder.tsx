@@ -11,7 +11,8 @@ import { Save } from "lucide-react";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { LoadingState } from "@/design-system/components/LoadingState";
 import { useFolder, useUpdateFolder } from "../api";
-import { MOCK_GRADES, MOCK_TERMS } from "../mocks";
+import { useGrades } from "@/features/dashboard/admin/systemManagements/api";
+import { useProgramsCurriculumList } from "@/features/dashboard/admin/programs/api";
 
 export function EditFolder() {
     const { t } = useTranslation("adminResources");
@@ -20,10 +21,13 @@ export function EditFolder() {
     const { data: folder, isLoading } = useFolder(folderId || "");
     const updateFolder = useUpdateFolder();
 
+    const { data: gradesData } = useGrades();
+    const { data: programs = [] } = useProgramsCurriculumList();
+
     const [formData, setFormData] = useState({
         name: "",
         gradeId: "",
-        termId: "",
+        programCurriculumId: "",
         description: "",
     });
 
@@ -31,8 +35,8 @@ export function EditFolder() {
         if (folder) {
             setFormData({
                 name: folder.name,
-                gradeId: folder.grade.id,
-                termId: folder.term.id,
+                gradeId: String(folder.grade.id),
+                programCurriculumId: String(folder.programsCurriculum.id),
                 description: folder.description || "",
             });
         }
@@ -45,7 +49,7 @@ export function EditFolder() {
             !folderId ||
             !formData.name ||
             !formData.gradeId ||
-            !formData.termId
+            !formData.programCurriculumId
         ) {
             return;
         }
@@ -54,9 +58,10 @@ export function EditFolder() {
             id: folderId,
             payload: {
                 name: formData.name,
-                gradeId: formData.gradeId,
-                termId: formData.termId,
+                gradeId: Number(formData.gradeId),
+                programCurriculumId: Number(formData.programCurriculumId),
                 description: formData.description || undefined,
+                isActive: folder?.isActive ? 1 : 0,
             },
         });
 
@@ -130,8 +135,11 @@ export function EditFolder() {
                                     <option value="">
                                         {t("folder.selectGrade")}
                                     </option>
-                                    {MOCK_GRADES.map((grade) => (
-                                        <option key={grade.id} value={grade.id}>
+                                    {(gradesData?.items ?? []).map((grade) => (
+                                        <option
+                                            key={grade.id}
+                                            value={String(grade.id)}
+                                        >
                                             {grade.name}
                                         </option>
                                     ))}
@@ -144,11 +152,11 @@ export function EditFolder() {
                                     <span className="text-error-500">*</span>
                                 </label>
                                 <select
-                                    value={formData.termId}
+                                    value={formData.programCurriculumId}
                                     onChange={(e) =>
                                         setFormData({
                                             ...formData,
-                                            termId: e.target.value,
+                                            programCurriculumId: e.target.value,
                                         })
                                     }
                                     className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-500"
@@ -157,9 +165,12 @@ export function EditFolder() {
                                     <option value="">
                                         {t("folder.selectTerm")}
                                     </option>
-                                    {MOCK_TERMS.map((term) => (
-                                        <option key={term.id} value={term.id}>
-                                            {term.name}
+                                    {programs.map((program) => (
+                                        <option
+                                            key={program.id}
+                                            value={String(program.id)}
+                                        >
+                                            {program.caption}
                                         </option>
                                     ))}
                                 </select>

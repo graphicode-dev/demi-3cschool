@@ -7,7 +7,8 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { X } from "lucide-react";
-import { useFoldersList, useMoveResource } from "../api";
+import { useFoldersList } from "../api";
+import { useToast } from "@/design-system/hooks/useToast";
 import type { Resource, ResourceFolder } from "../types";
 
 interface MoveResourceModalProps {
@@ -24,15 +25,17 @@ export function MoveResourceModal({
     currentFolder,
 }: MoveResourceModalProps) {
     const { t } = useTranslation("adminResources");
+    const toast = useToast();
     const [selectedFolderId, setSelectedFolderId] = useState<string>("");
     const [isVisible, setIsVisible] = useState(false);
 
-    const { data: folders = [] } = useFoldersList({
+    const { data: foldersPage } = useFoldersList({
         gradeId: currentFolder?.grade.id,
-        termId: currentFolder?.term.id,
+        programId: currentFolder?.programsCurriculum.id,
+        page: 1,
     });
 
-    const moveResource = useMoveResource();
+    const folders = foldersPage?.items ?? [];
 
     // Filter out current folder
     const availableFolders = folders.filter((f) => f.id !== currentFolder?.id);
@@ -50,11 +53,10 @@ export function MoveResourceModal({
     const handleConfirm = async () => {
         if (!selectedFolderId) return;
 
-        await moveResource.mutateAsync({
-            resourceId: resource.id,
-            targetFolderId: selectedFolderId,
+        toast.addToast({
+            type: "error",
+            message: "Move resource is not available yet",
         });
-
         onClose();
     };
 
@@ -119,7 +121,7 @@ export function MoveResourceModal({
                                     {t("resource.currentTerm")}
                                 </span>
                                 <span className="text-gray-900 dark:text-white font-medium">
-                                    {currentFolder?.term.name}
+                                    {currentFolder?.programsCurriculum.caption}
                                 </span>
                             </div>
                             <div className="flex justify-between">
@@ -150,7 +152,10 @@ export function MoveResourceModal({
                                 {t("resource.selectFolderPlaceholder")}
                             </option>
                             {availableFolders.map((folder) => (
-                                <option key={folder.id} value={folder.id}>
+                                <option
+                                    key={folder.id}
+                                    value={String(folder.id)}
+                                >
                                     {folder.name}
                                 </option>
                             ))}
@@ -165,7 +170,7 @@ export function MoveResourceModal({
                 <div className="flex items-center gap-3 p-6 border-t border-gray-200 dark:border-gray-700">
                     <button
                         onClick={handleConfirm}
-                        disabled={!selectedFolderId || moveResource.isPending}
+                        disabled={!selectedFolderId}
                         className="flex-1 px-5 py-2.5 bg-brand-500 text-white rounded-lg hover:bg-brand-600 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {t("resource.confirmMove")}

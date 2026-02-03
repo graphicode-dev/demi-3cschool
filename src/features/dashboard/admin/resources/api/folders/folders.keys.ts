@@ -37,7 +37,7 @@ export const folderKeys = {
     /**
      * Key for specific folder detail
      */
-    detail: (id: string) => [...folderKeys.details(), id] as const,
+    detail: (id: string | number) => [...folderKeys.details(), id] as const,
 };
 
 /**

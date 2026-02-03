@@ -9,6 +9,7 @@ import { foldersApi } from "./folders.api";
 import { folderKeys } from "./folders.keys";
 import { useToast } from "@/design-system/hooks/useToast";
 import type { FolderCreatePayload, FolderUpdatePayload } from "../../types";
+import { useTranslation } from "react-i18next";
 
 /**
  * Hook to create a new folder
@@ -16,6 +17,7 @@ import type { FolderCreatePayload, FolderUpdatePayload } from "../../types";
 export function useCreateFolder() {
     const queryClient = useQueryClient();
     const toast = useToast();
+    const { t } = useTranslation("adminResources");
 
     return useMutation({
         mutationFn: (payload: FolderCreatePayload) =>
@@ -24,13 +26,13 @@ export function useCreateFolder() {
             queryClient.invalidateQueries({ queryKey: folderKeys.all });
             toast.addToast({
                 type: "success",
-                message: "Folder created successfully",
+                message: t("toasts.folderCreated"),
             });
         },
         onError: (error: Error) => {
             toast.addToast({
                 type: "error",
-                message: error.message || "Failed to create folder",
+                message: error.message || t("toasts.folderCreateFailed"),
             });
         },
     });
@@ -42,13 +44,14 @@ export function useCreateFolder() {
 export function useUpdateFolder() {
     const queryClient = useQueryClient();
     const toast = useToast();
+    const { t } = useTranslation("adminResources");
 
     return useMutation({
         mutationFn: ({
             id,
             payload,
         }: {
-            id: string;
+            id: string | number;
             payload: FolderUpdatePayload;
         }) => foldersApi.update(id, payload),
         onSuccess: (_, variables) => {
@@ -58,13 +61,13 @@ export function useUpdateFolder() {
             });
             toast.addToast({
                 type: "success",
-                message: "Folder updated successfully",
+                message: t("toasts.folderUpdated"),
             });
         },
         onError: (error: Error) => {
             toast.addToast({
                 type: "error",
-                message: error.message || "Failed to update folder",
+                message: error.message || t("toasts.folderUpdateFailed"),
             });
         },
     });
@@ -76,20 +79,21 @@ export function useUpdateFolder() {
 export function useDeleteFolder() {
     const queryClient = useQueryClient();
     const toast = useToast();
+    const { t } = useTranslation("adminResources");
 
     return useMutation({
-        mutationFn: (id: string) => foldersApi.delete(id),
+        mutationFn: (id: string | number) => foldersApi.delete(id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: folderKeys.all });
             toast.addToast({
                 type: "success",
-                message: "Folder deleted successfully",
+                message: t("toasts.folderDeleted"),
             });
         },
         onError: (error: Error) => {
             toast.addToast({
                 type: "error",
-                message: error.message || "Failed to delete folder",
+                message: error.message || t("toasts.folderDeleteFailed"),
             });
         },
     });

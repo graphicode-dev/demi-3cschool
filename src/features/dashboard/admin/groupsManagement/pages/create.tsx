@@ -11,6 +11,8 @@ import {
     GroupSummary,
     SimilarGroupsModal,
 } from "../components";
+import { useGrades } from "@/features/dashboard/admin/systemManagements/api";
+import { useLevel } from "@/features/dashboard/admin/learning/pages/levels/api";
 import {
     useCreateGroup,
     useGroupRecommendations,
@@ -95,6 +97,9 @@ export default function RegularGroupCreate() {
         gradeId: string;
         levelId: string;
     }>();
+
+    const { data: gradesData } = useGrades();
+    const { data: level } = useLevel(levelId);
     const [currentStep, setCurrentStep] = useState(0);
     const [isSimilarGroupsModalOpen, setIsSimilarGroupsModalOpen] =
         useState(false);
@@ -224,10 +229,17 @@ export default function RegularGroupCreate() {
     );
 
     const summaryData = useMemo(() => {
+        const gradeName = gradeId
+            ? (gradesData?.items?.find((g) => String(g.id) === String(gradeId))
+                  ?.name ?? `Grade ${gradeId}`)
+            : undefined;
+
+        const levelTitle = levelId ? (level?.title ?? `Level ${levelId}`) : "";
+
         return {
             groupName: formValues.groupName,
-            grade: `Grade ${gradeId}`,
-            level: `Level ${levelId}`,
+            grade: gradeName,
+            level: levelTitle,
             days: formValues.days
                 ? [getLabel(DAYS_OPTIONS, formValues.days)]
                 : [],
@@ -237,7 +249,7 @@ export default function RegularGroupCreate() {
             locationType:
                 formValues.locationType === "online" ? "Online" : "Offline",
         };
-    }, [formValues, levelId, gradeId]);
+    }, [formValues, levelId, gradeId, gradesData?.items, level?.title]);
 
     const handleNext = async () => {
         const fields = stepFields[currentStep];

@@ -3,10 +3,10 @@
  *
  * Raw API functions for resources domain.
  * These are pure functions that make HTTP requests.
- *
- * TODO: Replace mock implementations with real API calls
  */
 
+import { api } from "@/shared/api/client";
+import type { ApiResponse, PaginatedData } from "@/shared/api";
 import type {
     Resource,
     ResourcesListParams,
@@ -14,16 +14,8 @@ import type {
     ResourceUpdatePayload,
     MoveResourcePayload,
 } from "../../types";
-import {
-    getMockResources,
-    getMockResourceById,
-    MOCK_RESOURCES,
-} from "../../mocks";
 
-const BASE_URL = "/resources";
-
-// Simulate API delay
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const BASE_URL = "/learning-resources";
 
 /**
  * Resources API functions
@@ -35,153 +27,144 @@ export const resourcesApi = {
     getList: async (
         params: ResourcesListParams,
         signal?: AbortSignal
-    ): Promise<Resource[]> => {
-        // TODO: Replace with real API call
-        // const response = await api.get<ApiResponse<Resource[]>>(BASE_URL, {
-        //     params,
-        //     signal,
-        // });
-        await delay(300);
+    ): Promise<PaginatedData<Resource>> => {
+        const queryParams: Record<string, unknown> = {};
 
-        if (signal?.aborted) {
-            throw new Error("Request aborted");
+        if (params.page) queryParams.page = params.page;
+        if (params.type && params.type !== "all") queryParams.type = params.type;
+        if (params.search) queryParams.search = params.search;
+
+        const response = await api.get<
+            ApiResponse<PaginatedData<Resource>>
+        >(`${BASE_URL}/folder/${params.folderId}`, {
+            params: queryParams,
+            signal,
+        });
+
+        if (response.error) {
+            throw response.error;
         }
 
-        return getMockResources(params.folderId, params.type, params.search);
+        return response.data.data;
     },
 
     /**
      * Get single resource by ID
      */
-    getById: async (id: string, signal?: AbortSignal): Promise<Resource> => {
-        // TODO: Replace with real API call
-        // const response = await api.get<ApiResponse<Resource>>(
-        //     `${BASE_URL}/${id}`,
-        //     { signal }
-        // );
-        await delay(200);
+    getById: async (
+        id: string | number,
+        signal?: AbortSignal
+    ): Promise<Resource> => {
+        const response = await api.get<ApiResponse<Resource>>(
+            `${BASE_URL}/${id}`,
+            { signal }
+        );
 
-        if (signal?.aborted) {
-            throw new Error("Request aborted");
+        if (response.error) {
+            throw response.error;
         }
 
-        const resource = getMockResourceById(id);
-        if (!resource) {
-            throw new Error("Resource not found");
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
         }
 
-        return resource;
+        return response.data.data;
     },
 
     /**
      * Create a new resource
      */
     create: async (payload: ResourceCreatePayload): Promise<Resource> => {
-        // TODO: Replace with real API call with file upload
-        // const formData = new FormData();
-        // formData.append('title', payload.title);
-        // formData.append('description', payload.description);
-        // formData.append('type', payload.type);
-        // formData.append('folderId', payload.folderId);
-        // formData.append('file', payload.file);
-        // const response = await api.post<ApiResponse<Resource>>(BASE_URL, formData);
-        await delay(800);
+        const formData = new FormData();
+        formData.append("folderId", String(payload.folderId));
+        formData.append("title", payload.title);
+        formData.append("description", payload.description);
+        formData.append("type", payload.type);
+        formData.append("sort_order", String(payload.sortOrder));
+        formData.append("is_active", String(payload.isActive));
+        formData.append("file", payload.file);
 
-        const newResource: Resource = {
-            id: `resource-${Date.now()}`,
-            title: payload.title,
-            description: payload.description,
-            type: payload.type,
-            fileUrl: `/files/${payload.file.name}`,
-            fileName: payload.file.name,
-            fileSize: payload.file.size,
-            folderId: payload.folderId,
-            uploadedAt: new Date().toISOString(),
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-        };
+        const response = await api.post<ApiResponse<Resource>>(BASE_URL, formData, {
+            meta: { multipart: true },
+        });
 
-        MOCK_RESOURCES.push(newResource);
-        return newResource;
+        if (response.error) {
+            throw response.error;
+        }
+
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
+        }
+
+        return response.data.data;
     },
 
     /**
      * Update an existing resource
      */
     update: async (
-        id: string,
+        id: string | number,
         payload: ResourceUpdatePayload
     ): Promise<Resource> => {
-        // TODO: Replace with real API call
-        // const response = await api.patch<ApiResponse<Resource>>(
-        //     `${BASE_URL}/${id}`,
-        //     payload
-        // );
-        await delay(500);
+        const formData = new FormData();
 
-        const resourceIndex = MOCK_RESOURCES.findIndex((r) => r.id === id);
-        if (resourceIndex === -1) {
-            throw new Error("Resource not found");
+        if (payload.folderId != null) {
+            formData.append("folderId", String(payload.folderId));
         }
-
-        const updatedResource: Resource = {
-            ...MOCK_RESOURCES[resourceIndex],
-            ...payload,
-            updatedAt: new Date().toISOString(),
-        };
-
+        if (payload.title != null) {
+            formData.append("title", payload.title);
+        }
+        if (payload.description != null) {
+            formData.append("description", payload.description);
+        }
+        if (payload.type != null) {
+            formData.append("type", payload.type);
+        }
+        if (payload.sortOrder != null) {
+            formData.append("sort_order", String(payload.sortOrder));
+        }
+        if (payload.isActive != null) {
+            formData.append("is_active", String(payload.isActive));
+        }
         if (payload.file) {
-            updatedResource.fileUrl = `/files/${payload.file.name}`;
-            updatedResource.fileName = payload.file.name;
-            updatedResource.fileSize = payload.file.size;
+            formData.append("file", payload.file);
         }
 
-        MOCK_RESOURCES[resourceIndex] = updatedResource;
-        return updatedResource;
+        const response = await api.post<ApiResponse<Resource>>(
+            `${BASE_URL}/${id}`,
+            formData,
+            { meta: { multipart: true } }
+        );
+
+        if (response.error) {
+            throw response.error;
+        }
+
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
+        }
+
+        return response.data.data;
     },
 
     /**
      * Delete a resource
      */
-    delete: async (id: string): Promise<void> => {
-        // TODO: Replace with real API call
-        // const response = await api.delete(`${BASE_URL}/${id}`);
-        await delay(500);
+    delete: async (id: string | number): Promise<void> => {
+        const response = await api.delete<ApiResponse<unknown>>(
+            `${BASE_URL}/${id}`
+        );
 
-        const resourceIndex = MOCK_RESOURCES.findIndex((r) => r.id === id);
-        if (resourceIndex === -1) {
-            throw new Error("Resource not found");
+        if (response.error) {
+            throw response.error;
         }
-
-        MOCK_RESOURCES.splice(resourceIndex, 1);
     },
 
     /**
      * Move a resource to another folder
      */
     move: async (payload: MoveResourcePayload): Promise<Resource> => {
-        // TODO: Replace with real API call
-        // const response = await api.patch<ApiResponse<Resource>>(
-        //     `${BASE_URL}/${payload.resourceId}/move`,
-        //     { targetFolderId: payload.targetFolderId }
-        // );
-        await delay(500);
-
-        const resourceIndex = MOCK_RESOURCES.findIndex(
-            (r) => r.id === payload.resourceId
-        );
-        if (resourceIndex === -1) {
-            throw new Error("Resource not found");
-        }
-
-        const updatedResource: Resource = {
-            ...MOCK_RESOURCES[resourceIndex],
-            folderId: payload.targetFolderId,
-            updatedAt: new Date().toISOString(),
-        };
-
-        MOCK_RESOURCES[resourceIndex] = updatedResource;
-        return updatedResource;
+        throw new Error("Not implemented");
     },
 };
 

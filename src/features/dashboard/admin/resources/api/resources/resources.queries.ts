@@ -23,7 +23,7 @@ export function useResourcesList(params: ResourcesListParams, enabled = true) {
 /**
  * Hook to fetch a single resource by ID
  */
-export function useResource(id: string, enabled = true) {
+export function useResource(id: string | number, enabled = true) {
     return useQuery({
         queryKey: resourceKeys.detail(id),
         queryFn: ({ signal }) => resourcesApi.getById(id, signal),

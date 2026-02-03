@@ -29,7 +29,11 @@ export function EditResource() {
     }>();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const { data: resource, isLoading } = useResource(resourceId || "");
+    const numericResourceId = resourceId ? Number(resourceId) : undefined;
+    const { data: resource, isLoading } = useResource(
+        numericResourceId || "",
+        !!numericResourceId
+    );
     const updateResource = useUpdateResource();
 
     const [formData, setFormData] = useState({
@@ -71,12 +75,12 @@ export function EditResource() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!resourceId || !formData.title || !formData.description) {
+        if (!numericResourceId || !formData.title || !formData.description) {
             return;
         }
 
         await updateResource.mutateAsync({
-            id: resourceId,
+            id: numericResourceId,
             payload: {
                 title: formData.title,
                 description: formData.description,

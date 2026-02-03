@@ -8,6 +8,19 @@
     "resources": "Resources",
     "noFolders": "No folders found",
     "noFoldersDescription": "Create a new folder to start organizing your resources.",
+    "toasts": {
+        "folderCreated": "Folder created successfully",
+        "folderCreateFailed": "Failed to create folder",
+        "folderUpdated": "Folder updated successfully",
+        "folderUpdateFailed": "Failed to update folder",
+        "folderDeleted": "Folder deleted successfully",
+        "folderDeleteFailed": "Failed to delete folder"
+    },
+    "pagination": {
+        "prev": "Previous",
+        "next": "Next",
+        "page": "Page {{current}} of {{total}}"
+    },
     "breadcrumb": {
         "resources": "Resources",
         "folder": "Folder",

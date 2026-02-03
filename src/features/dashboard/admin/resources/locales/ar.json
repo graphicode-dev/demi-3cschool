@@ -8,6 +8,19 @@
     "resources": "الموارد",
     "noFolders": "لا توجد مجلدات",
     "noFoldersDescription": "أنشئ مجلداً جديداً لبدء تنظيم مواردك.",
+    "toasts": {
+        "folderCreated": "تم إنشاء المجلد بنجاح",
+        "folderCreateFailed": "فشل إنشاء المجلد",
+        "folderUpdated": "تم تحديث المجلد بنجاح",
+        "folderUpdateFailed": "فشل تحديث المجلد",
+        "folderDeleted": "تم حذف المجلد بنجاح",
+        "folderDeleteFailed": "فشل حذف المجلد"
+    },
+    "pagination": {
+        "prev": "السابق",
+        "next": "التالي",
+        "page": "صفحة {{current}} من {{total}}"
+    },
     "breadcrumb": {
         "resources": "الموارد",
         "folder": "مجلد",

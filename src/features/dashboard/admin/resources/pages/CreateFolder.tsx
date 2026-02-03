@@ -10,32 +10,41 @@ import { useTranslation } from "react-i18next";
 import { Save } from "lucide-react";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useCreateFolder } from "../api";
-import { MOCK_GRADES, MOCK_TERMS } from "../mocks";
+import { useGrades } from "@/features/dashboard/admin/systemManagements/api";
+import { useProgramsCurriculumList } from "@/features/dashboard/admin/programs/api";
 
 export function CreateFolder() {
     const { t } = useTranslation("adminResources");
     const navigate = useNavigate();
     const createFolder = useCreateFolder();
 
+    const { data: gradesData } = useGrades();
+    const { data: programs = [] } = useProgramsCurriculumList();
+
     const [formData, setFormData] = useState({
         name: "",
         gradeId: "",
-        termId: "",
+        programCurriculumId: "",
         description: "",
     });
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!formData.name || !formData.gradeId || !formData.termId) {
+        if (
+            !formData.name ||
+            !formData.gradeId ||
+            !formData.programCurriculumId
+        ) {
             return;
         }
 
         await createFolder.mutateAsync({
             name: formData.name,
-            gradeId: formData.gradeId,
-            termId: formData.termId,
+            gradeId: Number(formData.gradeId),
+            programCurriculumId: Number(formData.programCurriculumId),
             description: formData.description || undefined,
+            isActive: 1,
         });
 
         navigate("/admin/resources");
@@ -100,8 +109,11 @@ export function CreateFolder() {
                                     <option value="">
                                         {t("folder.selectGrade")}
                                     </option>
-                                    {MOCK_GRADES.map((grade) => (
-                                        <option key={grade.id} value={grade.id}>
+                                    {(gradesData?.items ?? []).map((grade) => (
+                                        <option
+                                            key={grade.id}
+                                            value={String(grade.id)}
+                                        >
                                             {grade.name}
                                         </option>
                                     ))}
@@ -114,11 +126,11 @@ export function CreateFolder() {
                                     <span className="text-error-500">*</span>
                                 </label>
                                 <select
-                                    value={formData.termId}
+                                    value={formData.programCurriculumId}
                                     onChange={(e) =>
                                         setFormData({
                                             ...formData,
-                                            termId: e.target.value,
+                                            programCurriculumId: e.target.value,
                                         })
                                     }
                                     className="w-full px-4 py-3 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-brand-500"
@@ -127,9 +139,12 @@ export function CreateFolder() {
                                     <option value="">
                                         {t("folder.selectTerm")}
                                     </option>
-                                    {MOCK_TERMS.map((term) => (
-                                        <option key={term.id} value={term.id}>
-                                            {term.name}
+                                    {programs.map((program) => (
+                                        <option
+                                            key={program.id}
+                                            value={String(program.id)}
+                                        >
+                                            {program.caption}
                                         </option>
                                     ))}
                                 </select>

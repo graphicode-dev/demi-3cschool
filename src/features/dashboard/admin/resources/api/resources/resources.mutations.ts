@@ -12,7 +12,6 @@ import { useToast } from "@/design-system/hooks/useToast";
 import type {
     ResourceCreatePayload,
     ResourceUpdatePayload,
-    MoveResourcePayload,
 } from "../../types";
 
 /**
@@ -57,7 +56,7 @@ export function useUpdateResource() {
             id,
             payload,
         }: {
-            id: string;
+            id: string | number;
             payload: ResourceUpdatePayload;
         }) => resourcesApi.update(id, payload),
         onSuccess: (_, variables) => {
@@ -87,7 +86,7 @@ export function useDeleteResource() {
     const toast = useToast();
 
     return useMutation({
-        mutationFn: (id: string) => resourcesApi.delete(id),
+        mutationFn: (id: string | number) => resourcesApi.delete(id),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: resourceKeys.all });
             queryClient.invalidateQueries({ queryKey: folderKeys.all });
@@ -100,33 +99,6 @@ export function useDeleteResource() {
             toast.addToast({
                 type: "error",
                 message: error.message || "Failed to delete resource",
-            });
-        },
-    });
-}
-
-/**
- * Hook to move a resource to another folder
- */
-export function useMoveResource() {
-    const queryClient = useQueryClient();
-    const toast = useToast();
-
-    return useMutation({
-        mutationFn: (payload: MoveResourcePayload) =>
-            resourcesApi.move(payload),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: resourceKeys.all });
-            queryClient.invalidateQueries({ queryKey: folderKeys.all });
-            toast.addToast({
-                type: "success",
-                message: "Resource moved successfully",
-            });
-        },
-        onError: (error: Error) => {
-            toast.addToast({
-                type: "error",
-                message: error.message || "Failed to move resource",
             });
         },
     });

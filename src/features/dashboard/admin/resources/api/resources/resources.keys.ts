@@ -30,7 +30,7 @@ export const resourceKeys = {
     /**
      * Key for resources by folder ID
      */
-    byFolder: (folderId: string) =>
+    byFolder: (folderId: string | number) =>
         [...resourceKeys.all, "byFolder", folderId] as const,
 
     /**
@@ -41,7 +41,7 @@ export const resourceKeys = {
     /**
      * Key for specific resource detail
      */
-    detail: (id: string) => [...resourceKeys.details(), id] as const,
+    detail: (id: string | number) => [...resourceKeys.details(), id] as const,
 };
 
 /**

@@ -4,7 +4,7 @@
  * Page for viewing folder contents with resource table and type tabs.
  */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
@@ -15,7 +15,6 @@ import {
     Music,
     Eye,
     Pencil,
-    ArrowRightLeft,
     Trash2,
 } from "lucide-react";
 import PageWrapper from "@/design-system/components/PageWrapper";
@@ -24,7 +23,6 @@ import { LoadingState } from "@/design-system/components/LoadingState";
 import { ConfirmDialog } from "@/design-system/components/ConfirmDialog";
 import { useFolder } from "../api/folders";
 import { useResourcesList, useDeleteResource } from "../api/resources";
-import { MoveResourceModal } from "../components/MoveResourceModal";
 import { ResourcePreviewModal } from "../components/ResourcePreviewModal";
 import type { Resource, ResourceType } from "../types";
 
@@ -50,21 +48,35 @@ export function FolderDetails() {
     const navigate = useNavigate();
     const { folderId } = useParams<{ folderId: string }>();
     const [activeTab, setActiveTab] = useState<TabType>("all");
+    const [page, setPage] = useState<number>(1);
     const [selectedResource, setSelectedResource] = useState<Resource | null>(
         null
     );
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-    const [showMoveModal, setShowMoveModal] = useState(false);
     const [showPreviewModal, setShowPreviewModal] = useState(false);
+
+    useEffect(() => {
+        setPage(1);
+    }, [activeTab, folderId]);
+
+    const numericFolderId = folderId ? Number(folderId) : undefined;
 
     const { data: folder, isLoading: folderLoading } = useFolder(
         folderId || ""
     );
-    const { data: resources = [], isLoading: resourcesLoading } =
-        useResourcesList({
-            folderId: folderId || "",
-            type: activeTab,
-        });
+    const { data: resourcesPage, isLoading: resourcesLoading } =
+        useResourcesList(
+            {
+                folderId: numericFolderId || "",
+                type: activeTab,
+                page,
+            },
+            !!numericFolderId
+        );
+
+    const resources = resourcesPage?.items ?? [];
+    const currentPage = resourcesPage?.currentPage ?? page;
+    const lastPage = resourcesPage?.lastPage ?? 1;
 
     const deleteResource = useDeleteResource();
 
@@ -81,11 +93,6 @@ export function FolderDetails() {
         navigate(
             `/admin/resources/folder/${folderId}/resource/${resource.id}/edit`
         );
-    };
-
-    const handleMove = (resource: Resource) => {
-        setSelectedResource(resource);
-        setShowMoveModal(true);
     };
 
     const handleDelete = (resource: Resource) => {
@@ -261,15 +268,6 @@ export function FolderDetails() {
                                                 </button>
                                                 <button
                                                     onClick={() =>
-                                                        handleMove(resource)
-                                                    }
-                                                    className="p-1.5 text-brand-500 hover:bg-brand-50 dark:hover:bg-brand-900/20 rounded transition-colors"
-                                                    title="Move"
-                                                >
-                                                    <ArrowRightLeft className="size-4" />
-                                                </button>
-                                                <button
-                                                    onClick={() =>
                                                         handleDelete(resource)
                                                     }
                                                     className="p-1.5 text-error-500 hover:bg-error-50 dark:hover:bg-error-900/20 rounded transition-colors"
@@ -287,6 +285,34 @@ export function FolderDetails() {
                 </div>
             )}
 
+            {/* Pagination */}
+            {lastPage > 1 && (
+                <div className="flex items-center justify-between mt-6">
+                    <button
+                        type="button"
+                        onClick={() => setPage((p) => Math.max(1, p - 1))}
+                        disabled={currentPage <= 1}
+                        className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {t("pagination.prev")}
+                    </button>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                        {t("pagination.page")} {currentPage}{" "}
+                        {t("pagination.of")} {lastPage}
+                    </span>
+                    <button
+                        type="button"
+                        onClick={() =>
+                            setPage((p) => Math.min(lastPage, p + 1))
+                        }
+                        disabled={currentPage >= lastPage}
+                        className="px-4 py-2 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {t("pagination.next")}
+                    </button>
+                </div>
+            )}
+
             {/* Delete Confirmation Dialog */}
             <ConfirmDialog
                 isOpen={showDeleteDialog}
@@ -299,19 +325,6 @@ export function FolderDetails() {
                 onConfirm={confirmDelete}
                 loading={deleteResource.isPending}
             />
-
-            {/* Move Resource Modal */}
-            {selectedResource && (
-                <MoveResourceModal
-                    isOpen={showMoveModal}
-                    onClose={() => {
-                        setShowMoveModal(false);
-                        setSelectedResource(null);
-                    }}
-                    resource={selectedResource}
-                    currentFolder={folder}
-                />
-            )}
 
             {/* Resource Preview Modal */}
             {selectedResource && (

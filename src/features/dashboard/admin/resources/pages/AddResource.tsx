@@ -57,8 +57,10 @@ export function AddResource() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        const numericFolderId = folderId ? Number(folderId) : undefined;
+
         if (
-            !folderId ||
+            !numericFolderId ||
             !formData.title ||
             !formData.description ||
             !selectedFile
@@ -70,7 +72,9 @@ export function AddResource() {
             title: formData.title,
             description: formData.description,
             type: formData.type,
-            folderId,
+            folderId: numericFolderId,
+            sortOrder: 0,
+            isActive: 1,
             file: selectedFile,
         });
 
@@ -214,7 +218,8 @@ export function AddResource() {
                             {t("resource.assignedTo")}
                         </p>
                         <p className="text-sm font-medium text-gray-900 dark:text-white">
-                            {folder.grade.name} • {folder.term.name}
+                            {folder.grade.name} •{" "}
+                            {folder.programsCurriculum.caption}
                         </p>
                     </div>
                 )}

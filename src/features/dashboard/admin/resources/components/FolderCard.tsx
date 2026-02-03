@@ -7,9 +7,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { MoreVertical, Pencil, Trash2, FileText } from "lucide-react";
+import { MoreVertical, Pencil, Trash2, FileText, File } from "lucide-react";
 import type { ResourceFolder } from "../types";
 import { ConfirmDialog } from "@/design-system/components/ConfirmDialog";
+import ActionsDropdown, {
+    DropdownAction,
+} from "@/design-system/components/ActionsDropdown";
 import { useDeleteFolder } from "../api";
 
 interface FolderCardProps {
@@ -20,8 +23,7 @@ interface FolderCardProps {
 export function FolderCard({ folder, index }: FolderCardProps) {
     const { t } = useTranslation("adminResources");
     const navigate = useNavigate();
-    const [showMenu, setShowMenu] = useState(false);
-    const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const [deleteTargetId, setDeleteTargetId] = useState<number | null>(null);
 
     const deleteFolder = useDeleteFolder();
 
@@ -29,30 +31,35 @@ export function FolderCard({ folder, index }: FolderCardProps) {
         navigate(`/admin/resources/folder/${folder.id}`);
     };
 
-    const handleEdit = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setShowMenu(false);
-        navigate(`/admin/resources/folder/${folder.id}/edit`);
-    };
-
-    const handleDelete = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setShowMenu(false);
-        setShowDeleteDialog(true);
-    };
-
     const confirmDelete = async () => {
-        await deleteFolder.mutateAsync(folder.id);
-        setShowDeleteDialog(false);
-    };
-
-    const toggleMenu = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setShowMenu(!showMenu);
+        if (deleteTargetId == null) return;
+        await deleteFolder.mutateAsync(deleteTargetId);
+        setDeleteTargetId(null);
     };
 
     // Check if folder has resources for styling
-    const hasResources = folder.resourceCount > 0;
+    const hasResources = folder.resourcesCount > 0;
+
+    const folderActions: DropdownAction[] = [
+        {
+            id: "edit",
+            label: t("folder.edit"),
+            icon: <Pencil className="size-4" />,
+            onClick: (itemId) => {
+                navigate(`/admin/resources/folder/${itemId}/edit`);
+            },
+        },
+        {
+            id: "delete",
+            label: t("folder.delete"),
+            icon: <Trash2 className="size-4" />,
+            onClick: (itemId) => {
+                setDeleteTargetId(Number(itemId));
+            },
+            className:
+                "text-error-600 dark:text-error-400 hover:bg-error-50 dark:hover:bg-error-900/20",
+        },
+    ];
 
     return (
         <>
@@ -62,80 +69,57 @@ export function FolderCard({ folder, index }: FolderCardProps) {
             >
                 {/* Decorative ellipse in bottom-right */}
                 <div
-                    className={`absolute -bottom-4 -right-4 w-16 h-16 rounded-full ${
+                    className={`absolute -bottom-10 -right-10 w-28 h-28 rounded-full ${
                         hasResources
-                            ? "bg-brand-100 dark:bg-brand-900/30"
-                            : "bg-gray-100 dark:bg-gray-700/30"
+                            ? "bg-brand-100 dark:bg-brand-900/20"
+                            : "bg-gray-100 dark:bg-gray-700/20"
                     }`}
                 />
 
-                {/* Menu button */}
-                <button
-                    onClick={toggleMenu}
-                    className="absolute top-4 right-4 p-0.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors z-10"
+                {/* Actions menu */}
+                <div
+                    className="absolute top-4 right-4 z-10"
+                    onClick={(e) => e.stopPropagation()}
                 >
-                    <MoreVertical className="size-5 text-gray-400" />
-                </button>
+                    <ActionsDropdown
+                        itemId={String(folder.id)}
+                        actions={folderActions}
+                        triggerIcon={
+                            <MoreVertical className="size-5 text-gray-400" />
+                        }
+                        triggerClassName="p-0.5 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                        width="w-40"
+                    />
+                </div>
 
-                {/* Dropdown menu */}
-                {showMenu && (
-                    <>
-                        <div
-                            className="fixed inset-0 z-20"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setShowMenu(false);
-                            }}
-                        />
-                        <div className="absolute top-10 right-4 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-30 min-w-[120px]">
-                            <button
-                                onClick={handleEdit}
-                                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                            >
-                                <Pencil className="size-4" />
-                                {t("folder.edit")}
-                            </button>
-                            <button
-                                onClick={handleDelete}
-                                className="w-full flex items-center gap-2 px-3 py-2 text-sm text-error-500 hover:bg-error-50 dark:hover:bg-error-900/20"
-                            >
-                                <Trash2 className="size-4" />
-                                {t("folder.delete")}
-                            </button>
-                        </div>
-                    </>
-                )}
-
-                {/* Content - Horizontal layout */}
-                <div className="flex gap-4 items-start">
-                    {/* Icon container */}
+                {/* Content */}
+                <div className="flex gap-4 items-center h-full">
+                    {/* Icon tile */}
                     <div
-                        className={`flex items-center justify-center w-10 h-12 rounded-xl shrink-0 ${
+                        className={`flex items-center justify-center w-14 h-14 rounded-2xl shrink-0 ${
                             hasResources
-                                ? "bg-brand-500/15 dark:bg-brand-500/20"
+                                ? "bg-brand-100 dark:bg-brand-900/25"
                                 : "bg-gray-100 dark:bg-gray-700"
                         }`}
                     >
-                        <FileText
-                            className={`size-5 ${
+                        <File
+                            className={`size-6 ${
                                 hasResources
-                                    ? "text-brand-500"
+                                    ? "text-brand-600 dark:text-brand-400"
                                     : "text-gray-400"
                             }`}
                         />
                     </div>
 
-                    {/* Text content */}
-                    <div className="flex flex-col gap-1.5 min-w-0 pr-6">
-                        {/* Folder name */}
-                        <h3 className="text-sm font-bold text-gray-900 dark:text-white line-clamp-2 leading-5">
+                    {/* Text */}
+                    <div className="flex flex-col min-w-0 pr-8 w-full">
+                        <h3 className="text-lg font-extrabold text-gray-900 dark:text-white line-clamp-1 leading-6">
                             {folder.name}
                         </h3>
 
-                        {/* Resource count badge */}
-                        <div className="inline-flex">
-                            <span className="bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 text-xs font-semibold px-2.5 py-1 rounded-md">
-                                {folder.resourceCount} {t("resources")}
+                        <div className="mt-3">
+                            <span className="inline-flex items-center justify-center bg-gray-100 dark:bg-gray-700/60 text-gray-600 dark:text-gray-300 text-sm font-semibold px-8 py-2 rounded-2xl">
+                                {folder.resourcesCount} {t("resources")}
                             </span>
                         </div>
                     </div>
@@ -144,8 +128,8 @@ export function FolderCard({ folder, index }: FolderCardProps) {
 
             {/* Delete confirmation dialog */}
             <ConfirmDialog
-                isOpen={showDeleteDialog}
-                onClose={() => setShowDeleteDialog(false)}
+                isOpen={deleteTargetId != null}
+                onClose={() => setDeleteTargetId(null)}
                 title={t("folder.deleteConfirmTitle")}
                 message={t("folder.deleteConfirmMessage")}
                 variant="danger"

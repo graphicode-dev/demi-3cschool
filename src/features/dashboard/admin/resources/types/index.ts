@@ -21,28 +21,31 @@ export type ResourceType = "video" | "file" | "image" | "audio";
  * Grade reference
  */
 export interface GradeRef {
-    id: string;
+    id: number;
     name: string;
+    code?: string;
 }
 
 /**
- * Term reference
+ * Programs Curriculum reference
  */
-export interface TermRef {
-    id: string;
+export interface ProgramCurriculumRef {
+    id: number;
     name: string;
+    caption: string;
 }
 
 /**
  * Resource Folder entity
  */
 export interface ResourceFolder {
-    id: string;
+    id: number;
     name: string;
     description?: string;
+    isActive: boolean;
+    resourcesCount: number;
     grade: GradeRef;
-    term: TermRef;
-    resourceCount: number;
+    programsCurriculum: ProgramCurriculumRef;
     createdAt: string;
     updatedAt: string;
 }
@@ -51,15 +54,17 @@ export interface ResourceFolder {
  * Resource entity
  */
 export interface Resource {
-    id: string;
+    id: number;
     title: string;
     description: string;
     type: ResourceType;
     fileUrl: string;
     fileName: string;
     fileSize: number;
-    folderId: string;
+    folderId: number;
     folder?: ResourceFolder;
+    sortOrder?: number;
+    isActive?: boolean;
     uploadedAt: string;
     createdAt: string;
     updatedAt: string;
@@ -73,8 +78,8 @@ export interface Resource {
  * List query parameters for folders
  */
 export interface FoldersListParams {
-    gradeId?: string;
-    termId?: string;
+    gradeId?: number;
+    programId?: number;
     page?: number;
 }
 
@@ -82,7 +87,7 @@ export interface FoldersListParams {
  * List query parameters for resources
  */
 export interface ResourcesListParams {
-    folderId: string;
+    folderId: string | number;
     type?: ResourceType | "all";
     page?: number;
     search?: string;
@@ -97,9 +102,10 @@ export interface ResourcesListParams {
  */
 export interface FolderCreatePayload {
     name: string;
-    gradeId: string;
-    termId: string;
+    gradeId: number;
+    programCurriculumId: number;
     description?: string;
+    isActive: number;
 }
 
 /**
@@ -107,9 +113,10 @@ export interface FolderCreatePayload {
  */
 export interface FolderUpdatePayload {
     name?: string;
-    gradeId?: string;
-    termId?: string;
+    gradeId?: number;
+    programCurriculumId?: number;
     description?: string;
+    isActive?: number;
 }
 
 /**
@@ -119,7 +126,9 @@ export interface ResourceCreatePayload {
     title: string;
     description: string;
     type: ResourceType;
-    folderId: string;
+    folderId: number;
+    sortOrder: number;
+    isActive: number;
     file: File;
 }
 
@@ -130,6 +139,9 @@ export interface ResourceUpdatePayload {
     title?: string;
     description?: string;
     type?: ResourceType;
+    folderId?: number;
+    sortOrder?: number;
+    isActive?: number;
     file?: File;
 }
 
@@ -137,6 +149,6 @@ export interface ResourceUpdatePayload {
  * Move resource payload
  */
 export interface MoveResourcePayload {
-    resourceId: string;
-    targetFolderId: string;
+    resourceId: number;
+    targetFolderId: number;
 }

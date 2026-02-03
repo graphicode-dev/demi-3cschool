@@ -3,158 +3,126 @@
  *
  * Raw API functions for resource folders domain.
  * These are pure functions that make HTTP requests.
- *
- * TODO: Replace mock implementations with real API calls
  */
 
+import { api } from "@/shared/api/client";
+import type { ApiResponse, PaginatedData } from "@/shared/api";
 import type {
     ResourceFolder,
     FoldersListParams,
     FolderCreatePayload,
     FolderUpdatePayload,
 } from "../../types";
-import { getMockFolders, getMockFolderById, MOCK_FOLDERS } from "../../mocks";
 
-const BASE_URL = "/resource-folders";
-
-// Simulate API delay
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const BASE_URL = "/learning-resource-folders";
 
 /**
  * Resource Folders API functions
  */
 export const foldersApi = {
     /**
-     * Get list of all folders (with optional filters)
+     * Get list of all folders (server-side filtering + pagination)
      */
     getList: async (
         params?: FoldersListParams,
         signal?: AbortSignal
-    ): Promise<ResourceFolder[]> => {
-        // TODO: Replace with real API call
-        // const response = await api.get<ApiResponse<ResourceFolder[]>>(BASE_URL, {
-        //     params,
-        //     signal,
-        // });
-        await delay(300);
+    ): Promise<PaginatedData<ResourceFolder>> => {
+        const queryParams: Record<string, unknown> = {};
 
-        if (signal?.aborted) {
-            throw new Error("Request aborted");
+        if (params?.page) queryParams.page = params.page;
+        if (params?.gradeId) queryParams.grade_id = params.gradeId;
+        if (params?.programId) queryParams.program_id = params.programId;
+
+        const response = await api.get<ApiResponse<PaginatedData<ResourceFolder>>>(
+            BASE_URL,
+            {
+                params: queryParams,
+                signal,
+            }
+        );
+
+        if (response.error) {
+            throw response.error;
         }
 
-        return getMockFolders(params?.gradeId, params?.termId);
+        return response.data.data;
     },
 
     /**
      * Get single folder by ID
      */
     getById: async (
-        id: string,
+        id: string | number,
         signal?: AbortSignal
     ): Promise<ResourceFolder> => {
-        // TODO: Replace with real API call
-        // const response = await api.get<ApiResponse<ResourceFolder>>(
-        //     `${BASE_URL}/${id}`,
-        //     { signal }
-        // );
-        await delay(200);
+        const response = await api.get<ApiResponse<ResourceFolder>>(
+            `${BASE_URL}/${id}`,
+            { signal }
+        );
 
-        if (signal?.aborted) {
-            throw new Error("Request aborted");
+        if (response.error) {
+            throw response.error;
         }
 
-        const folder = getMockFolderById(id);
-        if (!folder) {
-            throw new Error("Folder not found");
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
         }
 
-        return folder;
+        return response.data.data;
     },
 
     /**
      * Create a new folder
      */
     create: async (payload: FolderCreatePayload): Promise<ResourceFolder> => {
-        // TODO: Replace with real API call
-        // const response = await api.post<ApiResponse<ResourceFolder>>(BASE_URL, payload);
-        await delay(500);
+        const response = await api.post<ApiResponse<ResourceFolder>>(
+            BASE_URL,
+            payload
+        );
 
-        const newFolder: ResourceFolder = {
-            id: `folder-${Date.now()}`,
-            name: payload.name,
-            description: payload.description,
-            grade: { id: payload.gradeId, name: `Grade ${payload.gradeId}` },
-            term: {
-                id: payload.termId,
-                name:
-                    payload.termId === "term-1" ? "First Term" : "Second Term",
-            },
-            resourceCount: 0,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString(),
-        };
+        if (response.error) {
+            throw response.error;
+        }
 
-        MOCK_FOLDERS.push(newFolder);
-        return newFolder;
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
+        }
+
+        return response.data.data;
     },
 
     /**
      * Update an existing folder
      */
     update: async (
-        id: string,
+        id: string | number,
         payload: FolderUpdatePayload
     ): Promise<ResourceFolder> => {
-        // TODO: Replace with real API call
-        // const response = await api.patch<ApiResponse<ResourceFolder>>(
-        //     `${BASE_URL}/${id}`,
-        //     payload
-        // );
-        await delay(500);
+        const response = await api.patch<ApiResponse<ResourceFolder>>(
+            `${BASE_URL}/${id}`,
+            payload
+        );
 
-        const folderIndex = MOCK_FOLDERS.findIndex((f) => f.id === id);
-        if (folderIndex === -1) {
-            throw new Error("Folder not found");
+        if (response.error) {
+            throw response.error;
         }
 
-        const updatedFolder = {
-            ...MOCK_FOLDERS[folderIndex],
-            ...payload,
-            updatedAt: new Date().toISOString(),
-        };
-
-        if (payload.gradeId) {
-            updatedFolder.grade = {
-                id: payload.gradeId,
-                name: `Grade ${payload.gradeId}`,
-            };
-        }
-        if (payload.termId) {
-            updatedFolder.term = {
-                id: payload.termId,
-                name:
-                    payload.termId === "term-1" ? "First Term" : "Second Term",
-            };
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
         }
 
-        MOCK_FOLDERS[folderIndex] = updatedFolder;
-        return updatedFolder;
+        return response.data.data;
     },
 
     /**
      * Delete a folder
      */
-    delete: async (id: string): Promise<void> => {
-        // TODO: Replace with real API call
-        // const response = await api.delete(`${BASE_URL}/${id}`);
-        await delay(500);
+    delete: async (id: string | number): Promise<void> => {
+        const response = await api.delete(`${BASE_URL}/${id}`);
 
-        const folderIndex = MOCK_FOLDERS.findIndex((f) => f.id === id);
-        if (folderIndex === -1) {
-            throw new Error("Folder not found");
+        if (response.error) {
+            throw response.error;
         }
-
-        MOCK_FOLDERS.splice(folderIndex, 1);
     },
 };
 
