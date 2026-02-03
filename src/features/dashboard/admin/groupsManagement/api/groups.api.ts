@@ -156,12 +156,15 @@ export const groupsApi = {
         params: GroupsByLevelParams,
         signal?: AbortSignal
     ): Promise<Group[] | PaginatedData<Group>> => {
-        const { levelId, page } = params;
+        const { levelId, page, search } = params;
 
         const response = await api.get<
             ListResponse<Group> | PaginatedResponse<Group>
         >(`${BASE_URL}/level/${levelId}`, {
-            params: { ...(page ? { page } : {}) },
+            params: {
+                ...(page ? { page } : {}),
+                ...(search ? { search } : {}),
+            },
             signal,
         });
 

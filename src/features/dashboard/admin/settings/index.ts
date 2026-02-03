@@ -10,3 +10,6 @@ export * from "./trainingCenters";
 
 // Teachers sub-feature
 export * from "./teachers";
+
+// Students sub-feature
+export * from "./students";

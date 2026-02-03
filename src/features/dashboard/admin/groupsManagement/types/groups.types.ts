@@ -225,6 +225,7 @@ export interface GroupsListParams {
 export interface GroupsByLevelParams {
     levelId: string;
     page?: number;
+    search?: string;
 }
 
 // ============================================================================

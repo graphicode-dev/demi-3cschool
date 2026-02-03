@@ -409,17 +409,17 @@ export default function RegularGroupViewPage() {
                         </h3>
 
                         <div className="bg-brand-50 dark:bg-brand-900/20 rounded-lg border border-brand-200 dark:border-brand-800 p-6 flex flex-col items-center text-center">
-                            {groupData?.trainer?.name ? (
+                            {groupData?.primaryTeacher?.name ? (
                                 <>
                                     <div className="flex items-center justify-center w-16 h-16 rounded-full bg-brand-500 text-white text-lg font-bold mb-4 shrink-0">
-                                        {groupData.trainer.name
+                                        {groupData.primaryTeacher.name
                                             .split(" ")
                                             .map((n: string) => n[0])
                                             .join("")
                                             .toUpperCase()}
                                     </div>
                                     <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
-                                        {groupData.trainer.name}
+                                        {groupData.primaryTeacher.name}
                                     </h4>
                                     <p className="text-base text-gray-600 dark:text-gray-400 mb-6">
                                         Trainer
@@ -446,7 +446,7 @@ export default function RegularGroupViewPage() {
                                 )}
                                 className="px-4 py-2 bg-brand-500 text-white text-sm font-semibold rounded-lg hover:bg-brand-600 transition-colors"
                             >
-                                {groupData?.trainer?.name
+                                {groupData?.primaryTeacher?.name
                                     ? "Manage Trainer"
                                     : "Assign Trainer"}
                             </Link>

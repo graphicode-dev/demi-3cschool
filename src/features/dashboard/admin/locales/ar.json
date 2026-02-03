@@ -9,7 +9,8 @@
         "trainingCenters": "مراكز التدريب",
         "resources": "إدارة الموارد",
         "grades": "المراحل",
-        "teachers": "المدرسين"
+        "teachers": "المدرسين",
+        "students": "الطلاب"
     },
     "title": "الإدارة"
 }

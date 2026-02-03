@@ -9,7 +9,8 @@
         "trainingCenters": "Training Centers",
         "resources": "Resources",
         "grades": "Grades",
-        "teachers": "Teachers"
+        "teachers": "Teachers",
+        "students": "Students"
     },
     "title": "Admin"
 }

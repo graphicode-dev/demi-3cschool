@@ -24,6 +24,7 @@ import { communityManagementRoutes } from "../communityManagement/navigation";
 import { slotsRoutes } from "../settings/slots/navigation";
 import { trainingCentersRoutes } from "../settings/trainingCenters/navigation";
 import { teachersRoutes } from "../settings/teachers/navigation";
+import { studentsRoutes } from "../settings/students/navigation";
 
 // Import admin feature route arrays
 import {
@@ -435,6 +436,8 @@ export const adminRouteModule: FeatureRouteModule = {
             ...trainingCentersRoutes,
             // Teachers (under settings)
             ...teachersRoutes,
+            // Students (under settings)
+            ...studentsRoutes,
             // Shared features (profile, chat, certificates, reports)
             ...adminOnlySharedRoutes,
             // Community Management
