@@ -1,13 +1,15 @@
-import { useMemo, useState, useCallback, useEffect } from "react";
+import { useMemo, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { DynamicTable } from "@/design-system/components/table";
+import {
+    DynamicTable,
+    useServerTableSearch,
+} from "@/design-system/components/table";
 import type { TableColumn, TableData } from "@/shared/types";
 import { StatCard } from "../components";
 import { GroupCard } from "../components/GroupCard";
 import { useGroupsByLevel, type Group, type PaginatedData } from "../api";
 import PageWrapper from "@/design-system/components/PageWrapper";
-import { useDebounce } from "@/shared/observability";
 
 const TotalGroupsIcon = () => (
     <svg
@@ -105,8 +107,11 @@ function RegularGroupsPage() {
         levelId: string;
     }>();
     const [currentPage, setCurrentPage] = useState(1);
-    const [searchQuery, setSearchQuery] = useState("");
-    const debouncedSearchQuery = useDebounce(searchQuery, 400);
+    const { searchQuery, setSearchQuery, debouncedSearchQuery } =
+        useServerTableSearch({
+            delayMs: 400,
+            onDebouncedChange: () => setCurrentPage(1),
+        });
 
     // Build base path from URL params
     const basePath = `/admin/groups/grades/${gradeId}/levels/${levelId}`;
@@ -117,10 +122,6 @@ function RegularGroupsPage() {
         page: currentPage,
         search: debouncedSearchQuery || undefined,
     });
-
-    useEffect(() => {
-        setCurrentPage(1);
-    }, [debouncedSearchQuery]);
 
     // Check if data is paginated or array
     const isPaginated = data && "items" in data;

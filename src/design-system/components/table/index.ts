@@ -8,3 +8,5 @@ export { TableFilter, type GroupableColumn } from "./TableFilter";
 export { TableAvatar } from "./TableAvatar";
 export { SortableHeader } from "./SortableHeader";
 export { TableHead } from "./TableHead";
+
+export { useServerTableSearch } from "./hooks/useServerTableSearch";
