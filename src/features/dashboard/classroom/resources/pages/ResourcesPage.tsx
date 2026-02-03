@@ -4,31 +4,35 @@
  * Main page displaying all sessions with their resource counts.
  */
 
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { SessionCard } from "../components";
-import { mockSessions } from "../mockData";
 import { resourcesPaths } from "../navigation/paths";
 import type { Session } from "../types";
 import PageWrapper from "@/design-system/components/PageWrapper";
+import { useFoldersList } from "@/features/dashboard/admin/resources/api";
 
 export function ResourcesPage() {
     const { t } = useTranslation("resources");
     const navigate = useNavigate();
-    const [sessions, setSessions] = useState<Session[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        // Simulate API call
-        const loadSessions = async () => {
-            setIsLoading(true);
-            await new Promise((resolve) => setTimeout(resolve, 500));
-            setSessions(mockSessions);
-            setIsLoading(false);
-        };
-        loadSessions();
-    }, []);
+    const { data: foldersPage, isLoading } = useFoldersList({ page: 1 });
+    const folders = foldersPage?.items ?? [];
+
+    const sessions: Session[] = useMemo(
+        () =>
+            folders.map((folder, index) => ({
+                id: String(folder.id),
+                title: folder.name,
+                order: index,
+                resourceCount: folder.resourcesCount,
+                resources: [],
+                createdAt: folder.createdAt,
+                updatedAt: folder.updatedAt,
+            })),
+        [folders]
+    );
 
     const handleSessionClick = (session: Session) => {
         navigate(resourcesPaths.session(session.id));

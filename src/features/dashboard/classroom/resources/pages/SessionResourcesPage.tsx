@@ -4,7 +4,7 @@
  * Displays resources for a specific session with type filtering.
  */
 
-import { useState, useEffect, useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowLeft } from "lucide-react";
@@ -13,37 +13,68 @@ import {
     ResourceItem,
     ResourceEmptyState,
 } from "../components";
-import { getSessionById, getResourcesByType } from "../mockData";
 import { resourcesPaths } from "../navigation/paths";
 import type { Session, Resource, ResourceFilter } from "../types";
+import {
+    useFolder,
+    useResourcesList,
+} from "@/features/dashboard/admin/resources/api";
 
 export function SessionResourcesPage() {
     const { t } = useTranslation("resources");
     const { sessionId } = useParams<{ sessionId: string }>();
     const navigate = useNavigate();
 
-    const [session, setSession] = useState<Session | null>(null);
     const [activeFilter, setActiveFilter] = useState<ResourceFilter>("all");
-    const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        // Simulate API call
-        const loadSession = async () => {
-            setIsLoading(true);
-            await new Promise((resolve) => setTimeout(resolve, 300));
-            if (sessionId) {
-                const foundSession = getSessionById(sessionId);
-                setSession(foundSession || null);
-            }
-            setIsLoading(false);
+    const folderId = sessionId ? Number(sessionId) : undefined;
+    const { data: folder, isLoading: isFolderLoading } = useFolder(
+        folderId || "",
+        !!folderId
+    );
+    const { data: resourcesPage, isLoading: isResourcesLoading } =
+        useResourcesList(
+            {
+                folderId: folderId || "",
+                type: activeFilter,
+                page: 1,
+            },
+            !!folderId
+        );
+
+    const session: Session | null = useMemo(() => {
+        if (!folder) return null;
+        return {
+            id: String(folder.id),
+            title: folder.name,
+            order: 0,
+            resourceCount: folder.resourcesCount,
+            resources: [],
+            createdAt: folder.createdAt,
+            updatedAt: folder.updatedAt,
         };
-        loadSession();
-    }, [sessionId]);
+    }, [folder]);
 
-    const filteredResources = useMemo(() => {
-        if (!sessionId) return [];
-        return getResourcesByType(sessionId, activeFilter);
-    }, [sessionId, activeFilter]);
+    const filteredResources: Resource[] = useMemo(() => {
+        const items = resourcesPage?.items ?? [];
+        if (!folderId) return [];
+
+        return items.map((r) => ({
+            id: String(r.id),
+            title: r.title,
+            type: r.type,
+            url: r.fileUrl,
+            sessionId: String(r.folderId),
+            size:
+                typeof r.fileSize === "number"
+                    ? `${Math.max(1, Math.round(r.fileSize / 1024))} KB`
+                    : undefined,
+            createdAt: r.createdAt,
+            updatedAt: r.updatedAt,
+        }));
+    }, [resourcesPage?.items, folderId]);
+
+    const isLoading = isFolderLoading || isResourcesLoading;
 
     const handleBack = () => {
         navigate(resourcesPaths.root());
@@ -130,7 +161,12 @@ export function SessionResourcesPage() {
                     className="flex items-center gap-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 mb-2 text-xs"
                 >
                     <ArrowLeft className="w-3 h-3" />
-                    <span>{t("resources.actions.backToSessions", "Back to sessions")}</span>
+                    <span>
+                        {t(
+                            "resources.actions.backToSessions",
+                            "Back to sessions"
+                        )}
+                    </span>
                 </button>
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                     {session.title}
