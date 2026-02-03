@@ -1,0 +1,39 @@
+{
+    "title": "مراكز التدريب",
+    "description": "إدارة مراكز التدريب",
+    "loading": "جاري التحميل...",
+    "error": "فشل في التحميل",
+    "confirmDelete": "هل أنت متأكد؟",
+    "fields": {
+        "name": "الاسم",
+        "governorateId": "رقم المحافظة"
+    },
+    "actions": {
+        "create": "إنشاء",
+        "edit": "تعديل",
+        "view": "عرض",
+        "delete": "حذف",
+        "save": "حفظ",
+        "cancel": "إلغاء"
+    },
+    "messages": {
+        "createSuccess": "تم إنشاء مركز التدريب بنجاح",
+        "updateSuccess": "تم تحديث مركز التدريب بنجاح",
+        "deleteSuccess": "تم حذف مركز التدريب بنجاح"
+    },
+    "delete": {
+        "title": "حذف مركز التدريب",
+        "message": "هل أنت متأكد من حذف مركز التدريب؟ لا يمكن التراجع عن هذا الإجراء."
+    },
+    "table": {
+        "id": "المعرف",
+        "governorate": "المحافظة",
+        "status": "الحالة",
+        "createdAt": "تاريخ الإنشاء",
+        "actions": "الإجراءات"
+    },
+    "status": {
+        "active": "نشط",
+        "inactive": "غير نشط"
+    }
+}

@@ -22,6 +22,7 @@ import { adminSharedRoutes } from "@/features/dashboard/shared/navigation";
 import { ticketsManagementRoutes } from "../ticketsManagement/navigation";
 import { communityManagementRoutes } from "../communityManagement/navigation";
 import { slotsRoutes } from "../settings/slots/navigation";
+import { trainingCentersRoutes } from "../settings/trainingCenters/navigation";
 
 // Import admin feature route arrays
 import {
@@ -397,6 +398,8 @@ export const adminRouteModule: FeatureRouteModule = {
             })),
             // Slots (under settings)
             ...slotsRoutes,
+            // Training Centers (under settings)
+            ...trainingCentersRoutes,
             // Shared features (profile, chat, certificates, reports)
             ...adminOnlySharedRoutes,
             // Community Management

@@ -4,3 +4,6 @@
 
 // Slots sub-feature
 export * from "./slots";
+
+// Training Centers sub-feature
+export * from "./trainingCenters";
