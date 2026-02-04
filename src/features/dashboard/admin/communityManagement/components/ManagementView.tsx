@@ -1111,7 +1111,7 @@ export function ManagementView({
                                                     >
                                                         <ChevronRight
                                                             size={12}
-                                                            className="text-red-400"
+                                                            className="text-red-400 rtl:rotate-180"
                                                         />
                                                     </button>
                                                 </div>

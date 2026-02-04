@@ -14,21 +14,50 @@ export interface Term {
 }
 
 interface TermStepperProps {
-    translationNamespace?: string;
     terms: Term[];
     selectedTermId: number | undefined;
     onSelectTerm: (termId: number) => void;
+    isLoading?: boolean;
+    className?: string;
 }
 
 export function TermStepper({
-    translationNamespace = "selfStudy",
     terms,
     selectedTermId,
     onSelectTerm,
+    className,
+    isLoading,
 }: TermStepperProps) {
-    const { t } = useTranslation(translationNamespace);
-
-    const sortedTerms = [...terms].sort((a, b) => a.order - b.order);
+    const getStepStyles = (status: TermStatus, isSelected: boolean) => {
+        switch (status) {
+            case "completed":
+                return {
+                    circle: isSelected
+                        ? "bg-success-600 text-white border-success-600 ring-4 ring-success-100"
+                        : "bg-success-500 text-white border-success-500",
+                    label: isSelected
+                        ? "text-success-600 font-semibold"
+                        : "text-success-500 font-medium",
+                    clickable: true,
+                };
+            case "current":
+                return {
+                    circle: isSelected
+                        ? "bg-brand-500 text-white border-brand-500 ring-4 ring-brand-100"
+                        : "bg-white dark:bg-gray-800 text-brand-500 border-brand-500 border-2",
+                    label: isSelected
+                        ? "text-brand-600 font-semibold"
+                        : "text-brand-500 font-medium",
+                    clickable: true,
+                };
+            case "locked":
+                return {
+                    circle: "bg-gray-200 dark:bg-gray-700 text-gray-400 border-gray-300 dark:border-gray-600",
+                    label: "text-gray-400 dark:text-gray-500",
+                    clickable: false,
+                };
+        }
+    };
 
     const handleTermClick = (term: Term, termId: number) => {
         if (term.status === "completed" || term.status === "current") {
@@ -40,75 +69,56 @@ export function TermStepper({
     };
 
     return (
-        <div className="relative flex items-center justify-center gap-4 bg-white dark:bg-gray-900 rounded-xl shadow-theme-sm p-4">
-            {sortedTerms.map((term, index) => {
-                const isCompleted = term.status === "completed";
-                const isCurrent = term.status === "current";
-                const isLocked = term.status === "locked";
-                const isLast = index === sortedTerms.length - 1;
+        <div className={`flex items-center justify-center ${className}`}>
+            {terms.map((term, index) => {
                 const isSelected = term.id === selectedTermId;
-                const isClickable = isCompleted || isCurrent;
+                const styles = getStepStyles(term.status, isSelected);
+                const isLast = index === terms.length - 1;
 
                 return (
                     <div key={term.id} className="flex items-center">
+                        {/* Step */}
                         <button
                             type="button"
                             onClick={() => handleTermClick(term, term.id)}
-                            disabled={isLocked}
-                            className={`
-                                flex flex-col items-center gap-2
-                                ${isClickable ? "cursor-pointer" : "cursor-not-allowed"}
-                            `}
+                            disabled={term.status === "locked" || isLoading}
+                            className={`flex flex-col items-center ${
+                                styles.clickable
+                                    ? "cursor-pointer hover:opacity-80"
+                                    : "cursor-not-allowed"
+                            } transition-opacity disabled:opacity-50`}
                         >
                             {/* Circle */}
                             <div
-                                className={`
-                                    flex items-center justify-center size-12 rounded-full transition-all
-                                    ${isCompleted ? "bg-success-500" : ""}
-                                    ${isCurrent ? "bg-white dark:bg-gray-800 border-[3px] border-brand-500" : ""}
-                                    ${isLocked ? "bg-gray-200 dark:bg-gray-700 shadow-theme-xs" : ""}
-                                    ${isSelected && isClickable ? "ring-2 ring-offset-2 ring-brand-500 dark:ring-offset-gray-900" : ""}
-                                `}
+                                className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${styles.circle}`}
                             >
-                                {isCompleted && (
-                                    <Check
-                                        className="size-6 text-white"
-                                        strokeWidth={3}
-                                    />
-                                )}
-                                {isCurrent && (
-                                    <span className="text-lg font-bold text-brand-500">
-                                        {term.order}
+                                {term.status === "completed" ? (
+                                    <Check className="w-5 h-5" />
+                                ) : term.status === "locked" ? (
+                                    <Lock className="w-4 h-4" />
+                                ) : (
+                                    <span className="text-sm font-bold">
+                                        {index + 1}
                                     </span>
                                 )}
-                                {isLocked && (
-                                    <Lock className="size-4 text-gray-500 dark:text-gray-400" />
-                                )}
                             </div>
-
                             {/* Label */}
                             <span
-                                className={`
-                                    text-sm font-medium tracking-wide text-center
-                                    ${isCompleted ? "text-success-500" : ""}
-                                    ${isCurrent ? "text-brand-500" : ""}
-                                    ${isLocked ? "text-gray-500 dark:text-gray-400" : ""}
-                                `}
+                                className={`mt-2 text-sm whitespace-nowrap transition-colors ${styles.label}`}
                             >
                                 {term.caption}
                             </span>
                         </button>
 
-                        {/* Progress Line */}
+                        {/* Connector Line */}
                         {!isLast && (
-                            <div className="w-24 h-1 mx-2 -mt-6">
-                                <div
-                                    className={`
-                                        h-full rounded-full
-                                        ${isCompleted ? "bg-success-500" : "bg-gray-300 dark:bg-gray-600"}
-                                    `}
-                                />
-                            </div>
+                            <div
+                                className={`w-20 md:w-32 h-0.5 mx-2 ${
+                                    term.status === "completed"
+                                        ? "bg-success-500"
+                                        : "bg-gray-300 dark:bg-gray-600"
+                                }`}
+                            />
                         )}
                     </div>
                 );

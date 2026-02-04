@@ -1,17 +1,19 @@
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
 import { Clock, CheckCircle, GraduationCap, ArrowLeft } from "lucide-react";
-import { MOCK_PROJECTS } from "../mocks";
 import PageWrapper from "@/design-system/components/PageWrapper";
+import { useLessonAssignment } from "@/features/dashboard/admin/learning/pages/lessons/api";
 
 export function HomeworkResultPage() {
     const { t } = useTranslation("projects");
     const { projectId } = useParams<{ projectId: string }>();
     const navigate = useNavigate();
 
-    const project = MOCK_PROJECTS.find((p) => p.id === Number(projectId));
+    const { data: assignment } = useLessonAssignment(projectId, {
+        enabled: !!projectId,
+    });
 
-    if (!project) {
+    if (!assignment) {
         return (
             <div className="flex flex-col items-center justify-center py-12">
                 <p className="text-gray-500 dark:text-gray-400">
@@ -21,7 +23,7 @@ export function HomeworkResultPage() {
         );
     }
 
-    const isUnderReview = project.status === "under_review";
+    const isUnderReview = true;
 
     return (
         <PageWrapper
@@ -74,19 +76,19 @@ export function HomeworkResultPage() {
                     </p>
 
                     {/* Points Card (Reviewed only) */}
-                    {!isUnderReview && project.grade !== undefined && (
+                    {!isUnderReview && false && (
                         <div className="w-full max-w-sm bg-success-500/10 border border-success-500/50 rounded-2xl p-6 flex flex-col items-center gap-2">
                             <span className="text-lg font-semibold text-success-600">
                                 {t("result.points")}
                             </span>
                             <span className="text-3xl font-bold text-success-600 tracking-wider">
-                                {project.grade}/{project.maxGrade || 10}
+                                0/10
                             </span>
                         </div>
                     )}
 
                     {/* Teacher Feedback (Reviewed only) */}
-                    {!isUnderReview && project.feedback && (
+                    {!isUnderReview && false && (
                         <div className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6">
                             <div className="flex items-center gap-4 mb-3">
                                 <div className="size-12 rounded-full bg-brand-500 flex items-center justify-center">
@@ -97,7 +99,7 @@ export function HomeworkResultPage() {
                                 </span>
                             </div>
                             <p className="text-base text-gray-600 dark:text-gray-300 leading-relaxed">
-                                "{project.feedback}"
+                                ""
                             </p>
                         </div>
                     )}

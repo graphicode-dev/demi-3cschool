@@ -1,17 +1,19 @@
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
 import { FileText, Download, ArrowLeft } from "lucide-react";
-import { MOCK_PROJECTS } from "../mocks";
 import PageWrapper from "@/design-system/components/PageWrapper";
+import { useLessonAssignment } from "@/features/dashboard/admin/learning/pages/lessons/api";
 
 export function HomeworkFilePage() {
     const { t } = useTranslation("projects");
     const { projectId } = useParams<{ projectId: string }>();
     const navigate = useNavigate();
 
-    const project = MOCK_PROJECTS.find((p) => p.id === Number(projectId));
+    const { data: assignment } = useLessonAssignment(projectId, {
+        enabled: !!projectId,
+    });
 
-    if (!project) {
+    if (!assignment) {
         return (
             <div className="flex flex-col items-center justify-center py-12">
                 <p className="text-gray-500 dark:text-gray-400">
@@ -22,8 +24,8 @@ export function HomeworkFilePage() {
     }
 
     const handleDownload = () => {
-        if (project.homeworkFile?.url) {
-            window.open(project.homeworkFile.url, "_blank");
+        if (assignment.file?.url) {
+            window.open(assignment.file.url, "_blank");
         }
     };
 
@@ -48,15 +50,16 @@ export function HomeworkFilePage() {
                         {/* File Info */}
                         <div className="flex flex-col">
                             <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                                {project.homeworkFile?.name || "Homework.pdf"}
+                                {assignment.file?.fileName || "Homework.pdf"}
                             </h3>
                             <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                                 <span className="px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-800 text-xs font-semibold uppercase">
-                                    {project.homeworkFile?.type || "PDF"}
+                                    {assignment.file?.mimeType || "PDF"}
                                 </span>
                                 <span>•</span>
                                 <span>
-                                    {project.homeworkFile?.size || "2.5 MB"}
+                                    {assignment.file?.humanReadableSize ||
+                                        "2.5 MB"}
                                 </span>
                             </div>
                         </div>

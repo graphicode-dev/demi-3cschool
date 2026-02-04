@@ -65,7 +65,7 @@ export function NavigationCard({
                         </button>
                     )}
                     <Link to={href}>
-                        <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-brand-500 group-hover:translate-x-1 transition-all" />
+                        <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-brand-500 group-hover:translate-x-1 transition-all rtl:rotate-180" />
                     </Link>
                 </div>
             </div>

@@ -3,8 +3,14 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { ChevronDown, BookOpen } from "lucide-react";
 import { ProjectCard } from "../components";
-import { MOCK_PROJECTS, MOCK_LESSONS } from "../mocks";
+import type { Project } from "../types";
 import PageWrapper from "@/design-system/components/PageWrapper";
+import { useMyAllSessions } from "@/features/dashboard/classroom/mySchedule/api";
+import {
+    useLessonAssignment,
+    useLessonAssignmentsList,
+    useLessonAssignmentsByLesson,
+} from "@/features/dashboard/admin/learning/pages/lessons/api";
 
 export function ProjectsPage() {
     const { t } = useTranslation("projects");
@@ -13,22 +19,103 @@ export function ProjectsPage() {
         null
     );
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [selectedAssignmentId, setSelectedAssignmentId] = useState<
+        string | null
+    >(null);
 
-    const selectedLesson = useMemo(
-        () => MOCK_LESSONS.find((l) => l.id === selectedLessonId),
-        [selectedLessonId]
+    const { data: mySessionsData } = useMyAllSessions();
+
+    const lessons = useMemo(() => {
+        const items = mySessionsData?.items ?? [];
+        const unique = new Map<number, { id: number; title: string }>();
+        for (const s of items) {
+            const lessonId = s.lesson?.id;
+            const lessonTitle = s.lesson?.title;
+            if (!lessonId || !lessonTitle) continue;
+            if (!unique.has(lessonId)) {
+                unique.set(lessonId, { id: lessonId, title: lessonTitle });
+            }
+        }
+        return Array.from(unique.values()).sort((a, b) => a.id - b.id);
+    }, [mySessionsData?.items]);
+
+    const selectedLesson = useMemo(() => {
+        if (!selectedLessonId) return null;
+        return lessons.find((l) => l.id === selectedLessonId) ?? null;
+    }, [selectedLessonId, lessons]);
+
+    const { data: allAssignments } = useLessonAssignmentsList({
+        enabled: selectedLessonId === null,
+    });
+
+    const { data: assignmentsData } = useLessonAssignmentsByLesson(
+        selectedLessonId ? String(selectedLessonId) : null,
+        undefined,
+        { enabled: !!selectedLessonId }
     );
 
-    const filteredProjects = useMemo(() => {
-        if (!selectedLessonId) return MOCK_PROJECTS;
-        return MOCK_PROJECTS.filter((p) => p.lessonId === selectedLessonId);
-    }, [selectedLessonId]);
+    useLessonAssignment(selectedAssignmentId, {
+        enabled: !!selectedAssignmentId,
+    });
+
+    const stringToStableInt = (value: string) => {
+        let hash = 0;
+        for (let i = 0; i < value.length; i++) {
+            hash = (hash * 31 + value.charCodeAt(i)) | 0;
+        }
+        return Math.abs(hash);
+    };
+
+    const projects = useMemo(() => {
+        const items =
+            selectedLessonId === null
+                ? (allAssignments ?? [])
+                : (assignmentsData?.items ?? []);
+
+        if (items.length === 0) return [] as Project[];
+
+        return items.map((a) => {
+            const numericId = Number(a.id);
+            const id = Number.isFinite(numericId)
+                ? numericId
+                : stringToStableInt(a.id);
+
+            return {
+                id,
+                assignmentId: a.id,
+                lessonId: selectedLesson?.id ?? 0,
+                lessonTitle: selectedLesson?.title ?? t("allLessons"),
+                lessonOrder: 0,
+                title: a.title,
+                description: a.file?.fileName ?? a.file?.name ?? "",
+                status: "new",
+                homeworkFile: a.file
+                    ? {
+                          name: a.file.fileName ?? a.file.name,
+                          type: a.file.mimeType,
+                          size: a.file.humanReadableSize,
+                          url: a.file.url,
+                      }
+                    : undefined,
+            } satisfies Project;
+        });
+    }, [
+        allAssignments,
+        assignmentsData?.items,
+        selectedLesson,
+        selectedLessonId,
+        t,
+    ]);
 
     const handleViewHomework = useCallback(
         (projectId: number) => {
-            navigate(`homework/${projectId}`);
+            const assignmentId =
+                projects.find((p) => p.id === projectId)?.assignmentId ??
+                String(projectId);
+            setSelectedAssignmentId(assignmentId);
+            navigate(`homework/${assignmentId}`);
         },
-        [navigate]
+        [navigate, projects]
     );
 
     const handleSubmit = useCallback(
@@ -65,7 +152,7 @@ export function ProjectsPage() {
                         <BookOpen className="size-5 text-brand-500" />
                         <span className="flex-1 text-start text-base font-semibold text-gray-900 dark:text-white">
                             {selectedLesson
-                                ? `Lesson ${selectedLesson.order}: ${selectedLesson.title}`
+                                ? selectedLesson.title
                                 : t("allLessons")}
                         </span>
                         <ChevronDown
@@ -89,7 +176,7 @@ export function ProjectsPage() {
                             >
                                 {t("allLessons")}
                             </button>
-                            {MOCK_LESSONS.map((lesson) => (
+                            {lessons.map((lesson) => (
                                 <button
                                     key={lesson.id}
                                     onClick={() => {
@@ -102,7 +189,7 @@ export function ProjectsPage() {
                                             : "text-gray-900 dark:text-white"
                                     }`}
                                 >
-                                    Lesson {lesson.order}: {lesson.title}
+                                    {lesson.title}
                                 </button>
                             ))}
                         </div>
@@ -112,8 +199,8 @@ export function ProjectsPage() {
 
             {/* Projects List */}
             <div className="flex flex-col gap-4">
-                {filteredProjects.length > 0 ? (
-                    filteredProjects.map((project) => (
+                {projects.length > 0 ? (
+                    projects.map((project: Project) => (
                         <ProjectCard
                             key={project.id}
                             project={project}

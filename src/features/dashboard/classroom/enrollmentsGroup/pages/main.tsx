@@ -16,7 +16,6 @@ import {
     ConfirmEnrollmentModal,
     UnlockOfflineSection,
     FilterGroups,
-    TermStepper,
     type Term,
     type TermStatus,
 } from "../components";
@@ -33,6 +32,8 @@ import type {
     AvailableGroup,
     EnrolledGroup,
 } from "../types";
+import { TermStepper } from "../../components";
+import { useCurriculumTerms } from "../../components/TermStepper";
 
 type TabType = "online" | "offline";
 
@@ -88,9 +89,13 @@ export function EnrollmentsGroupPage() {
     const { t } = useTranslation("enrollmentsGroup");
     const { addToast } = useToast();
 
-    // Fetch curriculum list for term stepper
-    const { data: curriculumData, isLoading: isLoadingCurriculum } =
-        useProgramsCurriculumList();
+    const {
+        curriculums,
+        isLoadingCurriculum,
+        selectedTermId,
+        setSelectedTermId,
+        terms,
+    } = useCurriculumTerms();
 
     // State
     const [selectedCurriculumId, setSelectedCurriculumId] = useState<
@@ -107,10 +112,6 @@ export function EnrollmentsGroupPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showMoreDetails, setShowMoreDetails] = useState(false);
 
-    // Set initial curriculum when data loads
-    // API returns array directly
-    const curriculums = curriculumData ?? [];
-
     // Auto-select first active curriculum if none selected
     if (!selectedCurriculumId && curriculums.length > 0) {
         const activeCurriculum = curriculums.find((c) => c.isActive);
@@ -120,35 +121,6 @@ export function EnrollmentsGroupPage() {
             setSelectedCurriculumId(curriculums[0].id);
         }
     }
-
-    // Build terms from curriculum data
-    const terms: Term[] = useMemo(() => {
-        if (!curriculums.length) return [];
-
-        return curriculums.map((curriculum) => {
-            // Simply lock inactive programs, active ones are available (current)
-            const isActive = Boolean(curriculum.isActive);
-            const isSelected = curriculum.id === selectedCurriculumId;
-
-            let status: TermStatus;
-            if (!isActive) {
-                // Inactive programs are always locked
-                status = "locked";
-            } else if (isSelected) {
-                // Selected active program is current
-                status = "current";
-            } else {
-                // Other active programs are available (show as current/clickable)
-                status = "current";
-            }
-
-            return {
-                id: curriculum.id,
-                label: curriculum.caption || curriculum.name,
-                status,
-            };
-        });
-    }, [curriculums, selectedCurriculumId]);
 
     // Fetch online groups for selected curriculum
     const {
@@ -672,10 +644,8 @@ export function EnrollmentsGroupPage() {
                 ) : (
                     <TermStepper
                         terms={terms}
-                        selectedTermId={selectedCurriculumId}
-                        onTermSelect={handleTermSelect}
-                        isLoading={isLoading}
-                        className="py-6"
+                        selectedTermId={selectedTermId}
+                        onSelectTerm={setSelectedTermId}
                     />
                 )}
 

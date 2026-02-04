@@ -1,0 +1,33 @@
+{
+    "sessionBanner": {
+        "liveNow": "مباشر الآن",
+        "upcoming": "قادم",
+        "online": "أونلاين",
+        "offline": "حضوري",
+        "joinClass": "انضم للحصة",
+        "join": "انضم",
+        "details": "التفاصيل",
+        "hideDetails": "إخفاء",
+        "startsIn": "تبدأ خلال",
+        "endsIn": "تنتهي خلال",
+        "lateBy": "متأخر بـ",
+        "sessionId": "الجلسة",
+        "state": "الحالة",
+        "status": "الجدولة",
+        "reason": "السبب",
+        "timeRange": "الوقت",
+        "openLocation": "فتح الموقع",
+        "fallbackDayTime": "الاثنين • ٤:٣٠ م",
+        "loadingTitle": "جاري تحميل الجلسة...",
+        "loadingSubtitle": "يرجى الانتظار",
+        "errorTitle": "تعذر تحميل الجلسات",
+        "errorSubtitle": "حاول مرة أخرى لاحقًا",
+        "emptyTitle": "لا توجد جلسة حالية",
+        "emptySubtitle": "لا توجد جلسة قادمة",
+        "time": {
+            "h": "س",
+            "m": "د",
+            "s": "ث"
+        }
+    }
+}

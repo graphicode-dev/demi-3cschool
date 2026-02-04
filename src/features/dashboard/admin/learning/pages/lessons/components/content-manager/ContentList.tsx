@@ -145,7 +145,7 @@ export default function ContentList({
                             disabled={currentPage <= 1}
                             className="flex items-center gap-1 px-2 py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-brand-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                         >
-                            <ChevronLeft className="w-4 h-4" />
+                            <ChevronLeft className="w-4 h-4 rtl:rotate-180" />
                             {t("common:pagination.previous", "Previous")}
                         </button>
                         <span className="text-sm text-gray-500 dark:text-gray-400">
@@ -157,7 +157,7 @@ export default function ContentList({
                             className="flex items-center gap-1 px-2 py-1 text-sm text-gray-600 dark:text-gray-400 hover:text-brand-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                         >
                             {t("common:pagination.next", "Next")}
-                            <ChevronRight className="w-4 h-4" />
+                            <ChevronRight className="w-4 h-4 rtl:rotate-180" />
                         </button>
                     </div>
                 )}

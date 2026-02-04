@@ -370,7 +370,7 @@ export function TakeExamPage() {
                                 : "border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
                         }`}
                     >
-                        <ChevronLeft className="size-4" />
+                        <ChevronLeft className="size-4 rtl:rotate-180" />
                         {t("exam.previous")}
                     </button>
 
@@ -393,7 +393,7 @@ export function TakeExamPage() {
                             className="flex items-center gap-2 px-6 py-2 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-semibold transition-colors"
                         >
                             {t("exam.next")}
-                            <ChevronRight className="size-4" />
+                            <ChevronRight className="size-4 rtl:rotate-180" />
                         </button>
                     )}
                 </div>

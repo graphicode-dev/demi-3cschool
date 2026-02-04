@@ -2,8 +2,8 @@ import { useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
 import { MessageSquare, CloudUpload, Download, ArrowLeft } from "lucide-react";
-import { MOCK_PROJECTS } from "../mocks";
 import PageWrapper from "@/design-system/components/PageWrapper";
+import { useLessonAssignment } from "@/features/dashboard/admin/learning/pages/lessons/api";
 
 export function SubmitAssignmentPage() {
     const { t } = useTranslation("projects");
@@ -13,7 +13,9 @@ export function SubmitAssignmentPage() {
     const [files, setFiles] = useState<File[]>([]);
     const [isDragging, setIsDragging] = useState(false);
 
-    const project = MOCK_PROJECTS.find((p) => p.id === Number(projectId));
+    const { data: assignment } = useLessonAssignment(projectId, {
+        enabled: !!projectId,
+    });
 
     const handleDragOver = useCallback((e: React.DragEvent) => {
         e.preventDefault();
@@ -49,7 +51,7 @@ export function SubmitAssignmentPage() {
 
     const isSubmitDisabled = files.length === 0;
 
-    if (!project) {
+    if (!assignment) {
         return (
             <div className="flex flex-col items-center justify-center py-12">
                 <p className="text-gray-500 dark:text-gray-400">

@@ -337,15 +337,15 @@ layer(base);
 }
 
 @utility menu-item {
-    @apply relative flex items-center w-full gap-3 px-3 py-2 font-medium rounded-lg text-base text-gray-500;
+    @apply relative flex items-center w-full gap-3 px-3 py-2 font-medium rounded-lg text-base text-gray-500  transition-all duration-300 ease-in-out;
 }
 
 @utility menu-item-active {
-    @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400;
+    @apply bg-brand-500 text-white rounded-3xl
 }
 
 @utility menu-item-inactive {
-    @apply text-gray-500 hover:bg-gray-100 group-hover:text-gray-700 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-gray-300;
+    @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-gray-300 hover:border hover:border-brand-500 hover:rounded-3xl hover:bg-brand-50! transition-all duration-100 ease-in-out;
 }
 
 @utility menu-item-icon {
@@ -353,7 +353,7 @@ layer(base);
 }
 
 @utility menu-item-icon-active {
-    @apply text-brand-500 dark:text-brand-400;
+    @apply text-white;
 }
 
 @utility scrollbar-hide {

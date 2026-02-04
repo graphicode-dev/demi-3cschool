@@ -70,10 +70,10 @@ export function ProjectCard({
                         {/* Tags Row */}
                         <div className="flex flex-wrap items-center gap-2">
                             {/* Lesson Tag */}
-                            <span className="inline-flex items-center px-3 py-1 rounded-lg bg-brand-500/10 text-brand-500 text-sm font-semibold">
+                            {/* <span className="inline-flex items-center px-3 py-1 rounded-lg bg-brand-500/10 text-brand-500 text-sm font-semibold">
                                 Lesson {project.lessonOrder}:{" "}
                                 {project.lessonTitle}
-                            </span>
+                            </span> */}
 
                             {/* Status Tag */}
                             <span

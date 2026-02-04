@@ -1,0 +1,33 @@
+{
+    "sessionBanner": {
+        "liveNow": "Live Now",
+        "upcoming": "Upcoming",
+        "online": "Online",
+        "offline": "Offline",
+        "joinClass": "Join Class",
+        "join": "Join",
+        "details": "Details",
+        "hideDetails": "Hide",
+        "startsIn": "Starts in",
+        "endsIn": "Ends in",
+        "lateBy": "Late by",
+        "sessionId": "Session",
+        "state": "State",
+        "status": "Status",
+        "reason": "Reason",
+        "timeRange": "Time",
+        "openLocation": "Open location",
+        "fallbackDayTime": "Monday • 4:30 PM",
+        "loadingTitle": "Loading session...",
+        "loadingSubtitle": "Please wait",
+        "errorTitle": "Couldn't load sessions",
+        "errorSubtitle": "Try again later",
+        "emptyTitle": "No current session",
+        "emptySubtitle": "No upcoming session",
+        "time": {
+            "h": "H",
+            "m": "M",
+            "s": "S"
+        }
+    }
+}

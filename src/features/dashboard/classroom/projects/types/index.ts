@@ -2,6 +2,7 @@ export type ProjectStatus = "new" | "under_review" | "reviewed";
 
 export interface Project {
     id: number;
+    assignmentId?: string;
     lessonId: number;
     lessonTitle: string;
     lessonOrder: number;

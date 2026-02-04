@@ -10,11 +10,8 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { scrollToSection } from "../hooks";
-import logo3C from "@/assets/images/landing/3c-black.png";
-import DEMIar from "@/assets/images/landing/DEMIar.png";
-import DEMIen from "@/assets/images/landing/DEMIen.png";
-import MCAR from "@/assets/images/landing/MCAR.png";
-import MCEN from "@/assets/images/landing/MCEN.png";
+import LogoAr from "@/assets/images/logos/ArabicDark.png";
+import LogoEn from "@/assets/images/logos/EnglishDark.png";
 import { authStore } from "@/auth";
 import { useLogout } from "@/features/auth/api";
 import { paths } from "@/router";
@@ -121,37 +118,18 @@ function LandingNavbar() {
         >
             {/* Logos */}
             <div className="flex items-center gap-6 lg:gap-12">
-                <img
-                    src={logo3C}
-                    alt="3C Coding School"
-                    className="w-25 object-contain transition-transform duration-300 hover:scale-105"
-                />
                 {isRTL ? (
-                    <>
-                        <img
-                            src={MCAR}
-                            alt="Ministry of Communications"
-                            className="h-12  w-auto object-fill transition-transform duration-300 hover:scale-105"
-                        />
-                        <img
-                            src={DEMIar}
-                            alt="Ministry of Communications"
-                            className="h-12  w-auto object-fill transition-transform duration-300 hover:scale-105"
-                        />
-                    </>
+                    <img
+                        src={LogoAr}
+                        alt="Ministry of Communications"
+                        className="h-17 w-auto object-fill transition-transform duration-300 hover:scale-105"
+                    />
                 ) : (
-                    <>
-                        <img
-                            src={MCEN}
-                            alt="Ministry of Communications"
-                            className="h-12  w-auto object-fill transition-transform duration-300 hover:scale-105"
-                        />
-                        <img
-                            src={DEMIen}
-                            alt="Ministry of Communications"
-                            className="h-12  w-auto object-fill transition-transform duration-300 hover:scale-105"
-                        />
-                    </>
+                    <img
+                        src={LogoEn}
+                        alt="Ministry of Communications"
+                        className="h-17 w-auto object-fill transition-transform duration-300 hover:scale-105"
+                    />
                 )}
             </div>
 

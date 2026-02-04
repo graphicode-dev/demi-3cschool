@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Monitor, Building2 } from "lucide-react";
 import { ScheduleCalendar } from "../components";
-import { MOCK_SCHEDULE_SESSIONS } from "../mocks";
-import type { ScheduleSession } from "../types";
+import type { MyAllSession, ScheduleSession } from "../types";
+import { useMyAllSessions } from "../api";
 import PageWrapper from "@/design-system/components/PageWrapper";
 
 type FilterType = "all" | "online" | "offline";
@@ -12,7 +12,36 @@ export function MySchedulePage() {
     const { t } = useTranslation("mySchedule");
     const [filter, setFilter] = useState<FilterType>("all");
 
-    const filteredSessions = MOCK_SCHEDULE_SESSIONS.filter((session) => {
+    const { data: myAllSessions } = useMyAllSessions();
+
+    const apiSessions: ScheduleSession[] = useMemo(() => {
+        const items: MyAllSession[] = myAllSessions?.items ?? [];
+
+        return items.map((session: MyAllSession) => {
+            const date = new Date(
+                `${session.sessionDate}T${session.startTime}`
+            );
+            const dayOfWeek = Number.isNaN(date.getTime()) ? 0 : date.getDay();
+
+            const startTime = session.startTime.slice(0, 5);
+            const endTime = session.endTime.slice(0, 5);
+
+            return {
+                id: session.id,
+                title: session.lesson?.title ?? "",
+                type: session.locationType,
+                status: session.reason ? "cancelled" : "scheduled",
+                date: session.sessionDate,
+                startTime,
+                endTime,
+                dayOfWeek,
+            };
+        });
+    }, [myAllSessions]);
+
+    const allSessions = apiSessions;
+
+    const filteredSessions = allSessions.filter((session) => {
         if (filter === "all") return true;
         return session.type === filter;
     });

@@ -544,7 +544,7 @@ function AcceptanceExamTakePage() {
                                 : "border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
                         }`}
                     >
-                        <ChevronLeft className="h-4 w-4" />
+                        <ChevronLeft className="h-4 w-4 rtl:rotate-180" />
                         {t("exam.previous")}
                     </button>
 
@@ -567,7 +567,7 @@ function AcceptanceExamTakePage() {
                             className="flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-medium transition-colors"
                         >
                             {t("exam.next")}
-                            <ChevronRight className="h-4 w-4" />
+                            <ChevronRight className="h-4 w-4 rtl:rotate-180" />
                         </button>
                     )}
                 </div>

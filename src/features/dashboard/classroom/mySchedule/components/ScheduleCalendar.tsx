@@ -26,13 +26,46 @@ const HOURS = [
     "18:00",
 ];
 
-const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+function formatLocalDateYYYYMMDD(date: Date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+}
+
+function parseLocalYYYYMMDD(yyyyMmDd: string) {
+    const [y, m, d] = yyyyMmDd.split("-").map((v) => Number(v));
+    if (!y || !m || !d) return null;
+    return new Date(y, m - 1, d, 12, 0, 0, 0);
+}
+
+function startOfWeekSunday(date: Date) {
+    const start = new Date(date);
+    start.setHours(12, 0, 0, 0);
+    start.setDate(start.getDate() - start.getDay());
+    return start;
+}
 
 export function ScheduleCalendar({ sessions }: ScheduleCalendarProps) {
-    const { t } = useTranslation("mySchedule");
-    const [currentDate, setCurrentDate] = useState(new Date(2026, 9, 16)); // October 16, 2026
+    const { t, i18n } = useTranslation("mySchedule");
+    const [currentDate, setCurrentDate] = useState(new Date());
+
+    const sessionWeekStarts = useMemo(() => {
+        const unique = new Map<string, Date>();
+        for (const s of sessions) {
+            const d = parseLocalYYYYMMDD(s.date);
+            if (!d) continue;
+            const weekStart = startOfWeekSunday(d);
+            const key = formatLocalDateYYYYMMDD(weekStart);
+            if (!unique.has(key)) unique.set(key, weekStart);
+        }
+        return Array.from(unique.values()).sort(
+            (a, b) => a.getTime() - b.getTime()
+        );
+    }, [sessions]);
 
     const weekDays = useMemo(() => {
+        const today = new Date();
         const startOfWeek = new Date(currentDate);
         const dayOfWeek = startOfWeek.getDay();
         startOfWeek.setDate(startOfWeek.getDate() - dayOfWeek);
@@ -42,12 +75,12 @@ export function ScheduleCalendar({ sessions }: ScheduleCalendarProps) {
             date.setDate(startOfWeek.getDate() + i);
             return {
                 date: date.getDate(),
-                dayName: DAY_NAMES[i],
-                fullDate: date.toISOString().split("T")[0],
-                isToday: date.toDateString() === currentDate.toDateString(),
+                dayName: t(`days.${i}`),
+                fullDate: formatLocalDateYYYYMMDD(date),
+                isToday: date.toDateString() === today.toDateString(),
             };
         });
-    }, [currentDate]);
+    }, [currentDate, t]);
 
     const weekRange = useMemo(() => {
         const start = weekDays[0].date;
@@ -60,7 +93,7 @@ export function ScheduleCalendar({ sessions }: ScheduleCalendarProps) {
             month: "long",
             year: "numeric",
         });
-    }, [currentDate]);
+    }, [currentDate, i18n.language]);
 
     const goToPreviousWeek = () => {
         const newDate = new Date(currentDate);
@@ -72,6 +105,40 @@ export function ScheduleCalendar({ sessions }: ScheduleCalendarProps) {
         const newDate = new Date(currentDate);
         newDate.setDate(newDate.getDate() + 7);
         setCurrentDate(newDate);
+    };
+
+    const goToCurrentWeek = () => {
+        setCurrentDate(new Date());
+    };
+
+    const goToPreviousSessionWeek = () => {
+        if (sessionWeekStarts.length === 0) return;
+        const currentWeekStart = startOfWeekSunday(currentDate).getTime();
+        let target: Date | null = null;
+        for (let i = sessionWeekStarts.length - 1; i >= 0; i--) {
+            const t = sessionWeekStarts[i].getTime();
+            if (t < currentWeekStart) {
+                target = sessionWeekStarts[i];
+                break;
+            }
+        }
+        setCurrentDate(target ?? sessionWeekStarts[0]);
+    };
+
+    const goToNextSessionWeek = () => {
+        if (sessionWeekStarts.length === 0) return;
+        const currentWeekStart = startOfWeekSunday(currentDate).getTime();
+        let target: Date | null = null;
+        for (let i = 0; i < sessionWeekStarts.length; i++) {
+            const t = sessionWeekStarts[i].getTime();
+            if (t > currentWeekStart) {
+                target = sessionWeekStarts[i];
+                break;
+            }
+        }
+        setCurrentDate(
+            target ?? sessionWeekStarts[sessionWeekStarts.length - 1]
+        );
     };
 
     const getSessionStyle = (session: ScheduleSession) => {
@@ -92,28 +159,54 @@ export function ScheduleCalendar({ sessions }: ScheduleCalendarProps) {
             <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-sm p-6">
                 {/* Month Navigation */}
                 <div className="flex items-center justify-between mb-6">
-                    <button
-                        onClick={goToPreviousWeek}
-                        className="size-10 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors flex items-center justify-center"
-                    >
-                        <ChevronLeft className="size-6 text-gray-600 dark:text-gray-400" />
-                    </button>
-                    <span className="text-xl font-semibold text-gray-900 dark:text-white">
-                        {monthYear}
-                    </span>
-                    <button
-                        onClick={goToNextWeek}
-                        className="size-10 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors flex items-center justify-center"
-                    >
-                        <ChevronRight className="size-6 text-gray-600 dark:text-gray-400" />
-                    </button>
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={goToPreviousWeek}
+                            className="size-10 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors flex items-center justify-center"
+                        >
+                            <ChevronLeft className="size-6 text-gray-600 dark:text-gray-400 rtl:rotate-180" />
+                        </button>
+                        <button
+                            onClick={goToPreviousSessionWeek}
+                            disabled={sessionWeekStarts.length === 0}
+                            className="h-10 px-3 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-xs font-semibold text-gray-700 dark:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {t("previousSession")}
+                        </button>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <span className="text-xl font-semibold text-gray-900 dark:text-white">
+                            {monthYear}
+                        </span>
+                        <button
+                            onClick={goToCurrentWeek}
+                            className="h-9 px-3 rounded-full bg-brand-500 text-white transition-colors text-xs font-semibold"
+                        >
+                            {t("today")}
+                        </button>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={goToNextSessionWeek}
+                            disabled={sessionWeekStarts.length === 0}
+                            className="h-10 px-3 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-xs font-semibold text-gray-700 dark:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {t("nextSession")}
+                        </button>
+                        <button
+                            onClick={goToNextWeek}
+                            className="size-10 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors flex items-center justify-center"
+                        >
+                            <ChevronRight className="size-6 text-gray-600 dark:text-gray-400 rtl:rotate-180" />
+                        </button>
+                    </div>
                 </div>
 
                 {/* Week Header */}
                 <div className="flex mb-4">
                     <div className="w-28 shrink-0 flex items-center">
                         <span className="text-sm text-gray-400">
-                            Week ({weekRange})
+                            {t("week")} ({weekRange})
                         </span>
                     </div>
                     <div className="flex-1 grid grid-cols-7">
@@ -175,7 +268,7 @@ export function ScheduleCalendar({ sessions }: ScheduleCalendarProps) {
                             >
                                 {/* Sessions */}
                                 {sessions
-                                    .filter((s) => s.dayOfWeek === dayIndex)
+                                    .filter((s) => s.date === day.fullDate)
                                     .map((session, sessionIndex) => (
                                         <SessionCard
                                             key={session.id}

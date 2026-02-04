@@ -9,7 +9,6 @@ import {
     Sparkles,
 } from "lucide-react";
 import PageWrapper from "@/design-system/components/PageWrapper";
-import { MOCK_VIRTUAL_SESSIONS_DATA } from "../mocks";
 import { CLASSROOM_PATH } from "../../navigation/constant";
 import { useLessonVideo } from "@/features/dashboard/admin/learning/pages/lessons/api";
 

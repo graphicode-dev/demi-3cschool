@@ -1,12 +1,14 @@
-import { useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Clock, Video, ExternalLink, Sparkles } from "lucide-react";
-import { useCurriculumTerms } from "@/features/dashboard/classroom/components/TermStepper";
-import { useOnlineSessions } from "@/features/dashboard/classroom/virtualSessions/api";
-import { useOfflineSessions } from "@/features/dashboard/classroom/physicalSessions/api/physicalSessions.queries";
+import { ExternalLink, Sparkles, Monitor } from "lucide-react";
+import { useMyCurrentSession } from "@/features/dashboard/classroom/mySchedule/api";
+import type { MyCurrentSession } from "@/features/dashboard/classroom/mySchedule/types";
 
 interface SessionEvent {
     id: number;
+    sessionState: string;
+    status: string;
+    effectiveLocationType: "online" | "offline";
     group: {
         id: number;
         name: string;
@@ -44,23 +46,13 @@ const NavbarSessionCountdown = () => {
     const { t, i18n } = useTranslation("dashboard");
     const isRTL = i18n.language === "ar";
     const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
-    const [fallbackSeconds, setFallbackSeconds] = useState(15 * 60);
+    const [fallbackSeconds, setFallbackSeconds] = useState(0);
+    const [showDetails, setShowDetails] = useState(false);
+    const [countdownMode, setCountdownMode] = useState<
+        "upcoming" | "current" | "ended"
+    >("ended");
 
-    const { selectedTermId } = useCurriculumTerms();
-
-    const {
-        data: onlineSessions = [],
-        isLoading: isLoadingOnline,
-        isError: isOnlineError,
-    } = useOnlineSessions(selectedTermId, { enabled: !!selectedTermId });
-    const {
-        data: offlineSessions = [],
-        isLoading: isLoadingOffline,
-        isError: isOfflineError,
-    } = useOfflineSessions(selectedTermId, { enabled: !!selectedTermId });
-
-    const isLoading = isLoadingOnline || isLoadingOffline;
-    const isError = isOnlineError || isOfflineError;
+    const { data: currentSession, isLoading, isError } = useMyCurrentSession();
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -69,98 +61,100 @@ const NavbarSessionCountdown = () => {
         return () => clearInterval(timer);
     }, []);
 
-    const sessions: Array<SessionEvent & { kind: SessionKind }> =
-        useMemo(() => {
-            const online = onlineSessions.map((s) => ({
-                id: s.id,
-                kind: "online" as const,
-                group: {
-                    id: s.group.id,
-                    name: s.group.name,
-                    locationType: "online" as const,
-                    location: "",
-                    locationMapUrl: "",
-                },
-                sessionDate: s.sessionDate,
-                startTime: s.startTime,
-                endTime: s.endTime,
-                topic: s.lesson?.title ?? "",
-                lesson: {
-                    id: s.lesson.id,
-                    title: s.lesson.title,
-                },
-                isCancelled: Boolean(s.reason),
-                cancellationReason: s.reason,
-                meetingProvider: "bbb",
-                meetingId: s.bbbMeetingId,
-                hasMeeting: Boolean(s.hasMeeting),
-                linkMeeing: s.hasMeeting ? (s.bbbMeetingId ?? null) : null,
-            }));
+    const sessionEvent = useMemo(():
+        | (SessionEvent & { kind: SessionKind })
+        | null => {
+        const s: MyCurrentSession | null | undefined = currentSession;
+        if (!s) return null;
 
-            const offline = offlineSessions.map((s) => ({
-                id: s.id,
-                kind: "offline" as const,
-                group: {
-                    id: s.group.id,
-                    name: s.group.name,
-                    locationType: "offline" as const,
-                    location: s.offlineLocation ?? "",
-                    locationMapUrl: "",
-                },
-                sessionDate: s.sessionDate,
-                startTime: s.startTime,
-                endTime: s.endTime,
-                topic: s.lesson?.title ?? "",
-                lesson: {
-                    id: s.lesson.id,
-                    title: s.lesson.title,
-                },
-                isCancelled: Boolean(s.reason),
-                cancellationReason: s.reason,
-                meetingProvider: "bbb",
-                meetingId: s.bbbMeetingId,
-                hasMeeting: Boolean(s.hasMeeting),
-                linkMeeing: s.hasMeeting ? (s.bbbMeetingId ?? null) : null,
-            }));
+        const kind =
+            s.locationType === "offline"
+                ? ("offline" as const)
+                : ("online" as const);
 
-            return [...online, ...offline];
-        }, [onlineSessions, offlineSessions]);
+        return {
+            id: s.id,
+            kind,
+            sessionState: String(s.sessionState ?? ""),
+            status: String(s.status ?? ""),
+            effectiveLocationType: s.effectiveLocationType,
+            group: {
+                id: s.group?.id ?? 0,
+                name: s.group?.name ?? "",
+                locationType: kind,
+                location: s.offlineLocation ?? "",
+                locationMapUrl: "",
+            },
+            sessionDate: s.sessionDate,
+            startTime: s.startTime,
+            endTime: s.endTime,
+            topic: s.lesson?.title ?? "",
+            lesson: {
+                id: s.lesson?.id ?? 0,
+                title: s.lesson?.title ?? "",
+            },
+            isCancelled: Boolean(s.reason),
+            cancellationReason: s.reason,
+            meetingProvider: "bbb",
+            meetingId: s.bbbMeetingId,
+            hasMeeting: Boolean(s.hasMeeting),
+            linkMeeing: s.hasMeeting ? (s.bbbMeetingId ?? null) : null,
+        };
+    }, [currentSession]);
 
-    // Find the next upcoming session
-    const nextSession = useMemo(() => {
-        if (!sessions || sessions.length === 0) return null;
-
-        const now = new Date();
-        const upcomingSessions = sessions
-            .filter((session: SessionEvent) => {
-                if (session.isCancelled) return false;
-                const sessionDateTime = new Date(
-                    `${session.sessionDate}T${session.startTime}`
-                );
-                return sessionDateTime > now;
-            })
-            .sort((a: SessionEvent, b: SessionEvent) => {
-                const dateA = new Date(`${a.sessionDate}T${a.startTime}`);
-                const dateB = new Date(`${b.sessionDate}T${b.startTime}`);
-                return dateA.getTime() - dateB.getTime();
-            });
-
-        return upcomingSessions[0] as SessionEvent | undefined;
-    }, [sessions]);
+    const sessionTiming = useMemo(() => {
+        if (!sessionEvent) return null;
+        const start = new Date(
+            `${sessionEvent.sessionDate}T${sessionEvent.startTime}`
+        );
+        const end = new Date(
+            `${sessionEvent.sessionDate}T${sessionEvent.endTime}`
+        );
+        if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()))
+            return null;
+        return { start, end };
+    }, [sessionEvent]);
 
     // Calculate time left
     useEffect(() => {
-        if (!nextSession) return;
+        if (!sessionTiming) {
+            setTimeLeft(null);
+            setCountdownMode("ended");
+            return;
+        }
 
         const calculateTimeLeft = () => {
-            const sessionDateTime = new Date(
-                `${nextSession.sessionDate}T${nextSession.startTime}`
-            );
             const now = new Date();
-            const difference = sessionDateTime.getTime() - now.getTime();
+            const target =
+                now < sessionTiming.start
+                    ? sessionTiming.start
+                    : now >= sessionTiming.start && now < sessionTiming.end
+                      ? sessionTiming.end
+                      : null;
+
+            const mode =
+                now < sessionTiming.start
+                    ? "upcoming"
+                    : now >= sessionTiming.start && now < sessionTiming.end
+                      ? "current"
+                      : "ended";
+
+            setCountdownMode(mode);
+            if (!target) {
+                setTimeLeft(null);
+                return;
+            }
+
+            const difference = target.getTime() - now.getTime();
 
             if (difference <= 0) {
-                setTimeLeft(null);
+                setTimeLeft({
+                    days: 0,
+                    hours: 0,
+                    minutes: 0,
+                    seconds: 0,
+                    total: 0,
+                });
                 return;
             }
 
@@ -180,152 +174,345 @@ const NavbarSessionCountdown = () => {
         const timer = setInterval(calculateTimeLeft, 1000);
 
         return () => clearInterval(timer);
-    }, [nextSession]);
-
-    const formatTime = (time: string) => {
-        if (!time) return "";
-        const [hours, minutes] = time.split(":");
-        const hour = parseInt(hours);
-        const ampm = hour >= 12 ? "PM" : "AM";
-        const hour12 = hour % 12 || 12;
-        return `${hour12}:${minutes} ${ampm}`;
-    };
-
-    const formatDate = (dateStr: string) => {
-        const date = new Date(dateStr);
-        return date.toLocaleDateString(isRTL ? "ar-EG" : "en-US", {
-            weekday: "short",
-            month: "short",
-            day: "numeric",
-        });
-    };
-
-    const isStartingSoon = Boolean(
-        timeLeft && timeLeft.total <= 30 * 60 * 1000
-    );
-    const isVeryClose = Boolean(timeLeft && timeLeft.total <= 5 * 60 * 1000);
-
-    const getStatusColor = () => {
-        if (!selectedTermId) return "bg-brand-500";
-        if (isVeryClose) return "bg-red-500";
-        if (isStartingSoon) return "bg-amber-500";
-        return "bg-brand-500";
-    };
-
-    const getTextColor = () => {
-        if (!selectedTermId) return "text-brand-600 dark:text-brand-400";
-        if (isVeryClose) return "text-red-600 dark:text-red-400";
-        if (isStartingSoon) return "text-amber-600 dark:text-amber-400";
-        return "text-brand-600 dark:text-brand-400";
-    };
-
-    const formatSeconds = (seconds: number) => {
-        const mins = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        return `${mins}:${secs.toString().padStart(2, "0")}`;
-    };
+    }, [sessionTiming]);
 
     const displayTitle =
-        nextSession?.topic ||
-        nextSession?.lesson?.title ||
-        "Mastering Maze Game Logic";
-    const displaySubtitle =
-        nextSession?.group?.name || "Level 1: Candidate Exclusive";
+        sessionEvent?.topic ||
+        sessionEvent?.lesson?.title ||
+        (isLoading
+            ? t("sessionBanner.loadingTitle")
+            : isError
+              ? t("sessionBanner.errorTitle")
+              : t("sessionBanner.emptyTitle"));
 
-    const displayTotalSeconds =
-        timeLeft?.total != null
-            ? Math.max(0, Math.floor(timeLeft.total / 1000))
-            : fallbackSeconds;
+    const displaySubtitle =
+        sessionEvent?.group?.name ||
+        (isLoading
+            ? t("sessionBanner.loadingSubtitle")
+            : isError
+              ? t("sessionBanner.errorSubtitle")
+              : t("sessionBanner.emptySubtitle"));
+
+    const displayTotalSeconds = useMemo(() => {
+        if (timeLeft?.total != null) {
+            return Math.max(0, Math.floor(timeLeft.total / 1000));
+        }
+        if (countdownMode !== "ended") {
+            return 0;
+        }
+        return fallbackSeconds;
+    }, [timeLeft?.total, countdownMode, fallbackSeconds]);
+
+    const formatTime = (totalSeconds: number) => {
+        const hrs = Math.floor(totalSeconds / 3600);
+        const mins = Math.floor((totalSeconds % 3600) / 60);
+        const secs = totalSeconds % 60;
+        return {
+            hrs: hrs.toString().padStart(2, "0"),
+            mins: mins.toString().padStart(2, "0"),
+            secs: secs.toString().padStart(2, "0"),
+        };
+    };
+
+    const time = formatTime(displayTotalSeconds);
+
+    const lateSeconds = useMemo(() => {
+        if (!sessionTiming) return null;
+        if (countdownMode !== "current") return null;
+        const now = new Date();
+        const diff = now.getTime() - sessionTiming.start.getTime();
+        return diff > 0 ? Math.floor(diff / 1000) : 0;
+    }, [sessionTiming, countdownMode]);
+
+    const formatDuration = (totalSeconds: number) => {
+        const hrs = Math.floor(totalSeconds / 3600);
+        const mins = Math.floor((totalSeconds % 3600) / 60);
+        const secs = totalSeconds % 60;
+        const hh = hrs.toString().padStart(2, "0");
+        const mm = mins.toString().padStart(2, "0");
+        const ss = secs.toString().padStart(2, "0");
+        return hrs > 0 ? `${hh}:${mm}:${ss}` : `${mm}:${ss}`;
+    };
+
+    const formatBannerDayTime = () => {
+        if (!sessionEvent) return t("sessionBanner.fallbackDayTime");
+
+        const date = new Date(
+            `${sessionEvent.sessionDate}T${sessionEvent.startTime}`
+        );
+        if (Number.isNaN(date.getTime()))
+            return t("sessionBanner.fallbackDayTime");
+
+        const weekday = date.toLocaleDateString(isRTL ? "ar-EG" : "en-US", {
+            weekday: "long",
+        });
+        const timeStr = date.toLocaleTimeString(isRTL ? "ar-EG" : "en-US", {
+            hour: "numeric",
+            minute: "2-digit",
+        });
+        return `${weekday} • ${timeStr}`;
+    };
 
     const handleJoinClick = () => {
-        if (!nextSession) return;
-        if (nextSession.group.locationType !== "online") return;
-        if (!nextSession.hasMeeting) return;
-        if (!nextSession.linkMeeing) return;
-        window.open(nextSession.linkMeeing, "_blank");
+        if (!sessionEvent) return;
+        if (sessionEvent.group.locationType !== "online") return;
+        if (!sessionEvent.hasMeeting) return;
+        if (!sessionEvent.linkMeeing) return;
+
+        window.open(sessionEvent.linkMeeing, "_blank");
+    };
+
+    const isCurrent =
+        (sessionEvent?.sessionState?.toLowerCase().includes("current") ??
+            false) ||
+        countdownMode === "current";
+
+    const countdownLabel =
+        countdownMode === "current"
+            ? t("sessionBanner.endsIn")
+            : t("sessionBanner.startsIn");
+
+    const locationLabel =
+        sessionEvent?.group.locationType === "offline"
+            ? t("sessionBanner.offline")
+            : t("sessionBanner.online");
+
+    const formatTimeRange = () => {
+        if (!sessionEvent) return "";
+        const start = sessionEvent.startTime?.slice(0, 5) ?? "";
+        const end = sessionEvent.endTime?.slice(0, 5) ?? "";
+        if (!start || !end) return "";
+        return `${start} - ${end}`;
     };
 
     return (
-        <div className="relative group overflow-hidden border-b border-white/10 animate-in slide-in-from-top duration-700">
-            {/* Animated Gradient Background */}
-            <div className="absolute inset-0 bg-[length:200%_200%] animate-gradient-slow bg-gradient-to-r from-[#00ADEF] via-[#FFB800] to-[#007ABF] opacity-95" />
+        <div className="relative w-full group overflow-hidden rounded-full animate-in slide-in-from-top duration-700 shadow-xl shadow-blue-500/10">
+            <div
+                className={`absolute inset-0 bg-size-[300%_300%] animate-gradient-slow bg-linear-to-r opacity-95 ${
+                    isCurrent
+                        ? "from-[#EF4444] via-[#F97316] to-[#EF4444]"
+                        : "from-[#00ADEF] via-[#FFB800] to-[#00ADEF]"
+                }`}
+            />
 
-            {/* Floating Light Effects */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-[-50%] left-[-10%] w-[40%] h-[200%] bg-white/10 blur-[80px] rotate-45 animate-pulse" />
-                <div className="absolute bottom-[-50%] right-[-10%] w-[30%] h-[200%] bg-yellow-300/20 blur-[100px] -rotate-45 animate-pulse delay-700" />
+                <div className="absolute top-[-50%] left-[-10%] w-[50%] h-[200%] bg-white/10 blur-[100px] rotate-45 animate-pulse" />
+                <div className="absolute bottom-[-50%] right-[-10%] w-[30%] h-[150%] bg-yellow-200/20 blur-[80px] -rotate-45 animate-pulse delay-1000" />
             </div>
 
-            <div className=" mx-auto px-10 py-3.5 flex items-center justify-between gap-4 relative z-10">
-                <div className="flex items-center gap-6">
-                    {/* Animated Status Badge */}
-                    <div className="flex items-center gap-2 bg-white/20 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/30 shadow-sm">
+            <div className="max-w-7xl mx-auto px-10 py-3 flex items-start justify-between gap-4 relative z-10">
+                <div className="flex items-start gap-6">
+                    <div className="flex items-center gap-2 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/30">
                         <span className="relative flex h-2 w-2">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                             <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
                         </span>
-                        <span className="text-[10px] font-black text-white uppercase tracking-[0.2em] drop-shadow-sm">
-                            Session Live
+                        <span className="text-[10px] font-black text-white uppercase tracking-widest">
+                            {isCurrent
+                                ? t("sessionBanner.liveNow")
+                                : t("sessionBanner.upcoming")}
                         </span>
                     </div>
 
-                    <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 bg-white/20 backdrop-blur-xl rounded-2xl flex items-center justify-center text-white border border-white/30 shadow-inner group-hover:rotate-6 transition-transform">
-                            <Video size={18} />
-                        </div>
-                        <div>
-                            <p className="text-white font-black text-[15px] tracking-tight drop-shadow-sm flex items-center gap-2">
-                                {displayTitle}{" "}
-                                <Sparkles
-                                    size={14}
-                                    className="text-yellow-200 animate-bounce"
-                                />
+                    <div className="flex flex-col">
+                        <h3 className="text-white font-black text-lg tracking-tight leading-tight flex items-center gap-2 drop-shadow-sm">
+                            {displayTitle}{" "}
+                            <Sparkles
+                                size={16}
+                                className="text-white/80 animate-bounce"
+                            />
+                        </h3>
+                        <div className="flex items-center gap-3 mt-0.5">
+                            <div className="flex items-center gap-1.5 text-white/80 text-[10px] font-black uppercase tracking-widest">
+                                <Monitor size={12} strokeWidth={2.5} />
+                                {locationLabel}
+                            </div>
+                            <span className="w-1 h-1 bg-white/40 rounded-full" />
+                            <p className="text-white/80 text-[10px] font-black uppercase tracking-widest">
+                                {formatBannerDayTime()}
                             </p>
-                            <p className="text-white/70 text-[10px] font-black uppercase tracking-widest leading-none mt-0.5">
+                            {!!sessionEvent && !!formatTimeRange() && (
+                                <>
+                                    <span className="w-1 h-1 bg-white/40 rounded-full" />
+                                    <p className="text-white/80 text-[10px] font-black uppercase tracking-widest">
+                                        {t("sessionBanner.timeRange", {
+                                            defaultValue: "Time",
+                                        })}
+                                        : {formatTimeRange()}
+                                    </p>
+                                </>
+                            )}
+                        </div>
+                        {!!displaySubtitle && (
+                            <p className="text-white/70 text-[10px] font-black uppercase tracking-widest mt-0.5">
                                 {displaySubtitle}
                             </p>
-                        </div>
+                        )}
+                        {!!sessionEvent && (
+                            <div className="flex flex-wrap items-center gap-2 mt-1">
+                                <span className="text-white/60 text-[9px] font-black uppercase tracking-widest">
+                                    {t("sessionBanner.sessionId")}: #
+                                    {sessionEvent.id}
+                                </span>
+                                {!!sessionEvent.sessionState && (
+                                    <span className="text-white/60 text-[9px] font-black uppercase tracking-widest">
+                                        {t("sessionBanner.state")}:{" "}
+                                        {sessionEvent.sessionState}
+                                    </span>
+                                )}
+                                {!!sessionEvent.status && (
+                                    <span className="text-white/60 text-[9px] font-black uppercase tracking-widest">
+                                        {t("sessionBanner.status")}:{" "}
+                                        {sessionEvent.status}
+                                    </span>
+                                )}
+                                {!!sessionEvent.cancellationReason && (
+                                    <span className="text-white/60 text-[9px] font-black uppercase tracking-widest line-clamp-1">
+                                        {t("sessionBanner.reason")}:{" "}
+                                        {sessionEvent.cancellationReason}
+                                    </span>
+                                )}
+                                {sessionEvent.group.locationType ===
+                                    "offline" &&
+                                    !!sessionEvent.group.location && (
+                                        <a
+                                            href={sessionEvent.group.location}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="text-white/80 text-[9px] font-black uppercase tracking-widest underline underline-offset-2"
+                                        >
+                                            {t("sessionBanner.openLocation")}
+                                        </a>
+                                    )}
+                            </div>
+                        )}
                     </div>
                 </div>
 
                 <div className="flex items-center gap-10">
-                    <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full border border-white/30 flex items-center justify-center text-white/80">
-                            <Clock size={14} />
+                    <div className="flex items-center gap-2">
+                        <div className="flex flex-col items-end me-2">
+                            <span className="text-[9px] font-black text-white/70 uppercase tracking-widest">
+                                {countdownLabel}
+                            </span>
+                            {lateSeconds != null && (
+                                <span className="text-[9px] font-black text-white/70 uppercase tracking-widest">
+                                    {t("sessionBanner.lateBy")}:{" "}
+                                    {formatDuration(lateSeconds)}
+                                </span>
+                            )}
                         </div>
-                        <div>
-                            <p className="text-white/60 text-[9px] font-black uppercase tracking-[0.2em] leading-none mb-1">
-                                Starts In
-                            </p>
-                            <p className="text-white font-black text-lg tabular-nums tracking-tighter leading-none drop-shadow-sm">
-                                {formatSeconds(displayTotalSeconds)}
-                            </p>
-                        </div>
+                        {[
+                            { val: time.hrs, label: t("sessionBanner.time.h") },
+                            {
+                                val: time.mins,
+                                label: t("sessionBanner.time.m"),
+                            },
+                            {
+                                val: time.secs,
+                                label: t("sessionBanner.time.s"),
+                            },
+                        ].map((unit, idx) => (
+                            <Fragment key={idx}>
+                                <div className="flex flex-col items-center">
+                                    <div className="bg-white/20 backdrop-blur-md w-12 h-12 rounded-full flex items-center justify-center border border-white/30 shadow-inner">
+                                        <span className="text-white font-black text-xl tabular-nums">
+                                            {unit.val}
+                                        </span>
+                                    </div>
+                                    <span className="text-[8px] font-black text-white/60 uppercase mt-1 tracking-tighter">
+                                        {unit.label}
+                                    </span>
+                                </div>
+                                {idx < 2 && (
+                                    <span className="text-white/50 font-black text-xl mb-3">
+                                        :
+                                    </span>
+                                )}
+                            </Fragment>
+                        ))}
                     </div>
 
-                    <button
-                        onClick={handleJoinClick}
-                        className="bg-white text-[#007ABF] px-8 py-3.5 rounded-[18px] font-black text-[11px] uppercase tracking-widest shadow-2xl shadow-black/10 hover:shadow-white/20 hover:scale-[1.05] active:scale-95 transition-all flex items-center gap-3 border border-white group/btn"
-                    >
-                        Join Class{" "}
-                        <ExternalLink
-                            size={14}
-                            className="group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform"
-                        />
-                    </button>
+                    {isCurrent ? (
+                        <button
+                            onClick={handleJoinClick}
+                            disabled={
+                                !sessionEvent?.hasMeeting ||
+                                !sessionEvent?.linkMeeing
+                            }
+                            className="px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-widest bg-white/90 text-gray-900 hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {t("sessionBanner.join")}
+                        </button>
+                    ) : (
+                        <button
+                            onClick={() => setShowDetails((v) => !v)}
+                            disabled={!sessionEvent}
+                            className="px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-widest bg-white/20 text-white hover:bg-white/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {showDetails
+                                ? t("sessionBanner.hideDetails")
+                                : t("sessionBanner.details")}
+                        </button>
+                    )}
                 </div>
             </div>
 
+            {showDetails && !!sessionEvent && (
+                <div className="max-w-7xl mx-auto px-10 pb-3 relative z-10">
+                    <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-4 py-3 text-white/90">
+                        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[10px] font-black uppercase tracking-widest">
+                            <span>
+                                {t("sessionBanner.sessionId")}: #
+                                {sessionEvent.id}
+                            </span>
+                            {!!sessionEvent.sessionState && (
+                                <span>
+                                    {t("sessionBanner.state")}:{" "}
+                                    {sessionEvent.sessionState}
+                                </span>
+                            )}
+                            {!!sessionEvent.status && (
+                                <span>
+                                    {t("sessionBanner.status")}:{" "}
+                                    {sessionEvent.status}
+                                </span>
+                            )}
+                        </div>
+
+                        {!!sessionEvent.cancellationReason && (
+                            <p className="mt-2 text-[11px] font-semibold">
+                                {t("sessionBanner.reason")}:{" "}
+                                {sessionEvent.cancellationReason}
+                            </p>
+                        )}
+
+                        {sessionEvent.group.locationType === "offline" &&
+                            !!sessionEvent.group.location && (
+                                <a
+                                    href={sessionEvent.group.location}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="mt-2 inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-widest underline underline-offset-2"
+                                >
+                                    {t("sessionBanner.openLocation")}
+                                    <ExternalLink size={12} />
+                                </a>
+                            )}
+                    </div>
+                </div>
+            )}
+
             <style>{`
-        @keyframes gradient-slow {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        .animate-gradient-slow {
-          animation: gradient-slow 12s ease infinite;
-        }
-      `}</style>
+          @keyframes gradient-slow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+          }
+          .animate-gradient-slow {
+            animation: gradient-slow 10s ease infinite;
+          }
+        `}</style>
         </div>
     );
 };

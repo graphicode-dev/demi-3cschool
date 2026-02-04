@@ -563,7 +563,7 @@ export function ManagementView({
                                   <p className="text-[10px] font-bold text-red-600">New Report: {r.reason}</p>
                                   <p className="text-[9px] text-red-400">By {r.reporter.name}</p>
                                </div>
-                               <button onClick={() => setActiveSubTab('reports')}><ChevronRight size={12} className="text-red-400" /></button>
+                               <button onClick={() => setActiveSubTab('reports')}><ChevronRight size={12} className="text-red-400 rtl:rotate-180" /></button>
                             </div>
                          ))}
                       </div>

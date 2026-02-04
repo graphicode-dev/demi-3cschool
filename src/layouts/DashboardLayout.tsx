@@ -48,7 +48,9 @@ const LayoutContent: React.FC = () => {
                 <Navbar />
                 {canSeeSessionBanner && (
                     <Suspense fallback={null}>
-                        <NavbarSessionCountdown />
+                        <div className="sticky top-[72px] z-10 w-full px-10 pt-6 pb-2 bg-white dark:bg-gray-900/70 dark:supports-backdrop-filter:bg-gray-900/50">
+                            <NavbarSessionCountdown />
+                        </div>
                     </Suspense>
                 )}
                 <div className="mx-auto bg-gray-50 dark:bg-gray-900 max-w-(--breakpoint-3xl) overflow-x-hidden">

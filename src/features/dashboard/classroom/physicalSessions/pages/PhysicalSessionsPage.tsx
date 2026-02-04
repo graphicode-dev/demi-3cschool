@@ -22,7 +22,6 @@ function PhysicalSessionsPage() {
         >
             {/* Term Stepper */}
             <TermStepper
-                translationNamespace="physicalSessions"
                 terms={terms}
                 selectedTermId={selectedTermId}
                 onSelectTerm={setSelectedTermId}
@@ -47,13 +46,13 @@ function PhysicalSessionsPage() {
                         ${isSummerTerm ? "flex flex-wrap gap-6" : "flex flex-col gap-4"}
                     `}
             >
-                {offlineSessions?.map((session) => (
+                {/* {offlineSessions?.map((session) => (
                     <PhysicalSessionCard
                         key={session.id}
                         session={session}
                         variant={isSummerTerm ? "compact" : "full"}
                     />
-                ))}
+                ))} */}
             </div>
         </PageWrapper>
     );

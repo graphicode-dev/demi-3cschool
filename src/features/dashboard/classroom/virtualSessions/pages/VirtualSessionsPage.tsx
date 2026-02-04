@@ -38,7 +38,8 @@ function VirtualSessionsPage() {
             status: string
         ): "current" | "upcoming" | "completed" => {
             const s = status.toLowerCase();
-            if (s.includes("current") || s.includes("running")) return "current";
+            if (s.includes("current") || s.includes("running"))
+                return "current";
             if (s.includes("complete") || s.includes("ended"))
                 return "completed";
             return "upcoming";
@@ -135,7 +136,6 @@ function VirtualSessionsPage() {
         >
             {/* Term Stepper */}
             <TermStepper
-                translationNamespace="virtualSessions"
                 terms={terms}
                 selectedTermId={selectedTermId}
                 onSelectTerm={setSelectedTermId}
@@ -207,7 +207,7 @@ function VirtualSessionsPage() {
                         </h2>
                         <button className="flex items-center gap-1 text-sm font-medium text-warning-500 hover:text-warning-600 transition-colors">
                             {t("session.viewAllHistory")}
-                            <ChevronRight className="size-4" />
+                            <ChevronRight className="size-4 rtl:rotate-180" />
                         </button>
                     </div>
                     <div className="flex flex-wrap gap-4">

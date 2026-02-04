@@ -237,7 +237,29 @@ function LessonPage() {
     }
 
     return (
-        <PageWrapper>
+        <PageWrapper
+            pageHeaderProps={{
+                backButton: true,
+                title: selectedVideo?.title,
+            }}
+        >
+            {/* Progress */}
+            <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-xl">
+                <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                        {t("lesson.about.yourProgress")}
+                    </span>
+                    <span className="text-sm font-bold text-brand-500">
+                        75% {t("lesson.about.complete")}
+                    </span>
+                </div>
+                <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <div
+                        className="h-full bg-brand-500 rounded-full transition-all"
+                        style={{ width: "75%" }}
+                    />
+                </div>
+            </div>
             <div className="flex flex-col gap-6 max-w-6xl mx-auto px-4 py-6">
                 {/* Main Content Area */}
                 <div className="flex gap-4">

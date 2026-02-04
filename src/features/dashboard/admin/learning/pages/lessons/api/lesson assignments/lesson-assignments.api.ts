@@ -56,7 +56,15 @@ export const lessonAssignmentsApi = {
      * Get list of all lesson assignments
      */
     getList: async (signal?: AbortSignal): Promise<LessonAssignment[]> => {
-        const response = await api.get<ListResponse<LessonAssignment>>(
+        const response = await api.get<
+            ApiResponse<
+                | LessonAssignment[]
+                | {
+                      items?: LessonAssignment[];
+                      data?: LessonAssignment[];
+                  }
+            >
+        >(
             BASE_URL,
             {
                 signal,
@@ -71,7 +79,13 @@ export const lessonAssignmentsApi = {
             throw new Error("No data returned from server");
         }
 
-        return response.data.data;
+        const payload = response.data.data;
+
+        if (Array.isArray(payload)) {
+            return payload;
+        }
+
+        return payload.items ?? payload.data ?? [];
     },
 
     /**
@@ -88,7 +102,8 @@ export const lessonAssignmentsApi = {
                 perPage: number;
                 lastPage: number;
                 nextPageUrl: string | null;
-                data: LessonAssignment[];
+                items?: LessonAssignment[];
+                data?: LessonAssignment[];
             }>
         >(`${BASE_URL}/lesson/${lessonId}`, {
             params: params as Record<string, unknown> | undefined,
@@ -104,8 +119,11 @@ export const lessonAssignmentsApi = {
         }
 
         const apiData = response.data.data;
+
+        const items =
+            apiData.items ?? apiData.data ?? ([] as LessonAssignment[]);
         return {
-            items: apiData.data,
+            items,
             currentPage: apiData.currentPage,
             perPage: apiData.perPage,
             lastPage: apiData.lastPage,

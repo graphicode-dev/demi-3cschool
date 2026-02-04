@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, useLocation } from "react-router";
 import { useTranslation } from "react-i18next";
-
+import LogoArDark from "@/assets/images/logos/ArabicDark.png";
+import LogoEnDark from "@/assets/images/logos/EnglishDark.png";
+import LogoArLight from "@/assets/images/logos/ArabicLight.png";
+import LogoEnLight from "@/assets/images/logos/EnglishLight.png";
 import Logo3CBlack from "@/assets/images/landing/3c-black.png";
-import Logo3CWhite from "@/assets/images/landing/3c-white.png";
 import { useSidebar } from "@/shared/context/SidebarContext";
 import { useTheme } from "@/shared/context/ThemeContext";
 import { useNavItems, type NavItem } from "@/navigation";
@@ -12,7 +14,8 @@ import { paths } from "@/router";
 import { authStore } from "@/auth";
 
 const Sidebar: React.FC = () => {
-    const { t } = useTranslation("sidebar");
+    const { t, i18n } = useTranslation("sidebar");
+    const isArabic = i18n.language === "ar";
     const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
     const { theme } = useTheme();
     const location = useLocation();
@@ -353,31 +356,41 @@ const Sidebar: React.FC = () => {
                     {isExpanded || isHovered || isMobileOpen ? (
                         <div className="flex justify-center items-center gap-2">
                             {theme === "light" ? (
+                                isArabic ? (
+                                    <img
+                                        src={LogoArDark}
+                                        className="w-200 object-contain"
+                                        alt="Logo"
+                                    />
+                                ) : (
+                                    <img
+                                        src={LogoEnDark}
+                                        className="w-200 object-contain"
+                                        alt="Logo"
+                                    />
+                                )
+                            ) : isArabic ? (
                                 <img
-                                    src={Logo3CBlack}
-                                    className="w-20 object-contain"
+                                    src={LogoArLight}
+                                    className="w-200 object-contain"
                                     alt="Logo"
                                 />
                             ) : (
                                 <img
-                                    src={Logo3CWhite}
-                                    className="w-20 object-contain"
+                                    src={LogoEnLight}
+                                    className="w-200 object-contain"
                                     alt="Logo"
                                 />
                             )}
                         </div>
                     ) : (
                         <div>
-                            {theme === "light" ? (
-                                <img src={Logo3CBlack} width={70} alt="Logo" />
-                            ) : (
-                                <img
-                                    src={Logo3CWhite}
-                                    alt="Logo"
-                                    width={100}
-                                    height={32}
-                                />
-                            )}
+                            <img
+                                src={Logo3CBlack}
+                                alt="Logo"
+                                width={100}
+                                height={32}
+                            />
                         </div>
                     )}
                 </Link>

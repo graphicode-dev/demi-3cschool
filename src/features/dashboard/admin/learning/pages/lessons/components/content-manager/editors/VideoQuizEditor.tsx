@@ -696,7 +696,7 @@ export default function VideoQuizEditor({
                                             >
                                                 <Trash2 className="w-4 h-4" />
                                             </button>
-                                            <ChevronRight className="w-5 h-5 text-gray-400" />
+                                            <ChevronRight className="w-5 h-5 text-gray-400 rtl:rotate-180" />
                                         </div>
                                     </div>
                                 )}
@@ -1067,7 +1067,7 @@ export default function VideoQuizEditor({
                                             >
                                                 <Trash2 className="w-4 h-4" />
                                             </button>
-                                            <ChevronRight className="w-5 h-5 text-gray-400" />
+                                            <ChevronRight className="w-5 h-5 text-gray-400 rtl:rotate-180" />
                                         </div>
                                     </div>
                                 )}

@@ -241,7 +241,7 @@ export const Calendar = ({
                     onClick={goToPreviousMonth}
                     className="p-2 hover:bg-gray-100 rounded-full transition-colors dark:hover:bg-gray-700"
                 >
-                    <ChevronLeft size={20} />
+                    <ChevronLeft size={20} className="rtl:rotate-180" />
                 </button>
                 <h2
                     className={cn(
