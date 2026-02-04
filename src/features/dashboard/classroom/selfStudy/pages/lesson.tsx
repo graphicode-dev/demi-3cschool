@@ -66,6 +66,12 @@ type PlayerState = {
     duration: number; // seconds
 };
 
+interface PlayerJsInstance {
+    on: (event: string, callback: (...args: unknown[]) => void) => void;
+    getDuration: (callback: (duration: number) => void) => void;
+    getCurrentTime: (callback: (time: number) => void) => void;
+}
+
 function useUpdateProgress() {
     const mutate = useCallback(
         (
@@ -162,7 +168,9 @@ function useGetGroupProgress(groupId: string | null, enabled: boolean) {
 
 declare global {
     interface Window {
-        playerjs?: any;
+        playerjs?: {
+            Player: new (iframe: HTMLIFrameElement) => PlayerJsInstance;
+        };
     }
 }
 
@@ -174,7 +182,7 @@ const BunnyStreamPlayer = memo(function BunnyStreamPlayer({
     onState: (s: PlayerState) => void;
 }) {
     const iframeRef = useRef<HTMLIFrameElement | null>(null);
-    const playerRef = useRef<any>(null);
+    const playerRef = useRef<PlayerJsInstance | null>(null);
 
     const srcRaw = useMemo(
         () => getIframeSrcFromEmbedHtml(embedHtml),
