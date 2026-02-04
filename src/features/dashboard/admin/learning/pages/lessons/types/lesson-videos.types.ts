@@ -32,7 +32,11 @@ export interface LessonVideo {
     videoReferenceAr: string;
     videoReferenceEn: string;
     embedHtml: string;
+    embedHtmlAr?: string;
+    embedHtmlEn?: string;
     thumbnail: string;
+    thumbnailAr?: string;
+    thumbnailEn?: string;
     isActive: number;
     createdAt: string;
     updatedAt: string;

@@ -5,7 +5,7 @@
  * Matches the design from the provided images.
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useRef, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { Check, Play, Loader2, Trash2 } from "lucide-react";
 import { ConfirmDialog } from "@/design-system/components/ConfirmDialog";
@@ -27,6 +27,77 @@ interface VideoEditorProps {
 }
 
 type VideoPreviewTab = "arabic" | "english";
+
+function getIframeSrcFromEmbedHtml(embedHtml: string): string | null {
+    const m = embedHtml.match(/src="([^"]+)"/i);
+    return m?.[1] ?? null;
+}
+
+function setQueryParam(url: string, key: string, value: string) {
+    try {
+        const u = new URL(url);
+        u.searchParams.set(key, value);
+        return u.toString();
+    } catch {
+        return url;
+    }
+}
+
+const StableEmbedPlayer = memo(function StableEmbedPlayer({
+    embedHtml,
+}: {
+    embedHtml: string;
+}) {
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const lastHtmlRef = useRef<string>("");
+
+    const html = useMemo(() => {
+        return (embedHtml || "").replace("autoplay=true", "autoplay=false");
+    }, [embedHtml]);
+
+    useEffect(() => {
+        if (!containerRef.current) return;
+        if (lastHtmlRef.current === html) return;
+
+        lastHtmlRef.current = html;
+        containerRef.current.innerHTML = html;
+    }, [html]);
+
+    return <div ref={containerRef} className="w-full h-full" />;
+});
+
+const BunnyEmbedPreview = memo(function BunnyEmbedPreview({
+    embedHtml,
+}: {
+    embedHtml: string;
+}) {
+    const srcRaw = useMemo(
+        () => getIframeSrcFromEmbedHtml(embedHtml),
+        [embedHtml]
+    );
+    const src = useMemo(() => {
+        if (!srcRaw) return null;
+        let next = srcRaw;
+        next = setQueryParam(next, "autoplay", "false");
+        next = setQueryParam(next, "loop", "false");
+        return next;
+    }, [srcRaw]);
+
+    if (!src) {
+        return <StableEmbedPlayer embedHtml={embedHtml} />;
+    }
+
+    return (
+        <iframe
+            src={src}
+            className="w-full h-full"
+            allow="autoplay; encrypted-media; picture-in-picture"
+            allowFullScreen
+            style={{ border: 0 }}
+            title="video-preview"
+        />
+    );
+});
 
 export default function VideoEditor({
     lessonId,
@@ -169,10 +240,13 @@ export default function VideoEditor({
         });
     };
 
-    const currentVideoUrl =
-        previewTab === "arabic"
-            ? formData.videoReferenceAr
-            : formData.videoReferenceEn;
+    const previewEmbedHtml = useMemo(() => {
+        if (!video) return "";
+        if (previewTab === "arabic") {
+            return String(video.embedHtmlAr ?? video.embedHtml ?? "");
+        }
+        return String(video.embedHtmlEn ?? video.embedHtml ?? "");
+    }, [previewTab, video]);
 
     return (
         <div className="space-y-6">
@@ -393,13 +467,10 @@ export default function VideoEditor({
                             </button>
                         </div>
                     </div>
-                    {video?.embedHtml ? (
-                        <div
-                            className="w-full rounded-xl overflow-hidden"
-                            dangerouslySetInnerHTML={{
-                                __html: video.embedHtml,
-                            }}
-                        />
+                    {previewEmbedHtml ? (
+                        <div className="w-full rounded-xl overflow-hidden aspect-video bg-gray-900">
+                            <BunnyEmbedPreview embedHtml={previewEmbedHtml} />
+                        </div>
                     ) : (
                         <div className="aspect-video bg-gray-900 rounded-xl flex flex-col items-center justify-center">
                             <div className="w-16 h-16 flex items-center justify-center rounded-full bg-gray-800 text-gray-500 mb-3">
