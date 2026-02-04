@@ -1,7 +1,9 @@
-import { useState, useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Clock, Video, MapPin, ChevronDown, ChevronUp } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Clock, Video, ExternalLink, Sparkles } from "lucide-react";
+import { useCurriculumTerms } from "@/features/dashboard/classroom/components/TermStepper";
+import { useOnlineSessions } from "@/features/dashboard/classroom/virtualSessions/api";
+import { useOfflineSessions } from "@/features/dashboard/classroom/physicalSessions/api/physicalSessions.queries";
 
 interface SessionEvent {
     id: number;
@@ -36,16 +38,93 @@ interface TimeLeft {
     total: number;
 }
 
+type SessionKind = "online" | "offline";
+
 const NavbarSessionCountdown = () => {
     const { t, i18n } = useTranslation("dashboard");
     const isRTL = i18n.language === "ar";
-    const [isExpanded, setIsExpanded] = useState(false);
     const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
+    const [fallbackSeconds, setFallbackSeconds] = useState(15 * 60);
 
-    // TODO: Implement getAllSessions API hook
-    // const { data: sessions = [], isLoading } = getAllSessions();
-    const sessions: SessionEvent[] = [];
-    const isLoading = false;
+    const { selectedTermId } = useCurriculumTerms();
+
+    const {
+        data: onlineSessions = [],
+        isLoading: isLoadingOnline,
+        isError: isOnlineError,
+    } = useOnlineSessions(selectedTermId, { enabled: !!selectedTermId });
+    const {
+        data: offlineSessions = [],
+        isLoading: isLoadingOffline,
+        isError: isOfflineError,
+    } = useOfflineSessions(selectedTermId, { enabled: !!selectedTermId });
+
+    const isLoading = isLoadingOnline || isLoadingOffline;
+    const isError = isOnlineError || isOfflineError;
+
+    useEffect(() => {
+        const timer = setInterval(() => {
+            setFallbackSeconds((prev) => (prev > 0 ? prev - 1 : 0));
+        }, 1000);
+        return () => clearInterval(timer);
+    }, []);
+
+    const sessions: Array<SessionEvent & { kind: SessionKind }> =
+        useMemo(() => {
+            const online = onlineSessions.map((s) => ({
+                id: s.id,
+                kind: "online" as const,
+                group: {
+                    id: s.group.id,
+                    name: s.group.name,
+                    locationType: "online" as const,
+                    location: "",
+                    locationMapUrl: "",
+                },
+                sessionDate: s.sessionDate,
+                startTime: s.startTime,
+                endTime: s.endTime,
+                topic: s.lesson?.title ?? "",
+                lesson: {
+                    id: s.lesson.id,
+                    title: s.lesson.title,
+                },
+                isCancelled: Boolean(s.reason),
+                cancellationReason: s.reason,
+                meetingProvider: "bbb",
+                meetingId: s.bbbMeetingId,
+                hasMeeting: Boolean(s.hasMeeting),
+                linkMeeing: s.hasMeeting ? (s.bbbMeetingId ?? null) : null,
+            }));
+
+            const offline = offlineSessions.map((s) => ({
+                id: s.id,
+                kind: "offline" as const,
+                group: {
+                    id: s.group.id,
+                    name: s.group.name,
+                    locationType: "offline" as const,
+                    location: s.offlineLocation ?? "",
+                    locationMapUrl: "",
+                },
+                sessionDate: s.sessionDate,
+                startTime: s.startTime,
+                endTime: s.endTime,
+                topic: s.lesson?.title ?? "",
+                lesson: {
+                    id: s.lesson.id,
+                    title: s.lesson.title,
+                },
+                isCancelled: Boolean(s.reason),
+                cancellationReason: s.reason,
+                meetingProvider: "bbb",
+                meetingId: s.bbbMeetingId,
+                hasMeeting: Boolean(s.hasMeeting),
+                linkMeeing: s.hasMeeting ? (s.bbbMeetingId ?? null) : null,
+            }));
+
+            return [...online, ...offline];
+        }, [onlineSessions, offlineSessions]);
 
     // Find the next upcoming session
     const nextSession = useMemo(() => {
@@ -121,259 +200,132 @@ const NavbarSessionCountdown = () => {
         });
     };
 
-    // Don't show if loading, no session, or no time left
-    if (isLoading || !nextSession || !timeLeft) return null;
-
-    // Check if session is starting soon (within 30 minutes)
-    const isStartingSoon = timeLeft.total <= 30 * 60 * 1000;
-    // Check if session is very close (within 5 minutes)
-    const isVeryClose = timeLeft.total <= 5 * 60 * 1000;
+    const isStartingSoon = Boolean(
+        timeLeft && timeLeft.total <= 30 * 60 * 1000
+    );
+    const isVeryClose = Boolean(timeLeft && timeLeft.total <= 5 * 60 * 1000);
 
     const getStatusColor = () => {
+        if (!selectedTermId) return "bg-brand-500";
         if (isVeryClose) return "bg-red-500";
         if (isStartingSoon) return "bg-amber-500";
         return "bg-brand-500";
     };
 
     const getTextColor = () => {
+        if (!selectedTermId) return "text-brand-600 dark:text-brand-400";
         if (isVeryClose) return "text-red-600 dark:text-red-400";
         if (isStartingSoon) return "text-amber-600 dark:text-amber-400";
         return "text-brand-600 dark:text-brand-400";
     };
 
-    const getBgColor = () => {
-        if (isVeryClose) return "bg-red-50 dark:bg-red-500/10";
-        if (isStartingSoon) return "bg-amber-50 dark:bg-amber-500/10";
-        return "bg-brand-50 dark:bg-brand-500/10";
+    const formatSeconds = (seconds: number) => {
+        const mins = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${mins}:${secs.toString().padStart(2, "0")}`;
     };
 
-    const getBorderColor = () => {
-        if (isVeryClose) return "border-red-200 dark:border-red-800";
-        if (isStartingSoon) return "border-amber-200 dark:border-amber-800";
-        return "border-brand-200 dark:border-brand-800";
+    const displayTitle =
+        nextSession?.topic ||
+        nextSession?.lesson?.title ||
+        "Mastering Maze Game Logic";
+    const displaySubtitle =
+        nextSession?.group?.name || "Level 1: Candidate Exclusive";
+
+    const displayTotalSeconds =
+        timeLeft?.total != null
+            ? Math.max(0, Math.floor(timeLeft.total / 1000))
+            : fallbackSeconds;
+
+    const handleJoinClick = () => {
+        if (!nextSession) return;
+        if (nextSession.group.locationType !== "online") return;
+        if (!nextSession.hasMeeting) return;
+        if (!nextSession.linkMeeing) return;
+        window.open(nextSession.linkMeeing, "_blank");
     };
 
     return (
-        <div className="relative">
-            {/* Compact Countdown Button */}
-            <button
-                onClick={() => setIsExpanded(!isExpanded)}
-                className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition-all duration-300 ${getBgColor()} ${getBorderColor()} hover:shadow-md ${
-                    isVeryClose ? "animate-pulse" : ""
-                }`}
-            >
-                <div className={`p-1 rounded-lg ${getStatusColor()}`}>
-                    {nextSession.group.locationType === "online" ? (
-                        <Video className="h-3.5 w-3.5 text-white" />
-                    ) : (
-                        <MapPin className="h-3.5 w-3.5 text-white" />
-                    )}
-                </div>
-                <div className="flex items-center gap-1.5">
-                    <Clock className={`h-4 w-4 ${getTextColor()}`} />
-                    <span
-                        className={`font-bold tabular-nums text-sm ${getTextColor()}`}
-                    >
-                        {timeLeft.days > 0 && `${timeLeft.days}d `}
-                        {String(timeLeft.hours).padStart(2, "0")}:
-                        {String(timeLeft.minutes).padStart(2, "0")}:
-                        {String(timeLeft.seconds).padStart(2, "0")}
-                    </span>
-                </div>
-                {isExpanded ? (
-                    <ChevronUp className={`h-4 w-4 ${getTextColor()}`} />
-                ) : (
-                    <ChevronDown className={`h-4 w-4 ${getTextColor()}`} />
-                )}
-            </button>
+        <div className="relative group overflow-hidden border-b border-white/10 animate-in slide-in-from-top duration-700">
+            {/* Animated Gradient Background */}
+            <div className="absolute inset-0 bg-[length:200%_200%] animate-gradient-slow bg-gradient-to-r from-[#00ADEF] via-[#FFB800] to-[#007ABF] opacity-95" />
 
-            {/* Expanded Dropdown */}
-            {isExpanded && (
-                <>
-                    {/* Backdrop */}
-                    <div
-                        className="fixed inset-0 z-40"
-                        onClick={() => setIsExpanded(false)}
-                    />
+            {/* Floating Light Effects */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute top-[-50%] left-[-10%] w-[40%] h-[200%] bg-white/10 blur-[80px] rotate-45 animate-pulse" />
+                <div className="absolute bottom-[-50%] right-[-10%] w-[30%] h-[200%] bg-yellow-300/20 blur-[100px] -rotate-45 animate-pulse delay-700" />
+            </div>
 
-                    {/* Dropdown Content */}
-                    <div
-                        className={`absolute top-full mt-2 z-50 w-[320px] rounded-2xl border shadow-xl overflow-hidden ${
-                            isRTL ? "left-0" : "right-0"
-                        } ${getBgColor()} ${getBorderColor()}`}
-                    >
-                        {/* Header */}
-                        <div
-                            className={`px-4 py-3 border-b ${getBorderColor()}`}
-                        >
-                            <div className="flex items-center justify-between">
-                                <span
-                                    className={`text-sm font-semibold ${getTextColor()}`}
-                                >
-                                    {t(
-                                        "pages.student.schedule.nextSession",
-                                        "Next Session"
-                                    )}
-                                </span>
-                                {isStartingSoon && (
-                                    <span
-                                        className={`px-2 py-0.5 text-[10px] font-bold uppercase rounded-full text-white ${getStatusColor()} ${
-                                            isVeryClose ? "animate-pulse" : ""
-                                        }`}
-                                    >
-                                        {isVeryClose
-                                            ? t(
-                                                  "pages.student.schedule.startingNow",
-                                                  "Starting Now!"
-                                              )
-                                            : t(
-                                                  "pages.student.schedule.soon",
-                                                  "Soon"
-                                              )}
-                                    </span>
-                                )}
-                            </div>
+            <div className=" mx-auto px-10 py-3.5 flex items-center justify-between gap-4 relative z-10">
+                <div className="flex items-center gap-6">
+                    {/* Animated Status Badge */}
+                    <div className="flex items-center gap-2 bg-white/20 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/30 shadow-sm">
+                        <span className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                        </span>
+                        <span className="text-[10px] font-black text-white uppercase tracking-[0.2em] drop-shadow-sm">
+                            Session Live
+                        </span>
+                    </div>
+
+                    <div className="flex items-center gap-4">
+                        <div className="w-10 h-10 bg-white/20 backdrop-blur-xl rounded-2xl flex items-center justify-center text-white border border-white/30 shadow-inner group-hover:rotate-6 transition-transform">
+                            <Video size={18} />
                         </div>
-
-                        {/* Session Info */}
-                        <div className="p-4">
-                            <h4 className="font-bold text-gray-900 dark:text-white truncate">
-                                {nextSession.topic || nextSession.lesson?.title}
-                            </h4>
-                            <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
-                                {nextSession.group.name}
+                        <div>
+                            <p className="text-white font-black text-[15px] tracking-tight drop-shadow-sm flex items-center gap-2">
+                                {displayTitle}{" "}
+                                <Sparkles
+                                    size={14}
+                                    className="text-yellow-200 animate-bounce"
+                                />
                             </p>
-                            <div className="flex items-center gap-2 mt-2 text-xs text-gray-500 dark:text-gray-400">
-                                <Clock className="h-3.5 w-3.5" />
-                                <span>
-                                    {formatDate(nextSession.sessionDate)} •{" "}
-                                    {formatTime(nextSession.startTime)} -{" "}
-                                    {formatTime(nextSession.endTime)}
-                                </span>
-                            </div>
-
-                            {/* Countdown Display */}
-                            <div className="flex items-center justify-center gap-3 mt-4 py-3 rounded-xl bg-white/50 dark:bg-gray-800/50">
-                                {timeLeft.days > 0 && (
-                                    <div className="text-center">
-                                        <div
-                                            className={`text-2xl font-bold tabular-nums ${getTextColor()}`}
-                                        >
-                                            {String(timeLeft.days).padStart(
-                                                2,
-                                                "0"
-                                            )}
-                                        </div>
-                                        <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase">
-                                            {t(
-                                                "pages.student.schedule.countdown.days",
-                                                "Days"
-                                            )}
-                                        </div>
-                                    </div>
-                                )}
-                                {timeLeft.days > 0 && (
-                                    <span
-                                        className={`text-xl font-bold ${getTextColor()}`}
-                                    >
-                                        :
-                                    </span>
-                                )}
-                                <div className="text-center">
-                                    <div
-                                        className={`text-2xl font-bold tabular-nums ${getTextColor()}`}
-                                    >
-                                        {String(timeLeft.hours).padStart(
-                                            2,
-                                            "0"
-                                        )}
-                                    </div>
-                                    <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase">
-                                        {t(
-                                            "pages.student.schedule.countdown.hours",
-                                            "Hours"
-                                        )}
-                                    </div>
-                                </div>
-                                <span
-                                    className={`text-xl font-bold ${getTextColor()}`}
-                                >
-                                    :
-                                </span>
-                                <div className="text-center">
-                                    <div
-                                        className={`text-2xl font-bold tabular-nums ${getTextColor()}`}
-                                    >
-                                        {String(timeLeft.minutes).padStart(
-                                            2,
-                                            "0"
-                                        )}
-                                    </div>
-                                    <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase">
-                                        {t(
-                                            "pages.student.schedule.countdown.mins",
-                                            "Mins"
-                                        )}
-                                    </div>
-                                </div>
-                                <span
-                                    className={`text-xl font-bold ${getTextColor()}`}
-                                >
-                                    :
-                                </span>
-                                <div className="text-center">
-                                    <div
-                                        className={`text-2xl font-bold tabular-nums ${getTextColor()}`}
-                                    >
-                                        {String(timeLeft.seconds).padStart(
-                                            2,
-                                            "0"
-                                        )}
-                                    </div>
-                                    <div className="text-[10px] text-gray-500 dark:text-gray-400 uppercase">
-                                        {t(
-                                            "pages.student.schedule.countdown.secs",
-                                            "Secs"
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Action Buttons */}
-                            <div className="flex items-center gap-2 mt-4">
-                                <Link
-                                    to="/schedule"
-                                    onClick={() => setIsExpanded(false)}
-                                    className="flex-1 px-4 py-2.5 text-sm font-medium text-center text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors border border-gray-200 dark:border-gray-700"
-                                >
-                                    {t(
-                                        "pages.student.schedule.viewSchedule",
-                                        "View Schedule"
-                                    )}
-                                </Link>
-                                {nextSession.hasMeeting &&
-                                    nextSession.linkMeeing && (
-                                        <a
-                                            href={nextSession.linkMeeing}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className={`flex-1 px-4 py-2.5 text-sm font-medium text-center text-white rounded-xl transition-colors ${getStatusColor()} hover:opacity-90 ${
-                                                isVeryClose
-                                                    ? "animate-pulse"
-                                                    : ""
-                                            }`}
-                                        >
-                                            {t(
-                                                "pages.student.schedule.joinNow",
-                                                "Join Now"
-                                            )}
-                                        </a>
-                                    )}
-                            </div>
+                            <p className="text-white/70 text-[10px] font-black uppercase tracking-widest leading-none mt-0.5">
+                                {displaySubtitle}
+                            </p>
                         </div>
                     </div>
-                </>
-            )}
+                </div>
+
+                <div className="flex items-center gap-10">
+                    <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full border border-white/30 flex items-center justify-center text-white/80">
+                            <Clock size={14} />
+                        </div>
+                        <div>
+                            <p className="text-white/60 text-[9px] font-black uppercase tracking-[0.2em] leading-none mb-1">
+                                Starts In
+                            </p>
+                            <p className="text-white font-black text-lg tabular-nums tracking-tighter leading-none drop-shadow-sm">
+                                {formatSeconds(displayTotalSeconds)}
+                            </p>
+                        </div>
+                    </div>
+
+                    <button
+                        onClick={handleJoinClick}
+                        className="bg-white text-[#007ABF] px-8 py-3.5 rounded-[18px] font-black text-[11px] uppercase tracking-widest shadow-2xl shadow-black/10 hover:shadow-white/20 hover:scale-[1.05] active:scale-95 transition-all flex items-center gap-3 border border-white group/btn"
+                    >
+                        Join Class{" "}
+                        <ExternalLink
+                            size={14}
+                            className="group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform"
+                        />
+                    </button>
+                </div>
+            </div>
+
+            <style>{`
+        @keyframes gradient-slow {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        .animate-gradient-slow {
+          animation: gradient-slow 12s ease infinite;
+        }
+      `}</style>
         </div>
     );
 };

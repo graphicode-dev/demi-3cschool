@@ -8,7 +8,7 @@
  * TODO: Add Sidebar, Navbar, and Backdrop components when available
  */
 
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { authStore } from "@/auth/auth.store";
 import { paths } from "@/router/paths";
@@ -23,8 +23,16 @@ import "@/search/init";
 import { CLASSROOM_PATH } from "@/features/dashboard/classroom/navigation/constant";
 import { ADMIN_PATH } from "@/features/dashboard/admin/navigation/constant";
 
+const NavbarSessionCountdown = lazy(
+    () => import("@/shared/components/dashboard/navbar/NavbarSessionCountdown")
+);
+
 const LayoutContent: React.FC = () => {
     const { isExpanded, isHovered, isMobileOpen } = useSidebar();
+    const user = authStore((state) => state.user);
+    const roleName = user?.role?.name?.toLowerCase().trim();
+    const canSeeSessionBanner =
+        roleName === "student" || roleName === "teacher";
 
     return (
         <div className="dashboard min-h-screen xl:flex bg-white">
@@ -38,6 +46,11 @@ const LayoutContent: React.FC = () => {
                 } ${isMobileOpen ? "ms-0" : ""}`}
             >
                 <Navbar />
+                {canSeeSessionBanner && (
+                    <Suspense fallback={null}>
+                        <NavbarSessionCountdown />
+                    </Suspense>
+                )}
                 <div className="mx-auto bg-gray-50 dark:bg-gray-900 max-w-(--breakpoint-3xl) overflow-x-hidden">
                     <Breadcrumb />
                     <Outlet />

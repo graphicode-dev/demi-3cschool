@@ -1,9 +1,9 @@
 import type { VirtualSessionsData, VirtualSession, Term } from "../types";
 
 const MOCK_TERMS: Term[] = [
-    { id: 1, name: "first", order: 1, status: "completed" },
-    { id: 2, name: "second", order: 2, status: "current" },
-    { id: 3, name: "summer", order: 3, status: "locked" },
+    { id: 1, name: "first", caption: "First", order: 1, status: "completed" },
+    { id: 2, name: "second", caption: "Second", order: 2, status: "current" },
+    { id: 3, name: "summer", caption: "Summer", order: 3, status: "locked" },
 ];
 
 const MOCK_SESSIONS: VirtualSession[] = [
@@ -110,7 +110,7 @@ const MOCK_SESSIONS: VirtualSession[] = [
         timezone: "GMT+3",
         createdAt: "2026-01-15 10:00:00",
         updatedAt: "2026-01-15 10:00:00",
-        status: "live",
+        status: "current",
     },
     // Term 2 - Upcoming
     {

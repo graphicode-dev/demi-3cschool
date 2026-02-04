@@ -1,6 +1,6 @@
 import NotificationDropdown from "@/shared/components/dashboard/navbar/NotificationDropdown";
 import UserDropdown from "@/shared/components/dashboard/navbar/UserDropdown";
-import { useState, lazy, Suspense } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import Logo3CBlack from "@/assets/images/landing/3c-black.png";
@@ -10,11 +10,6 @@ import { useTheme } from "@/shared/context/ThemeContext";
 import { ThemeToggleButton } from "../../ui/ThemeToggleButton";
 import { authStore } from "@/auth/auth.store";
 import { useSearch } from "@/search";
-
-// Lazy load NavbarSessionCountdown to avoid circular dependency during initial load
-const NavbarSessionCountdown = lazy(
-    () => import("@/shared/components/dashboard/navbar/NavbarSessionCountdown")
-);
 
 const Navbar = () => {
     const { t, i18n } = useTranslation("dashboard");
@@ -170,12 +165,6 @@ const Navbar = () => {
                     } items-center justify-between w-full gap-4 px-5 py-4 lg:flex shadow-theme-md lg:justify-end lg:px-0 lg:shadow-none`}
                 >
                     <div className="flex items-center gap-2 2xsm:gap-3">
-                        {/* <!-- Session Countdown --> */}
-                        {user?.role?.name === "student" && (
-                            <Suspense fallback={null}>
-                                <NavbarSessionCountdown />
-                            </Suspense>
-                        )}
                         {/* <!-- Language Selector --> */}
                         <div className="relative">
                             <button
