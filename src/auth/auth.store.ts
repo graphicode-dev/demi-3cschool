@@ -52,11 +52,11 @@ export const authStore = create<AuthStoreState>()(
                 isAuthenticated: state.isAuthenticated,
             }),
             onRehydrateStorage: () => (state) => {
-                console.log("Auth Store Rehydrated - user:", state?.user);
-                console.log(
-                    "Auth Store Rehydrated - userInformation:",
-                    state?.user?.userInformation
-                );
+                // console.log("Auth Store Rehydrated - user:", state?.user);
+                // console.log(
+                //     "Auth Store Rehydrated - userInformation:",
+                //     state?.user?.userInformation
+                // );
                 state?.setHasHydrated(true);
             },
         }
