@@ -3,13 +3,11 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
 import { SessionList, TermStepper, CourseCard } from "../components";
-import { useOnlineSessions } from "../api";
+import { useMySessions } from "../api";
 import { selfStudyPaths } from "../navigation";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useCurriculumTerms } from "../../components/TermStepper";
 import type {
-    TermStatus,
-    OnlineSession,
     CourseSession,
     Course,
 } from "../types";
@@ -28,7 +26,7 @@ function SelfStudyPage() {
     } = useCurriculumTerms();
 
     // Fetch online sessions for selected curriculum
-    const { data: sessions, isLoading: isLoadingSessions } = useOnlineSessions(
+    const { data: sessions, isLoading: isLoadingSessions } = useMySessions(
         selectedTermId,
         { enabled: !!selectedTermId }
     );
@@ -68,7 +66,7 @@ function SelfStudyPage() {
         return {
             id: curriculum.id,
             termId: curriculum.id,
-            title: curriculum.name,
+            title: curriculum.caption,
             description: curriculum.caption,
             onlineSessionsCount: onlineCount,
             offlineSessionsCount: offlineCount,
