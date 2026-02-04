@@ -1,93 +1,312 @@
-import { useState } from 'react';
-import PageWrapper from '@/design-system/components/PageWrapper';
-import { ManagementView } from '../components';
-import { MOCK_POSTS, MOCK_CHANNELS, CURRENT_USER } from '../mocks';
-import type { Post, Channel, Audience, CommunityUser, PostReport } from '../types';
+import { useMemo } from "react";
+import PageWrapper from "@/design-system/components/PageWrapper";
+import { ManagementView } from "../components";
+import { useMutationHandler } from "@/shared/api";
+import type { Post, Channel, CommunityUser } from "../types";
+import {
+    usePostsList,
+    useChannelsList,
+    useReportsList,
+    useCreatePost,
+    useUpdatePost,
+    useDeletePost,
+    useReactToPost,
+    useSavePost,
+    useUnsavePost,
+    usePinPost,
+    useUnpinPost,
+    useFollowChannel,
+    useUnfollowChannel,
+    useCreateChannel,
+    useAddChannelAdmin,
+    useRemoveChannelAdmin,
+    useReviewReport,
+    transformPosts,
+    transformChannels,
+    toApiCategory,
+    toApiAudience,
+    toApiAccessType,
+    toApiGradeRange,
+    type PostCreatePayload,
+    type ChannelCreatePayload,
+} from "../api";
+
+interface PostReport {
+    id: string;
+    postId: string;
+    reporter: CommunityUser;
+    reason: string;
+    timestamp: string;
+}
 
 export function CommunityManagementPage() {
-  const [posts, setPosts] = useState<Post[]>(MOCK_POSTS.map(p => ({ ...p, audience: 'Public' as Audience, isPinned: false })));
-  const [channels, setChannels] = useState<Channel[]>(MOCK_CHANNELS);
-  const [reports, setReports] = useState<PostReport[]>([]);
+    const { execute } = useMutationHandler();
 
-  const handleLike = (postId: string) => {
-    setPosts(prev => prev.map(p => p.id === postId ? { ...p, likes: p.likes + 1 } : p));
-  };
+    // Fetch data
+    const { data: postsData, isLoading: postsLoading } = usePostsList();
+    const { data: channelsData, isLoading: channelsLoading } =
+        useChannelsList();
+    const { data: reportsData, isLoading: reportsLoading } = useReportsList();
 
-  const handleSave = (postId: string) => {
-    setPosts(prev => prev.map(p => p.id === postId ? { ...p, isSaved: !p.isSaved } : p));
-  };
+    // Transform API data to UI types
+    const posts = useMemo(() => {
+        if (!postsData?.items) return [];
+        return transformPosts(postsData.items);
+    }, [postsData]);
 
-  const handlePin = (postId: string) => {
-    setPosts(prev => prev.map(p => p.id === postId ? { ...p, isPinned: !p.isPinned } : p));
-  };
+    const channels = useMemo(() => {
+        if (!channelsData?.items) return [];
+        return transformChannels(channelsData.items);
+    }, [channelsData]);
 
-  const handleDeletePost = (postId: string) => {
-    setPosts(prev => prev.filter(p => p.id !== postId));
-    setReports(prev => prev.filter(r => r.postId !== postId));
-  };
+    const reports = useMemo((): PostReport[] => {
+        if (!reportsData?.items) return [];
+        return reportsData.items.map((r) => ({
+            id: String(r.id),
+            postId: String(r.post_id),
+            reporter: {
+                id: String(r.reporter.id),
+                name: r.reporter.name,
+                avatar: r.reporter.avatar || "",
+                role: "student" as const,
+            },
+            reason: r.reason,
+            timestamp: r.created_at,
+        }));
+    }, [reportsData]);
 
-  const handleEditPost = (postId: string, newContent: string) => {
-    setPosts(prev => prev.map(p => p.id === postId ? { ...p, content: newContent } : p));
-  };
+    // Mutations
+    const { mutateAsync: createPost } = useCreatePost();
+    const { mutateAsync: updatePost } = useUpdatePost();
+    const { mutateAsync: deletePost } = useDeletePost();
+    const { mutateAsync: reactToPost } = useReactToPost();
+    const { mutateAsync: savePost } = useSavePost();
+    const { mutateAsync: unsavePost } = useUnsavePost();
+    const { mutateAsync: pinPost } = usePinPost();
+    const { mutateAsync: unpinPost } = useUnpinPost();
+    const { mutateAsync: followChannel } = useFollowChannel();
+    const { mutateAsync: unfollowChannel } = useUnfollowChannel();
+    const { mutateAsync: createChannel } = useCreateChannel();
+    const { mutateAsync: addChannelAdmin } = useAddChannelAdmin();
+    const { mutateAsync: removeChannelAdmin } = useRemoveChannelAdmin();
+    const { mutateAsync: reviewReport } = useReviewReport();
 
-  const handleFollowChannel = (channelId: string) => {
-    setChannels(prev => prev.map(c => c.id === channelId ? { ...c, isFollowing: !c.isFollowing } : c));
-  };
-
-  const handleCreatePost = (newPost: Post) => {
-    setPosts([newPost, ...posts]);
-  };
-
-  const handleCreateChannel = (channel: Channel) => {
-    setChannels([channel, ...channels]);
-  };
-
-  const handleUpdateChannelAdmins = (channelId: string, admins: CommunityUser[]) => {
-    setChannels(prev => prev.map(c => c.id === channelId ? { ...c, admins } : c));
-  };
-
-  const handleGlobalPost = (content: string, media?: { url: string, type: string }, channelId?: string) => {
-    const announcement: Post = {
-      id: crypto.randomUUID(),
-      author: { ...CURRENT_USER, role: 'manager' }, 
-      content,
-      likes: 0,
-      comments: [],
-      isSaved: false,
-      isPinned: true,
-      isOfficial: true,
-      createdAt: 'Just now',
-      audience: channelId ? 'Group' : 'Public',
-      channelId: channelId,
-      image: media?.type === 'image' ? media.url : undefined,
-      video: media?.type === 'video' ? media.url : undefined,
-      gif: media?.type === 'gif' ? media.url : undefined,
+    const handleLike = (postId: string) => {
+        execute(
+            () => reactToPost({ id: Number(postId), data: { emoji: "👍" } }),
+            { showSuccessToast: false }
+        );
     };
-    setPosts([announcement, ...posts]);
-  };
 
-  return (
-    <PageWrapper>
-      <div className="min-h-screen bg-background dark:bg-background-dark">
-        <ManagementView 
-          posts={posts}
-          channels={channels}
-          reports={reports}
-          onDeletePost={handleDeletePost}
-          onCreateChannel={handleCreateChannel}
-          onUpdateChannelAdmins={handleUpdateChannelAdmins}
-          onGlobalPost={handleGlobalPost}
-          onClearReport={(id) => setReports(prev => prev.filter(r => r.id !== id))}
-          onLike={handleLike}
-          onSave={handleSave}
-          onPin={handlePin}
-          onEdit={handleEditPost}
-          onFollow={handleFollowChannel}
-          onCreatePost={handleCreatePost}
-        />
-      </div>
-    </PageWrapper>
-  );
+    const handleSave = (postId: string) => {
+        const post = posts.find((p) => p.id === postId);
+        if (post?.isSaved) {
+            execute(() => unsavePost(Number(postId)), {
+                showSuccessToast: false,
+            });
+        } else {
+            execute(() => savePost(Number(postId)), {
+                showSuccessToast: false,
+            });
+        }
+    };
+
+    const handlePin = (postId: string) => {
+        const post = posts.find((p) => p.id === postId);
+        if (post?.isPinned) {
+            execute(() => unpinPost(Number(postId)), {
+                showSuccessToast: false,
+            });
+        } else {
+            execute(() => pinPost(Number(postId)), { showSuccessToast: false });
+        }
+    };
+
+    const handleDeletePost = (postId: string) => {
+        execute(() => deletePost(Number(postId)), {
+            successMessage: "Post deleted successfully",
+        });
+    };
+
+    const handleEditPost = (postId: string, newContent: string) => {
+        execute(
+            () =>
+                updatePost({
+                    id: Number(postId),
+                    data: { content: newContent },
+                }),
+            { successMessage: "Post updated successfully" }
+        );
+    };
+
+    const handleFollowChannel = (channelId: string) => {
+        const channel = channels.find((c) => c.id === channelId);
+        if (channel?.isFollowing) {
+            execute(() => unfollowChannel(Number(channelId)), {
+                showSuccessToast: false,
+            });
+        } else {
+            execute(() => followChannel(Number(channelId)), {
+                showSuccessToast: false,
+            });
+        }
+    };
+
+    const handleCreatePost = (newPost: Post) => {
+        const payload: PostCreatePayload = {
+            content: newPost.content,
+            channel_id: newPost.channelId
+                ? Number(newPost.channelId)
+                : undefined,
+            image: newPost.image,
+            video: newPost.video,
+            gif: newPost.gif,
+            audience: toApiAudience(newPost.audience),
+            category: toApiCategory(newPost.category || "General"),
+            feeling: newPost.feeling,
+            is_pinned: newPost.isPinned,
+            is_official: newPost.isOfficial,
+            tagged_user_ids: newPost.taggedUsers?.map((u) => Number(u.id)),
+            poll: newPost.poll
+                ? {
+                      question: newPost.poll.question,
+                      options: newPost.poll.options.map((o) => o.text),
+                  }
+                : undefined,
+        };
+
+        execute(() => createPost(payload), {
+            successMessage: "Post created successfully",
+        });
+    };
+
+    const handleCreateChannel = (channel: Channel) => {
+        const payload: ChannelCreatePayload = {
+            name: channel.name,
+            description: channel.description,
+            banner: channel.banner,
+            thumbnail: channel.thumbnail,
+            access_type: toApiAccessType(channel.accessType),
+            grade_range: toApiGradeRange(channel.gradeRange),
+            admin_ids: channel.admins.map((a) => Number(a.id)),
+        };
+
+        execute(() => createChannel(payload), {
+            successMessage: "Channel created successfully",
+        });
+    };
+
+    const handleUpdateChannelAdmins = (
+        channelId: string,
+        admins: CommunityUser[]
+    ) => {
+        const channel = channels.find((c) => c.id === channelId);
+        if (!channel) return;
+
+        const currentAdminIds = channel.admins.map((a) => a.id);
+        const newAdminIds = admins.map((a) => a.id);
+
+        // Find admins to add
+        const adminsToAdd = newAdminIds.filter(
+            (id) => !currentAdminIds.includes(id)
+        );
+        // Find admins to remove
+        const adminsToRemove = currentAdminIds.filter(
+            (id) => !newAdminIds.includes(id)
+        );
+
+        // Add new admins
+        adminsToAdd.forEach((userId) => {
+            execute(
+                () =>
+                    addChannelAdmin({
+                        channelId: Number(channelId),
+                        data: { user_id: Number(userId) },
+                    }),
+                { showSuccessToast: false }
+            );
+        });
+
+        // Remove old admins
+        adminsToRemove.forEach((userId) => {
+            execute(
+                () =>
+                    removeChannelAdmin({
+                        channelId: Number(channelId),
+                        data: { user_id: Number(userId) },
+                    }),
+                { showSuccessToast: false }
+            );
+        });
+    };
+
+    const handleGlobalPost = (
+        content: string,
+        media?: { url: string; type: string },
+        channelId?: string
+    ) => {
+        const payload: PostCreatePayload = {
+            content,
+            channel_id: channelId ? Number(channelId) : undefined,
+            image: media?.type === "image" ? media.url : undefined,
+            video: media?.type === "video" ? media.url : undefined,
+            gif: media?.type === "gif" ? media.url : undefined,
+            audience: channelId ? "group" : "public",
+            is_pinned: true,
+            is_official: true,
+            status: "announcement",
+        };
+
+        execute(() => createPost(payload), {
+            successMessage: "Announcement posted successfully",
+        });
+    };
+
+    const handleClearReport = (reportId: string) => {
+        execute(
+            () =>
+                reviewReport({
+                    id: Number(reportId),
+                    data: { status: "resolved" },
+                }),
+            { successMessage: "Report resolved" }
+        );
+    };
+
+    const isLoading = postsLoading || channelsLoading || reportsLoading;
+
+    if (isLoading) {
+        return (
+            <PageWrapper>
+                <div className="min-h-screen bg-background dark:bg-background-dark flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-500"></div>
+                </div>
+            </PageWrapper>
+        );
+    }
+
+    return (
+        <PageWrapper>
+            <div className="min-h-screen bg-background dark:bg-background-dark">
+                <ManagementView
+                    posts={posts}
+                    channels={channels}
+                    reports={reports}
+                    onDeletePost={handleDeletePost}
+                    onCreateChannel={handleCreateChannel}
+                    onUpdateChannelAdmins={handleUpdateChannelAdmins}
+                    onGlobalPost={handleGlobalPost}
+                    onClearReport={handleClearReport}
+                    onLike={handleLike}
+                    onSave={handleSave}
+                    onPin={handlePin}
+                    onEdit={handleEditPost}
+                    onFollow={handleFollowChannel}
+                    onCreatePost={handleCreatePost}
+                />
+            </div>
+        </PageWrapper>
+    );
 }
 
 export default CommunityManagementPage;
