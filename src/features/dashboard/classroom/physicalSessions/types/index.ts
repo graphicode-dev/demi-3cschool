@@ -11,7 +11,7 @@ export type PhysicalSessionStatus =
 export interface SessionGroup {
     id: number;
     name: string;
-    locationType: "offline" | "online";
+    locationType: "offline";
     location: string;
     locationMapUrl: string;
 }
@@ -30,6 +30,40 @@ export interface SessionLesson {
     id: number;
     title: string;
 }
+
+export interface OfflineSession {
+    id: number;
+    sessionDate: string;
+    startTime: string;
+    endTime: string;
+    locationType: "offline";
+    effectiveLocationType: "offline";
+    offlineLocation: string | null;
+    status: string;
+    reason: string | null;
+    isManual: boolean;
+    lesson: {
+        id: number;
+        title: string;
+    };
+    group: {
+        id: number;
+        name: string;
+    };
+    teacher: {
+        id: number;
+        name: string;
+    } | null;
+    bbbMeetingId: string | null;
+    bbbIsRunning: boolean;
+    bbbRecord: boolean;
+    bbbStartedAt: string | null;
+    bbbEndedAt: string | null;
+    hasMeeting: boolean;
+    createdAt: string;
+    updatedAt: string;
+}
+
 
 export interface ContentProgressItem {
     lessonContentId: number;

@@ -1,28 +1,17 @@
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { TermStepper } from "../../components";
 import { PhysicalSessionCard, SummerCampBanner } from "../components";
-import { MOCK_PHYSICAL_SESSIONS_SUMMER } from "../mocks";
+import { useOfflineSessions } from "../api/physicalSessions.queries";
+import { useCurriculumTerms } from "../../components/TermStepper";
 
 function PhysicalSessionsPage() {
     const { t } = useTranslation("physicalSessions");
 
-    // Mock data - replace with API call
-    const data = MOCK_PHYSICAL_SESSIONS_SUMMER;
-
-    const [selectedTermId, setSelectedTermId] = useState<number>(
-        data.currentTermId
-    );
-
-    const filteredSessions = data.sessions.filter(
-        (session) => session.term.id === selectedTermId
-    );
+    const { selectedTermId, setSelectedTermId, terms } = useCurriculumTerms();
+    const { data: offlineSessions } = useOfflineSessions(selectedTermId);
 
     const isSummerTerm = selectedTermId === 3;
-    const completedCount = filteredSessions.filter(
-        (s) => s.status === "completed"
-    ).length;
 
     return (
         <PageWrapper
@@ -33,17 +22,17 @@ function PhysicalSessionsPage() {
         >
             {/* Term Stepper */}
             <TermStepper
-                terms={data.terms}
-                selectedTermId={selectedTermId}
-                onTermSelect={setSelectedTermId}
                 translationNamespace="physicalSessions"
+                terms={terms}
+                selectedTermId={selectedTermId}
+                onSelectTerm={setSelectedTermId}
             />
 
             {/* Summer Camp Banner - Only for summer term */}
             {isSummerTerm && (
                 <SummerCampBanner
-                    totalSessions={filteredSessions.length}
-                    completedSessions={completedCount}
+                    totalSessions={offlineSessions?.length || 0}
+                    completedSessions={0}
                 />
             )}
 
@@ -58,13 +47,13 @@ function PhysicalSessionsPage() {
                         ${isSummerTerm ? "flex flex-wrap gap-6" : "flex flex-col gap-4"}
                     `}
             >
-                {filteredSessions.map((session) => (
+                {/* {offlineSessions?.map((session) => (
                     <PhysicalSessionCard
                         key={session.id}
                         session={session}
                         variant={isSummerTerm ? "compact" : "full"}
                     />
-                ))}
+                ))} */}
             </div>
         </PageWrapper>
     );

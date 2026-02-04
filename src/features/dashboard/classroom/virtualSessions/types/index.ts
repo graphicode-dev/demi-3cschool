@@ -2,13 +2,46 @@ import type { Term, TermStatus } from "../../components";
 
 export type { Term, TermStatus };
 
-export type VirtualSessionStatus = "live" | "upcoming" | "completed";
+export type VirtualSessionStatus = "current" | "upcoming" | "completed";
 
 export interface SessionInstructor {
     id: number;
     name: string;
     avatar?: string;
     course: string;
+}
+
+export interface OnlineSession {
+    id: number;
+    sessionDate: string;
+    startTime: string;
+    endTime: string;
+    locationType: "online" | "offline";
+    effectiveLocationType: "online" | "offline";
+    offlineLocation: string | null;
+    sessionState: "current" | "completed" | "upcoming";
+    reason: string | null;
+    isManual: boolean;
+    lesson: {
+        id: number;
+        title: string;
+    };
+    group: {
+        id: number;
+        name: string;
+    };
+    teacher: {
+        id: number;
+        name: string;
+    } | null;
+    bbbMeetingId: string | null;
+    bbbIsRunning: boolean;
+    bbbRecord: boolean;
+    bbbStartedAt: string | null;
+    bbbEndedAt: string | null;
+    hasMeeting: boolean;
+    createdAt: string;
+    updatedAt: string;
 }
 
 export interface SessionGroup {

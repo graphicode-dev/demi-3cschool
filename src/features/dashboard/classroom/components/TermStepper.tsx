@@ -1,35 +1,41 @@
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Check, Lock } from "lucide-react";
+import { useProgramsCurriculumList } from "../../admin/programs";
 
 export type TermStatus = "completed" | "current" | "locked";
 
 export interface Term {
     id: number;
     name: string;
+    caption: string;
     order: number;
     status: TermStatus;
 }
 
 interface TermStepperProps {
-    terms: Term[];
-    selectedTermId: number;
-    onTermSelect: (termId: number) => void;
     translationNamespace?: string;
+    terms: Term[];
+    selectedTermId: number | undefined;
+    onSelectTerm: (termId: number) => void;
 }
 
 export function TermStepper({
+    translationNamespace = "selfStudy",
     terms,
     selectedTermId,
-    onTermSelect,
-    translationNamespace = "selfStudy",
+    onSelectTerm,
 }: TermStepperProps) {
     const { t } = useTranslation(translationNamespace);
 
     const sortedTerms = [...terms].sort((a, b) => a.order - b.order);
 
-    const handleTermClick = (term: Term) => {
+    const handleTermClick = (term: Term, termId: number) => {
         if (term.status === "completed" || term.status === "current") {
-            onTermSelect(term.id);
+            const term = terms.find((t) => t.id === termId);
+            if (term && term.status !== "locked") {
+                onSelectTerm(termId);
+            }
         }
     };
 
@@ -47,7 +53,7 @@ export function TermStepper({
                     <div key={term.id} className="flex items-center">
                         <button
                             type="button"
-                            onClick={() => handleTermClick(term)}
+                            onClick={() => handleTermClick(term, term.id)}
                             disabled={isLocked}
                             className={`
                                 flex flex-col items-center gap-2
@@ -89,7 +95,7 @@ export function TermStepper({
                                     ${isLocked ? "text-gray-500 dark:text-gray-400" : ""}
                                 `}
                             >
-                                {t(`terms.${term.name}`)}
+                                {term.caption}
                             </span>
                         </button>
 
@@ -110,5 +116,56 @@ export function TermStepper({
         </div>
     );
 }
+
+export const useCurriculumTerms = () => {
+    const { data: curriculumData, isLoading: isLoadingCurriculum } =
+        useProgramsCurriculumList();
+
+    const curriculums = curriculumData ?? [];
+
+    const [selectedTermId, setSelectedTermId] = useState<number | undefined>(
+        undefined
+    );
+
+    useEffect(() => {
+        if (selectedTermId) return;
+        if (curriculums.length === 0) return;
+
+        const activeCurriculum = curriculums.find((c) => c.isActive);
+        if (activeCurriculum) {
+            setSelectedTermId(activeCurriculum.id);
+            return;
+        }
+
+        if (curriculums[0]) {
+            setSelectedTermId(curriculums[0].id);
+        }
+    }, [curriculums, selectedTermId]);
+
+    const terms: Term[] = useMemo(() => {
+        if (!curriculums.length) return [];
+
+        return curriculums.map((curriculum, index) => {
+            const isActive = Boolean(curriculum.isActive);
+            const status: TermStatus = isActive ? "current" : "locked";
+
+            return {
+                id: curriculum.id,
+                name: curriculum.name,
+                caption: curriculum.caption || "",
+                order: index + 1,
+                status,
+            };
+        });
+    }, [curriculums]);
+
+    return {
+        curriculums,
+        isLoadingCurriculum,
+        selectedTermId,
+        setSelectedTermId,
+        terms,
+    };
+};
 
 export default TermStepper;

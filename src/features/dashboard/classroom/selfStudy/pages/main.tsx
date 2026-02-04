@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
@@ -6,7 +6,7 @@ import { SessionList, TermStepper, CourseCard } from "../components";
 import { useOnlineSessions } from "../api";
 import { selfStudyPaths } from "../navigation";
 import PageWrapper from "@/design-system/components/PageWrapper";
-import { useProgramsCurriculumList } from "@/features/dashboard/admin/programs/api";
+import { useCurriculumTerms } from "../../components/TermStepper";
 import type {
     TermStatus,
     OnlineSession,
@@ -19,51 +19,18 @@ function SelfStudyPage() {
     const { t } = useTranslation("selfStudy");
     const navigate = useNavigate();
 
-    // Fetch curriculum list for term stepper
-    const { data: curriculumData, isLoading: isLoadingCurriculum } =
-        useProgramsCurriculumList();
-
-    // State
-    const [selectedCurriculumId, setSelectedCurriculumId] = useState<
-        number | undefined
-    >(undefined);
-
-    // API returns array directly
-    const curriculums = curriculumData ?? [];
-
-    // Auto-select first active curriculum if none selected
-    if (!selectedCurriculumId && curriculums.length > 0) {
-        const activeCurriculum = curriculums.find((c) => c.isActive);
-        if (activeCurriculum) {
-            setSelectedCurriculumId(activeCurriculum.id);
-        } else if (curriculums[0]) {
-            setSelectedCurriculumId(curriculums[0].id);
-        }
-    }
-
-    // Build terms from curriculum data - locked if not active
-    const terms: Term[] = useMemo(() => {
-        if (!curriculums.length) return [];
-
-        return curriculums.map((curriculum, index) => {
-            const isActive = Boolean(curriculum.isActive);
-
-            // If not active, it's locked. Otherwise it's current (clickable)
-            const status: TermStatus = isActive ? "current" : "locked";
-
-            return {
-                id: curriculum.id,
-                name: curriculum.name,
-                order: index + 1,
-                status,
-            };
-        });
-    }, [curriculums]);
+    const {
+        curriculums,
+        isLoadingCurriculum,
+        selectedTermId,
+        setSelectedTermId,
+        terms,
+    } = useCurriculumTerms();
 
     // Fetch online sessions for selected curriculum
     const { data: sessions, isLoading: isLoadingSessions } = useOnlineSessions(
-        selectedCurriculumId,
-        { enabled: !!selectedCurriculumId }
+        selectedTermId,
+        { enabled: !!selectedTermId }
     );
 
     // Transform OnlineSession[] to CourseSession[] for SessionList component
@@ -72,7 +39,7 @@ function SelfStudyPage() {
 
         return sessions.map((session, index) => ({
             id: session.id,
-            courseId: selectedCurriculumId ?? 0,
+            courseId: selectedTermId ?? 0,
             title: session.lesson.title,
             description: session.group?.name,
             type: session.locationType,
@@ -82,15 +49,13 @@ function SelfStudyPage() {
             // Store lesson ID for navigation
             _lessonId: session.lesson.id,
         }));
-    }, [sessions, selectedCurriculumId]);
+    }, [sessions, selectedTermId]);
 
     // Build course data for CourseCard
     const selectedCourse: Course | null = useMemo(() => {
-        if (!selectedCurriculumId || !curriculums.length) return null;
+        if (!selectedTermId || !curriculums.length) return null;
 
-        const curriculum = curriculums.find(
-            (c) => c.id === selectedCurriculumId
-        );
+        const curriculum = curriculums.find((c) => c.id === selectedTermId);
         if (!curriculum) return null;
 
         const onlineCount = courseSessions.filter(
@@ -109,14 +74,7 @@ function SelfStudyPage() {
             offlineSessionsCount: offlineCount,
             sessions: courseSessions,
         };
-    }, [selectedCurriculumId, curriculums, courseSessions]);
-
-    const handleTermSelect = (termId: number) => {
-        const term = terms.find((t) => t.id === termId);
-        if (term && term.status !== "locked") {
-            setSelectedCurriculumId(termId);
-        }
-    };
+    }, [selectedTermId, curriculums, courseSessions]);
 
     const handleStartSession = (sessionId: number) => {
         // Find the session to get the lesson ID
@@ -153,8 +111,8 @@ function SelfStudyPage() {
                 {terms.length > 0 && (
                     <TermStepper
                         terms={terms}
-                        selectedTermId={selectedCurriculumId ?? 0}
-                        onTermSelect={handleTermSelect}
+                        selectedTermId={selectedTermId}
+                        onSelectTerm={setSelectedTermId}
                     />
                 )}
 

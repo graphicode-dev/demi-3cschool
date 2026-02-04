@@ -43,7 +43,7 @@ export function VirtualSessionCard({
 }: VirtualSessionCardProps) {
     const { t } = useTranslation("virtualSessions");
 
-    const isLive = session.status === "live";
+    const isLive = session.status === "current";
     const isUpcoming = session.status === "upcoming";
     const isCompleted = session.status === "completed";
 

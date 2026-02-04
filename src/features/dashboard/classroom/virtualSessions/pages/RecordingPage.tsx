@@ -11,6 +11,7 @@ import {
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { MOCK_VIRTUAL_SESSIONS_DATA } from "../mocks";
 import { CLASSROOM_PATH } from "../../navigation/constant";
+import { useLessonVideo } from "@/features/dashboard/admin/learning/pages/lessons/api";
 
 // Format time from "HH:mm:ss" to "HH:mm"
 function formatTime(time: string): string {
@@ -41,20 +42,7 @@ function RecordingPage() {
     const navigate = useNavigate();
     const { sessionId } = useParams<{ sessionId: string }>();
 
-    // Find session from mock data
-    const session = MOCK_VIRTUAL_SESSIONS_DATA.sessions.find(
-        (s) => s.id === Number(sessionId)
-    );
-
-    if (!session) {
-        return (
-            <PageWrapper>
-                <div className="flex items-center justify-center h-96">
-                    <p className="text-gray-500">Session not found</p>
-                </div>
-            </PageWrapper>
-        );
-    }
+    const { data: lessonVideo, isLoading } = useLessonVideo(sessionId!);
 
     const handleGoBack = () => {
         navigate(`${CLASSROOM_PATH}/virtual-sessions`);
@@ -62,7 +50,9 @@ function RecordingPage() {
 
     const handleWatchLessonVideos = () => {
         // Navigate to self study lesson
-        navigate(`${CLASSROOM_PATH}/self-study/lesson/${session.lesson.id}`);
+        navigate(
+            `${CLASSROOM_PATH}/self-study/lesson/${lessonVideo?.lesson.id}`
+        );
     };
 
     return (
@@ -77,17 +67,34 @@ function RecordingPage() {
                     {t("recording.backToVirtualSessions")}
                 </button>
 
-                {/* Video Player */}
-                <div className="relative w-full aspect-video bg-gray-900 rounded-2xl overflow-hidden">
-                    {/* Placeholder image - replace with actual video player */}
-                    <div className="absolute inset-0 bg-linear-to-b from-gray-800 to-gray-900 flex items-center justify-center">
-                        <button className="size-20 bg-brand-500 hover:bg-brand-600 rounded-full flex items-center justify-center transition-colors shadow-lg">
-                            <Play
-                                className="size-8 text-white ml-1"
-                                fill="white"
-                            />
-                        </button>
-                    </div>
+                {/* Video Preview */}
+                <div>
+                    {lessonVideo?.embedHtml ? (
+                        <div
+                            className="w-full rounded-xl overflow-hidden"
+                            dangerouslySetInnerHTML={{
+                                __html: lessonVideo.embedHtml,
+                            }}
+                        />
+                    ) : (
+                        <div className="aspect-video bg-gray-900 rounded-xl flex flex-col items-center justify-center">
+                            <div className="w-16 h-16 flex items-center justify-center rounded-full bg-gray-800 text-gray-500 mb-3">
+                                <Play className="w-8 h-8" />
+                            </div>
+                            <p className="text-sm text-gray-400">
+                                {t(
+                                    "lessons:content.fields.noVideoUploaded",
+                                    "No video uploaded"
+                                )}
+                            </p>
+                            <p className="text-xs text-gray-500 mt-1">
+                                {t(
+                                    "lessons:content.fields.addVideoUrl",
+                                    "Add a video URL to preview"
+                                )}
+                            </p>
+                        </div>
+                    )}
                 </div>
 
                 {/* Session Info */}
@@ -96,18 +103,20 @@ function RecordingPage() {
                     <div className="flex items-center justify-between flex-wrap gap-2">
                         <div className="flex items-center gap-3">
                             <span className="bg-brand-100 dark:bg-brand-500/20 text-brand-600 dark:text-brand-400 text-xs font-medium px-2.5 py-1 rounded">
-                                {session.course.title}
+                                {lessonVideo?.title}
                             </span>
-                            <span className="bg-brand-50 dark:bg-brand-500/10 text-brand-500 text-xs font-medium px-2.5 py-1 rounded border border-brand-200 dark:border-brand-500/30">
-                                Term {session.term.id}
-                            </span>
+                            {/* <span className="bg-brand-50 dark:bg-brand-500/10 text-brand-500 text-xs font-medium px-2.5 py-1 rounded border border-brand-200 dark:border-brand-500/30">
+                                Term {lessonVideo?.term?.name}
+                            </span> */}
                             <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-xs">
                                 <Clock className="size-3.5" />
-                                <span>{session.duration || 60} min</span>
+                                <span>{lessonVideo?.duration || 60} min</span>
                             </div>
                             <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-xs">
                                 <Calendar className="size-3.5" />
-                                <span>{formatDate(session.sessionDate)}</span>
+                                <span>
+                                    {formatDate(lessonVideo?.createdAt!)}
+                                </span>
                             </div>
                         </div>
                         <span className="bg-brand-100 dark:bg-brand-500/20 text-brand-600 dark:text-brand-400 text-xs font-medium px-2.5 py-1 rounded">
@@ -117,11 +126,11 @@ function RecordingPage() {
 
                     {/* Title */}
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                        {session.topic}
+                        {lessonVideo?.title}
                     </h1>
 
                     {/* Lesson Summary */}
-                    {session.description && (
+                    {lessonVideo?.description && (
                         <div className="flex flex-col gap-2">
                             <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                                 <BookOpen className="size-4" />
@@ -130,7 +139,7 @@ function RecordingPage() {
                                 </span>
                             </div>
                             <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                                {session.description}
+                                {lessonVideo.description}
                             </p>
                         </div>
                     )}
