@@ -1,5 +1,13 @@
 {
     "programs": {
+        "standardProgram": {
+            "title": "Standard Program",
+            "description": "Year-round academic curriculum for regular school terms"
+        },
+        "summerProgram": {
+            "title": "Summer Program",
+            "description": "Intensive learning activities during summer break"
+        },
         "breadcrumb": "Programs",
         "title": "Programs",
         "description": "Manage your educational programs and curricula",

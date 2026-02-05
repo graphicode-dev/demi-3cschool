@@ -21,7 +21,9 @@ import { registerFeaturePaths } from "@/router/paths.registry";
 // ============================================================================
 
 export const programsPaths = {
-    list: () => "/admin/programs",
+    main: () => "/admin/programs",
+    summerList: () => "summer",
+    standardList: () => "standard",
 } as const;
 
 // ============================================================================
@@ -32,7 +34,9 @@ export const programsManagementPaths = registerFeaturePaths(
     "programsManagement",
     {
         // Programs
-        programsList: programsPaths.list,
+        programsList: programsPaths.main,
+        summerList: programsPaths.summerList,
+        standardList: programsPaths.standardList,
     }
 );
 

@@ -14,6 +14,8 @@ import {
     ExternalLink,
     Loader2,
     Trash2,
+    Eye,
+    X,
 } from "lucide-react";
 import { ConfirmDialog } from "@/design-system/components/ConfirmDialog";
 import {
@@ -60,6 +62,8 @@ export default function AssignmentEditor({
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [isSaved, setIsSaved] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+    const [showPreviewModal, setShowPreviewModal] = useState(false);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
 
     const isSaving = isCreating || isUpdating;
@@ -86,15 +90,15 @@ export default function AssignmentEditor({
     };
 
     const handleValidationError = (error: ApiError) => {
-        if (error?.validationErrors) {
+        const validationErrors =
+            error?.validationErrors || (error as any)?.errors;
+        if (validationErrors) {
             const errors: Record<string, string> = {};
-            Object.entries(error.validationErrors).forEach(
-                ([field, messages]) => {
-                    errors[field] = Array.isArray(messages)
-                        ? messages[0]
-                        : messages;
-                }
-            );
+            Object.entries(validationErrors).forEach(([field, messages]) => {
+                errors[field] = Array.isArray(messages)
+                    ? messages[0]
+                    : String(messages);
+            });
             setFieldErrors(errors);
         }
     };
@@ -104,6 +108,13 @@ export default function AssignmentEditor({
         if (file) {
             setSelectedFile(file);
             setIsSaved(false);
+            if (fieldErrors.file) {
+                setFieldErrors((prev) => {
+                    const newErrors = { ...prev };
+                    delete newErrors.file;
+                    return newErrors;
+                });
+            }
         }
     };
 
@@ -112,6 +123,39 @@ export default function AssignmentEditor({
         if (fileInputRef.current) {
             fileInputRef.current.value = "";
         }
+        if (previewUrl) {
+            URL.revokeObjectURL(previewUrl);
+            setPreviewUrl(null);
+        }
+    };
+
+    const handlePreviewFile = () => {
+        if (selectedFile) {
+            const url = URL.createObjectURL(selectedFile);
+            setPreviewUrl(url);
+            setShowPreviewModal(true);
+        } else if (existingFile?.url) {
+            setPreviewUrl(existingFile.url);
+            setShowPreviewModal(true);
+        }
+    };
+
+    const closePreviewModal = () => {
+        setShowPreviewModal(false);
+        if (previewUrl && selectedFile) {
+            URL.revokeObjectURL(previewUrl);
+        }
+        setPreviewUrl(null);
+    };
+
+    const getFileExtension = (filename: string) => {
+        return filename.split(".").pop()?.toLowerCase() || "";
+    };
+
+    const canPreviewFile = () => {
+        const filename = selectedFile?.name || existingFile?.fileName || "";
+        const ext = getFileExtension(filename);
+        return ["pdf", "jpg", "jpeg", "png", "gif", "webp"].includes(ext);
     };
 
     const handleSaveChanges = async () => {
@@ -287,6 +331,18 @@ export default function AssignmentEditor({
                                         )}
                                     </button>
                                 )}
+                                {canPreviewFile() && (
+                                    <button
+                                        onClick={handlePreviewFile}
+                                        className="mt-2 flex items-center gap-1 text-xs text-brand-500 hover:text-brand-600"
+                                    >
+                                        <Eye className="w-3 h-3" />
+                                        {t(
+                                            "lessons:content.assignments.previewFile",
+                                            "Preview file"
+                                        )}
+                                    </button>
+                                )}
                             </div>
                         </div>
                     ) : (
@@ -305,6 +361,11 @@ export default function AssignmentEditor({
                                 PDF, DOC, XLSX, PPTX, etc.
                             </p>
                         </label>
+                    )}
+                    {fieldErrors.file && (
+                        <p className="mt-2 text-sm text-red-500">
+                            {fieldErrors.file}
+                        </p>
                     )}
                 </div>
 
@@ -409,6 +470,47 @@ export default function AssignmentEditor({
                 onConfirm={handleDeleteAssignment}
                 loading={isDeleting}
             />
+
+            {/* File Preview Modal */}
+            {showPreviewModal && previewUrl && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                    <div className="relative w-full max-w-4xl max-h-[90vh] bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden">
+                        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+                            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                                {t(
+                                    "lessons:content.assignments.filePreview",
+                                    "File Preview"
+                                )}
+                            </h3>
+                            <button
+                                onClick={closePreviewModal}
+                                className="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                        </div>
+                        <div className="p-4 overflow-auto max-h-[calc(90vh-80px)]">
+                            {getFileExtension(
+                                selectedFile?.name ||
+                                    existingFile?.fileName ||
+                                    ""
+                            ) === "pdf" ? (
+                                <iframe
+                                    src={previewUrl}
+                                    className="w-full h-[70vh] border-0"
+                                    title="PDF Preview"
+                                />
+                            ) : (
+                                <img
+                                    src={previewUrl}
+                                    alt="File preview"
+                                    className="max-w-full h-auto mx-auto"
+                                />
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

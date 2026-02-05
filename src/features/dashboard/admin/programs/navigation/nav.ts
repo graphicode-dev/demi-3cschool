@@ -26,7 +26,7 @@ export const programsManagementNav: FeatureNavModule = {
             key: "programs-management",
             labelKey: "programs:programs.breadcrumb",
             label: "Programs Management",
-            href: programsPaths.list(),
+            href: programsPaths.main(),
             icon: BookOpen,
         },
     ],

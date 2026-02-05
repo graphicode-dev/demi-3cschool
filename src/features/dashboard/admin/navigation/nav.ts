@@ -42,6 +42,7 @@ import { trainingCentersNavItem } from "../settings/trainingCenters/navigation/n
 import { resourcesNavItem } from "../resources/navigation/nav";
 import { teachersNavItem } from "../settings/teachers/navigation/nav";
 import { studentsNavItem } from "../settings/students/navigation/nav";
+import { programsManagementNav } from "../programs/navigation";
 
 const { course, level, lesson } = learningPermissions;
 const { group, groupSession } = groupsPermissions;
@@ -113,6 +114,8 @@ export const adminNav: FeatureNavModule = {
         },
         // Shared features (profile, chat, certificates, reports)
         ...adminSharedNavItems,
+        // Programs Management
+        ...programsManagementNav.items,
     ],
 };
 

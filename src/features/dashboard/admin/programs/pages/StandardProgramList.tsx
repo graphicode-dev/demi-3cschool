@@ -5,13 +5,7 @@ import { ErrorState } from "@/design-system/components/ErrorState";
 import { EmptyState } from "@/design-system/components/EmptyState";
 import type { ProgramCurriculum } from "../types";
 
-interface ProgramsCurriculumListProps {
-    onItemClick?: (program: ProgramCurriculum) => void;
-}
-
-export function ProgramsCurriculumList({
-    onItemClick,
-}: ProgramsCurriculumListProps) {
+export default function StandardProgramList() {
     const { t } = useTranslation("programs");
     const { data, isLoading, isError, error, refetch } =
         useProgramsCurriculumList();
@@ -69,10 +63,7 @@ export function ProgramsCurriculumList({
                         key={program.id}
                         className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700"
                     >
-                        <div
-                            className={`flex-1 ${onItemClick ? "cursor-pointer" : ""}`}
-                            onClick={() => onItemClick?.(program)}
-                        >
+                        <div className="flex-1">
                             <h3 className="text-base font-semibold text-gray-900 dark:text-white">
                                 {program.name}
                             </h3>

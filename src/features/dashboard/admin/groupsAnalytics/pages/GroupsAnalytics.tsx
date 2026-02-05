@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import {
     StatCard,
@@ -8,6 +8,7 @@ import {
     TrackCard,
 } from "../components";
 import PageWrapper from "@/design-system/components/PageWrapper";
+import { useGrades } from "@/features/dashboard/admin/systemManagements/api";
 
 const TotalGroupsIcon = () => (
     <svg
@@ -201,9 +202,15 @@ const MOCK_PROFESSIONAL_TRACKS = [
 
 function GroupsAnalyticsPage() {
     const { t } = useTranslation("groupsAnalytics");
-    const [activeTab, setActiveTab] = useState<"standard" | "professional">(
-        "standard"
-    );
+    const { data: gradesData } = useGrades();
+    const grades = gradesData?.items ?? [];
+    const [activeGradeId, setActiveGradeId] = useState<number | null>(null);
+
+    useEffect(() => {
+        if (grades.length > 0 && activeGradeId === null) {
+            setActiveGradeId(grades[0].id);
+        }
+    }, [grades, activeGradeId]);
 
     const stats = {
         totalGroups: 6,
@@ -246,32 +253,19 @@ function GroupsAnalyticsPage() {
             <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-between">
                     <div className="flex gap-2">
-                        <button
-                            onClick={() => setActiveTab("standard")}
-                            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                                activeTab === "standard"
-                                    ? "bg-brand-500 text-white"
-                                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
-                            }`}
-                        >
-                            {t(
-                                "groupsAnalytics.tabs.standard",
-                                "Standard Learning"
-                            )}
-                        </button>
-                        <button
-                            onClick={() => setActiveTab("professional")}
-                            className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
-                                activeTab === "professional"
-                                    ? "bg-brand-500 text-white"
-                                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
-                            }`}
-                        >
-                            {t(
-                                "groupsAnalytics.tabs.professional",
-                                "Professional Learning"
-                            )}
-                        </button>
+                        {grades.map((grade) => (
+                            <button
+                                key={grade.id}
+                                onClick={() => setActiveGradeId(grade.id)}
+                                className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                                    activeGradeId === grade.id
+                                        ? "bg-brand-500 text-white"
+                                        : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700"
+                                }`}
+                            >
+                                {grade.name}
+                            </button>
+                        ))}
                     </div>
                 </div>
 
@@ -382,11 +376,7 @@ function GroupsAnalyticsPage() {
                         )}
                     </h3>
                     <DonutChart
-                        data={
-                            activeTab === "standard"
-                                ? MOCK_STANDARD_STATUS_DATA
-                                : MOCK_PROFESSIONAL_STATUS_DATA
-                        }
+                        data={MOCK_STANDARD_STATUS_DATA}
                         centerValue={6}
                     />
                 </div>
@@ -399,11 +389,7 @@ function GroupsAnalyticsPage() {
                         )}
                     </h3>
                     <HorizontalBarChart
-                        data={
-                            activeTab === "standard"
-                                ? MOCK_STANDARD_STUDENTS_PER_TRACK
-                                : MOCK_PROFESSIONAL_STUDENTS_PER_TRACK
-                        }
+                        data={MOCK_STANDARD_STUDENTS_PER_TRACK}
                         valueFormatter={(v) => `${v} students`}
                     />
                 </div>
@@ -427,10 +413,7 @@ function GroupsAnalyticsPage() {
                     )}
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {(activeTab === "standard"
-                        ? MOCK_STANDARD_TRACKS
-                        : MOCK_PROFESSIONAL_TRACKS
-                    ).map((track, index) => (
+                    {MOCK_STANDARD_TRACKS.map((track, index) => (
                         <TrackCard
                             key={index}
                             title={track.title}

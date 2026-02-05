@@ -32,6 +32,7 @@ import {
     groupsPermissions,
     dashboardPermissions,
 } from "@/auth";
+import { programsManagementRoutes } from "../programs/navigation";
 
 const { course, level, lesson } = learningPermissions;
 const { group, groupSession, studentAttendance } = groupsPermissions;
@@ -131,21 +132,6 @@ const gradesRoutes: RouteConfig[] = [
         // permissions: [lesson.view],
         meta: { titleKey: "learning:levels.quiz.title" },
         handle: { crumb: "learning:levels.quiz.title" },
-    },
-];
-
-// ============================================================================
-// Programs Routes
-// ============================================================================
-
-const programsRoutes: RouteConfig[] = [
-    {
-        path: "programs",
-        lazy: () =>
-            import("@/features/dashboard/admin/programs/pages/Programs"),
-        // permissions: [course.viewAny],
-        meta: { titleKey: "programs:programs.title" },
-        handle: { crumb: "programs:programs.title" },
     },
 ];
 
@@ -414,7 +400,10 @@ export const adminRouteModule: FeatureRouteModule = {
             // Grades (new navigation structure)
             ...gradesRoutes,
             // Programs
-            ...programsRoutes,
+            {
+                path: "programs",
+                ...programsManagementRoutes.routes,
+            },
             // Groups Management
             ...groupsManagementRoutes,
             // Groups Analytics

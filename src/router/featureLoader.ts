@@ -19,6 +19,10 @@ import { navRegistry } from "@/navigation/navRegistry";
 import type { FeatureRouteModule } from "./routes.types";
 import type { FeatureNavModule } from "@/navigation/nav.types";
 
+// Manual imports for consolidated admin routes (excluded from glob to prevent circular deps)
+import { adminRouteModule } from "@/features/dashboard/admin/navigation/routes";
+import { adminNav } from "@/features/dashboard/admin/navigation/nav";
+
 // ============================================================================
 // Manual Feature Registration (Phase 1 - Incremental Migration)
 // ============================================================================
@@ -73,6 +77,8 @@ export const loadFeatureRoutes = (): void => {
             "../features/dashboard/*/*/navigation/routes.{ts,tsx}",
             "../features/dashboard/*/*/*/navigation/routes.{ts,tsx}",
             // Exclude admin feature routes (they are consolidated in admin/navigation/routes.tsx)
+            // The main admin routes file must be excluded to prevent circular dependency
+            "!../features/dashboard/admin/navigation/**",
             "!../features/dashboard/admin/learning/**",
             "!../features/dashboard/admin/groupsManagement/**",
             "!../features/dashboard/admin/groupsAnalytics/**",
@@ -120,9 +126,12 @@ export const loadFeatureNavigation = (): void => {
             "../features/dashboard/*/*/navigation/nav.{ts,tsx}",
             "../features/dashboard/*/*/*/navigation/nav.{ts,tsx}",
             // Exclude admin feature nav (they are consolidated in admin/navigation/nav.ts)
+            // The main admin nav file must be excluded to prevent circular dependency
+            "!../features/dashboard/admin/navigation/**",
             "!../features/dashboard/admin/learning/**",
             "!../features/dashboard/admin/groupsManagement/**",
             "!../features/dashboard/admin/groupsAnalytics/**",
+            "!../features/dashboard/admin/programs/**",
             "!../features/dashboard/admin/overview/**",
             "!../features/dashboard/admin/sales_subscription/**",
             "!../features/dashboard/admin/settings/**",
@@ -160,6 +169,11 @@ export const loadFeatureNavigation = (): void => {
  * Load all features (routes + navigation)
  */
 export const loadFeatures = (): void => {
+    // Register consolidated admin routes manually (excluded from glob to prevent circular deps)
+    routeRegistry.register(adminRouteModule);
+    navRegistry.register(adminNav);
+
+    // Auto-discover and register other feature routes
     loadFeatureRoutes();
     loadFeatureNavigation();
 };

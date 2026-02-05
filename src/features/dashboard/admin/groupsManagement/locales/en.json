@@ -1,7 +1,7 @@
 ﻿{
     "groups": {
         "title": "Groups Management",
-        "regularListBreadcrumb": "Regular Groups",
+        "regularListBreadcrumb": "Groups",
         "semiPrivateListBreadcrumb": "Semi Private Groups",
         "privateListBreadcrumb": "Private Groups",
         "sessionsListBreadcrumb": "Sessions Groups",
