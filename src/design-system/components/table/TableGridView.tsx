@@ -230,9 +230,10 @@ export const TableGridView = ({
                                 <tr
                                     key={row.id}
                                     className={`
-                                        ${rowIndex === 0 ? "bg-brand-50 dark:bg-brand-500/10" : "bg-white dark:bg-gray-800"}
+                                        ${rowIndex === 0 ? "bg-brand-100/30 dark:bg-brand-500/10" : "bg-white dark:bg-gray-800"}
                                         ${!disableRowClick ? "cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50" : ""}
                                         ${rowClassName ? rowClassName(row) : ""}
+                                        hover:bg-brand-50 dark:hover:bg-brand-500/10
                                         transition-colors
                                     `}
                                     onClick={() =>

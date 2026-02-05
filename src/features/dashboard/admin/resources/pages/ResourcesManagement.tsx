@@ -45,26 +45,52 @@ export function ResourcesManagement() {
         setPage(1);
     }, [selectedGrade, selectedProgram]);
 
-    // Group folders by grade and term
-    const groupedFolders = useMemo(() => {
-        const groups: Record<
+    // Group folders by grade, then by term under each grade
+    const groupedByGrade = useMemo(() => {
+        const gradeGroups: Record<
             string,
-            { grade: string; term: string; folders: ResourceFolder[] }
+            {
+                gradeId: number;
+                gradeName: string;
+                terms: Record<
+                    string,
+                    {
+                        termId: number;
+                        termName: string;
+                        folders: ResourceFolder[];
+                    }
+                >;
+            }
         > = {};
 
         folders.forEach((folder: ResourceFolder) => {
-            const key = `${folder.grade.id}-${folder.programsCurriculum.id}`;
-            if (!groups[key]) {
-                groups[key] = {
-                    grade: folder.grade.name,
-                    term: folder.programsCurriculum.caption,
+            const gradeKey = String(folder.grade.id);
+            const termKey = String(folder.programsCurriculum.id);
+
+            if (!gradeGroups[gradeKey]) {
+                gradeGroups[gradeKey] = {
+                    gradeId: folder.grade.id,
+                    gradeName: folder.grade.name,
+                    terms: {},
+                };
+            }
+
+            if (!gradeGroups[gradeKey].terms[termKey]) {
+                gradeGroups[gradeKey].terms[termKey] = {
+                    termId: folder.programsCurriculum.id,
+                    termName: folder.programsCurriculum.caption,
                     folders: [],
                 };
             }
-            groups[key].folders.push(folder);
+
+            gradeGroups[gradeKey].terms[termKey].folders.push(folder);
         });
 
-        return Object.values(groups);
+        // Convert to array and sort
+        return Object.values(gradeGroups).map((grade) => ({
+            ...grade,
+            terms: Object.values(grade.terms),
+        }));
     }, [folders]);
 
     const handleCreateFolder = () => {
@@ -145,27 +171,36 @@ export function ResourcesManagement() {
                     message={t("noFoldersDescription")}
                 />
             ) : (
-                <div className="space-y-8">
-                    {groupedFolders.map((group, groupIndex) => (
-                        <div key={groupIndex}>
-                            {/* Group Header */}
-                            <div className="mb-4">
-                                <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                                    {group.grade}
-                                </h3>
-                                <p className="text-sm text-gray-500 dark:text-gray-400">
-                                    {group.term}
-                                </p>
-                            </div>
+                <div className="space-y-10">
+                    {groupedByGrade.map((gradeGroup) => (
+                        <div key={gradeGroup.gradeId}>
+                            {/* Grade Header */}
+                            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
+                                {gradeGroup.gradeName}
+                            </h2>
 
-                            {/* Folders Grid */}
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                {group.folders.map((folder, index) => (
-                                    <FolderCard
-                                        key={folder.id}
-                                        folder={folder}
-                                        index={index}
-                                    />
+                            {/* Terms under this grade */}
+                            <div className="space-y-6">
+                                {gradeGroup.terms.map((term) => (
+                                    <div key={term.termId}>
+                                        {/* Term Header */}
+                                        <p className="text-sm font-medium text-brand-500 mb-3">
+                                            {term.termName}
+                                        </p>
+
+                                        {/* Folders Grid */}
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                            {term.folders.map(
+                                                (folder, index) => (
+                                                    <FolderCard
+                                                        key={folder.id}
+                                                        folder={folder}
+                                                        index={index}
+                                                    />
+                                                )
+                                            )}
+                                        </div>
+                                    </div>
                                 ))}
                             </div>
                         </div>

@@ -14,11 +14,13 @@ import {
 } from "lucide-react";
 import type { Lesson, LessonTabType } from "../../types";
 import { RatingModal } from "./RatingModal";
+import { AssignmentSubmitModal } from "./AssignmentSubmitModal";
 import {
     useLessonMaterialsByLesson,
     useLessonAssignmentsByLesson,
     useLessonQuizzesByLesson,
 } from "@/features/dashboard/admin/learning/pages/lessons/api";
+import type { LessonAssignment } from "@/features/dashboard/admin/learning/pages/lessons/types/lesson-assignments.types";
 
 interface LessonContentProps {
     lesson: Lesson;
@@ -28,6 +30,12 @@ interface LessonContentProps {
 export function LessonContent({ lesson, activeTab }: LessonContentProps) {
     const { t } = useTranslation("selfStudy");
     const [showRatingModal, setShowRatingModal] = useState(false);
+    const [showSubmitModal, setShowSubmitModal] = useState(false);
+    const [selectedAssignment, setSelectedAssignment] =
+        useState<LessonAssignment | null>(null);
+    const [submittedAssignments, setSubmittedAssignments] = useState<
+        Set<string>
+    >(new Set());
 
     // Fetch materials only when materials tab is active
     const { data: materialsData, isLoading: isLoadingMaterials } =
@@ -311,13 +319,54 @@ export function LessonContent({ lesson, activeTab }: LessonContentProps) {
                                 <Eye className="size-4" />
                                 {t("lesson.assignments.view")}
                             </a>
-                            <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-semibold text-sm transition-colors">
-                                <Send className="size-4" />
-                                {t("lesson.assignments.submit")}
-                            </button>
+                            {submittedAssignments.has(assignment.id) ? (
+                                <button
+                                    type="button"
+                                    disabled
+                                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-success-500 text-white font-semibold text-sm cursor-default"
+                                >
+                                    <CheckCircle className="size-4" />
+                                    {t(
+                                        "lesson.assignments.completed",
+                                        "Completed"
+                                    )}
+                                </button>
+                            ) : (
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setSelectedAssignment(assignment);
+                                        setShowSubmitModal(true);
+                                    }}
+                                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-semibold text-sm transition-colors"
+                                >
+                                    <Send className="size-4" />
+                                    {t("lesson.assignments.submit")}
+                                </button>
+                            )}
                         </div>
                     </div>
                 ))}
+
+                {/* Assignment Submit Modal */}
+                {selectedAssignment && (
+                    <AssignmentSubmitModal
+                        isOpen={showSubmitModal}
+                        onClose={() => {
+                            setShowSubmitModal(false);
+                            setSelectedAssignment(null);
+                        }}
+                        assignment={selectedAssignment}
+                        lessonId={String(lesson.id)}
+                        onSuccess={() => {
+                            setSubmittedAssignments((prev) => {
+                                const next = new Set(prev);
+                                next.add(selectedAssignment.id);
+                                return next;
+                            });
+                        }}
+                    />
+                )}
             </div>
         );
     }

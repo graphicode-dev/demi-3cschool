@@ -1,4 +1,4 @@
-export type ProjectStatus = "new" | "under_review" | "reviewed";
+export type ProjectStatus = "new" | "under_review" | "reviewed" | "completed";
 
 export interface Project {
     id: number;

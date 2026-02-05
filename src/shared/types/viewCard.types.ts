@@ -5,7 +5,7 @@ export interface ViewCardFieldItem {
     label: string;
     value: string | number | null | React.ReactNode | undefined;
     colSpan?: number; // Number of columns this field should span (default: 1)
-    type?: string;
+    type?: "file" | "image";
 }
 
 // Row structure for ViewCard
@@ -56,7 +56,7 @@ export interface ViewCardSectionProps {
 export interface ViewCardFieldProps {
     label: string;
     value?: string | number | React.ReactNode | null;
-    type?: string;
+    type?: "file" | "image";
 }
 
 // Props for the ViewCardButtons component

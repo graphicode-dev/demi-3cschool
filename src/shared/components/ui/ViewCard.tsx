@@ -96,6 +96,12 @@ const ViewCardField: React.FC<ViewCardFieldProps> = ({
                 >
                     <span>{displayValue}</span>
                 </a>
+            ) : type === "image" ? (
+                <img
+                    src={displayValue}
+                    className="w-30 h-30 object-cover rounded-full hover:opacity-80 hover:w-50 hover:h-50 transition-all"
+                    alt={label}
+                />
             ) : (
                 <p className="text-gray-900 dark:text-white font-medium max-w-full truncate wrap-break-word whitespace-pre-wrap">
                     {displayValue || "No Value"}

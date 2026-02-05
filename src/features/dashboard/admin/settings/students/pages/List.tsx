@@ -7,6 +7,8 @@ import type { TableColumn, TableData } from "@/shared/types";
 import { useStudentsList, useDeleteStudent } from "../api";
 import { studentsPaths } from "../navigation/paths";
 import { useMutationHandler } from "@/shared/api";
+import { Eye, Pen, Plus, Trash } from "lucide-react";
+import ActionsDropdown from "@/design-system/components/ActionsDropdown";
 
 export default function StudentsListPage() {
     const { t } = useTranslation("students");
@@ -17,6 +19,24 @@ export default function StudentsListPage() {
 
     const { data, isLoading, error, refetch } = useStudentsList({ page: 1 });
     const deleteMutation = useDeleteStudent();
+
+    const handleDelete = async (rowId: string) => {
+        const confirmed = await confirm({
+            title: t("confirmDelete", "Are you sure?"),
+            message: t("confirmDelete", "Are you sure?"),
+            variant: "danger",
+            confirmText: t("common.delete", "Delete"),
+            cancelText: t("common.cancel", "Cancel"),
+            successMessage: t(
+                "messages.deleteSuccess",
+                "Student deleted successfully"
+            ),
+        });
+
+        if (!confirmed) return;
+
+        await execute(() => deleteMutation.mutateAsync(rowId));
+    };
 
     const columnsData = [
         {
@@ -49,58 +69,35 @@ export default function StudentsListPage() {
                 const rowId = String(row?.original?.id ?? row?.id);
 
                 return (
-                    <div className="flex items-center gap-2 justify-end">
-                        <button
-                            type="button"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                navigate(studentsPaths.view(rowId));
-                            }}
-                            className="px-3 py-1.5 rounded-md border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800"
-                        >
-                            {t("actions.view", "View")}
-                        </button>
-                        <button
-                            type="button"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                navigate(studentsPaths.edit(rowId));
-                            }}
-                            className="px-3 py-1.5 rounded-md border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800"
-                        >
-                            {t("actions.edit", "Edit")}
-                        </button>
-                        <button
-                            type="button"
-                            disabled={deleteMutation.isPending}
-                            onClick={async (e) => {
-                                e.stopPropagation();
-
-                                const confirmed = await confirm({
-                                    title: t("confirmDelete", "Are you sure?"),
-                                    message: t("confirmDelete", "Are you sure?"),
-                                    variant: "danger",
-                                    confirmText: t("common.delete", "Delete"),
-                                    cancelText: t("common.cancel", "Cancel"),
-                                });
-
-                                if (!confirmed) return;
-
-                                await execute(
-                                    () => deleteMutation.mutateAsync(rowId),
-                                    {
-                                        successMessage: t(
-                                            "messages.deleteSuccess",
-                                            "Student deleted successfully"
-                                        ),
-                                    }
-                                );
-                            }}
-                            className="px-3 py-1.5 rounded-md border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50"
-                        >
-                            {t("actions.delete", "Delete")}
-                        </button>
-                    </div>
+                    <ActionsDropdown
+                        itemId={rowId}
+                        actions={[
+                            {
+                                id: "view",
+                                label: t("actions.view", "View"),
+                                onClick: () =>
+                                    navigate(studentsPaths.view(rowId)),
+                                icon: <Eye className="w-4 h-4" />,
+                            },
+                            {
+                                id: "edit",
+                                label: t("actions.edit", "Edit"),
+                                onClick: () =>
+                                    navigate(studentsPaths.edit(rowId)),
+                                icon: <Pen className="w-4 h-4" />,
+                            },
+                            {
+                                id: "delete",
+                                label: t("actions.delete", "Delete"),
+                                onClick: () => handleDelete(rowId),
+                                icon: (
+                                    <Trash className="text-red-500 w-4 h-4" />
+                                ),
+                                className: "text-red-500",
+                                divider: true,
+                            },
+                        ]}
+                    />
                 );
             },
         },
@@ -111,18 +108,18 @@ export default function StudentsListPage() {
             pageHeaderProps={{
                 title: t("title", "Students"),
                 subtitle: t("description", "Manage students"),
+                actions: (
+                    <button
+                        type="button"
+                        onClick={() => navigate(studentsPaths.create)}
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-brand-500 text-white rounded-lg hover:bg-brand-600 transition-colors"
+                    >
+                        <Plus className="w-4 h-4" />{" "}
+                        {t("actions.create", "Create")}
+                    </button>
+                ),
             }}
         >
-            <div className="flex justify-end mb-4">
-                <button
-                    type="button"
-                    onClick={() => navigate(studentsPaths.create)}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-brand-500 text-white rounded-lg hover:bg-brand-600 transition-colors"
-                >
-                    {t("actions.create", "Create")}
-                </button>
-            </div>
-
             {isLoading ? (
                 <LoadingState message={t("loading", "Loading...")} />
             ) : error ? (
@@ -131,32 +128,30 @@ export default function StudentsListPage() {
                     onRetry={refetch}
                 />
             ) : (
-                <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-                    <DynamicTable
-                        title={t("title", "Students")}
-                        data={
-                            (data?.items ?? []).map((item) => ({
-                                id: String(item.id),
-                                columns: {
-                                    id: item.id,
-                                    name: item.name,
-                                    email: item.email,
-                                    role:
-                                        item.role?.caption ??
-                                        item.role?.name ??
-                                        "-",
-                                },
-                            })) as TableData[]
-                        }
-                        columns={columnsData}
-                        initialView="grid"
-                        hideToolbar
-                        hidePagination
-                        hideActionButtons
-                        disableRowClick={false}
-                        onRowClick={(rowId) => navigate(studentsPaths.view(rowId))}
-                    />
-                </div>
+                <DynamicTable
+                    title={t("title", "Students")}
+                    data={
+                        (data?.items ?? []).map((item) => ({
+                            id: String(item.id),
+                            columns: {
+                                id: item.id,
+                                name: item.name,
+                                email: item.email,
+                                role:
+                                    item.role?.caption ??
+                                    item.role?.name ??
+                                    "-",
+                            },
+                        })) as TableData[]
+                    }
+                    columns={columnsData}
+                    hideToolbar
+                    hidePagination
+                    hideActionButtons
+                    disableRowClick
+                    hideBorder
+                    hideHeader
+                />
             )}
         </PageWrapper>
     );

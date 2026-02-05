@@ -1,11 +1,11 @@
 import { api } from "@/shared/api/client";
 import type { ApiResponse, PaginatedData } from "@/shared/api";
 import type {
-    Teacher,
     TeachersListParams,
     TeacherCreatePayload,
     TeacherUpdatePayload,
 } from "../types";
+import { User } from "@/auth/auth.types";
 
 const BASE_URL = "/system-managements/teachers";
 
@@ -13,12 +13,12 @@ export const teachersApi = {
     list: async (
         params?: TeachersListParams,
         signal?: AbortSignal
-    ): Promise<PaginatedData<Teacher>> => {
+    ): Promise<PaginatedData<User>> => {
         const queryParams: Record<string, unknown> = {};
         if (params?.page) queryParams.page = params.page;
         if (params?.search) queryParams.search = params.search;
 
-        const response = await api.get<ApiResponse<PaginatedData<Teacher>>>(
+        const response = await api.get<ApiResponse<PaginatedData<User>>>(
             BASE_URL,
             {
                 params: queryParams,
@@ -40,8 +40,8 @@ export const teachersApi = {
     getById: async (
         id: string | number,
         signal?: AbortSignal
-    ): Promise<Teacher> => {
-        const response = await api.get<ApiResponse<Teacher>>(`${BASE_URL}/${id}`, {
+    ): Promise<User> => {
+        const response = await api.get<ApiResponse<User>>(`${BASE_URL}/${id}`, {
             signal,
         });
 
@@ -56,8 +56,8 @@ export const teachersApi = {
         return response.data.data;
     },
 
-    create: async (payload: TeacherCreatePayload): Promise<Teacher> => {
-        const response = await api.post<ApiResponse<Teacher>>(BASE_URL, payload);
+    create: async (payload: TeacherCreatePayload): Promise<User> => {
+        const response = await api.post<ApiResponse<User>>(BASE_URL, payload);
 
         if (response.error) {
             throw response.error;
@@ -73,11 +73,14 @@ export const teachersApi = {
     update: async (
         id: string | number,
         payload: TeacherUpdatePayload
-    ): Promise<Teacher> => {
-        const response = await api.post<ApiResponse<Teacher>>(`${BASE_URL}/${id}`, {
-            _method: "put",
-            ...payload,
-        });
+    ): Promise<User> => {
+        const response = await api.post<ApiResponse<User>>(
+            `${BASE_URL}/${id}`,
+            {
+                _method: "put",
+                ...payload,
+            }
+        );
 
         if (response.error) {
             throw response.error;

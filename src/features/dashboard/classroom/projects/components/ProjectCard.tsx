@@ -43,6 +43,12 @@ const statusConfig: Record<
         textColor: "text-success-500",
         icon: CheckCircle,
     },
+    completed: {
+        labelKey: "status.completed",
+        bgColor: "bg-success-500/10",
+        textColor: "text-success-500",
+        icon: CheckCircle,
+    },
 };
 
 export function ProjectCard({
@@ -115,6 +121,14 @@ export function ProjectCard({
                         >
                             {t("submitHomework")}
                             <span className="text-xs">→</span>
+                        </button>
+                    ) : project.status === "completed" ? (
+                        <button
+                            disabled
+                            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-success-500 text-white text-sm font-bold cursor-default"
+                        >
+                            <CheckCircle className="size-4" />
+                            {t("status.completed", "Completed")}
                         </button>
                     ) : (
                         <button

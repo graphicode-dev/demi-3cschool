@@ -2,11 +2,12 @@ import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
 import { teachersKeys } from "./teachers.keys";
 import { teachersApi } from "./teachers.api";
 import type { PaginatedData } from "@/shared/api";
-import type { Teacher, TeachersListParams } from "../types";
+import type { TeachersListParams } from "../types";
+import { User } from "@/auth/auth.types";
 
 export function useTeachersList(
     params?: TeachersListParams,
-    options?: Partial<UseQueryOptions<PaginatedData<Teacher>, Error>>
+    options?: Partial<UseQueryOptions<PaginatedData<User>, Error>>
 ) {
     return useQuery({
         queryKey: teachersKeys.list(params),
@@ -17,7 +18,7 @@ export function useTeachersList(
 
 export function useTeacher(
     id: string | number | null | undefined,
-    options?: Partial<UseQueryOptions<Teacher, Error>>
+    options?: Partial<UseQueryOptions<User, Error>>
 ) {
     return useQuery({
         queryKey: teachersKeys.detail(String(id ?? "")),

@@ -1,17 +1,17 @@
 import { api } from "@/shared/api/client";
 import type { ApiResponse, PaginatedData } from "@/shared/api";
 import type {
-    Student,
     StudentsListParams,
     StudentCreatePayload,
     StudentUpdatePayload,
 } from "../types";
+import { User } from "@/auth/auth.types";
 
 const BASE_URL = "/system-managements/students";
 
 function normalizeStudentsList(
-    data: PaginatedData<Student> | Student[]
-): PaginatedData<Student> {
+    data: PaginatedData<User> | User[]
+): PaginatedData<User> {
     if (Array.isArray(data)) {
         return {
             perPage: data.length,
@@ -29,13 +29,13 @@ export const studentsApi = {
     list: async (
         params?: StudentsListParams,
         signal?: AbortSignal
-    ): Promise<PaginatedData<Student>> => {
+    ): Promise<PaginatedData<User>> => {
         const queryParams: Record<string, unknown> = {};
         if (params?.page) queryParams.page = params.page;
         if (params?.search) queryParams.search = params.search;
 
         const response = await api.get<
-            ApiResponse<PaginatedData<Student> | Student[]>
+            ApiResponse<PaginatedData<User> | User[]>
         >(BASE_URL, {
             params: queryParams,
             signal,
@@ -55,8 +55,8 @@ export const studentsApi = {
     getById: async (
         id: string | number,
         signal?: AbortSignal
-    ): Promise<Student> => {
-        const response = await api.get<ApiResponse<Student>>(
+    ): Promise<User> => {
+        const response = await api.get<ApiResponse<User>>(
             `${BASE_URL}/${id}`,
             { signal }
         );
@@ -72,8 +72,8 @@ export const studentsApi = {
         return response.data.data;
     },
 
-    create: async (payload: StudentCreatePayload): Promise<Student> => {
-        const response = await api.post<ApiResponse<Student>>(BASE_URL, payload);
+    create: async (payload: StudentCreatePayload): Promise<User> => {
+        const response = await api.post<ApiResponse<User>>(BASE_URL, payload);
 
         if (response.error) {
             throw response.error;
@@ -89,8 +89,8 @@ export const studentsApi = {
     update: async (
         id: string | number,
         payload: StudentUpdatePayload
-    ): Promise<Student> => {
-        const response = await api.put<ApiResponse<Student>>(
+    ): Promise<User> => {
+        const response = await api.put<ApiResponse<User>>(
             `${BASE_URL}/${id}`,
             payload
         );

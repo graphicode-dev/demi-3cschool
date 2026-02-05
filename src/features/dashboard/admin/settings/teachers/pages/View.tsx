@@ -1,12 +1,13 @@
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import PageWrapper from "@/design-system/components/PageWrapper";
+import { ViewCard } from "@/shared/components/ui/ViewCard";
 import { useTeacher } from "../api";
 import { teachersPaths } from "../navigation/paths";
+import { Pen } from "lucide-react";
 
 export default function TeachersViewPage() {
     const { t } = useTranslation("teachers");
-    const navigate = useNavigate();
     const { id } = useParams<{ id: string }>();
 
     const { data, isLoading, error } = useTeacher(id);
@@ -16,6 +17,15 @@ export default function TeachersViewPage() {
             pageHeaderProps={{
                 title: t("actions.view", "View"),
                 backButton: true,
+                actions: (
+                    <Link
+                        to={teachersPaths.edit(id!)}
+                        className="inline-flex items-center gap-2 px-4 py-2.5 bg-brand-500 text-white text-sm font-medium rounded-lg hover:bg-brand-600 transition-colors"
+                    >
+                        <Pen className="w-3 h-3" />
+                        {t("actions.edit", "Edit")}
+                    </Link>
+                ),
             }}
         >
             {isLoading ? (
@@ -27,52 +37,47 @@ export default function TeachersViewPage() {
                     {t("error", "Failed to load")}
                 </div>
             ) : (
-                <div className="space-y-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-6">
-                    <div className="flex justify-end gap-2">
-                        <button
-                            type="button"
-                            onClick={() => navigate(teachersPaths.edit(data.id))}
-                            className="px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
-                        >
-                            {t("actions.edit", "Edit")}
-                        </button>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400">
-                                {t("table.id", "ID")}
-                            </div>
-                            <div className="text-sm text-gray-900 dark:text-gray-100">
-                                {data.id}
-                            </div>
-                        </div>
-                        <div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400">
-                                {t("fields.name", "Name")}
-                            </div>
-                            <div className="text-sm text-gray-900 dark:text-gray-100">
-                                {data.name}
-                            </div>
-                        </div>
-                        <div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400">
-                                {t("fields.email", "Email")}
-                            </div>
-                            <div className="text-sm text-gray-900 dark:text-gray-100">
-                                {data.email}
-                            </div>
-                        </div>
-                        <div>
-                            <div className="text-xs text-gray-500 dark:text-gray-400">
-                                {t("fields.role", "Role")}
-                            </div>
-                            <div className="text-sm text-gray-900 dark:text-gray-100">
-                                {data.role?.caption ?? data.role?.name ?? "-"}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <ViewCard
+                    headerTitle={t("sections.details", "Teacher Details")}
+                    data={{
+                        rows: [
+                            {
+                                fields: [
+                                    {
+                                        label: "",
+                                        value: data.image,
+                                        type: "image",
+                                        colSpan: 3,
+                                    },
+                                    {
+                                        label: t("table.id", "ID"),
+                                        value: data.id,
+                                    },
+                                    {
+                                        label: t("fields.name", "Name"),
+                                        value: data.name,
+                                    },
+                                    {
+                                        label: t("fields.email", "Email"),
+                                        value: data.email,
+                                    },
+                                    {
+                                        label: t("fields.phone", "Phone"),
+                                        value: data.userInformation
+                                            ?.phoneNumber,
+                                    },
+                                    {
+                                        label: t("fields.role", "Role"),
+                                        value:
+                                            data.role?.caption ??
+                                            data.role?.name ??
+                                            "-",
+                                    },
+                                ],
+                            },
+                        ],
+                    }}
+                />
             )}
         </PageWrapper>
     );
