@@ -52,8 +52,9 @@ export default function LearningLessonsDetail() {
                         {
                             fields: [
                                 {
-                                    label: "Lesson ID",
-                                    value: lesson?.id,
+                                    label: "Lesson Description",
+                                    value: lesson?.description,
+                                    colSpan: 3,
                                 },
                             ],
                         },
