@@ -1,6 +1,10 @@
 {
     "title": "محتوى الدراسة الذاتية",
     "description": "تتبع رحلة تعلمك وأكمل جلساتك خطوة بخطوة.",
+    "breadcrumb": {
+        "selfStudyContent": "محتوى الدراسة الذاتية",
+        "lesson": "الدرس"
+    },
     "terms": {
         "firstTerm": "الفصل الأول",
         "secondTerm": "الفصل الثاني",

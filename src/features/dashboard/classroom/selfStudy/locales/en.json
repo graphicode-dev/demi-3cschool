@@ -1,6 +1,10 @@
 {
     "title": "Self Study Content",
     "description": "Track your learning journey and complete your sessions step by step.",
+    "breadcrumb": {
+        "selfStudyContent": "Self Study Content",
+        "lesson": "Lesson"
+    },
     "terms": {
         "firstTerm": "First Term",
         "secondTerm": "Second Term",

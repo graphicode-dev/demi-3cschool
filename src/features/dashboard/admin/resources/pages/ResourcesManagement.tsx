@@ -4,10 +4,10 @@
  * Main page for managing resource folders with filters.
  */
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { Filter, FolderPlus } from "lucide-react";
+import { Filter, FolderPlus, ChevronDown } from "lucide-react";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { EmptyState } from "@/design-system/components/EmptyState";
 import { LoadingState } from "@/design-system/components/LoadingState";
@@ -16,6 +16,93 @@ import { useFoldersList } from "../api";
 import { useGrades } from "@/features/dashboard/admin/systemManagements/api";
 import { useProgramsCurriculumList } from "@/features/dashboard/admin/programs/api";
 import type { ResourceFolder } from "../types";
+
+// Collapsible Section Component
+function CollapsibleSection({
+    title,
+    count,
+    children,
+    defaultExpanded = true,
+    variant = "grade",
+}: {
+    title: string;
+    count?: number;
+    children: React.ReactNode;
+    defaultExpanded?: boolean;
+    variant?: "grade" | "term";
+}) {
+    const [isExpanded, setIsExpanded] = useState(defaultExpanded);
+    const contentRef = useRef<HTMLDivElement>(null);
+    const [contentHeight, setContentHeight] = useState<number | undefined>(
+        undefined
+    );
+
+    useEffect(() => {
+        if (contentRef.current) {
+            setContentHeight(contentRef.current.scrollHeight);
+        }
+    }, [children]);
+
+    const isGrade = variant === "grade";
+
+    return (
+        <div className={isGrade ? "" : ""}>
+            <button
+                type="button"
+                onClick={() => setIsExpanded((prev) => !prev)}
+                className={`w-full flex items-center justify-between gap-3 ${
+                    isGrade
+                        ? "py-3 px-4 bg-gray-100 dark:bg-gray-800 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700"
+                        : "py-2 hover:opacity-80"
+                } transition-all`}
+            >
+                <div className="flex items-center gap-2">
+                    <ChevronDown
+                        className={`size-4 ${
+                            isGrade
+                                ? "text-gray-600 dark:text-gray-400"
+                                : "text-brand-500"
+                        } transition-transform duration-300 ease-in-out ${
+                            isExpanded ? "rotate-180" : "rotate-0"
+                        }`}
+                    />
+                    {isGrade ? (
+                        <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+                            {title}
+                        </h2>
+                    ) : (
+                        <p className="text-sm font-medium text-brand-500">
+                            {title}
+                        </p>
+                    )}
+                </div>
+                {count !== undefined && (
+                    <span
+                        className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+                            isGrade
+                                ? "bg-brand-100 text-brand-600 dark:bg-brand-500/20 dark:text-brand-400"
+                                : "bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-400"
+                        }`}
+                    >
+                        {count}
+                    </span>
+                )}
+            </button>
+
+            <div
+                className="overflow-hidden transition-all duration-300 ease-in-out"
+                style={{
+                    maxHeight: isExpanded ? contentHeight : 0,
+                    opacity: isExpanded ? 1 : 0,
+                }}
+            >
+                <div ref={contentRef} className={isGrade ? "pt-4" : "pt-3"}>
+                    {children}
+                </div>
+            </div>
+        </div>
+    );
+}
 
 export function ResourcesManagement() {
     const { t } = useTranslation("adminResources");
@@ -171,40 +258,46 @@ export function ResourcesManagement() {
                     message={t("noFoldersDescription")}
                 />
             ) : (
-                <div className="space-y-10">
-                    {groupedByGrade.map((gradeGroup) => (
-                        <div key={gradeGroup.gradeId}>
-                            {/* Grade Header */}
-                            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
-                                {gradeGroup.gradeName}
-                            </h2>
-
-                            {/* Terms under this grade */}
-                            <div className="space-y-6">
-                                {gradeGroup.terms.map((term) => (
-                                    <div key={term.termId}>
-                                        {/* Term Header */}
-                                        <p className="text-sm font-medium text-brand-500 mb-3">
-                                            {term.termName}
-                                        </p>
-
-                                        {/* Folders Grid */}
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                                            {term.folders.map(
-                                                (folder, index) => (
-                                                    <FolderCard
-                                                        key={folder.id}
-                                                        folder={folder}
-                                                        index={index}
-                                                    />
-                                                )
-                                            )}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    ))}
+                <div className="space-y-6">
+                    {groupedByGrade.map((gradeGroup) => {
+                        const totalFolders = gradeGroup.terms.reduce(
+                            (acc, term) => acc + term.folders.length,
+                            0
+                        );
+                        return (
+                            <CollapsibleSection
+                                key={gradeGroup.gradeId}
+                                title={gradeGroup.gradeName}
+                                count={totalFolders}
+                                variant="grade"
+                            >
+                                {/* Terms under this grade */}
+                                <div className="space-y-4 ps-4">
+                                    {gradeGroup.terms.map((term) => (
+                                        <CollapsibleSection
+                                            key={term.termId}
+                                            title={term.termName}
+                                            count={term.folders.length}
+                                            variant="term"
+                                        >
+                                            {/* Folders Grid */}
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                                {term.folders.map(
+                                                    (folder, index) => (
+                                                        <FolderCard
+                                                            key={folder.id}
+                                                            folder={folder}
+                                                            index={index}
+                                                        />
+                                                    )
+                                                )}
+                                            </div>
+                                        </CollapsibleSection>
+                                    ))}
+                                </div>
+                            </CollapsibleSection>
+                        );
+                    })}
 
                     {/* Pagination */}
                     <div className="flex items-center justify-between gap-4 pt-2">

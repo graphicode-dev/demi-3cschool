@@ -1,6 +1,9 @@
 {
     "title": "الجلسات الحضورية",
     "description": "انضم إلى ورش العمل العملية وتجارب التعلم الشخصية",
+    "breadcrumb": {
+        "physicalStudyContent": "محتوى الدراسة الحضورية"
+    },
     "atTheCenter": "في المركز",
     "terms": {
         "first": "الفصل الأول",

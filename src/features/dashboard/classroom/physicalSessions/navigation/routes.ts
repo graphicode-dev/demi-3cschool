@@ -19,6 +19,9 @@ export const physicalSessionsRoutes: RouteConfig[] = [
             titleKey: "physicalSessions:title",
             requiresAuth: true,
         },
+        handle: {
+            crumb: "physicalSessions:breadcrumb.physicalStudyContent",
+        },
         // permissions: [groupSession.viewAny],
     },
 ];

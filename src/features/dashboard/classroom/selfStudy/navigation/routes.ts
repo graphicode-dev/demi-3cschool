@@ -19,6 +19,9 @@ export const selfStudyRoutes: RouteConfig[] = [
             titleKey: "selfStudy:title",
             requiresAuth: true,
         },
+        handle: {
+            crumb: "selfStudy:breadcrumb.selfStudyContent",
+        },
         // permissions: [lesson.viewAny],
     },
     {
@@ -31,6 +34,7 @@ export const selfStudyRoutes: RouteConfig[] = [
             titleKey: "selfStudy:lesson.title",
             requiresAuth: true,
         },
+        // Dynamic breadcrumb is set by the page component using useDynamicBreadcrumb
         // permissions: [lesson.view],
     },
 ];

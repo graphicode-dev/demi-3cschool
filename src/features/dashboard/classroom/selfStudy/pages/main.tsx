@@ -7,10 +7,7 @@ import { useMySessions } from "../api";
 import { selfStudyPaths } from "../navigation";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { useCurriculumTerms } from "../../components/TermStepper";
-import type {
-    CourseSession,
-    Course,
-} from "../types";
+import type { CourseSession, Course } from "../types";
 import type { Term } from "../../components/TermStepper";
 
 function SelfStudyPage() {

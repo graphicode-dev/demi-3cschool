@@ -33,6 +33,7 @@ import {
     mockInstallments,
 } from "../mockData/profile.mock";
 import PageWrapper from "@/design-system/components/PageWrapper";
+import { authStore } from "@/auth";
 
 const PersonalDetailsTab = lazy(
     () => import("../components/PersonalDetailsTab")
@@ -46,56 +47,6 @@ const AssignmentsTab = lazy(() => import("../components/AssignmentsTab"));
 const InvoicesTab = lazy(() => import("../components/InvoicesTab"));
 const InstallmentsTab = lazy(() => import("../components/InstallmentsTab"));
 
-const tabs: {
-    key: ProfileTabType;
-    labelKey: string;
-    fallback: string;
-    icon: React.ReactNode;
-}[] = [
-    {
-        key: "personal",
-        labelKey: "account:profile.tabs.personal",
-        fallback: "Personal Details",
-        icon: <User className="w-4 h-4" />,
-    },
-    {
-        key: "academic",
-        labelKey: "account:profile.tabs.academic",
-        fallback: "Academic Details",
-        icon: <GraduationCap className="w-4 h-4" />,
-    },
-    {
-        key: "groups",
-        labelKey: "account:profile.tabs.groups",
-        fallback: "Group History",
-        icon: <History className="w-4 h-4" />,
-    },
-    {
-        key: "attendance",
-        labelKey: "account:profile.tabs.attendance",
-        fallback: "Attendance",
-        icon: <ClipboardCheck className="w-4 h-4" />,
-    },
-    {
-        key: "assignments",
-        labelKey: "account:profile.tabs.assignments",
-        fallback: "Assignments",
-        icon: <BookOpen className="w-4 h-4" />,
-    },
-    {
-        key: "invoices",
-        labelKey: "account:profile.tabs.invoices",
-        fallback: "Invoices",
-        icon: <Receipt className="w-4 h-4" />,
-    },
-    {
-        key: "installments",
-        labelKey: "account:profile.tabs.installments",
-        fallback: "Installments",
-        icon: <CreditCard className="w-4 h-4" />,
-    },
-];
-
 function TabLoader() {
     return (
         <div className="flex items-center justify-center h-64">
@@ -106,8 +57,68 @@ function TabLoader() {
 
 function ProfilePage() {
     const { t } = useTranslation();
+    const { user } = authStore();
+    const isAdmin = user?.role?.name === "admin";
     const [searchParams, setSearchParams] = useSearchParams();
     const activeTab = (searchParams.get("tab") as ProfileTabType) || "personal";
+
+    const tabs: {
+        key: ProfileTabType;
+        labelKey: string;
+        fallback: string;
+        icon: React.ReactNode;
+        show: boolean;
+    }[] = [
+        {
+            key: "personal",
+            labelKey: "account:profile.tabs.personal",
+            fallback: "Personal Details",
+            icon: <User className="w-4 h-4" />,
+            show: true,
+        },
+        {
+            key: "academic",
+            labelKey: "account:profile.tabs.academic",
+            fallback: "Academic Details",
+            icon: <GraduationCap className="w-4 h-4" />,
+            show: true,
+        },
+        {
+            key: "groups",
+            labelKey: "account:profile.tabs.groups",
+            fallback: "Group History",
+            icon: <History className="w-4 h-4" />,
+            show: true,
+        },
+        {
+            key: "attendance",
+            labelKey: "account:profile.tabs.attendance",
+            fallback: "Attendance",
+            icon: <ClipboardCheck className="w-4 h-4" />,
+            show: true,
+        },
+        {
+            key: "assignments",
+            labelKey: "account:profile.tabs.assignments",
+            fallback: "Assignments",
+            icon: <BookOpen className="w-4 h-4" />,
+            show: true,
+        },
+        {
+            key: "invoices",
+            labelKey: "account:profile.tabs.invoices",
+            fallback: "Invoices",
+            icon: <Receipt className="w-4 h-4" />,
+            show: isAdmin,
+        },
+        {
+            key: "installments",
+            labelKey: "account:profile.tabs.installments",
+            fallback: "Installments",
+            icon: <CreditCard className="w-4 h-4" />,
+            show: isAdmin,
+        },
+    ];
 
     const handleTabChange = (value: string) => {
         setSearchParams({ tab: value });
@@ -169,14 +180,24 @@ function ProfilePage() {
                         <Edit className="w-4 h-4" />
                         {t("account:profile.editProfile", "Edit Profile")}
                     </button>
-                    <button className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                        <Users className="w-4 h-4" />
-                        {t("account:profile.assignToGroup", "Assign to group")}
-                    </button>
-                    <button className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-brand-500 hover:bg-brand-600 rounded-lg transition-colors">
-                        <FileText className="w-4 h-4" />
-                        {t("account:profile.createInvoice", "Create Invoice")}
-                    </button>
+                    {isAdmin && (
+                        <>
+                            <button className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                <Users className="w-4 h-4" />
+                                {t(
+                                    "account:profile.assignToGroup",
+                                    "Assign to group"
+                                )}
+                            </button>
+                            <button className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-brand-500 hover:bg-brand-600 rounded-lg transition-colors">
+                                <FileText className="w-4 h-4" />
+                                {t(
+                                    "account:profile.createInvoice",
+                                    "Create Invoice"
+                                )}
+                            </button>
+                        </>
+                    )}
                 </div>
             </div>
 
@@ -189,14 +210,16 @@ function ProfilePage() {
             >
                 <div className="bg-white dark:bg-gray-800 rounded-t-2xl border border-gray-200 dark:border-gray-700 px-6 pt-4 shadow-sm">
                     <Tabs.List>
-                        {tabs.map((tab) => (
-                            <Tabs.Item
-                                key={tab.key}
-                                value={tab.key}
-                                label={t(tab.labelKey, tab.fallback)}
-                                icon={tab.icon}
-                            />
-                        ))}
+                        {tabs
+                            .filter((tab) => tab.show)
+                            .map((tab) => (
+                                <Tabs.Item
+                                    key={tab.key}
+                                    value={tab.key}
+                                    label={t(tab.labelKey, tab.fallback)}
+                                    icon={tab.icon}
+                                />
+                            ))}
                     </Tabs.List>
                 </div>
 
@@ -231,16 +254,22 @@ function ProfilePage() {
                             <AssignmentsTab assignments={mockAssignments} />
                         </Suspense>
                     </Tabs.Panel>
-                    <Tabs.Panel value="invoices">
-                        <Suspense fallback={<TabLoader />}>
-                            <InvoicesTab invoices={mockInvoices} />
-                        </Suspense>
-                    </Tabs.Panel>
-                    <Tabs.Panel value="installments">
-                        <Suspense fallback={<TabLoader />}>
-                            <InstallmentsTab installments={mockInstallments} />
-                        </Suspense>
-                    </Tabs.Panel>
+                    {isAdmin && (
+                        <>
+                            <Tabs.Panel value="invoices">
+                                <Suspense fallback={<TabLoader />}>
+                                    <InvoicesTab invoices={mockInvoices} />
+                                </Suspense>
+                            </Tabs.Panel>
+                            <Tabs.Panel value="installments">
+                                <Suspense fallback={<TabLoader />}>
+                                    <InstallmentsTab
+                                        installments={mockInstallments}
+                                    />
+                                </Suspense>
+                            </Tabs.Panel>
+                        </>
+                    )}
                 </Tabs.Content>
             </Tabs>
         </PageWrapper>

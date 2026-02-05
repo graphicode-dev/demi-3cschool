@@ -1,6 +1,10 @@
 {
     "title": "My Virtual Sessions",
     "description": "Join live virtual sessions and interact with teachers in real-time",
+    "breadcrumb": {
+        "virtualStudyContent": "Virtual Study Content",
+        "recording": "Recording"
+    },
     "terms": {
         "first": "First Term",
         "second": "Second Term",

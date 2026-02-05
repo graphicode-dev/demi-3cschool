@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import {
@@ -11,6 +12,7 @@ import {
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { CLASSROOM_PATH } from "../../navigation/constant";
 import { useLessonVideo } from "@/features/dashboard/admin/learning/pages/lessons/api";
+import { useDynamicBreadcrumb } from "@/navigation";
 
 // Format time from "HH:mm:ss" to "HH:mm"
 function formatTime(time: string): string {
@@ -40,8 +42,19 @@ function RecordingPage() {
     const { t } = useTranslation("virtualSessions");
     const navigate = useNavigate();
     const { sessionId } = useParams<{ sessionId: string }>();
+    const { setLabel: setDynamicBreadcrumb } = useDynamicBreadcrumb();
 
     const { data: lessonVideo, isLoading } = useLessonVideo(sessionId!);
+
+    // Set dynamic breadcrumb with recording title
+    useEffect(() => {
+        if (lessonVideo?.title) {
+            setDynamicBreadcrumb(lessonVideo.title);
+        }
+        return () => {
+            setDynamicBreadcrumb(null);
+        };
+    }, [lessonVideo?.title, setDynamicBreadcrumb]);
 
     const handleGoBack = () => {
         navigate(`${CLASSROOM_PATH}/virtual-sessions`);

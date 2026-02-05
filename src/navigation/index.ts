@@ -27,5 +27,9 @@ export type { NavRegistry } from "./navRegistry";
 
 // Hooks
 export { useNavItems } from "./hooks/useNavItems";
-export { useBreadcrumbs } from "./hooks/useBreadcrumbs";
+export {
+    useBreadcrumbs,
+    useDynamicBreadcrumb,
+    DynamicBreadcrumbProvider,
+} from "./hooks/useBreadcrumbs";
 export type { BreadcrumbItem } from "./hooks/useBreadcrumbs";

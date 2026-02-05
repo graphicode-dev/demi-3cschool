@@ -1,6 +1,9 @@
 {
     "title": "Physical Sessions",
     "description": "Join hands-on workshops and in-person learning experiences",
+    "breadcrumb": {
+        "physicalStudyContent": "Physical Study Content"
+    },
     "atTheCenter": "At the Center",
     "terms": {
         "first": "First Term",

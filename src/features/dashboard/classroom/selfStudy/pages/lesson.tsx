@@ -5,6 +5,7 @@ import { FileQuestion, Loader2 } from "lucide-react";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { ConfirmDialog } from "@/design-system";
 import { api } from "@/shared/api/client";
+import { useDynamicBreadcrumb } from "@/navigation";
 import {
     MissionPath,
     VideoQuizModal,
@@ -337,6 +338,7 @@ function LessonPage() {
     const { sessionId: lessonId } = useParams<{ sessionId: string }>();
     const [searchParams] = useSearchParams();
     const groupId = searchParams.get("group_id") ?? searchParams.get("groupId");
+    const { setLabel: setDynamicBreadcrumb } = useDynamicBreadcrumb();
 
     const [watchInEnglish, setWatchInEnglish] = useState(false);
     const [videoProgress, setVideoProgress] = useState<Record<number, number>>(
@@ -402,6 +404,16 @@ function LessonPage() {
     // Fetch lesson data
     const { data: lessonData, isLoading: isLoadingLesson } =
         useLesson(lessonId);
+
+    // Set dynamic breadcrumb with lesson title
+    useEffect(() => {
+        if (lessonData?.title) {
+            setDynamicBreadcrumb(lessonData.title);
+        }
+        return () => {
+            setDynamicBreadcrumb(null);
+        };
+    }, [lessonData?.title, setDynamicBreadcrumb]);
 
     // Fetch lesson videos
     const { data: videosData, isLoading: isLoadingVideos } =
@@ -937,9 +949,26 @@ function LessonPage() {
                                 </p>
                             </div>
                         )}
+
+                        {/* Lesson Info Card */}
+                        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-theme-sm p-6">
+                            {/* Tabs */}
+                            <LessonTabs
+                                activeTab={activeTab}
+                                onTabChange={setActiveTab}
+                            />
+
+                            {/* Tab Content */}
+                            <div className="mt-6">
+                                <LessonContent
+                                    lesson={lesson}
+                                    activeTab={activeTab}
+                                />
+                            </div>
+                        </div>
                     </div>
 
-                    {/* Mission Path Sidebar */}
+                    {/* Videos List Sidebar */}
                     <MissionPath
                         videos={videos}
                         currentVideoId={selectedVideoId}
@@ -955,20 +984,6 @@ function LessonPage() {
                             }
                         }}
                     />
-                </div>
-
-                {/* Lesson Info Card */}
-                <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-theme-sm p-6">
-                    {/* Tabs */}
-                    <LessonTabs
-                        activeTab={activeTab}
-                        onTabChange={setActiveTab}
-                    />
-
-                    {/* Tab Content */}
-                    <div className="mt-6">
-                        <LessonContent lesson={lesson} activeTab={activeTab} />
-                    </div>
                 </div>
             </div>
 

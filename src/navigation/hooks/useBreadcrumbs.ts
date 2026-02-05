@@ -15,7 +15,15 @@
  * ```
  */
 
-import { useMemo } from "react";
+import {
+    useMemo,
+    createContext,
+    useContext,
+    useState,
+    useCallback,
+    createElement,
+    ReactNode,
+} from "react";
 import { useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { navRegistry } from "../navRegistry";
@@ -23,6 +31,52 @@ import type { NavItem } from "../nav.types";
 import { CLASSROOM_PATH } from "@/features/dashboard/classroom/navigation/constant";
 import { ADMIN_PATH } from "@/features/dashboard/admin/navigation/constant";
 import { overviewPaths } from "@/features/dashboard/admin/overview/navigation";
+
+// ============================================================================
+// Dynamic Breadcrumb Context
+// ============================================================================
+
+interface DynamicBreadcrumbContextType {
+    dynamicLabel: string | null;
+    setDynamicLabel: (label: string | null) => void;
+}
+
+const DynamicBreadcrumbContext = createContext<DynamicBreadcrumbContextType>({
+    dynamicLabel: null,
+    setDynamicLabel: () => {},
+});
+
+export function DynamicBreadcrumbProvider({
+    children,
+}: {
+    children: ReactNode;
+}) {
+    const [dynamicLabel, setDynamicLabel] = useState<string | null>(null);
+
+    return createElement(
+        DynamicBreadcrumbContext.Provider,
+        { value: { dynamicLabel, setDynamicLabel } },
+        children
+    );
+}
+
+export function useDynamicBreadcrumb() {
+    const context = useContext(DynamicBreadcrumbContext);
+
+    const setLabel = useCallback(
+        (label: string | null) => {
+            context.setDynamicLabel(label);
+        },
+        [context]
+    );
+
+    return { setLabel };
+}
+
+export function useDynamicBreadcrumbLabel() {
+    const context = useContext(DynamicBreadcrumbContext);
+    return context.dynamicLabel;
+}
 
 export interface BreadcrumbItem {
     path: string;
@@ -150,6 +204,7 @@ export const useBreadcrumbs = (
         options;
     const { pathname } = useLocation();
     const { t } = useTranslation();
+    const dynamicLabel = useDynamicBreadcrumbLabel();
 
     const breadcrumbs = useMemo(() => {
         const crumbs: BreadcrumbItem[] = [];
@@ -268,13 +323,24 @@ export const useBreadcrumbs = (
             });
         }
 
+        // Add dynamic label as last crumb if available
+        if (dynamicLabel) {
+            crumbs.push({
+                path: pathname,
+                label: dynamicLabel,
+                isActive: true,
+            });
+        }
+
         // Mark only the last item as active
         if (crumbs.length > 0) {
+            // Reset all to inactive first
+            crumbs.forEach((c) => (c.isActive = false));
             crumbs[crumbs.length - 1].isActive = true;
         }
 
         return crumbs;
-    }, [pathname, includeDashboard, dashboardConfig, t]);
+    }, [pathname, includeDashboard, dashboardConfig, t, dynamicLabel]);
 
     return breadcrumbs;
 };

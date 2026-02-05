@@ -19,6 +19,9 @@ export const virtualSessionsRoutes: RouteConfig[] = [
             titleKey: "virtualSessions:title",
             requiresAuth: true,
         },
+        handle: {
+            crumb: "virtualSessions:breadcrumb.virtualStudyContent",
+        },
         // permissions: [groupSession.viewAny],
     },
     {
@@ -31,6 +34,7 @@ export const virtualSessionsRoutes: RouteConfig[] = [
             titleKey: "virtualSessions:recording.title",
             requiresAuth: true,
         },
+        // Dynamic breadcrumb is set by the page component using useDynamicBreadcrumb
         // permissions: [groupSession.view],
     },
 ];
