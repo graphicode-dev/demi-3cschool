@@ -22,7 +22,7 @@ import type {
 } from "../../types/assignTeacher.types";
 import type { ListResponse } from "../../types/groups.types";
 import { ApiResponse } from "@/shared/api";
-import type { Teacher } from "@/features/dashboard/admin/settings/teachers/types";
+import { User } from "@/auth/auth.types";
 
 interface AvailableTeachersParams {
     groupId?: number;
@@ -105,8 +105,8 @@ export const assignTeacherApi = {
     getAvailableTeachers: async (
         params: AvailableTeachersParams,
         signal?: AbortSignal
-    ): Promise<Teacher[]> => {
-        const response = await api.get<ListResponse<Teacher>>(
+    ): Promise<User[]> => {
+        const response = await api.get<ListResponse<User>>(
             `${GROUPS_BASE_URL}/available-teachers`,
             {
                 params: params as Record<string, unknown>,
@@ -127,13 +127,13 @@ export const assignTeacherApi = {
     getAvailableTeachersForGroup: async (
         groupId: number,
         additionalParams?: Omit<AvailableTeachersParams, "groupId">
-    ): Promise<Teacher[]> => {
+    ): Promise<User[]> => {
         const params: AvailableTeachersParams = {
             groupId,
             ...additionalParams,
         };
 
-        const response = await api.get<ListResponse<Teacher>>(
+        const response = await api.get<ListResponse<User>>(
             `${GROUPS_BASE_URL}/${groupId}/available-teachers`,
             {
                 params: params as Record<string, unknown>,
@@ -153,13 +153,13 @@ export const assignTeacherApi = {
     getAvailableTeachersForSession: async (
         sessionId: number,
         additionalParams?: Omit<AvailableTeachersParams, "sessionId">
-    ): Promise<Teacher[]> => {
+    ): Promise<User[]> => {
         const params: AvailableTeachersParams = {
             sessionId,
             ...additionalParams,
         };
 
-        const response = await api.get<ListResponse<Teacher>>(
+        const response = await api.get<ListResponse<User>>(
             `${SESSIONS_BASE_URL}/${sessionId}/available-teachers`,
             {
                 params: params as Record<string, unknown>,

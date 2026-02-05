@@ -15,8 +15,8 @@ import { useMutationHandler } from "@/shared/api";
 import { useSetPrimaryTeacherMutation } from "../api/assignTeacher/assignTeacher.mutations";
 import { useGroup } from "../api";
 import { useTeachersList } from "@/features/dashboard/admin/settings/teachers/api";
-import type { Teacher } from "@/features/dashboard/admin/settings/teachers/types";
 import { useDebounce } from "@/shared/observability";
+import { User } from "@/auth/auth.types";
 
 const AVATAR_COLORS = [
     "bg-purple-500",
@@ -41,7 +41,7 @@ function getInitials(name: string): string {
 }
 
 interface TeacherCardProps {
-    teacher: Teacher;
+    teacher: User;
     colorIndex: number;
     onSelect: (teacherId: number) => void;
     isSelecting: boolean;
@@ -105,7 +105,7 @@ function TeacherCard({
 
             <button
                 type="button"
-                onClick={() => onSelect(teacher.id)}
+                onClick={() => onSelect(Number(teacher.id))}
                 disabled={isSelecting}
                 className="w-full h-10 bg-sky-500 text-white text-sm font-semibold rounded-lg hover:bg-sky-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >

@@ -8,19 +8,6 @@ export interface TeacherRoleRef {
     caption: string;
 }
 
-export interface Teacher {
-    id: number;
-    name: string;
-    email: string;
-    phoneVerified: boolean;
-    emailVerified: boolean;
-    image?: string | null;
-    role: TeacherRoleRef;
-    userInformation?: unknown;
-    createdAt: string;
-    updatedAt: string;
-}
-
 export interface TeachersListParams {
     page?: number;
     search?: string;
@@ -36,5 +23,5 @@ export interface TeacherCreatePayload {
 export interface TeacherUpdatePayload {
     name?: string;
     email?: string;
-    role_id?:number
+    role_id?: number;
 }

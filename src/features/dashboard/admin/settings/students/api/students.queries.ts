@@ -2,7 +2,7 @@ import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
 import { studentsKeys } from "./students.keys";
 import { studentsApi } from "./students.api";
 import type { PaginatedData } from "@/shared/api";
-import type { Student, StudentsListParams } from "../types";
+import type { StudentsListParams } from "../types";
 import { User } from "@/auth/auth.types";
 
 export function useStudentsList(

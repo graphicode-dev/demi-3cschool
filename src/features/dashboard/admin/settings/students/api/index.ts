@@ -4,7 +4,6 @@
 
 // Types
 export type {
-    Student,
     StudentRoleRef,
     StudentUserInformation,
     StudentsListParams,

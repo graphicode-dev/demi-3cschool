@@ -39,19 +39,6 @@ export interface StudentUserInformation {
     updatedAt: string | null;
 }
 
-export interface Student {
-    id: number;
-    name: string;
-    email: string;
-    phoneVerified: boolean;
-    emailVerified: boolean;
-    image?: string | null;
-    role: StudentRoleRef;
-    userInformation?: StudentUserInformation | unknown;
-    createdAt: string;
-    updatedAt: string;
-}
-
 export interface StudentsListParams {
     page?: number;
     search?: string;

@@ -4,7 +4,6 @@
 
 // Types
 export type {
-    Teacher,
     TeacherRoleRef,
     TeachersListParams,
     TeacherCreatePayload,
@@ -21,4 +20,8 @@ export { teachersApi } from "./teachers.api";
 export { useTeachersList, useTeacher } from "./teachers.queries";
 
 // Mutation Hooks
-export { useCreateTeacher, useUpdateTeacher, useDeleteTeacher } from "./teachers.mutations";
+export {
+    useCreateTeacher,
+    useUpdateTeacher,
+    useDeleteTeacher,
+} from "./teachers.mutations";

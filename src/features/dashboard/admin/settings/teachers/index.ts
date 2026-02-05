@@ -4,7 +4,6 @@
 
 // Types
 export type {
-    Teacher,
     TeacherRoleRef,
     TeachersListParams,
     TeacherCreatePayload,

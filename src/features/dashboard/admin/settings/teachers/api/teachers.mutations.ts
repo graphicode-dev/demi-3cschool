@@ -2,16 +2,13 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { ApiError } from "@/shared/api";
 import { teachersApi } from "./teachers.api";
 import { teachersKeys } from "./teachers.keys";
-import type {
-    Teacher,
-    TeacherCreatePayload,
-    TeacherUpdatePayload,
-} from "../types";
+import type { TeacherCreatePayload, TeacherUpdatePayload } from "../types";
+import { User } from "@/auth/auth.types";
 
 export function useCreateTeacher() {
     const queryClient = useQueryClient();
 
-    return useMutation<Teacher, ApiError, TeacherCreatePayload>({
+    return useMutation<User, ApiError, TeacherCreatePayload>({
         mutationFn: teachersApi.create,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: teachersKeys.all });
@@ -23,7 +20,7 @@ export function useUpdateTeacher() {
     const queryClient = useQueryClient();
 
     return useMutation<
-        Teacher,
+        User,
         ApiError,
         { id: string | number; data: TeacherUpdatePayload }
     >({
