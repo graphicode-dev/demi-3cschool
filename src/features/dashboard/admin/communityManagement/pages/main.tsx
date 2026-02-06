@@ -30,6 +30,7 @@ import {
     type PostCreatePayload,
     type ChannelCreatePayload,
 } from "../api";
+import { useCreateComment } from "@/features/dashboard/classroom/community/api";
 
 interface PostReport {
     id: string;
@@ -90,6 +91,7 @@ export function CommunityManagementPage() {
     const { mutateAsync: addChannelAdmin } = useAddChannelAdmin();
     const { mutateAsync: removeChannelAdmin } = useRemoveChannelAdmin();
     const { mutateAsync: reviewReport } = useReviewReport();
+    const { mutateAsync: createComment } = useCreateComment();
 
     const handleLike = (postId: string) => {
         execute(
@@ -181,6 +183,12 @@ export function CommunityManagementPage() {
     };
 
     const handleCreateChannel = (channel: Channel) => {
+        // Filter out mock user IDs (non-numeric or invalid IDs)
+        // Only include admin_ids if they are valid numeric IDs from the backend
+        const validAdminIds = channel.admins
+            .map((a) => Number(a.id))
+            .filter((id) => !isNaN(id) && id > 0);
+
         const payload: ChannelCreatePayload = {
             name: channel.name,
             description: channel.description,
@@ -188,7 +196,8 @@ export function CommunityManagementPage() {
             thumbnail: channel.thumbnail,
             access_type: toApiAccessType(channel.accessType),
             grade_range: toApiGradeRange(channel.gradeRange),
-            admin_ids: channel.admins.map((a) => Number(a.id)),
+            // Only include admin_ids if there are valid IDs, otherwise omit the field
+            ...(validAdminIds.length > 0 ? { admin_ids: validAdminIds } : {}),
         };
 
         execute(() => createChannel(payload), {
@@ -262,14 +271,34 @@ export function CommunityManagementPage() {
         });
     };
 
-    const handleClearReport = (reportId: string) => {
+    const handleClearReport = (
+        reportId: string,
+        action?: "dismiss" | "resolve"
+    ) => {
+        const status = action === "dismiss" ? "dismissed" : "resolved";
         execute(
             () =>
                 reviewReport({
                     id: Number(reportId),
-                    data: { status: "resolved" },
+                    data: { status },
                 }),
-            { successMessage: "Report resolved" }
+            {
+                successMessage:
+                    action === "dismiss"
+                        ? "Report dismissed"
+                        : "Report resolved",
+            }
+        );
+    };
+
+    const handleComment = (postId: string, content: string) => {
+        execute(
+            () =>
+                createComment({
+                    postId: Number(postId),
+                    data: { content },
+                }),
+            { successMessage: "Comment added" }
         );
     };
 
@@ -303,6 +332,7 @@ export function CommunityManagementPage() {
                     onEdit={handleEditPost}
                     onFollow={handleFollowChannel}
                     onCreatePost={handleCreatePost}
+                    onComment={handleComment}
                 />
             </div>
         </PageWrapper>

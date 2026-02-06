@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { usePostComments } from "../api";
 import {
     Heart,
     MessageSquare,
-    Share2,
     Bookmark,
     MoreHorizontal,
     Globe,
@@ -14,7 +14,6 @@ import {
     Edit3,
     Link2,
     ThumbsUp,
-    Laugh,
     Zap,
     Star,
     ShieldCheck,
@@ -24,6 +23,8 @@ import {
     Check,
     AtSign,
     BarChart3,
+    Forward,
+    Send,
 } from "lucide-react";
 import { ConfirmDialog } from "@/design-system/components/ConfirmDialog";
 import type { Post, Comment } from "../types";
@@ -36,7 +37,9 @@ interface PostCardProps {
     onPin: (id: string) => void;
     onDelete: (id: string) => void;
     onEdit: (id: string, newContent: string) => void;
+    onVote?: (postId: string, optionId: string) => void;
     onReport?: (id: string, reason: string) => void;
+    onComment?: (postId: string, content: string) => void;
     showReportCount?: boolean;
 }
 
@@ -47,20 +50,28 @@ export function PostCard({
     onPin,
     onDelete,
     onEdit,
+    onVote,
     onReport,
+    onComment,
     showReportCount = false,
 }: PostCardProps) {
     const { t } = useTranslation("community");
     const [showComments, setShowComments] = useState(false);
-    const [voted, setVoted] = useState(false);
+    // Initialize voted state from poll.hasVoted if available
+    const [voted, setVoted] = useState(post.poll?.hasVoted ?? false);
     const [showMenu, setShowMenu] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(post.content);
-    const [commentSort, setCommentSort] = useState<"newest" | "top">("newest");
-    const [showReactPicker, setShowReactPicker] = useState(false);
+    const [commentText, setCommentText] = useState("");
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [showReportDialog, setShowReportDialog] = useState(false);
     const [reportReason, setReportReason] = useState("");
+
+    // Fetch comments when comment section is opened
+    const { data: fetchedComments, isLoading: commentsLoading } =
+        usePostComments(showComments ? Number(post.id) : null, {
+            enabled: showComments,
+        });
 
     const copyLink = () => {
         const postUrl = `${window.location.origin}/post/${post.id}`;
@@ -91,10 +102,11 @@ export function PostCard({
         setShowDeleteDialog(false);
     };
 
-    const sortedComments = [...post.comments].sort((a, b) => {
+    // Use fetched comments or fall back to post.comments
+    const comments = fetchedComments || post.comments || [];
+    const sortedComments = [...comments].sort((a, b) => {
         if (a.isSolution) return -1;
         if (b.isSolution) return 1;
-        if (commentSort === "top") return b.likes - a.likes;
         return (
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
@@ -107,13 +119,47 @@ export function PostCard({
         Resource: "bg-indigo-50 text-indigo-600 border-indigo-100",
     };
 
-    const reactions = [
-        { label: "Like", icon: ThumbsUp, color: "text-blue-500" },
-        { label: "Love", icon: Heart, color: "text-red-500" },
-        { label: "Haha", icon: Laugh, color: "text-yellow-500" },
-        { label: "Wow", icon: Zap, color: "text-orange-500" },
-        { label: "Star", icon: Star, color: "text-yellow-400" },
-    ];
+    // Check if current user owns this post
+    const isOwnPost =
+        post.author.id === CURRENT_USER.id || post.author.id === "2"; // TODO: Replace with actual current user ID from auth
+
+    // Format relative time
+    const formatRelativeTime = (dateString: string) => {
+        if (!dateString || dateString === "Just now") return dateString;
+
+        // Parse date - handle "YYYY-MM-DD HH:mm:ss" format from API (local time)
+        let date: Date;
+        if (dateString.includes(" ") && !dateString.includes("T")) {
+            // Convert "2026-02-06 21:09:04" to ISO format (treated as local time)
+            date = new Date(dateString.replace(" ", "T"));
+        } else {
+            date = new Date(dateString);
+        }
+
+        // Check for invalid date
+        if (isNaN(date.getTime())) return dateString;
+
+        const now = new Date();
+        const diffMs = now.getTime() - date.getTime();
+
+        // Handle negative diff (future dates)
+        if (diffMs < 0) return "Just now";
+
+        const diffSecs = Math.floor(diffMs / 1000);
+        const diffMins = Math.floor(diffSecs / 60);
+        const diffHours = Math.floor(diffMins / 60);
+        const diffDays = Math.floor(diffHours / 24);
+
+        // Less than 60 seconds = "Just now"
+        if (diffSecs < 60) return "Just now";
+        // Less than 60 minutes = show minutes
+        if (diffMins < 60) return `${diffMins}m ago`;
+        // Less than 24 hours = show hours
+        if (diffHours < 24) return `${diffHours}h ago`;
+        // Less than 7 days = show days
+        if (diffDays < 7) return `${diffDays}d ago`;
+        return date.toLocaleDateString();
+    };
 
     const CommentItem = ({
         comment,
@@ -263,9 +309,21 @@ export function PostCard({
                                     Lvl {post.author.gradeLevel || 1} Student
                                 </span>
                                 <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
-                                <span>{post.createdAt}</span>
+                                <span>
+                                    {formatRelativeTime(post.createdAt)}
+                                </span>
                                 <span className="w-1 h-1 bg-gray-300 rounded-full"></span>
-                                <Globe size={11} className="text-gray-300" />
+                                {post.audience === "Group" ? (
+                                    <UsersIcon
+                                        size={11}
+                                        className="text-gray-300"
+                                    />
+                                ) : (
+                                    <Globe
+                                        size={11}
+                                        className="text-gray-300"
+                                    />
+                                )}
                             </div>
                         </div>
                     </div>
@@ -278,37 +336,45 @@ export function PostCard({
                         </button>
                         {showMenu && (
                             <div className="absolute right-0 mt-2 w-52 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-2xl rounded-2xl z-50 overflow-hidden py-1.5 animate-in zoom-in-95">
-                                {!post.category ||
-                                post.category === "General" ? (
-                                    <button
-                                        onClick={() => {
-                                            setIsEditing(true);
-                                            setShowMenu(false);
-                                        }}
-                                        className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                                    >
-                                        <Edit3 size={16} /> {t("post.edit")}
-                                    </button>
-                                ) : null}
+                                {isOwnPost &&
+                                    (!post.category ||
+                                        post.category === "General") && (
+                                        <button
+                                            onClick={() => {
+                                                setIsEditing(true);
+                                                setShowMenu(false);
+                                            }}
+                                            className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                                        >
+                                            <Edit3 size={16} /> {t("post.edit")}
+                                        </button>
+                                    )}
                                 <button
                                     onClick={copyLink}
                                     className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                                 >
                                     <Link2 size={16} /> {t("post.copyLink")}
                                 </button>
-                                <button
-                                    onClick={handleReport}
-                                    className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/30 transition-colors"
-                                >
-                                    <Flag size={16} /> {t("post.report")}
-                                </button>
-                                <div className="h-px bg-gray-50 dark:bg-gray-700 my-1.5 mx-2"></div>
-                                <button
-                                    onClick={handleDelete}
-                                    className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
-                                >
-                                    <Trash2 size={16} /> {t("post.delete")}
-                                </button>
+                                {!isOwnPost && (
+                                    <button
+                                        onClick={handleReport}
+                                        className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/30 transition-colors"
+                                    >
+                                        <Flag size={16} /> {t("post.report")}
+                                    </button>
+                                )}
+                                {isOwnPost && (
+                                    <>
+                                        <div className="h-px bg-gray-50 dark:bg-gray-700 my-1.5 mx-2"></div>
+                                        <button
+                                            onClick={handleDelete}
+                                            className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 transition-colors"
+                                        >
+                                            <Trash2 size={16} />{" "}
+                                            {t("post.delete")}
+                                        </button>
+                                    </>
+                                )}
                             </div>
                         )}
                     </div>
@@ -371,17 +437,26 @@ export function PostCard({
                         </h4>
                         <div className="space-y-3">
                             {post.poll.options.map((opt) => {
-                                const percent = post.poll
-                                    ? Math.round(
-                                          (opt.votes / post.poll.totalVotes) *
-                                              100
-                                      )
-                                    : 0;
+                                // Handle NaN when totalVotes is 0
+                                const percent =
+                                    post.poll && post.poll.totalVotes > 0
+                                        ? Math.round(
+                                              (opt.votes /
+                                                  post.poll.totalVotes) *
+                                                  100
+                                          )
+                                        : 0;
                                 return (
                                     <button
                                         key={opt.id}
-                                        onClick={() => setVoted(true)}
-                                        className="w-full relative h-12 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-600 rounded-[18px] overflow-hidden group hover:border-[#00ADEF] transition-all"
+                                        onClick={() => {
+                                            if (!voted) {
+                                                setVoted(true);
+                                                onVote?.(post.id, opt.id);
+                                            }
+                                        }}
+                                        disabled={voted}
+                                        className={`w-full relative h-12 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-600 rounded-[18px] overflow-hidden group transition-all ${voted ? "cursor-default" : "hover:border-[#00ADEF]"}`}
                                     >
                                         <div
                                             className="absolute left-0 top-0 h-full bg-[#E0F4FF] dark:bg-[#00ADEF]/20 transition-all duration-1000"
@@ -436,48 +511,22 @@ export function PostCard({
 
                 <div className="flex items-center justify-between pt-6 border-t border-gray-50 dark:border-gray-700">
                     <div className="flex items-center gap-6">
-                        <div className="relative group">
-                            <button
-                                onClick={() => onLike(post.id)}
-                                onMouseEnter={() => setShowReactPicker(true)}
-                                onMouseLeave={() => setShowReactPicker(false)}
-                                className="flex items-center gap-2 text-[#64748b] dark:text-gray-400 hover:text-[#00ADEF] transition-all font-bold text-[13px] group/btn"
-                            >
-                                <ThumbsUp
-                                    size={18}
-                                    className={
-                                        post.likes > 0 ? "text-[#00ADEF]" : ""
-                                    }
-                                />
-                                <span>
-                                    {post.likes > 0 ? post.likes : "React"}
-                                </span>
-                            </button>
-                            {showReactPicker && (
-                                <div
-                                    onMouseEnter={() =>
-                                        setShowReactPicker(true)
-                                    }
-                                    onMouseLeave={() =>
-                                        setShowReactPicker(false)
-                                    }
-                                    className="absolute bottom-full left-0 mb-3 flex gap-2.5 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-2xl rounded-full px-4 py-2 z-50 animate-in fade-in slide-in-from-bottom-2 duration-200"
-                                >
-                                    {reactions.map((r) => (
-                                        <button
-                                            key={r.label}
-                                            onClick={() => {
-                                                onLike(post.id);
-                                                setShowReactPicker(false);
-                                            }}
-                                            className={`p-1.5 hover:scale-125 transition-transform ${r.color}`}
-                                        >
-                                            <r.icon size={18} />
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
+                        <button
+                            onClick={() => onLike(post.id)}
+                            className="flex items-center gap-2 text-[#64748b] dark:text-gray-400 hover:text-[#00ADEF] transition-all font-bold text-[13px]"
+                        >
+                            <ThumbsUp
+                                size={18}
+                                className={
+                                    post.likes > 0 ? "text-[#00ADEF]" : ""
+                                }
+                            />
+                            <span>
+                                {post.likes > 0
+                                    ? post.likes
+                                    : t("post.like", "Like")}
+                            </span>
+                        </button>
 
                         <button
                             onClick={() => setShowComments(!showComments)}
@@ -485,22 +534,17 @@ export function PostCard({
                         >
                             <MessageSquare size={18} />
                             <span>
-                                {post.comments.length}{" "}
+                                {post.commentsCount}{" "}
                                 <span className="hidden sm:inline">
-                                    Comment
+                                    {t("post.comment", "Comment")}
                                 </span>
                             </span>
                         </button>
                         <button className="flex items-center gap-2 text-[#64748b] dark:text-gray-400 hover:text-green-600 transition-all font-bold text-[13px]">
-                            <Share2 size={18} />
-                            <span className="hidden sm:inline">Share</span>
-                        </button>
-                        <button
-                            onClick={copyLink}
-                            className="flex items-center gap-2 text-[#64748b] dark:text-gray-400 hover:text-blue-500 transition-all font-bold text-[13px]"
-                        >
-                            <Link2 size={18} />
-                            <span className="hidden sm:inline">Link</span>
+                            <Forward size={18} />
+                            <span className="hidden sm:inline">
+                                {t("post.forward", "Forward")}
+                            </span>
                         </button>
                     </div>
                     <div className="flex items-center gap-2">
@@ -527,27 +571,15 @@ export function PostCard({
 
                 {showComments && (
                     <div className="mt-8 space-y-4 pt-6 bg-[#fcfdfe] dark:bg-gray-900 border-t border-gray-50 dark:border-gray-700 rounded-[40px] px-8 pb-8 -mx-8 -mb-8 animate-in slide-in-from-bottom-4 duration-300">
-                        <div className="flex items-center justify-between mb-4">
-                            <h5 className="text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest">
-                                Discussion Thread
-                            </h5>
-                            <div className="flex gap-4">
-                                <button
-                                    onClick={() => setCommentSort("newest")}
-                                    className={`text-[10px] font-black uppercase tracking-tight ${commentSort === "newest" ? "text-[#00ADEF]" : "text-gray-300"}`}
-                                >
-                                    Newest
-                                </button>
-                                <button
-                                    onClick={() => setCommentSort("top")}
-                                    className={`text-[10px] font-black uppercase tracking-tight ${commentSort === "top" ? "text-[#00ADEF]" : "text-gray-300"}`}
-                                >
-                                    Top Rated
-                                </button>
-                            </div>
-                        </div>
+                        <h5 className="text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">
+                            {t("post.discussionThread", "Discussion Thread")}
+                        </h5>
 
-                        {sortedComments.length > 0 ? (
+                        {commentsLoading ? (
+                            <div className="flex justify-center py-6">
+                                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#00ADEF]"></div>
+                            </div>
+                        ) : sortedComments.length > 0 ? (
                             sortedComments.map((comment) => (
                                 <CommentItem
                                     key={comment.id}
@@ -556,7 +588,10 @@ export function PostCard({
                             ))
                         ) : (
                             <p className="text-center py-6 text-[13px] text-gray-400 dark:text-gray-500 font-medium">
-                                No comments yet. Start the conversation!
+                                {t(
+                                    "post.noComments",
+                                    "No comments yet. Start the conversation!"
+                                )}
                             </p>
                         )}
 
@@ -564,14 +599,49 @@ export function PostCard({
                             <img
                                 src={CURRENT_USER.avatar}
                                 alt=""
-                                className="w-10 h-10 rounded-xl shadow-sm border border-white"
+                                className="w-10 h-10 rounded-xl shadow-sm border border-white dark:border-gray-700"
                             />
-                            <div className="flex-1 relative">
+                            <div className="flex-1 flex gap-2">
                                 <input
                                     type="text"
-                                    placeholder="Add a comment..."
-                                    className="w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-2xl py-3 px-5 text-[14px] text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-[#00ADEF]/10 focus:border-[#00ADEF] transition-all shadow-sm"
+                                    value={commentText}
+                                    onChange={(e) =>
+                                        setCommentText(e.target.value)
+                                    }
+                                    onKeyDown={(e) => {
+                                        if (
+                                            e.key === "Enter" &&
+                                            commentText.trim() &&
+                                            onComment
+                                        ) {
+                                            onComment(
+                                                post.id,
+                                                commentText.trim()
+                                            );
+                                            setCommentText("");
+                                        }
+                                    }}
+                                    placeholder={t(
+                                        "post.addComment",
+                                        "Add a comment..."
+                                    )}
+                                    className="flex-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-2xl py-3 px-5 text-[14px] text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-[#00ADEF]/10 focus:border-[#00ADEF] transition-all shadow-sm"
                                 />
+                                <button
+                                    onClick={() => {
+                                        if (commentText.trim() && onComment) {
+                                            onComment(
+                                                post.id,
+                                                commentText.trim()
+                                            );
+                                            setCommentText("");
+                                        }
+                                    }}
+                                    disabled={!commentText.trim()}
+                                    className="bg-[#00ADEF] text-white p-3 rounded-xl hover:bg-[#0095CC] transition-colors shadow-lg shadow-[#00ADEF]/20 disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    <Send size={18} />
+                                </button>
                             </div>
                         </div>
                     </div>

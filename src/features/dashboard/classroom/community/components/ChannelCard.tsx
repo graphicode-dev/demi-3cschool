@@ -59,7 +59,7 @@ export function ChannelCard({ channel, onFollow, onClick }: ChannelCardProps) {
                             <UserPlus size={14} />
                         )}
                         {channel.isFollowing
-                            ? t("channel.following")
+                            ? t("channel.unfollow", "Unfollow")
                             : t("channel.follow")}
                     </button>
                 </div>

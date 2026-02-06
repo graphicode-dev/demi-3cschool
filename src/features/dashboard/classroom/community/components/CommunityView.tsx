@@ -65,6 +65,8 @@ const EMOJIS = [
 interface CommunityViewProps {
     posts: Post[];
     channels: Channel[];
+    activeTab?: CommunityTab;
+    onTabChange?: (tab: CommunityTab) => void;
     onPostsUpdate: (posts: Post[]) => void;
     onChannelsUpdate: (channels: Channel[]) => void;
     onLike: (id: string) => void;
@@ -74,12 +76,16 @@ interface CommunityViewProps {
     onEdit: (id: string, content: string) => void;
     onFollow: (id: string) => void;
     onCreatePost: (post: Post) => void;
+    onVote?: (postId: string, optionId: string) => void;
     onReportPost?: (id: string, reason: string) => void;
+    onComment?: (postId: string, content: string) => void;
 }
 
 export function CommunityView({
     posts,
     channels,
+    activeTab,
+    onTabChange,
     onLike,
     onSave,
     onPin,
@@ -87,17 +93,30 @@ export function CommunityView({
     onEdit,
     onFollow,
     onCreatePost,
+    onVote,
     onReportPost,
+    onComment,
 }: CommunityViewProps) {
     const { t } = useTranslation("community");
-    const [viewMode, setViewMode] = useState<CommunityTab>("feed");
+    // Use controlled tab if provided, otherwise use internal state
+    const [internalViewMode, setInternalViewMode] =
+        useState<CommunityTab>("feed");
+    const viewMode = activeTab ?? internalViewMode;
+    const setViewMode = (tab: CommunityTab) => {
+        if (onTabChange) {
+            onTabChange(tab);
+        } else {
+            setInternalViewMode(tab);
+        }
+    };
     const [selectedChannelId, setSelectedChannelId] = useState<string | null>(
         null
     );
     const [hubFilter, setHubFilter] = useState<PostCategory | "All">("All");
 
     const [postText, setPostText] = useState("");
-    const [postCategory, setPostCategory] = useState<PostCategory>("General");
+    const [postCategory, setPostCategory] =
+        useState<PostCategory>("Project Help");
     const [audience, setAudience] = useState<Audience>("Public");
     const [feeling, setFeeling] = useState<string | null>(null);
     const [isExpanded, setIsExpanded] = useState(false);
@@ -133,6 +152,7 @@ export function CommunityView({
         if (!postText.trim() && !pollQuestion && !attachedFile) return;
 
         const newPost: Post = {
+            commentsCount: 0,
             id: crypto.randomUUID(),
             author: CURRENT_USER,
             content: postText,
@@ -199,15 +219,12 @@ export function CommunityView({
             list = list.filter((p) => p.category && p.category !== "General");
             if (hubFilter !== "All")
                 list = list.filter((p) => p.category === hubFilter);
-        } else {
-            if (viewMode === "saved") list = list.filter((p) => p.isSaved);
-            if (viewMode === "my-posts")
-                list = list.filter((p) => p.author.id === CURRENT_USER.id);
-            if (viewMode === "feed")
-                list = list.filter(
-                    (p) => !p.category || p.category === "General"
-                );
+        } else if (viewMode === "feed") {
+            // Only filter for feed - saved and my-posts are already filtered by API
+            list = list.filter((p) => !p.category || p.category === "General");
         }
+        // For "saved" and "my-posts" tabs, the API already returns the correct data
+        // so no additional filtering is needed
 
         return list.sort((a, b) => {
             if (a.isPinned && !b.isPinned) return -1;
@@ -807,7 +824,9 @@ export function CommunityView({
                                     onPin={onPin}
                                     onDelete={onDelete}
                                     onEdit={onEdit}
+                                    onVote={onVote}
                                     onReport={onReportPost}
+                                    onComment={onComment}
                                 />
                             ))
                         ) : (

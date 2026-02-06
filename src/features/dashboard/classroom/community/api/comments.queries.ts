@@ -7,18 +7,22 @@
 import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
 import { commentKeys } from "./community.keys";
 import { commentsApi } from "./comments.api";
-import type { Comment } from "./community.types";
+import { transformComments } from "./community.transformers";
+import type { Comment as UiComment } from "../types";
 
 /**
  * Hook to fetch comments for a post
  */
 export function usePostComments(
     postId: number | undefined | null,
-    options?: Partial<UseQueryOptions<Comment[], Error>>
+    options?: Partial<UseQueryOptions<UiComment[], Error>>
 ) {
     return useQuery({
         queryKey: commentKeys.byPost(postId ?? 0),
-        queryFn: ({ signal }) => commentsApi.getByPost(postId!, signal),
+        queryFn: async ({ signal }) => {
+            const apiComments = await commentsApi.getByPost(postId!, signal);
+            return transformComments(apiComments);
+        },
         enabled: !!postId,
         ...options,
     });

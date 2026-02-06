@@ -1,10 +1,12 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import PageWrapper from "@/design-system/components/PageWrapper";
 import { CommunityView } from "../components";
 import { useMutationHandler } from "@/shared/api";
 import type { Post, Channel } from "../types";
 import {
     usePostsList,
+    useSavedPosts,
+    useMyPosts,
     useChannelsList,
     useCreatePost,
     useUpdatePost,
@@ -16,26 +18,58 @@ import {
     useUnpinPost,
     useFollowChannel,
     useUnfollowChannel,
+    useVoteOnPoll,
+    useReportPost,
+    useCreateComment,
     transformPosts,
     transformChannels,
     toApiCategory,
     toApiAudience,
     type PostCreatePayload,
+    type PollVotePayload,
 } from "../api";
+import type { CommunityTab } from "../types";
 
 export function CommunityPage() {
     const { execute } = useMutationHandler();
+    const [activeTab, setActiveTab] = useState<CommunityTab>("feed");
 
-    // Fetch posts
-    const { data: postsData, isLoading: postsLoading } = usePostsList();
+    // Fetch posts based on active tab
+    // For feed tab, fetch general posts; for hub tab, fetch all posts (filtered client-side by category)
+    const { data: postsData, isLoading: postsLoading } = usePostsList(
+        activeTab === "feed" ? { category: "general" } : undefined,
+        {
+            enabled:
+                activeTab === "feed" ||
+                activeTab === "hub" ||
+                activeTab === "channels",
+        }
+    );
+    const { data: savedPostsData, isLoading: savedLoading } = useSavedPosts({
+        enabled: activeTab === "saved",
+    });
+    const { data: myPostsData, isLoading: myPostsLoading } = useMyPosts({
+        enabled: activeTab === "my-posts",
+    });
     const { data: channelsData, isLoading: channelsLoading } =
         useChannelsList();
 
-    // Transform API data to UI types
+    // Transform API data to UI types based on active tab
     const posts = useMemo(() => {
-        if (!postsData?.items) return [];
-        return transformPosts(postsData.items);
-    }, [postsData]);
+        let data;
+        switch (activeTab) {
+            case "saved":
+                data = savedPostsData?.items;
+                break;
+            case "my-posts":
+                data = myPostsData?.items;
+                break;
+            default:
+                data = postsData?.items;
+        }
+        if (!data) return [];
+        return transformPosts(data);
+    }, [postsData, savedPostsData, myPostsData, activeTab]);
 
     const channels = useMemo(() => {
         if (!channelsData?.items) return [];
@@ -53,6 +87,9 @@ export function CommunityPage() {
     const { mutateAsync: unpinPost } = useUnpinPost();
     const { mutateAsync: followChannel } = useFollowChannel();
     const { mutateAsync: unfollowChannel } = useUnfollowChannel();
+    const { mutateAsync: voteOnPoll } = useVoteOnPoll();
+    const { mutateAsync: reportPost } = useReportPost();
+    const { mutateAsync: createComment } = useCreateComment();
 
     const handleLike = (postId: string) => {
         execute(
@@ -122,6 +159,11 @@ export function CommunityPage() {
     };
 
     const handleCreatePost = (newPost: Post) => {
+        // Filter out invalid mock user IDs - only include valid numeric IDs
+        const validTaggedUserIds = newPost.taggedUsers
+            ?.map((u) => Number(u.id))
+            .filter((id) => !isNaN(id) && id > 0);
+
         const payload: PostCreatePayload = {
             content: newPost.content,
             channel_id: newPost.channelId
@@ -133,7 +175,10 @@ export function CommunityPage() {
             audience: toApiAudience(newPost.audience),
             category: toApiCategory(newPost.category || "General"),
             feeling: newPost.feeling,
-            tagged_user_ids: newPost.taggedUsers?.map((u) => Number(u.id)),
+            // Only include tagged_user_ids if there are valid IDs
+            ...(validTaggedUserIds && validTaggedUserIds.length > 0
+                ? { tagged_user_ids: validTaggedUserIds }
+                : {}),
             poll: newPost.poll
                 ? {
                       question: newPost.poll.question,
@@ -147,7 +192,51 @@ export function CommunityPage() {
         });
     };
 
-    const isLoading = postsLoading || channelsLoading;
+    const handleVote = (postId: string, optionId: string) => {
+        execute(
+            () =>
+                voteOnPoll({
+                    postId: Number(postId),
+                    data: { option_id: Number(optionId) },
+                }),
+            { showSuccessToast: false }
+        );
+    };
+
+    const handleTabChange = (tab: CommunityTab) => {
+        setActiveTab(tab);
+    };
+
+    const handleReportPost = (postId: string, reason: string) => {
+        execute(
+            () =>
+                reportPost({
+                    postId: Number(postId),
+                    data: { reason },
+                }),
+            { successMessage: "Post reported successfully" }
+        );
+    };
+
+    const handleComment = (postId: string, content: string) => {
+        execute(
+            () =>
+                createComment({
+                    postId: Number(postId),
+                    data: { content },
+                }),
+            { successMessage: "Comment added" }
+        );
+    };
+
+    const isLoading =
+        (activeTab === "feed" || activeTab === "hub" || activeTab === "channels"
+            ? postsLoading
+            : activeTab === "saved"
+              ? savedLoading
+              : activeTab === "my-posts"
+                ? myPostsLoading
+                : false) || channelsLoading;
 
     if (isLoading) {
         return (
@@ -165,6 +254,8 @@ export function CommunityPage() {
                 <CommunityView
                     posts={posts}
                     channels={channels}
+                    activeTab={activeTab}
+                    onTabChange={handleTabChange}
                     onPostsUpdate={() => {}}
                     onChannelsUpdate={() => {}}
                     onLike={handleLike}
@@ -174,6 +265,9 @@ export function CommunityPage() {
                     onEdit={handleEditPost}
                     onFollow={handleFollowChannel}
                     onCreatePost={handleCreatePost}
+                    onVote={handleVote}
+                    onReportPost={handleReportPost}
+                    onComment={handleComment}
                 />
             </div>
         </PageWrapper>

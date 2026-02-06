@@ -16,6 +16,8 @@ import type {
     PollOption as ApiPollOption,
 } from "./community.types";
 
+type ApiUserRefArray = ApiUserRef[];
+
 import type {
     Channel as UiChannel,
     Post as UiPost,
@@ -118,12 +120,24 @@ export function transformPollOption(apiOption: ApiPollOption): UiPollOption {
 
 /**
  * Transform API poll to UI poll
+ * Note: API may return either snake_case or camelCase fields
  */
 export function transformPoll(apiPoll: ApiPoll): UiPoll {
+    // Handle both snake_case and camelCase from API
+    const poll = apiPoll as ApiPoll & {
+        totalVotes?: number;
+        hasVoted?: boolean;
+        userVote?: number;
+        user_vote?: number;
+        has_voted?: boolean;
+    };
+
     return {
-        question: apiPoll.question,
-        options: apiPoll.options.map(transformPollOption),
-        totalVotes: apiPoll.total_votes,
+        question: poll.question,
+        options: poll.options.map(transformPollOption),
+        totalVotes: poll.totalVotes ?? poll.total_votes ?? 0,
+        hasVoted: poll.hasVoted ?? poll.has_voted ?? false,
+        userVote: poll.userVote ?? poll.user_vote,
     };
 }
 
@@ -198,29 +212,45 @@ function transformStatus(apiStatus: string): UiPostStatus {
 
 /**
  * Transform API post to UI post
+ * Note: API may return either snake_case or camelCase fields depending on endpoint
  */
 export function transformPost(apiPost: ApiPost): UiPost {
+    // Handle both snake_case and camelCase from API
+    const post = apiPost as ApiPost & {
+        isSaved?: boolean;
+        isLiked?: boolean;
+        isPinned?: boolean;
+        isOfficial?: boolean;
+        createdAt?: string;
+        commentsCount?: number;
+        reportCount?: number;
+        tagged_users?: ApiUserRef[];
+        taggedUsers?: ApiUserRef[];
+    };
+
     return {
-        id: String(apiPost.id),
-        author: transformUser(apiPost.author),
-        content: apiPost.content || "",
-        image: apiPost.image || undefined,
-        video: apiPost.video || undefined,
-        gif: apiPost.gif || undefined,
-        likes: apiPost.likes || 0,
+        id: String(post.id),
+        author: transformUser(post.author),
+        content: post.content || "",
+        image: post.image || undefined,
+        video: post.video || undefined,
+        gif: post.gif || undefined,
+        likes: post.likes || 0,
         comments: [],
-        isSaved: apiPost.is_saved ?? false,
-        isPinned: apiPost.is_pinned ?? false,
-        isOfficial: apiPost.is_official ?? false,
-        createdAt: apiPost.created_at || "",
-        channelId: apiPost.channel ? String(apiPost.channel.id) : undefined,
-        audience: transformAudience(apiPost.audience || "public"),
-        feeling: apiPost.feeling || undefined,
-        taggedUsers: apiPost.tagged_users?.map(transformUser) || [],
-        poll: apiPost.poll ? transformPoll(apiPost.poll) : undefined,
-        reportCount: apiPost.report_count || 0,
-        category: transformCategory(apiPost.category || "general"),
-        status: transformStatus(apiPost.status || "open"),
+        commentsCount: post.commentsCount ?? post.comments_count ?? 0,
+        isSaved: post.isSaved ?? post.is_saved ?? false,
+        isPinned: post.isPinned ?? post.is_pinned ?? false,
+        isOfficial: post.isOfficial ?? post.is_official ?? false,
+        createdAt: post.createdAt || post.created_at || "",
+        channelId: post.channel ? String(post.channel.id) : undefined,
+        audience: transformAudience(post.audience || "public"),
+        feeling: post.feeling || undefined,
+        taggedUsers:
+            (post.tagged_users || post.taggedUsers)?.map(transformUser) || [],
+        poll: post.poll ? transformPoll(post.poll) : undefined,
+        reportCount: post.reportCount ?? post.report_count ?? 0,
+        category: transformCategory(post.category || "general"),
+        status: transformStatus(post.status || "open"),
     };
 }
 

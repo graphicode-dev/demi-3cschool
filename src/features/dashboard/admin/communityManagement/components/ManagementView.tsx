@@ -40,13 +40,14 @@ interface ManagementViewProps {
         media?: { url: string; type: string },
         channelId?: string
     ) => void;
-    onClearReport: (id: string) => void;
+    onClearReport: (id: string, action?: "dismiss" | "resolve") => void;
     onLike: (id: string) => void;
     onSave: (id: string) => void;
     onPin: (id: string) => void;
     onEdit: (id: string, content: string) => void;
     onFollow: (id: string) => void;
     onCreatePost: (post: Post) => void;
+    onComment?: (postId: string, content: string) => void;
 }
 
 type ManagementTab =
@@ -70,6 +71,7 @@ export function ManagementView({
     onSave,
     onPin,
     onEdit,
+    onComment,
 }: ManagementViewProps) {
     const { t } = useTranslation("communityManagement");
     const [activeSubTab, setActiveSubTab] = useState<ManagementTab>("moderate");
@@ -86,6 +88,7 @@ export function ManagementView({
     const [attachedMedia, setAttachedMedia] = useState<{
         url: string;
         type: string;
+        file?: File;
     } | null>(null);
     const mediaInputRef = useRef<HTMLInputElement>(null);
 
@@ -104,6 +107,8 @@ export function ManagementView({
     const [postToDelete, setPostToDelete] = useState<string | null>(null);
     const [showDismissDialog, setShowDismissDialog] = useState(false);
     const [reportToDismiss, setReportToDismiss] = useState<string | null>(null);
+    const [showNotificationDropdown, setShowNotificationDropdown] =
+        useState(false);
 
     const handleDeletePost = (postId: string) => {
         setPostToDelete(postId);
@@ -125,10 +130,14 @@ export function ManagementView({
 
     const confirmDismissReport = () => {
         if (reportToDismiss) {
-            onClearReport(reportToDismiss);
+            onClearReport(reportToDismiss, "dismiss");
         }
         setReportToDismiss(null);
         setShowDismissDialog(false);
+    };
+
+    const handleResolveReport = (reportId: string) => {
+        onClearReport(reportId, "resolve");
     };
 
     const filteredPosts = posts.filter(
@@ -137,15 +146,23 @@ export function ManagementView({
             p.author.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const handleMediaUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleMediaUpload = async (
+        e: React.ChangeEvent<HTMLInputElement>
+    ) => {
         const file = e.target.files?.[0];
         if (!file) return;
+
         const type = file.type.startsWith("video")
             ? "video"
             : file.type === "image/gif"
               ? "gif"
               : "image";
-        setAttachedMedia({ url: URL.createObjectURL(file), type });
+
+        // TODO: Implement actual file upload to server to get URL
+        // For now, create a local preview URL
+        // The actual URL should come from a file upload endpoint
+        const previewUrl = URL.createObjectURL(file);
+        setAttachedMedia({ url: previewUrl, type, file });
     };
 
     const handleThumbnailUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -236,6 +253,7 @@ export function ManagementView({
                                     onPin={onPin}
                                     onDelete={onDeletePost}
                                     onEdit={onEdit}
+                                    onComment={onComment}
                                     showReportCount
                                 />
                             ))}
@@ -280,12 +298,115 @@ export function ManagementView({
                         </div>
                         <div className="flex items-center gap-3">
                             <div className="relative">
-                                <button className="p-3 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl text-gray-400 relative">
+                                <button
+                                    onClick={() =>
+                                        setShowNotificationDropdown(
+                                            !showNotificationDropdown
+                                        )
+                                    }
+                                    className="p-3 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl text-gray-400 relative hover:border-[#00ADEF] transition-colors"
+                                >
                                     <Bell size={20} />
                                     {reports.length > 0 && (
                                         <span className="absolute top-2 right-2 w-3 h-3 bg-red-500 border-2 border-white dark:border-gray-800 rounded-full"></span>
                                     )}
                                 </button>
+                                {showNotificationDropdown && (
+                                    <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-2xl rounded-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2">
+                                        <div className="p-4 border-b border-gray-100 dark:border-gray-700">
+                                            <h4 className="font-black text-gray-800 dark:text-white text-sm">
+                                                {t(
+                                                    "notifications.title",
+                                                    "Notifications"
+                                                )}
+                                            </h4>
+                                            <p className="text-xs text-gray-400 dark:text-gray-500">
+                                                {reports.length}{" "}
+                                                {t(
+                                                    "notifications.pendingReports",
+                                                    "pending reports"
+                                                )}
+                                            </p>
+                                        </div>
+                                        <div className="max-h-80 overflow-y-auto">
+                                            {reports.length === 0 ? (
+                                                <div className="p-6 text-center">
+                                                    <CheckCircle
+                                                        size={32}
+                                                        className="mx-auto mb-2 text-green-400 opacity-50"
+                                                    />
+                                                    <p className="text-sm text-gray-400 dark:text-gray-500">
+                                                        {t(
+                                                            "notifications.noReports",
+                                                            "No pending reports"
+                                                        )}
+                                                    </p>
+                                                </div>
+                                            ) : (
+                                                reports
+                                                    .slice(0, 5)
+                                                    .map((report) => (
+                                                        <div
+                                                            key={report.id}
+                                                            className="p-4 border-b border-gray-50 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 cursor-pointer"
+                                                            onClick={() => {
+                                                                setActiveSubTab(
+                                                                    "reports"
+                                                                );
+                                                                setShowNotificationDropdown(
+                                                                    false
+                                                                );
+                                                            }}
+                                                        >
+                                                            <div className="flex items-start gap-3">
+                                                                <div className="p-1.5 bg-red-50 dark:bg-red-900/20 text-red-500 rounded-lg shrink-0">
+                                                                    <Flag
+                                                                        size={
+                                                                            14
+                                                                        }
+                                                                    />
+                                                                </div>
+                                                                <div className="flex-1 min-w-0">
+                                                                    <p className="text-xs font-bold text-gray-800 dark:text-white truncate">
+                                                                        {
+                                                                            report.reason
+                                                                        }
+                                                                    </p>
+                                                                    <p className="text-[10px] text-gray-400 dark:text-gray-500">
+                                                                        {t(
+                                                                            "notifications.reportedBy",
+                                                                            "Reported by"
+                                                                        )}{" "}
+                                                                        {
+                                                                            report
+                                                                                .reporter
+                                                                                .name
+                                                                        }
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    ))
+                                            )}
+                                        </div>
+                                        {reports.length > 0 && (
+                                            <button
+                                                onClick={() => {
+                                                    setActiveSubTab("reports");
+                                                    setShowNotificationDropdown(
+                                                        false
+                                                    );
+                                                }}
+                                                className="w-full p-3 text-center text-xs font-bold text-[#00ADEF] hover:bg-[#E0F4FF] dark:hover:bg-[#00ADEF]/20 transition-colors"
+                                            >
+                                                {t(
+                                                    "notifications.viewAll",
+                                                    "View all reports"
+                                                )}
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                             <button
                                 onClick={() => setActiveSubTab("post")}
@@ -404,6 +525,7 @@ export function ManagementView({
                                             onPin={onPin}
                                             onDelete={onDeletePost}
                                             onEdit={onEdit}
+                                            onComment={onComment}
                                             showReportCount
                                         />
                                     ))}
@@ -724,22 +846,22 @@ export function ManagementView({
                                             </div>
                                             <button
                                                 onClick={() => {
-                                                    const owner =
-                                                        MOCK_USERS.find(
-                                                            (u) =>
-                                                                u.id ===
-                                                                newChannel.ownerId
-                                                        )!;
+                                                    // Create channel without mock admins - backend will set current user as owner
                                                     onCreateChannel({
-                                                        id: crypto.randomUUID(),
+                                                        id: "", // Will be assigned by backend
                                                         name: newChannel.name,
                                                         description:
                                                             newChannel.description,
                                                         banner: newChannel.banner,
                                                         thumbnail:
                                                             newChannel.thumbnail,
-                                                        owner: owner,
-                                                        admins: [owner],
+                                                        owner: {
+                                                            id: "",
+                                                            name: "",
+                                                            avatar: "",
+                                                            role: "manager",
+                                                        },
+                                                        admins: [], // Empty - no mock admins
                                                         followers: 0,
                                                         isFollowing: false,
                                                         accessType:
@@ -759,7 +881,11 @@ export function ManagementView({
                                                         gradeRange: "All",
                                                     });
                                                 }}
-                                                className="w-full bg-[#00ADEF] text-white py-4 rounded-2xl font-black text-sm hover:bg-[#0095CC] transition-all"
+                                                disabled={
+                                                    !newChannel.name ||
+                                                    !newChannel.description
+                                                }
+                                                className="w-full bg-[#00ADEF] text-white py-4 rounded-2xl font-black text-sm hover:bg-[#0095CC] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                                             >
                                                 Create Channel
                                             </button>
@@ -993,6 +1119,8 @@ export function ManagementView({
                                                     <video
                                                         src={attachedMedia.url}
                                                         className="w-full h-40 object-cover"
+                                                        controls
+                                                        preload="metadata"
                                                     />
                                                 ) : (
                                                     <img
@@ -1002,9 +1130,19 @@ export function ManagementView({
                                                     />
                                                 )}
                                                 <button
-                                                    onClick={() =>
-                                                        setAttachedMedia(null)
-                                                    }
+                                                    onClick={() => {
+                                                        // Revoke the object URL to free memory
+                                                        if (
+                                                            attachedMedia.url.startsWith(
+                                                                "blob:"
+                                                            )
+                                                        ) {
+                                                            URL.revokeObjectURL(
+                                                                attachedMedia.url
+                                                            );
+                                                        }
+                                                        setAttachedMedia(null);
+                                                    }}
                                                     className="absolute top-2 right-2 p-1 bg-black/50 text-white rounded-full hover:bg-black"
                                                 >
                                                     <X size={14} />
