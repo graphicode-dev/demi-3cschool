@@ -39,7 +39,7 @@ interface PostCardProps {
     onEdit: (id: string, newContent: string) => void;
     onVote?: (postId: string, optionId: string) => void;
     onReport?: (id: string, reason: string) => void;
-    onComment?: (postId: string, content: string) => void;
+    onComment?: (postId: string, content: string, parentId?: string) => void;
     showReportCount?: boolean;
 }
 
@@ -63,6 +63,8 @@ export function PostCard({
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState(post.content);
     const [commentText, setCommentText] = useState("");
+    const [replyingTo, setReplyingTo] = useState<string | null>(null);
+    const [replyText, setReplyText] = useState("");
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [showReportDialog, setShowReportDialog] = useState(false);
     const [reportReason, setReportReason] = useState("");
