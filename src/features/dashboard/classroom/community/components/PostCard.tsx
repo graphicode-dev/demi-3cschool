@@ -165,69 +165,168 @@ export function PostCard({
 
     const CommentItem = ({
         comment,
-        isReply = false,
+        depth = 0,
     }: {
         comment: Comment;
-        isReply?: boolean;
+        depth?: number;
     }) => {
+        const isReply = depth > 0;
+        const maxDepth = 3; // Limit nesting depth for UI
+
         return (
-            <div className={`flex gap-3 ${isReply ? "ml-10 mt-3" : "mt-5"}`}>
-                {isReply && (
-                    <CornerDownRight
-                        size={14}
-                        className="text-gray-300 mt-2 shrink-0"
+            <div
+                className={`${isReply ? "mt-3" : "mt-5"}`}
+                style={{
+                    marginLeft: isReply
+                        ? `${Math.min(depth, maxDepth) * 24}px`
+                        : 0,
+                }}
+            >
+                <div className="flex gap-3">
+                    {isReply && (
+                        <CornerDownRight
+                            size={14}
+                            className="text-gray-300 dark:text-gray-600 mt-2 shrink-0"
+                        />
+                    )}
+                    <img
+                        src={
+                            comment.author.avatar ||
+                            "https://via.placeholder.com/36"
+                        }
+                        alt=""
+                        className="w-9 h-9 rounded-xl shrink-0 border border-gray-100 dark:border-gray-700 shadow-sm"
                     />
-                )}
-                <img
-                    src={comment.author.avatar}
-                    alt=""
-                    className="w-9 h-9 rounded-xl shrink-0 border border-gray-100 dark:border-gray-700 shadow-sm"
-                />
-                <div className="flex-1">
-                    <div
-                        className={`bg-white dark:bg-gray-800 border rounded-2xl p-4 shadow-sm relative ${comment.isSolution ? "border-emerald-500 ring-2 ring-emerald-50 dark:ring-emerald-900/30" : "border-gray-100 dark:border-gray-700"}`}
-                    >
-                        {comment.isSolution && (
-                            <div className="flex items-center gap-1.5 mb-2 px-2.5 py-1 bg-emerald-500 text-white rounded-full text-[9px] font-black uppercase tracking-widest w-fit">
-                                <Check size={12} strokeWidth={3} />{" "}
-                                {t("post.bestSolution")}
-                            </div>
-                        )}
-                        <div className="flex items-center justify-between mb-1 gap-4">
-                            <div className="flex items-center gap-1.5">
-                                <p className="text-[12px] font-bold text-gray-800 dark:text-white">
-                                    {comment.author.name}
+                    <div className="flex-1">
+                        <div
+                            className={`bg-white dark:bg-gray-800 border rounded-2xl p-4 shadow-sm relative ${comment.isSolution ? "border-emerald-500 ring-2 ring-emerald-50 dark:ring-emerald-900/30" : "border-gray-100 dark:border-gray-700"}`}
+                        >
+                            {comment.isSolution && (
+                                <div className="flex items-center gap-1.5 mb-2 px-2.5 py-1 bg-emerald-500 text-white rounded-full text-[9px] font-black uppercase tracking-widest w-fit">
+                                    <Check size={12} strokeWidth={3} />{" "}
+                                    {t("post.bestSolution")}
+                                </div>
+                            )}
+                            <div className="flex items-center justify-between mb-1 gap-4">
+                                <div className="flex items-center gap-1.5">
+                                    <p className="text-[12px] font-bold text-gray-800 dark:text-white">
+                                        {comment.author.name}
+                                    </p>
+                                    {comment.author.role === "manager" && (
+                                        <ShieldCheck
+                                            size={10}
+                                            className="text-[#00ADEF]"
+                                        />
+                                    )}
+                                    {(comment.author.gradeLevel || 0) >= 8 && (
+                                        <Zap
+                                            size={10}
+                                            className="text-yellow-500 fill-yellow-500"
+                                        />
+                                    )}
+                                </div>
+                                <p className="text-[10px] text-gray-400 dark:text-gray-500 font-medium">
+                                    {formatRelativeTime(comment.createdAt)}
                                 </p>
-                                {comment.author.role === "manager" && (
-                                    <ShieldCheck
-                                        size={10}
-                                        className="text-[#00ADEF]"
-                                    />
-                                )}
-                                {(comment.author.gradeLevel || 0) >= 8 && (
-                                    <Zap
-                                        size={10}
-                                        className="text-yellow-500 fill-yellow-500"
-                                    />
-                                )}
                             </div>
-                            <p className="text-[10px] text-gray-400 dark:text-gray-500 font-medium">
-                                {comment.createdAt}
+                            <p className="text-[13px] text-gray-600 dark:text-gray-300 leading-relaxed">
+                                {comment.content}
                             </p>
                         </div>
-                        <p className="text-[13px] text-gray-600 dark:text-gray-300 leading-relaxed">
-                            {comment.content}
-                        </p>
-                    </div>
-                    <div className="flex items-center gap-5 mt-2 ml-2">
-                        <button className="text-[11px] font-bold text-gray-400 dark:text-gray-500 hover:text-[#00ADEF] transition-colors flex items-center gap-1">
-                            <ThumbsUp size={12} /> {t("post.helpful")}
-                        </button>
-                        <button className="text-[11px] font-bold text-gray-400 dark:text-gray-500 hover:text-[#00ADEF] transition-colors">
-                            {t("post.reply")}
-                        </button>
+                        <div className="flex items-center gap-5 mt-2 ml-2">
+                            <button className="text-[11px] font-bold text-gray-400 dark:text-gray-500 hover:text-[#00ADEF] transition-colors flex items-center gap-1">
+                                <ThumbsUp size={12} /> {t("post.helpful")}
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setReplyingTo(
+                                        replyingTo === comment.id
+                                            ? null
+                                            : comment.id
+                                    );
+                                    setReplyText("");
+                                }}
+                                className={`text-[11px] font-bold transition-colors ${replyingTo === comment.id ? "text-[#00ADEF]" : "text-gray-400 dark:text-gray-500 hover:text-[#00ADEF]"}`}
+                            >
+                                {t("post.reply")}
+                            </button>
+                        </div>
+
+                        {/* Reply input */}
+                        {replyingTo === comment.id && (
+                            <div className="flex gap-3 mt-3 ml-2 animate-in slide-in-from-top-2">
+                                <img
+                                    src={CURRENT_USER.avatar}
+                                    alt=""
+                                    className="w-8 h-8 rounded-lg shrink-0 border border-gray-100 dark:border-gray-700"
+                                />
+                                <div className="flex-1 flex gap-2">
+                                    <input
+                                        type="text"
+                                        value={replyText}
+                                        onChange={(e) =>
+                                            setReplyText(e.target.value)
+                                        }
+                                        onKeyDown={(e) => {
+                                            if (
+                                                e.key === "Enter" &&
+                                                replyText.trim() &&
+                                                onComment
+                                            ) {
+                                                onComment(
+                                                    post.id,
+                                                    replyText.trim(),
+                                                    comment.id
+                                                );
+                                                setReplyText("");
+                                                setReplyingTo(null);
+                                            }
+                                            if (e.key === "Escape") {
+                                                setReplyingTo(null);
+                                                setReplyText("");
+                                            }
+                                        }}
+                                        placeholder={t("post.replyTo", {
+                                            name: comment.author.name,
+                                        })}
+                                        className="flex-1 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl py-2 px-4 text-[13px] text-gray-800 dark:text-gray-200 outline-none focus:ring-2 focus:ring-[#00ADEF]/20 focus:border-[#00ADEF] transition-all"
+                                        autoFocus
+                                    />
+                                    <button
+                                        onClick={() => {
+                                            if (replyText.trim() && onComment) {
+                                                onComment(
+                                                    post.id,
+                                                    replyText.trim(),
+                                                    comment.id
+                                                );
+                                                setReplyText("");
+                                                setReplyingTo(null);
+                                            }
+                                        }}
+                                        disabled={!replyText.trim()}
+                                        className="bg-[#00ADEF] text-white p-2 rounded-xl hover:bg-[#0095CC] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        <Send size={16} />
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
+
+                {/* Render nested replies recursively */}
+                {comment.replies && comment.replies.length > 0 && (
+                    <div className="mt-1">
+                        {comment.replies.map((reply) => (
+                            <CommentItem
+                                key={reply.id}
+                                comment={reply}
+                                depth={depth + 1}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
         );
     };

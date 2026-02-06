@@ -47,7 +47,7 @@ interface ManagementViewProps {
     onEdit: (id: string, content: string) => void;
     onFollow: (id: string) => void;
     onCreatePost: (post: Post) => void;
-    onComment?: (postId: string, content: string) => void;
+    onComment?: (postId: string, content: string, parentId?: string) => void;
 }
 
 type ManagementTab =

@@ -78,7 +78,7 @@ interface CommunityViewProps {
     onCreatePost: (post: Post) => void;
     onVote?: (postId: string, optionId: string) => void;
     onReportPost?: (id: string, reason: string) => void;
-    onComment?: (postId: string, content: string) => void;
+    onComment?: (postId: string, content: string, parentId?: string) => void;
 }
 
 export function CommunityView({

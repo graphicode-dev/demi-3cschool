@@ -218,14 +218,21 @@ export function CommunityPage() {
         );
     };
 
-    const handleComment = (postId: string, content: string) => {
+    const handleComment = (
+        postId: string,
+        content: string,
+        parentId?: string
+    ) => {
         execute(
             () =>
                 createComment({
                     postId: Number(postId),
-                    data: { content },
+                    data: {
+                        content,
+                        parent_id: parentId ? Number(parentId) : null,
+                    },
                 }),
-            { successMessage: "Comment added" }
+            { successMessage: parentId ? "Reply added" : "Comment added" }
         );
     };
 
