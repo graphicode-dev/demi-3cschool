@@ -81,7 +81,7 @@ export function LessonContent({ lesson, activeTab }: LessonContentProps) {
 
         case "editor":
             return (
-                <div className="h-[500px] overflow-visible">
+                <div className="h-[450px] overflow-visible">
                     <EditorTab t={t} />
                 </div>
             );
