@@ -133,7 +133,8 @@
         "expand": "توسيع",
         "collapse": "طي",
         "clearConsole": "مسح وحدة التحكم",
-        "consoleEmpty": "ستظهر مخرجات وحدة التحكم هنا..."
+        "consoleEmpty": "ستظهر مخرجات وحدة التحكم هنا...",
+        "downloadProject": "تحميل المشروع"
     },
     "sitemap": {
         "lesson": {

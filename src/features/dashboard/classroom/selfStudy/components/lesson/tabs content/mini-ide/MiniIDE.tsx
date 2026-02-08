@@ -6,6 +6,7 @@ import {
     Sun,
     Moon,
     Download,
+    FolderDown,
     Terminal,
     RefreshCw,
     Maximize2,
@@ -341,6 +342,49 @@ export const MiniIDE = memo(function MiniIDE({ t }: MiniIDEProps) {
         URL.revokeObjectURL(url);
     }, [activeTab]);
 
+    const handleDownloadProject = useCallback(async () => {
+        try {
+            const JSZip = (await import("jszip")).default;
+            const zip = new JSZip();
+
+            // Helper function to add files recursively
+            const addFilesToZip = (
+                nodes: FileNode[],
+                parentPath: string = ""
+            ) => {
+                for (const node of nodes) {
+                    const path = parentPath
+                        ? `${parentPath}/${node.name}`
+                        : node.name;
+                    if (node.type === "file") {
+                        // Get latest content from tabs if open
+                        const tab = openTabs.find((t) => t.fileId === node.id);
+                        const content = tab ? tab.content : node.content || "";
+                        zip.file(path, content);
+                    } else if (node.type === "folder" && node.children) {
+                        addFilesToZip(node.children, path);
+                    }
+                }
+            };
+
+            // Add all files from the root
+            if (files.length > 0 && files[0].children) {
+                addFilesToZip(files[0].children, "");
+            }
+
+            // Generate and download the zip
+            const content = await zip.generateAsync({ type: "blob" });
+            const url = URL.createObjectURL(content);
+            const link = document.createElement("a");
+            link.download = `${files[0]?.name || "project"}.zip`;
+            link.href = url;
+            link.click();
+            URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error("Failed to download project:", error);
+        }
+    }, [files, openTabs]);
+
     const toggleTheme = useCallback(() => {
         setIsDarkTheme((prev) => !prev);
     }, []);
@@ -462,6 +506,18 @@ export const MiniIDE = memo(function MiniIDE({ t }: MiniIDEProps) {
                             <Download className="size-4 text-gray-500 dark:text-gray-400" />
                         </button>
                     )}
+
+                    <button
+                        type="button"
+                        onClick={handleDownloadProject}
+                        className="p-1.5 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                        title={t(
+                            "codeEditor.downloadProject",
+                            "Download project"
+                        )}
+                    >
+                        <FolderDown className="size-4 text-gray-500 dark:text-gray-400" />
+                    </button>
 
                     <button
                         type="button"

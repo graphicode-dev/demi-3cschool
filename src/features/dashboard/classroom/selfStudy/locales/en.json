@@ -133,7 +133,8 @@
         "expand": "Expand",
         "collapse": "Collapse",
         "clearConsole": "Clear console",
-        "consoleEmpty": "Console output will appear here..."
+        "consoleEmpty": "Console output will appear here...",
+        "downloadProject": "Download project"
     },
     "sitemap": {
         "lesson": {

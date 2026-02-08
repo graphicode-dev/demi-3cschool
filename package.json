@@ -40,6 +40,7 @@
         "i18next": "^25.7.3",
         "i18next-browser-languagedetector": "^8.2.0",
         "js-cookie": "^3.0.5",
+        "jszip": "^3.10.1",
         "lucide-react": "^0.562.0",
         "msw": "^2.12.7",
         "pusher-js": "^8.4.0",
