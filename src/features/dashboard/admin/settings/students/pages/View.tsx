@@ -1,7 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
-import PageWrapper from "@/design-system/components/PageWrapper";
-import { ViewCard } from "@/shared/components/ui/ViewCard";
+import { PageWrapper, ViewCard } from "@/design-system";
 import { useStudent } from "../api";
 import { studentsPaths } from "../navigation/paths";
 import { Pen } from "lucide-react";

@@ -29,7 +29,7 @@ import {
     studentDistributionData,
     recentActivities,
 } from "../mockData";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 
 function DashboardPage() {
     const { t } = useTranslation();

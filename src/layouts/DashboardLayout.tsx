@@ -12,19 +12,20 @@ import { lazy, Suspense, useEffect } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { authStore } from "@/auth/auth.store";
 import { paths } from "@/router/paths";
-import { Loading } from "@/shared/components/ui/Loading";
-import Sidebar from "@/shared/components/dashboard/sidebar";
 import { SidebarProvider, useSidebar } from "@/shared/context/SidebarContext";
-import Navbar from "@/shared/components/dashboard/navbar";
-import Backdrop from "@/shared/components/dashboard/Backdrop";
-import { Breadcrumb, ConfirmDialogProvider } from "@/design-system";
 import { SearchProvider, SearchModal } from "@/search";
 import "@/search/init";
 import { CLASSROOM_PATH } from "@/features/dashboard/classroom/navigation/constant";
 import { ADMIN_PATH } from "@/features/dashboard/admin/navigation/constant";
+import Sidebar from "@/features/dashboard/shared/components/sidebar";
+import Backdrop from "@/features/dashboard/shared/components/Backdrop";
+import Navbar from "@/features/dashboard/shared/components/navbar";
+import { Breadcrumb, LoadingState } from "@/design-system";
+import { ConfirmDialogProvider } from "@/design-system";
 
 const NavbarSessionCountdown = lazy(
-    () => import("@/shared/components/dashboard/navbar/NavbarSessionCountdown")
+    () =>
+        import("@/features/dashboard/shared/components/navbar/NavbarSessionCountdown")
 );
 
 const LayoutContent: React.FC = () => {
@@ -101,7 +102,7 @@ export const DashboardLayout = () => {
 
     // Show loading while store is hydrating
     if (!hasHydrated) {
-        return <Loading />;
+        return <LoadingState />;
     }
 
     return (

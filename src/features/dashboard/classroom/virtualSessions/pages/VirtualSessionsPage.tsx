@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { ChevronRight, Loader2 } from "lucide-react";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 import { TermStepper } from "../../components";
 import { VirtualSessionCard, SessionInfoModal } from "../components";
 import { useOnlineSessions } from "../api";

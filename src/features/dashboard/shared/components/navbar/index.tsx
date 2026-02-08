@@ -1,5 +1,3 @@
-import NotificationDropdown from "@/shared/components/dashboard/navbar/NotificationDropdown";
-import UserDropdown from "@/shared/components/dashboard/navbar/UserDropdown";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -7,9 +5,11 @@ import Logo3CBlack from "@/assets/images/landing/3c-black.png";
 import Logo3CWhite from "@/assets/images/landing/3c-white.png";
 import { useSidebar } from "@/shared/context/SidebarContext";
 import { useTheme } from "@/shared/context/ThemeContext";
-import { ThemeToggleButton } from "../../ui/ThemeToggleButton";
+import { ThemeToggleButton } from "@/design-system";
 import { authStore } from "@/auth/auth.store";
 import { useSearch } from "@/search";
+import NotificationDropdown from "./NotificationDropdown";
+import UserDropdown from "./UserDropdown";
 
 const Navbar = () => {
     const { t, i18n } = useTranslation("dashboard");

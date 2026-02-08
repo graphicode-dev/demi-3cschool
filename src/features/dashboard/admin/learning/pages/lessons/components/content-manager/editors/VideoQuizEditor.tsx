@@ -20,7 +20,7 @@ import {
     ArrowLeft,
     ChevronRight,
 } from "lucide-react";
-import { ConfirmDialog } from "@/design-system/components/ConfirmDialog";
+import { ConfirmDialog } from "@/design-system";
 import {
     useCreateLessonVideoQuiz,
     useDeleteLessonVideoQuiz,

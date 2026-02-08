@@ -5,7 +5,7 @@
  * Wraps React.lazy components with Suspense.
  */
 
-import { Loading } from "@/shared/components/ui/Loading";
+import { LoadingState } from "@/design-system";
 import { Suspense, type ComponentType } from "react";
 
 /**
@@ -31,7 +31,7 @@ export function RouteSuspense({
     fallback?: React.ReactNode;
 }) {
     return (
-        <Suspense fallback={fallback ?? <Loading />}>
+        <Suspense fallback={fallback ?? <LoadingState />}>
             <Component />
         </Suspense>
     );

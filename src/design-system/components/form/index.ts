@@ -76,7 +76,7 @@ export {
     inputVariants,
     labelVariants,
     helperTextVariants,
-    buttonVariants,
+    buttonVariants as FormButtonVariants,
 } from "./styles/variants";
 export type {
     InputVariants,
@@ -86,7 +86,7 @@ export type {
 } from "./styles/variants";
 
 // Export individual components (optional, for advanced usage)
-export { CheckBox } from "./components/CheckBox";
+export { FormCheckBox } from "./components/CheckBox";
 export { OTP } from "./components/OTP";
 export { DropdownInput } from "./components/DropdownInput";
 export { DateInput } from "./components/DateInput";

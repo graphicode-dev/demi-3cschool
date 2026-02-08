@@ -4,13 +4,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Form } from "@/design-system/components/form";
+import { PageWrapper, Form } from "@/design-system";
 import { FormSection } from "../components";
 import { groupsPaths } from "../navigation/paths";
 import { useGroup, useUpdateGroup } from "../api";
 import { useMutationHandler } from "@/shared/api";
 import type { Group, GroupUpdatePayload } from "../types/groups.types";
-import PageWrapper from "@/design-system/components/PageWrapper";
 
 const editGroupSchema = z.object({
     groupName: z.string().min(1, "Group name is required").max(255),

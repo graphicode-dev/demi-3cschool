@@ -4,7 +4,7 @@
  * Displays information about the primary teacher
  */
 
-import type { BaseComponentProps } from "@/design-system/types";
+import type { BaseComponentProps } from "@/design-system";
 import { useTranslation } from "react-i18next";
 
 interface PrimaryTeacher {

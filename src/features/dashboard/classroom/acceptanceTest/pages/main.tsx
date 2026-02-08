@@ -4,9 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { Clock, ChevronLeft, ChevronRight, Send } from "lucide-react";
 import PreExam from "./pre-exam";
 import { AcceptanceExamQuestion } from "../types";
-import { useToast } from "@/shared/hooks";
-import { ErrorState, LoadingState } from "@/design-system";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import {
+    PageWrapper,
+    ErrorState,
+    LoadingState,
+    useToast,
+} from "@/design-system";
 import {
     useStudentExam,
     useAttemptResult,

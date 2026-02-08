@@ -8,7 +8,7 @@ import { useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Save, Upload } from "lucide-react";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 import { useFolder, useCreateResource } from "../api";
 import type { ResourceType } from "../types";
 

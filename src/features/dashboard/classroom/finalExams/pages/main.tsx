@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ExamCard } from "../components";
 import { MOCK_FINAL_EXAMS } from "../mocks";
 import { finalExamsPaths } from "../navigation";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 
 export function FinalExamsPage() {
     const { t } = useTranslation("finalExams");

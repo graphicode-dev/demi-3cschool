@@ -17,8 +17,7 @@ import {
     CheckCircle,
     X,
 } from "lucide-react";
-import { ErrorState, LoadingState } from "@/design-system";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper, ErrorState, LoadingState } from "@/design-system";
 import { useMutationHandler } from "@/shared/api";
 import { useSetSessionTeacherMutation } from "../api/assignTeacher/assignTeacher.mutations";
 import { useSessionDetailQuery } from "../api/sessions/sessions.queries";

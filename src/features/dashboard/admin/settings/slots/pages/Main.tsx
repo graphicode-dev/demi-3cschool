@@ -2,7 +2,7 @@
  * Slots Main Page
  */
 
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 import { SlotsView } from "../components";
 
 export default function SlotsPage() {

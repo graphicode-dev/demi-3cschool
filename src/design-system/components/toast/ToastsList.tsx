@@ -1,7 +1,7 @@
 import { ToastItem } from "./ToastItem";
 import AlertToast from "./AlertToast";
 import { ToastPosition } from "@/shared/types";
-import { useToast } from "@/design-system/hooks/useToast";
+import { useToast } from "@/design-system";
 
 // Position class mapping
 const positionClasses: Record<ToastPosition, string> = {

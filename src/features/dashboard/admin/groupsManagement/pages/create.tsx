@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Form } from "@/design-system/components/form";
+import { PageWrapper, Form } from "@/design-system";
 import {
     StepIndicator,
     FormSection,
@@ -16,11 +16,9 @@ import { useLevel } from "@/features/dashboard/admin/learning/pages/levels/api";
 import {
     useCreateGroup,
     useGroupRecommendations,
-    useAvailableTeachersQuery,
     type GroupRecommendPayload,
     type GroupRecommendation,
 } from "../api";
-import PageWrapper from "@/design-system/components/PageWrapper";
 import { useMutationHandler } from "@/shared/api";
 import { useGroupScheduleSlots } from "../../settings/slots/api/slots.queries";
 import { useTrainingCentersList } from "../../settings";

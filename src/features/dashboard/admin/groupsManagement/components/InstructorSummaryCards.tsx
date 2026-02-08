@@ -4,7 +4,7 @@
  * Displays summary statistics for instructor management
  */
 
-import type { BaseComponentProps } from "@/design-system/types";
+import type { BaseComponentProps } from "@/design-system";
 import type { InstructorSummary } from "../types/instructor.types";
 import { Calendar, Clock, Star, Users } from "lucide-react";
 

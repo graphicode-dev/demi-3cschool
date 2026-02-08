@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { AcceptanceExam } from "../types";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 
 interface PreExamProps {
     startExam: () => void;

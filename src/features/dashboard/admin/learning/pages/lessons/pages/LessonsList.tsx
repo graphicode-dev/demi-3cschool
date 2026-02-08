@@ -9,6 +9,7 @@
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import {
+    PageWrapper,
     LoadingState,
     ErrorState,
     EmptyState,
@@ -17,7 +18,6 @@ import {
 import { useDeleteLesson, useLessonsByLevel } from "../api";
 import { ListCard } from "../../courses/components";
 import { Lesson } from "../types";
-import PageWrapper from "@/design-system/components/PageWrapper";
 import { useMutationHandler } from "@/shared/api";
 
 export default function LearningLessonsList() {

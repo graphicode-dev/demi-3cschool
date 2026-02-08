@@ -2,8 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import type { ViewMode, TableColumn, TableMetadata } from "@/shared/types";
 import { TableFilter, type GroupableColumn } from "./TableFilter";
-import { PDFIcon, VerticalFilter, XFile } from "@/shared/components/ui/icons";
-import { CheckBox } from "@/shared/components/ui/CheckBox";
+import { PDFIcon, VerticalFilter, XFile, CheckBox } from "@/design-system";
 import { usePagination } from "@/shared/hooks";
 import Pagination from "./Pagination";
 

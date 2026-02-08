@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 import { TermStepper } from "../../components";
 import { PhysicalSessionCard, SummerCampBanner } from "../components";
 import { useOfflineSessions } from "../api/physicalSessions.queries";

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { TableHead } from "./TableHead";
 import type { SortConfig, TableColumn, TableData } from "@/shared/types";
 import TableRow from "./TableRow";
-import { CheckBox } from "@/shared/components/ui/CheckBox";
+import { CheckBox } from "@/design-system";
 
 interface TableGroupViewProps {
     data: TableData[];

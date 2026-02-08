@@ -32,7 +32,7 @@ import {
     mockInvoices,
     mockInstallments,
 } from "../mockData/profile.mock";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 import { authStore } from "@/auth";
 
 const PersonalDetailsTab = lazy(

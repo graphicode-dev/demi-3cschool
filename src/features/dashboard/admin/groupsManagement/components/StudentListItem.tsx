@@ -1,9 +1,10 @@
-import ActionsDropdown, {
-    DropdownAction,
-} from "@/design-system/components/ActionsDropdown";
 import { Calendar, Trash2 } from "lucide-react";
 import { GroupStudent } from "../types";
-import { ConfirmDialog } from "@/design-system";
+import {
+    ConfirmDialog,
+    ActionsDropdown,
+    DropdownAction,
+} from "@/design-system";
 import { useState } from "react";
 import { TFunction } from "i18next";
 

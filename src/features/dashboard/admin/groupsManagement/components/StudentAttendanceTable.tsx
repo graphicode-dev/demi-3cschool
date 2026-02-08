@@ -7,18 +7,19 @@
 
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { DynamicTable } from "@/design-system/components/table";
-import { TableAvatar } from "@/design-system/components/table/TableAvatar";
+import {
+    DynamicTable,
+    TableAvatar,
+    ConfirmDialog,
+    ActionsDropdown,
+    DropdownAction,
+} from "@/design-system";
 import type { TableColumn, TableData } from "@/shared/types/table.types";
 import type {
     StudentAttendance,
     AttendanceStatus,
 } from "../types/attendance.types";
-import ActionsDropdown, {
-    DropdownAction,
-} from "@/design-system/components/ActionsDropdown";
-import { ConfirmDialog } from "@/design-system/components/ConfirmDialog";
-import { Check, Eye, X, Clock, Ban } from "lucide-react";
+import { Check, X, Clock, Ban } from "lucide-react";
 
 interface StudentAttendanceTableProps {
     students: StudentAttendance[];

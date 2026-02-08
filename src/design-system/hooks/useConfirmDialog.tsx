@@ -30,7 +30,7 @@ import {
     type ReactNode,
 } from "react";
 import { ConfirmDialog, type DialogVariant } from "../components/ConfirmDialog";
-import { useToast } from "@/shared/hooks";
+import { useToast } from "@/design-system";
 
 interface ConfirmOptions {
     title?: string;

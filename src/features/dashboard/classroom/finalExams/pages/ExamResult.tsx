@@ -1,8 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
-import { Star, Clock, ArrowLeft } from "lucide-react";
-import { ErrorState, LoadingState } from "@/design-system";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { Star, Clock } from "lucide-react";
+import { PageWrapper, ErrorState, LoadingState } from "@/design-system";
 import { useAttemptResult } from "../api";
 import { finalExamsPaths } from "../navigation";
 import {
@@ -17,7 +16,8 @@ export function ExamResultPage() {
     const { examId } = useParams<{ examId: string }>();
 
     // For demo purposes, use passed result for exam 1, under review for others
-    const mockResult = examId === "1" ? MOCK_RESULT_PASSED : MOCK_RESULT_UNDER_REVIEW;
+    const mockResult =
+        examId === "1" ? MOCK_RESULT_PASSED : MOCK_RESULT_UNDER_REVIEW;
 
     const {
         data: realResult,
@@ -102,7 +102,9 @@ export function ExamResultPage() {
                                 : "text-gray-900 dark:text-white"
                         }`}
                     >
-                        {isPassed ? t("result.greatJob") : t("result.underReview")}
+                        {isPassed
+                            ? t("result.greatJob")
+                            : t("result.underReview")}
                     </h2>
 
                     {/* Status Description */}

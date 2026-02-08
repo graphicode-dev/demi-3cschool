@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router";
-import { Dropdown } from "../../ui/dropdown/Dropdown";
-import { DropdownItem } from "../../ui/dropdown/DropdownItem";
+import { Dropdown, DropdownItem } from "@/design-system";
 import { paths } from "@/router";
 import { authStore } from "@/auth/auth.store";
 import { useLogout } from "@/features/auth/api/auth.mutations";

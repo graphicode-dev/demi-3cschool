@@ -18,7 +18,7 @@ import {
     Save,
     X,
 } from "lucide-react";
-import { ConfirmDialog } from "@/design-system/components/ConfirmDialog";
+import { ConfirmDialog } from "@/design-system";
 import { useMutationHandler } from "@/shared/api";
 import type { ApiError } from "@/shared/api/types";
 import {

@@ -17,7 +17,7 @@ import {
     Eye,
     X,
 } from "lucide-react";
-import { ConfirmDialog } from "@/design-system/components/ConfirmDialog";
+import { ConfirmDialog } from "@/design-system";
 import {
     useCreateLessonAssignment,
     useDeleteLessonAssignment,

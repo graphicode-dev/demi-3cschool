@@ -20,7 +20,7 @@ import { DropdownInput } from "../DropdownInput";
 import { DateInput } from "../DateInput";
 import { TimeInput } from "../TimeInput";
 import { FileInput } from "../FileInput";
-import { CheckBox } from "../CheckBox";
+import { FormCheckBox } from "../CheckBox";
 import { OTP } from "../OTP";
 import PhoneInput from "react-phone-input-2";
 import { BaseFormInputProps } from "./types";
@@ -191,7 +191,7 @@ export const FormBaseInput = <TFieldValues extends FieldValues = FieldValues>({
 
             case "checkbox":
                 return (
-                    <CheckBox
+                    <FormCheckBox
                         checked={field.value}
                         onChange={() => field.onChange(!field.value)}
                         label={typeConfig.label}

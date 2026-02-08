@@ -27,7 +27,7 @@
  */
 
 import { useCallback } from "react";
-import { useToast } from "@/design-system/hooks/useToast";
+import { useToast } from "@/design-system";
 import { toFormErrors } from "@/shared/api/client";
 import type { ApiError } from "@/shared/api/types";
 import type { FieldValues, Path, UseFormSetError } from "react-hook-form";

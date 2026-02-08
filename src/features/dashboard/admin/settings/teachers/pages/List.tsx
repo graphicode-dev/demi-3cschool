@@ -1,14 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import PageWrapper from "@/design-system/components/PageWrapper";
-import { ErrorState, LoadingState, useConfirmDialog } from "@/design-system";
-import { DynamicTable } from "@/design-system/components/table";
+import {
+    PageWrapper,
+    ActionsDropdown,
+    DynamicTable,
+    ErrorState,
+    LoadingState,
+    useConfirmDialog,
+} from "@/design-system";
 import type { TableColumn, TableData } from "@/shared/types";
 import { useTeachersList, useDeleteTeacher } from "../api";
 import { teachersPaths } from "../navigation/paths";
 import { useMutationHandler } from "@/shared/api";
 import { Eye, Pen, Plus, Trash } from "lucide-react";
-import ActionsDropdown from "@/design-system/components/ActionsDropdown";
 
 export default function TeachersListPage() {
     const { t } = useTranslation("teachers");

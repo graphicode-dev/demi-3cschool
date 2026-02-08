@@ -5,9 +5,12 @@ import { Clock, ChevronLeft, ChevronRight, Flag } from "lucide-react";
 import PreExam from "./PreExam";
 import { ExamSuccessModal } from "../components";
 import type { FinalExamQuestion } from "../types";
-import { useToast } from "@/shared/hooks";
-import { ErrorState, LoadingState } from "@/design-system";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import {
+    PageWrapper,
+    ErrorState,
+    LoadingState,
+    useToast,
+} from "@/design-system";
 import {
     useExam,
     useStartExam,

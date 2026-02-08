@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
-import { Clock, CheckCircle, GraduationCap, ArrowLeft } from "lucide-react";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { Clock, CheckCircle, GraduationCap } from "lucide-react";
+import { PageWrapper } from "@/design-system";
 import { useLessonAssignment } from "@/features/dashboard/admin/learning/pages/lessons/api";
 
 export function HomeworkResultPage() {

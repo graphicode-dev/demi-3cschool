@@ -1,5 +1,5 @@
 // src/components/CheckboxInput/index.tsx
-import { CheckBox } from "../CheckBox";
+import { FormCheckBox } from "../CheckBox";
 import { CheckboxInputProps } from "./types";
 
 export const CheckboxInput: React.FC<CheckboxInputProps> = ({
@@ -13,7 +13,7 @@ export const CheckboxInput: React.FC<CheckboxInputProps> = ({
     variant = "default",
 }) => {
     return (
-        <CheckBox
+        <FormCheckBox
             checked={!!field.value}
             onChange={() => field.onChange(!field.value)}
             label={label}

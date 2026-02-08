@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { X, Info } from "lucide-react";
-import { Form } from "@/design-system/components/form";
+import { Form } from "@/design-system";
 
 const rescheduleSessionSchema = z.object({
     date: z.string().min(1, "Date is required"),

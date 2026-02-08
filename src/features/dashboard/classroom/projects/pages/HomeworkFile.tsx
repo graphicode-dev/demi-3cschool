@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
 import { FileText, Download, ArrowLeft } from "lucide-react";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 import { useLessonAssignment } from "@/features/dashboard/admin/learning/pages/lessons/api";
 
 export function HomeworkFilePage() {

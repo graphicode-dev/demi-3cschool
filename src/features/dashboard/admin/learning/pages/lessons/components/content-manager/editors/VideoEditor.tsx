@@ -8,7 +8,7 @@
 import { useState, useEffect, useMemo, useRef, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { Check, Play, Loader2, Trash2 } from "lucide-react";
-import { ConfirmDialog } from "@/design-system/components/ConfirmDialog";
+import { ConfirmDialog } from "@/design-system";
 import {
     useCreateLessonVideo,
     useDeleteLessonVideo,

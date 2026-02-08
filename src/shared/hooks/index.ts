@@ -8,7 +8,6 @@
 // URL-synced list state
 export { useListQueryState } from "./useListQueryState";
 export { useTitle } from "./useTitle";
-export { useToast } from "../../design-system/hooks/useToast";
 export { useLanguage } from "./useLanguage";
 export { usePagination } from "./usePagination";
 export { useFormApiErrors } from "./useFormApiErrors";

@@ -15,21 +15,15 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 
 import {
+    PageWrapper,
     LoadingState,
     ErrorState,
     EmptyState,
     useConfirmDialog,
 } from "@/design-system";
-import { CourseFilterDropdown, LevelListItem } from "../components";
+import { LevelListItem } from "../components";
 import { learningPaths } from "@/features/dashboard/admin/learning/navigation/paths";
-import { useCoursesByProgram } from "../../courses";
-import {
-    Level,
-    useDeleteLevel,
-    useLevelsByCourse,
-    useLevelsList,
-} from "../api";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { Level, useDeleteLevel, useLevelsList } from "../api";
 import { useCurriculumType } from "../../../hooks";
 
 export default function LearningLevelsList() {
@@ -42,7 +36,6 @@ export default function LearningLevelsList() {
     // null or "all" = fetch all levels, <id> = fetch by specific course
     const courseIdFromUrl = searchParams.get("courseId");
     const isAllSelected = !courseIdFromUrl || courseIdFromUrl === "all";
-    const isSpecificCourse = courseIdFromUrl && courseIdFromUrl !== "all";
 
     const paths =
         curriculumType === "first_term"

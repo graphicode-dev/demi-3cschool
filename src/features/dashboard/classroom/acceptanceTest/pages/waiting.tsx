@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Clock, Loader2, CheckCircle, FileSearch } from "lucide-react";
 
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 
 function AcceptanceExamWaitingPage() {
     const { t } = useTranslation("acceptanceTest");

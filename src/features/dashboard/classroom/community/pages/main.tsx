@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 import { CommunityView } from "../components";
 import { useMutationHandler } from "@/shared/api";
-import type { Post, Channel } from "../types";
+import type { Post } from "../types";
 import {
     usePostsList,
     useSavedPosts,

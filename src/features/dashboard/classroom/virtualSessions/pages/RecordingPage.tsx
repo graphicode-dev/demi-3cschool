@@ -9,7 +9,7 @@ import {
     BookOpen,
     Sparkles,
 } from "lucide-react";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 import { CLASSROOM_PATH } from "../../navigation/constant";
 import { useLessonVideo } from "@/features/dashboard/admin/learning/pages/lessons/api";
 import { useDynamicBreadcrumb } from "@/navigation";

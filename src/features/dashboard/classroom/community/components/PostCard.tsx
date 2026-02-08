@@ -26,7 +26,7 @@ import {
     Forward,
     Send,
 } from "lucide-react";
-import { ConfirmDialog } from "@/design-system/components/ConfirmDialog";
+import { ConfirmDialog } from "@/design-system";
 import type { Post, Comment } from "../types";
 import { CURRENT_USER } from "../mocks";
 

@@ -1,8 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import type { ChatUser } from "../types";
-import { Dropdown } from "@/shared/components/ui/dropdown/Dropdown";
-import { DropdownItem } from "@/shared/components/ui/dropdown/DropdownItem";
+import { Dropdown, DropdownItem } from "@/design-system";
 import { MoreDotIcon } from "../icons";
 
 interface ChatBoxHeaderProps {

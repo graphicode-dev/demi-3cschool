@@ -8,8 +8,7 @@
 
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import PageWrapper from "@/design-system/components/PageWrapper";
-import { LoadingState, ErrorState, EmptyState } from "@/design-system";
+import { PageWrapper, LoadingState, ErrorState, EmptyState } from "@/design-system";
 import { useLevelsByGrade } from "@/features/dashboard/admin/learning/pages/levels";
 import {
     NavigationCard,

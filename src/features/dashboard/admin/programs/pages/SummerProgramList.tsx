@@ -1,10 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { useProgramsCurriculumList, useUpdateProgramCurriculum } from "../api";
-import { LoadingState } from "@/design-system/components/LoadingState";
-import { ErrorState } from "@/design-system/components/ErrorState";
-import { EmptyState } from "@/design-system/components/EmptyState";
+import {
+    PageWrapper,
+    LoadingState,
+    EmptyState,
+    ErrorState,
+} from "@/design-system";
 import type { ProgramCurriculum } from "../types";
-import PageWrapper from "@/design-system/components/PageWrapper";
 
 function SummerProgramList() {
     const { t } = useTranslation("programs");

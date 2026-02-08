@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from "react";
-import { CheckBox } from "@/shared/components/ui/CheckBox";
+import { CheckBox } from "@/design-system";
 import type { SortConfig, TableColumn } from "@/shared/types";
 import { SortableHeader } from "./SortableHeader";
 

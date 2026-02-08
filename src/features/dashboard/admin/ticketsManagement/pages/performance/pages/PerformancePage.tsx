@@ -18,7 +18,7 @@ import {
 } from "../components";
 import { usePerformanceData } from "../api";
 import type { PeriodFilter as PeriodFilterType } from "../types";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 
 export function PerformancePage() {
     const { t } = useTranslation("ticketsManagement");

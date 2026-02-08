@@ -1,7 +1,7 @@
 import { TableColumn, TableData } from "@/shared/types";
 import { TableAvatar } from "./TableAvatar";
 import { useNavigate, useLocation } from "react-router-dom";
-import { CheckBox } from "../../../shared/components/ui/CheckBox";
+import { CheckBox } from "@/design-system";
 
 // Helper function to safely render cell values (handles objects that can't be rendered as React children)
 const renderCellValue = (value: unknown): string => {

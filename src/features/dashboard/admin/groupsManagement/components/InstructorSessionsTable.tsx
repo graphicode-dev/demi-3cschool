@@ -6,12 +6,9 @@
 
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { DynamicTable } from "@/design-system/components/table";
+import { DynamicTable, ActionsDropdown, DropdownAction } from "@/design-system";
 import type { TableColumn, TableData } from "@/shared/types/table.types";
 import type { InstructorSession } from "../types/instructor.types";
-import ActionsDropdown, {
-    DropdownAction,
-} from "@/design-system/components/ActionsDropdown";
 import { UserCog } from "lucide-react";
 
 interface InstructorSessionsTableProps {

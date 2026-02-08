@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ChevronDown, BookOpen } from "lucide-react";
 import { ProjectCard } from "../components";
 import type { Project } from "../types";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 import { useMyAllSessions } from "@/features/dashboard/classroom/mySchedule/api";
 import {
     useLessonAssignment,

@@ -6,9 +6,10 @@
  */
 
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useListQueryState } from "@/shared/hooks";
 import {
+    PageWrapper,
     LoadingState,
     ErrorState,
     EmptyState,
@@ -16,9 +17,7 @@ import {
 } from "@/design-system";
 import { ListCard, SearchInput } from "../components";
 import { learningPaths } from "@/features/dashboard/admin/learning/navigation/paths";
-import { ProgramsCurriculum } from "@/features/dashboard/admin/learning/types";
 import { Course, useCoursesList, useDeleteCourse } from "../api";
-import PageWrapper from "@/design-system/components/PageWrapper";
 import { useCurriculumType } from "../../../hooks";
 
 export default function LearningCoursesList() {

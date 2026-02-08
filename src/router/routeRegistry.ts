@@ -19,8 +19,7 @@ import type { RouteObject } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import type { FeatureRouteModule, RouteConfig } from "./routes.types";
 import { RouteErrorBoundary } from "./RouteErrorBoundary";
-import { createElement, Suspense } from "react";
-import { Loading } from "@/shared/components/ui/Loading";
+import { createElement } from "react";
 import { ProtectedRoute } from "@/auth/ProtectedRoute";
 
 // ============================================================================

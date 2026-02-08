@@ -9,7 +9,7 @@ interface ErrorProps {
     showButtons?: boolean;
 }
 
-function Error(props: ErrorProps | string) {
+export function ErrorComponent(props: ErrorProps | string) {
     const config: ErrorProps =
         typeof props === "string"
             ? {
@@ -244,4 +244,3 @@ function Error(props: ErrorProps | string) {
     );
 }
 
-export default Error;

@@ -9,18 +9,19 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Plus, Search, MoreHorizontal, Filter } from "lucide-react";
-import PageWrapper from "@/design-system/components/PageWrapper";
-import { DynamicTable } from "@/design-system/components/table";
-import { ConfirmDialog } from "@/design-system/components/ConfirmDialog";
-import { useToast } from "@/design-system/hooks/useToast";
+import {
+    PageWrapper,
+    useToast,
+    ActionsDropdown,
+    DropdownAction,
+    DynamicTable,
+    ConfirmDialog,
+} from "@/design-system";
 import { teamStructure } from "../navigation/paths";
 import { mockLeads, mockTeamAgents, mockLeads as leadsData } from "../mockData";
 import type { Lead, Agent } from "../types";
 import type { TableColumn, TableData } from "@/shared/types";
 import LeadCard from "../components/LeadCard";
-import ActionsDropdown, {
-    DropdownAction,
-} from "@/design-system/components/ActionsDropdown";
 
 export function ManageTeamPage() {
     const { t } = useTranslation("ticketsManagement");

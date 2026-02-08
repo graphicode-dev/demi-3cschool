@@ -5,10 +5,9 @@ import { Loader2 } from "lucide-react";
 import { SessionList, TermStepper, CourseCard } from "../components";
 import { useMySessions } from "../api";
 import { selfStudyPaths } from "../navigation";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 import { useCurriculumTerms } from "../../components/TermStepper";
 import type { CourseSession, Course } from "../types";
-import type { Term } from "../../components/TermStepper";
 
 function SelfStudyPage() {
     const { t } = useTranslation("selfStudy");

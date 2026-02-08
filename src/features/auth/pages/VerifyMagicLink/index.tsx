@@ -2,10 +2,9 @@ import { useTranslation } from "react-i18next";
 import { ArrowRight, CheckCircle2, Loader2, XCircle } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { Navigate, useNavigate, useSearchParams } from "react-router-dom";
-import { useToast } from "@/shared/hooks";
 import { paths } from "@/router";
-import { Loading } from "@/shared/components/ui/Loading";
 import { useVerifyMagicLink } from "../../api/auth.queries";
+import { LoadingState, useToast } from "@/design-system";
 
 function VerifyMagicLink() {
     const { t } = useTranslation();
@@ -61,7 +60,7 @@ function VerifyMagicLink() {
     if (!token) return <Navigate to={paths.auth.login()} replace />;
 
     // Loading state
-    if (isLoading) return <Loading />;
+    if (isLoading) return <LoadingState />;
 
     // Error state
     if (isError) {

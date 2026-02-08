@@ -7,11 +7,14 @@
 
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { ErrorState, LoadingState } from "@/design-system";
+import {
+    PageWrapper,
+    ErrorState,
+    LoadingState,
+    ViewCard,
+} from "@/design-system";
 import { useLesson } from "../api";
 import { LessonContentManager } from "../components";
-import ViewCard from "@/shared/components/ui/ViewCard";
-import PageWrapper from "@/design-system/components/PageWrapper";
 
 export default function LearningLessonsDetail() {
     const { t } = useTranslation();

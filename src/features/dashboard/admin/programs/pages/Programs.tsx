@@ -4,7 +4,7 @@
  * Displays a list of programs curriculum with toggle buttons for status.
  */
 
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 import { useTranslation } from "react-i18next";
 import ProgramTypeCard from "../components/ProgramTypeCard";
 import { programsManagementPaths } from "../navigation";

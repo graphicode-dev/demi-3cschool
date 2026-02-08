@@ -5,11 +5,10 @@
  */
 
 import React, { useMemo } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ArrowRight } from "lucide-react";
-import PageWrapper from "@/design-system/components/PageWrapper";
-import { DynamicTable } from "@/design-system/components/table";
+import { PageWrapper, DynamicTable } from "@/design-system";
 import type { TableColumn, TableData } from "@/shared/types/table.types";
 
 // Helper to format date for display

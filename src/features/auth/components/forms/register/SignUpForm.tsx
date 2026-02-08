@@ -3,9 +3,7 @@ import { RegisterData, CommonFormProps, AuthSteps } from "@/auth/auth.types";
 import { useForm, useWatch, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Loading } from "@/shared/components/ui/Loading";
-import { Form } from "@/design-system/components/form";
-import { safeNavigate } from "@/utils";
+import { Form, LoadingState } from "@/design-system";
 import { GraduationCap, BookOpen } from "lucide-react";
 import { paths } from "@/router";
 import { authStore } from "@/auth/auth.store";
@@ -121,7 +119,7 @@ const SignUpForm = <_T,>({
         );
     };
 
-    if (isSignUpPending) return <Loading />;
+    if (isSignUpPending) return <LoadingState />;
 
     return (
         <>

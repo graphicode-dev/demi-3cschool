@@ -8,7 +8,7 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { X } from "lucide-react";
 import { useFoldersList } from "../api";
-import { useToast } from "@/design-system/hooks/useToast";
+import { useToast } from "@/design-system";
 import type { Resource, ResourceFolder } from "../types";
 
 interface MoveResourceModalProps {

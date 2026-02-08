@@ -3,7 +3,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AuthSteps, CommonFormProps } from "@/auth/auth.types";
-import { Form } from "@/design-system/components/form";
+import { Form } from "@/design-system";
 import { authStore } from "@/auth/auth.store";
 import { useMutationHandler } from "@/shared/api";
 

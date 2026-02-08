@@ -2,12 +2,10 @@ import { useState, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Filter, User, Download, Send } from "lucide-react";
-import PageWrapper from "@/design-system/components/PageWrapper";
-import { DynamicTable } from "@/design-system/components/table";
+import { PageWrapper, DynamicTable ,useToast} from "@/design-system";
 import type { TableColumn, TableData } from "@/shared/types";
 import { useCertificatesList } from "../api";
 import type { Certificate, CertificateStatus } from "../types";
-import { useToast } from "@/shared/hooks";
 
 const getStatusBadgeClass = (status: CertificateStatus) => {
     switch (status) {

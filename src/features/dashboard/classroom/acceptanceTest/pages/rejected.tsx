@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 
 import { XCircle, Mail, AlertTriangle } from "lucide-react";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 
 function AcceptanceExamRejectedPage() {
     const { t } = useTranslation("acceptanceTest");

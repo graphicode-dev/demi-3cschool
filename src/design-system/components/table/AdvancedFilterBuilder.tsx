@@ -6,9 +6,9 @@ import type {
     FilterOperator,
     TableMetadata,
 } from "@/shared/types";
-import { Button } from "@/shared/components/ui/button";
-import ErrorComponent from "@/shared/components/ui/Error";
+import { ErrorComponent } from "@/design-system";
 import { X, Trash2, Plus, Filter } from "lucide-react";
+import { Button } from "../button";
 
 interface AdvancedFilterBuilderProps {
     metadata: TableMetadata;

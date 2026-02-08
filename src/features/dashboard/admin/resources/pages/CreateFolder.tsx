@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Save } from "lucide-react";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 import { useCreateFolder } from "../api";
 import { useGrades } from "@/features/dashboard/admin/systemManagements/api";
 import { useProgramsCurriculumList } from "@/features/dashboard/admin/programs/api";

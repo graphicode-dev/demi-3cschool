@@ -1,7 +1,7 @@
 import React from "react";
 import PageHeader, { PageHeaderProps } from "./PageHeader";
 
-function PageWrapper({
+export function PageWrapper({
     children,
     classname,
     pageHeaderProps,
@@ -27,4 +27,3 @@ function PageWrapper({
         </>
     );
 }
-export default PageWrapper;

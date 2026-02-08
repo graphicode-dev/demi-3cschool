@@ -13,10 +13,9 @@ import type {
     InstructorSummary,
     InstructorSession,
 } from "../types/instructor.types";
-import PageWrapper from "@/design-system/components/PageWrapper";
 import { useTranslation } from "react-i18next";
 import { useGroup, useGroupSessionsQuery } from "../api";
-import { ErrorState, LoadingState } from "@/design-system";
+import { PageWrapper, ErrorState, LoadingState } from "@/design-system";
 import { groupsPaths } from "../navigation/paths";
 
 export const InstructorPage = () => {

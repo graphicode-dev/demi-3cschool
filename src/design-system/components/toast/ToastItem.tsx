@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 
 import { motion, AnimatePresence } from "framer-motion";
 import { ToastProps } from "@/shared/types";
-import { useToast } from "@/design-system/hooks/useToast";
+import { useToast } from "@/design-system";
 
 // Toast Icons
 const ErrorIcon = () => (

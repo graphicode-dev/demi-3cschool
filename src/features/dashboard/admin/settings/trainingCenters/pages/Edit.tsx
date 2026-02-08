@@ -4,8 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import PageWrapper from "@/design-system/components/PageWrapper";
-import { Form } from "@/design-system/components/form";
+import { PageWrapper,Form } from "@/design-system";
 import { useTrainingCenter, useUpdateTrainingCenter } from "../api";
 import { trainingCentersPaths } from "../navigation/paths";
 import { useMutationHandler } from "@/shared/api";
@@ -49,14 +48,17 @@ export default function TrainingCentersEditPage() {
     }, [data, reset]);
 
     const onSubmit = async (form: FormData) => {
-        await execute(() => updateMutation.mutateAsync({ id: id!, data: form }), {
-            successMessage: t(
-                "messages.updateSuccess",
-                "Training center updated successfully"
-            ),
-            setError,
-            onSuccess: () => navigate(trainingCentersPaths.view(id!)),
-        });
+        await execute(
+            () => updateMutation.mutateAsync({ id: id!, data: form }),
+            {
+                successMessage: t(
+                    "messages.updateSuccess",
+                    "Training center updated successfully"
+                ),
+                setError,
+                onSuccess: () => navigate(trainingCentersPaths.view(id!)),
+            }
+        );
     };
 
     return (
@@ -110,7 +112,9 @@ export default function TrainingCentersEditPage() {
                             </button>
                             <button
                                 type="button"
-                                onClick={() => navigate(trainingCentersPaths.list)}
+                                onClick={() =>
+                                    navigate(trainingCentersPaths.list)
+                                }
                                 className="inline-flex items-center gap-2 px-6 py-3 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800"
                             >
                                 {t("actions.cancel", "Cancel")}

@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { TeamStatsRow, BlocksList } from "../components";
 import { useTeamStructureData } from "../api";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 import { Edit } from "lucide-react";
 import { teamStructure } from "../navigation/paths";
 

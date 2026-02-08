@@ -17,10 +17,12 @@ import {
     Pencil,
     Trash2,
 } from "lucide-react";
-import PageWrapper from "@/design-system/components/PageWrapper";
-import { EmptyState } from "@/design-system/components/EmptyState";
-import { LoadingState } from "@/design-system/components/LoadingState";
-import { ConfirmDialog } from "@/design-system/components/ConfirmDialog";
+import {
+    PageWrapper,
+    EmptyState,
+    LoadingState,
+    ConfirmDialog,
+} from "@/design-system";
 import { useFolder } from "../api/folders";
 import { useResourcesList, useDeleteResource } from "../api/resources";
 import { ResourcePreviewModal } from "../components/ResourcePreviewModal";

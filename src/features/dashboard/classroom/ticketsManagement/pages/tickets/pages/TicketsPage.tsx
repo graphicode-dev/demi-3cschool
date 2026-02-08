@@ -25,7 +25,7 @@ import type {
     TicketStatus,
     TicketPriority,
 } from "../types";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 
 export function TicketsPage() {
     const { t } = useTranslation("ticketsManagement");

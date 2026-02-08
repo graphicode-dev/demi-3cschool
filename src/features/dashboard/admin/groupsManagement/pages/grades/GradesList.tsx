@@ -7,8 +7,7 @@
  */
 
 import { useTranslation } from "react-i18next";
-import PageWrapper from "@/design-system/components/PageWrapper";
-import { LoadingState, ErrorState } from "@/design-system";
+import { PageWrapper, LoadingState, ErrorState } from "@/design-system";
 import { useGrades } from "@/features/dashboard/admin/systemManagements/api/systemManagement.queries";
 import {
     NavigationCard,

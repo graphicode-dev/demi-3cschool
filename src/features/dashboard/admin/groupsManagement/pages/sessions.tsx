@@ -10,8 +10,13 @@ import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { Search, Info, Plus } from "lucide-react";
-import PageWrapper from "@/design-system/components/PageWrapper";
-import { LoadingState, ErrorState, ConfirmDialog } from "@/design-system";
+import {
+    PageWrapper,
+    LoadingState,
+    ErrorState,
+    ConfirmDialog,
+    useToast,
+} from "@/design-system";
 import { useSessionsListQuery } from "../api/sessions/sessions.queries";
 import { useGroup } from "../api";
 import { useLessonsByLevel } from "@/features/dashboard/admin/learning/pages/lessons/api";
@@ -29,7 +34,6 @@ import {
     useDeleteSession,
 } from "../api/sessions/sessions.mutations";
 import { useMutationHandler } from "@/shared/api";
-import { useToast } from "@/shared/hooks";
 
 interface SessionWithStatus extends Omit<GroupSession, "status"> {
     sessionNumber: number;

@@ -16,7 +16,7 @@ import {
     HighWorkloadAlert,
 } from "../components";
 import { useDistributionData } from "../api";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 
 export function DistributionPage() {
     const { t } = useTranslation("ticketsManagement");

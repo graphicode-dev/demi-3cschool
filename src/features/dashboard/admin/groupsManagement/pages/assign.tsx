@@ -2,13 +2,12 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { Search, Filter } from "lucide-react";
-import { ErrorState, LoadingState } from "@/design-system";
+import { ErrorState, LoadingState, PageWrapper } from "@/design-system";
 import { StudentSelectCard } from "../components";
 import {
     useAssignStudentMutation,
     useGetGroupStudentsQuery,
 } from "../api/assignStudent";
-import PageWrapper from "@/design-system/components/PageWrapper";
 import { useMutationHandler } from "@/shared/api";
 
 const MOCK_COURSES = [

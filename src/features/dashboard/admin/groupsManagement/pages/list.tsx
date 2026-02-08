@@ -2,14 +2,14 @@ import { useMemo, useState, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
+    PageWrapper,
     DynamicTable,
     useServerTableSearch,
-} from "@/design-system/components/table";
+} from "@/design-system";
 import type { TableColumn, TableData } from "@/shared/types";
 import { StatCard } from "../components";
 import { GroupCard } from "../components/GroupCard";
 import { useGroupsByLevel, type Group, type PaginatedData } from "../api";
-import PageWrapper from "@/design-system/components/PageWrapper";
 
 const TotalGroupsIcon = () => (
     <svg

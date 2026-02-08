@@ -8,23 +8,19 @@
 import { useState, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { Monitor, MapPin, Star, Loader2 } from "lucide-react";
-import PageWrapper from "@/design-system/components/PageWrapper";
-import { useToast } from "@/design-system/hooks/useToast";
+import { PageWrapper, useToast } from "@/design-system";
 import {
     GroupCard,
     EnrolledGroupCard,
     ConfirmEnrollmentModal,
     UnlockOfflineSection,
     FilterGroups,
-    type Term,
-    type TermStatus,
 } from "../components";
 import {
     useOnlineGroupsQuery,
     useOfflineGroupsQuery,
     useEnrollMutation,
 } from "../api";
-import { useProgramsCurriculumList } from "@/features/dashboard/admin/programs/api";
 import type {
     EnrollmentGroup,
     DayOfWeek,

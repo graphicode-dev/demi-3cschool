@@ -7,12 +7,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { MoreVertical, Pencil, Trash2, FileText, File } from "lucide-react";
+import { MoreVertical, Pencil, Trash2, File } from "lucide-react";
 import type { ResourceFolder } from "../types";
-import { ConfirmDialog } from "@/design-system/components/ConfirmDialog";
-import ActionsDropdown, {
+import {
+    ActionsDropdown,
     DropdownAction,
-} from "@/design-system/components/ActionsDropdown";
+    ConfirmDialog,
+} from "@/design-system";
 import { useDeleteFolder } from "../api";
 
 interface FolderCardProps {

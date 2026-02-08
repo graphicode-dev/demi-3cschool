@@ -7,17 +7,14 @@
 
 import { useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { LoadingState, ErrorState } from "@/design-system";
-import { Form } from "@/design-system/components/form";
+import { PageWrapper, Form, LoadingState, ErrorState } from "@/design-system";
 import { learningPaths } from "@/features/dashboard/admin/learning/navigation/paths";
-import { ProgramsCurriculum } from "@/features/dashboard/admin/learning/types";
 import { useLevel, useUpdateLevel } from "../api";
 import { useCoursesByProgram } from "../../courses";
-import PageWrapper from "@/design-system/components/PageWrapper";
 import { useMutationHandler } from "@/shared/api";
 import { useCurriculumType } from "../../../hooks";
 

@@ -8,11 +8,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { resourcesApi } from "./resources.api";
 import { resourceKeys } from "./resources.keys";
 import { folderKeys } from "../folders/folders.keys";
-import { useToast } from "@/design-system/hooks/useToast";
-import type {
-    ResourceCreatePayload,
-    ResourceUpdatePayload,
-} from "../../types";
+import { useToast } from "@/design-system";
+import type { ResourceCreatePayload, ResourceUpdatePayload } from "../../types";
 
 /**
  * Hook to create a new resource

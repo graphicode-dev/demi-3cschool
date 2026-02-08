@@ -9,8 +9,7 @@
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import PageWrapper from "@/design-system/components/PageWrapper";
-import { LoadingState, ErrorState } from "@/design-system";
+import { PageWrapper, LoadingState, ErrorState } from "@/design-system";
 import { useLevelsByGrade } from "../../levels";
 import { NavigationCard, CardGrid } from "../components";
 

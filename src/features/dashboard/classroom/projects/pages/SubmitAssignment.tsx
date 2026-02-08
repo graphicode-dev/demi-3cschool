@@ -11,7 +11,7 @@ import {
     Image as ImageIcon,
     Loader2,
 } from "lucide-react";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 import {
     useLessonAssignment,
     useCreateLessonAssignment,

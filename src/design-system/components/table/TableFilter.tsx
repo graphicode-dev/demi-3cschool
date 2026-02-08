@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { TableColumn } from "@/shared/types";
-import { CheckBox } from "@/shared/components/ui/CheckBox";
+import { CheckBox } from "@/design-system";
 
 export interface GroupableColumn {
     id: string;

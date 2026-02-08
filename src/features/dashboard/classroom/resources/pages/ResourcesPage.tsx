@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import { SessionCard } from "../components";
 import { resourcesPaths } from "../navigation/paths";
 import type { Session } from "../types";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 import { useFoldersList } from "@/features/dashboard/admin/resources/api";
 
 export function ResourcesPage() {

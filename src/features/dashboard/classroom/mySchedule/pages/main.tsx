@@ -4,7 +4,7 @@ import { Monitor, Building2 } from "lucide-react";
 import { ScheduleCalendar } from "../components";
 import type { MyAllSession, ScheduleSession } from "../types";
 import { useMyAllSessions } from "../api";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 
 type FilterType = "all" | "online" | "offline";
 

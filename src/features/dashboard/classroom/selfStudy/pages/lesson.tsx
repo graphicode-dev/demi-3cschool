@@ -2,8 +2,7 @@ import { useState, useCallback, useMemo, useEffect, useRef, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useSearchParams } from "react-router-dom";
 import { FileQuestion, Loader2 } from "lucide-react";
-import PageWrapper from "@/design-system/components/PageWrapper";
-import { ConfirmDialog } from "@/design-system";
+import { PageWrapper, ConfirmDialog } from "@/design-system";
 import { api } from "@/shared/api/client";
 import { useDynamicBreadcrumb } from "@/navigation";
 import {

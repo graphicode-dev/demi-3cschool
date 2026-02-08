@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 import { ManagementView } from "../components";
 import { useMutationHandler } from "@/shared/api";
 import type { Post, Channel, CommunityUser } from "../types";

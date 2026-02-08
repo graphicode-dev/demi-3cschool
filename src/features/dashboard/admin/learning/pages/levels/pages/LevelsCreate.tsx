@@ -6,16 +6,14 @@
  */
 
 import { useTranslation } from "react-i18next";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Form } from "@/design-system/components/form";
+import { PageWrapper, Form } from "@/design-system";
 import { learningPaths } from "@/features/dashboard/admin/learning/navigation/paths";
-import { ProgramsCurriculum } from "@/features/dashboard/admin/learning/types";
 import { useCreateLevel } from "../api";
 import { useCoursesByProgram } from "../../courses";
-import PageWrapper from "@/design-system/components/PageWrapper";
 import { useMutationHandler } from "@/shared/api";
 import { useCurriculumType } from "../../../hooks";
 

@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import PageWrapper from "@/design-system/components/PageWrapper";
-import { Form } from "@/design-system/components/form";
+import { PageWrapper, Form } from "@/design-system";
 import { useCreateTrainingCenter } from "../api";
 import { trainingCentersPaths } from "../navigation/paths";
 import { useMutationHandler } from "@/shared/api";
@@ -43,7 +42,8 @@ export default function TrainingCentersCreatePage() {
                 "Training center created successfully"
             ),
             setError,
-            onSuccess: (created) => navigate(trainingCentersPaths.view(created.id)),
+            onSuccess: (created) =>
+                navigate(trainingCentersPaths.view(created.id)),
         });
     };
 
@@ -54,12 +54,19 @@ export default function TrainingCentersCreatePage() {
                 backButton: true,
             }}
         >
-            <Form control={control} errors={errors} onSubmit={handleSubmit(onSubmit)}>
+            <Form
+                control={control}
+                errors={errors}
+                onSubmit={handleSubmit(onSubmit)}
+            >
                 <div className="space-y-6">
                     <Form.Input
                         name="name"
                         type={{ type: "text" }}
-                        label={{ text: t("fields.name", "Name"), required: true }}
+                        label={{
+                            text: t("fields.name", "Name"),
+                            required: true,
+                        }}
                         style={{ size: "md" }}
                     />
 

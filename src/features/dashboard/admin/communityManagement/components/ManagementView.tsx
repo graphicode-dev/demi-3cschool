@@ -23,9 +23,9 @@ import {
     Filter,
     LayoutList,
 } from "lucide-react";
-import { ConfirmDialog } from "@/design-system/components/ConfirmDialog";
+import { ConfirmDialog } from "@/design-system";
 import type { Post, Channel, CommunityUser, PostReport } from "../types";
-import { MOCK_USERS, CURRENT_USER } from "../mocks";
+import { MOCK_USERS } from "../mocks";
 import { PostCard } from "./PostCard";
 
 interface ManagementViewProps {

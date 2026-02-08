@@ -7,7 +7,7 @@ import {
     LineChart,
     TrackCard,
 } from "../components";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 import { useGrades } from "@/features/dashboard/admin/systemManagements/api";
 
 const TotalGroupsIcon = () => (

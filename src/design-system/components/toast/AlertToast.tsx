@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useToast } from "@/design-system/hooks/useToast";
+import { useToast } from "@/design-system";
 import { AlertTriangle, X } from "lucide-react";
 
 interface AlertToastProps {

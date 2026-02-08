@@ -17,8 +17,7 @@ import {
     UserCheck,
     Calendar,
 } from "lucide-react";
-import PageWrapper from "@/design-system/components/PageWrapper";
-import { ConfirmDialog } from "@/design-system/components/ConfirmDialog";
+import { PageWrapper, ConfirmDialog } from "@/design-system";
 import type { ReportStatus } from "../types";
 
 type PerformanceRating =

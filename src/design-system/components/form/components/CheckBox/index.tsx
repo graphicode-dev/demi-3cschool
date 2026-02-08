@@ -3,7 +3,7 @@ import { CheckBoxProps } from "./types";
 import { cn } from "../../utils/cn";
 import { Check } from "lucide-react";
 
-export const CheckBox = ({
+export const FormCheckBox = ({
     checked,
     onChange,
     label,

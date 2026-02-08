@@ -15,7 +15,7 @@ import {
     Loader2,
     Trash2,
 } from "lucide-react";
-import { ConfirmDialog } from "@/design-system/components/ConfirmDialog";
+import { ConfirmDialog } from "@/design-system";
 import {
     useCreateLessonMaterial,
     useDeleteLessonMaterial,

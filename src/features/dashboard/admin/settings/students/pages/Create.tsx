@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import PageWrapper from "@/design-system/components/PageWrapper";
-import { Form } from "@/design-system/components/form";
+import { PageWrapper, Form } from "@/design-system";
 import { useCreateStudent } from "../api";
 import { studentsPaths } from "../navigation/paths";
 import { useMutationHandler } from "@/shared/api";
@@ -52,7 +51,8 @@ export default function StudentsCreatePage() {
                     "Student created successfully"
                 ),
                 setError,
-                onSuccess: (created) => navigate(studentsPaths.view(created.id)),
+                onSuccess: (created) =>
+                    navigate(studentsPaths.view(created.id)),
             }
         );
     };

@@ -12,7 +12,7 @@ import {
     Loader2,
 } from "lucide-react";
 import type { FinalExam } from "../types";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 
 interface PreExamProps {
     exam: FinalExam;

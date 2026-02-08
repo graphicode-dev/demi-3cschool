@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Form } from "@/design-system/components/form";
+import { Form } from "@/design-system";
 import { AuthSteps, CommonFormProps } from "@/auth/auth.types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";

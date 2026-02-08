@@ -1,9 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Lead } from "../types";
 import { Crown, MoreHorizontal } from "lucide-react";
-import ActionsDropdown, {
-    DropdownAction,
-} from "@/design-system/components/ActionsDropdown";
+import { ActionsDropdown, DropdownAction } from "@/design-system";
 
 interface LeadCardProps {
     lead: Lead;

@@ -9,9 +9,7 @@ import React, { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { History, Check, X } from "lucide-react";
-import PageWrapper from "@/design-system/components/PageWrapper";
-import { DynamicTable } from "@/design-system/components/table";
-import { ConfirmDialog } from "@/design-system/components/ConfirmDialog";
+import { PageWrapper, DynamicTable } from "@/design-system";
 import type { TableColumn, TableData } from "@/shared/types/table.types";
 import type { AttendanceStatus } from "../types/attendance.types";
 import {

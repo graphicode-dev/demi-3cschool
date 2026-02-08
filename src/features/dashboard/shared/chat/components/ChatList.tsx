@@ -3,8 +3,7 @@ import { useState } from "react";
 import type { ConversationListItem } from "../types";
 import ChatListItem from "./ChatListItem";
 import { MoreDotIcon } from "../icons";
-import { Dropdown } from "@/shared/components/ui/dropdown/Dropdown";
-import { DropdownItem } from "@/shared/components/ui/dropdown/DropdownItem";
+import { Dropdown, DropdownItem } from "@/design-system";
 
 interface ChatListProps {
     isOpen: boolean;

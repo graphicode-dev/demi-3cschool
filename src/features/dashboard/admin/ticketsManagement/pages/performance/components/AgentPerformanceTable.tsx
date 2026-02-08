@@ -6,7 +6,7 @@
 
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { DynamicTable } from "@/design-system/components/table";
+import { DynamicTable } from "@/design-system";
 import type { TableData, TableColumn } from "@/shared/types";
 import type { AgentPerformanceRow, RatingLevel } from "../types";
 

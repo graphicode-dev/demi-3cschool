@@ -8,7 +8,12 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { LoadingState, ErrorState, ConfirmDialog } from "@/design-system";
+import {
+    PageWrapper,
+    LoadingState,
+    ErrorState,
+    ConfirmDialog,
+} from "@/design-system";
 import { AlertTriangle, Plus } from "lucide-react";
 import type {
     LessonQuiz,
@@ -41,7 +46,6 @@ import {
     useLessonQuizOptionsByQuestion,
 } from "../api/lesson quiz options";
 import { useLesson } from "../api";
-import PageWrapper from "@/design-system/components/PageWrapper";
 import { useMutationHandler } from "@/shared/api";
 
 const DEFAULT_NEW_QUIZ: Omit<NewLessonQuizData, "lessonId"> = {

@@ -15,7 +15,7 @@ import {
     QuickNavigation,
 } from "../components";
 import { useOverviewData } from "../api";
-import PageWrapper from "@/design-system/components/PageWrapper";
+import { PageWrapper } from "@/design-system";
 
 export function OverviewPage() {
     const { t } = useTranslation("ticketsManagement");

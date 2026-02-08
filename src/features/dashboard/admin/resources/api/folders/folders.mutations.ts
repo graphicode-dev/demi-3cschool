@@ -7,7 +7,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { foldersApi } from "./folders.api";
 import { folderKeys } from "./folders.keys";
-import { useToast } from "@/design-system/hooks/useToast";
+import { useToast } from "@/design-system";
 import type { FolderCreatePayload, FolderUpdatePayload } from "../../types";
 import { useTranslation } from "react-i18next";
 

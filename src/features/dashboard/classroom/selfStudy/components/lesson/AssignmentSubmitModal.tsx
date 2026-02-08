@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { X, Send, Loader2 } from "lucide-react";
-import { FileInput } from "@/design-system/components/form";
+import { FileInput } from "@/design-system";
 import { useCreateLessonAssignment } from "@/features/dashboard/admin/learning/pages/lessons/api";
 import type { LessonAssignment } from "@/features/dashboard/admin/learning/pages/lessons/types/lesson-assignments.types";
 
@@ -90,7 +90,10 @@ export function AssignmentSubmitModal({
                 <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
                     <div>
                         <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                            {t("lesson.assignments.submitTitle", "Submit Assignment")}
+                            {t(
+                                "lesson.assignments.submitTitle",
+                                "Submit Assignment"
+                            )}
                         </h2>
                         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                             {assignment.title}
@@ -114,7 +117,10 @@ export function AssignmentSubmitModal({
                             htmlFor="submission-title"
                             className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
                         >
-                            {t("lesson.assignments.submissionTitle", "Submission Title")}
+                            {t(
+                                "lesson.assignments.submissionTitle",
+                                "Submission Title"
+                            )}
                         </label>
                         <input
                             id="submission-title"

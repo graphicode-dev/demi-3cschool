@@ -29,7 +29,7 @@ export interface DropdownProps {
     alignment?: "left" | "right" | "center";
 }
 
-const ActionsDropdown: React.FC<DropdownProps> = ({
+export const ActionsDropdown: React.FC<DropdownProps> = ({
     itemId,
     actions,
     triggerIcon,
@@ -173,4 +173,3 @@ const ActionsDropdown: React.FC<DropdownProps> = ({
     );
 };
 
-export default ActionsDropdown;

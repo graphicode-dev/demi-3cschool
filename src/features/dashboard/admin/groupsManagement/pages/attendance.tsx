@@ -7,16 +7,14 @@
 
 import React, { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { EmptyState } from "@/design-system/components/EmptyState";
+import { PageWrapper, EmptyState, DynamicTable } from "@/design-system";
 import { AttendanceSummaryCards } from "../components/AttendanceSummaryCards";
 import { CurrentSessionDetails } from "../components/CurrentSessionDetails";
-import { DynamicTable } from "@/design-system/components/table";
 import type { TableColumn, TableData } from "@/shared/types/table.types";
 import type {
     AttendanceSummary,
     CurrentSession,
 } from "../types/attendance.types";
-import PageWrapper from "@/design-system/components/PageWrapper";
 import { useTranslation } from "react-i18next";
 import {
     useStudentAttendanceQuery,
