@@ -1,0 +1,19 @@
+{
+    "sitemap": {
+        "title": "الإعدادات",
+        "description": "تكوين إعدادات النظام والتفضيلات",
+        "routes": {
+            "slots": "الفترات الزمنية",
+            "slotsDesc": "إدارة الفترات الزمنية المتاحة",
+            "trainingCenters": "مراكز التدريب",
+            "trainingCentersDesc": "إدارة مواقع مراكز التدريب",
+            "teachers": "المعلمون",
+            "teachersDesc": "إدارة حسابات المعلمين",
+            "students": "الطلاب",
+            "studentsDesc": "إدارة حسابات الطلاب"
+        }
+    },
+    "breadcrumb": {
+        "settings": "الإعدادات"
+    }
+}

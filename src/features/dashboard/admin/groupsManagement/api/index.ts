@@ -40,8 +40,6 @@ export type {
     GroupRecommendationsData,
     RecommendationFeatureScores,
     RecommendationWeights,
-    PaginatedResponse,
-    PaginatedData,
     ListResponse,
 } from "../types/groups.types";
 
@@ -78,7 +76,6 @@ export {
     type AttendanceQueryKey,
 } from "./attendance/attendance.keys";
 
-
 // API Functions
 export { groupsApi } from "./groups.api";
 export { sessionsApi } from "./sessions/sessions.api";
@@ -95,7 +92,6 @@ export {
     useGroupRecommendations,
     useGroupsByLevel,
 } from "./groups.queries";
-
 
 export {
     useSessionsMetadataQuery,
@@ -145,6 +141,6 @@ export {
     useUpdateStudentAttendanceMutation,
 } from "./attendance/attendance.mutations";
 
-export * from "./quiz options"
-export * from "./quiz questions"
-export * from "./quizzes"
+export * from "./quiz options";
+export * from "./quiz questions";
+export * from "./quizzes";

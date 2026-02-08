@@ -112,5 +112,29 @@
         "title": "Resource Preview",
         "uploaded": "Uploaded:",
         "videoPreview": "Video Preview:"
+    },
+    "sitemap": {
+        "folder": {
+            "title": "Folder Navigation",
+            "description": "Select a folder action or navigate to available pages"
+        },
+        "resource": {
+            "title": "Resource Navigation",
+            "description": "Select a resource action or navigate to available pages"
+        },
+        "routes": {
+            "resourcesList": "Resources List",
+            "resourcesListDesc": "View all resource folders",
+            "folderDetails": "Folder Details",
+            "folderDetailsDesc": "View resources in this folder",
+            "createFolder": "Create Folder",
+            "createFolderDesc": "Create a new resource folder",
+            "editFolder": "Edit Folder",
+            "editFolderDesc": "Edit folder information",
+            "addResource": "Add Resource",
+            "addResourceDesc": "Add a new resource to this folder",
+            "editResource": "Edit Resource",
+            "editResourceDesc": "Edit resource information"
+        }
     }
 }

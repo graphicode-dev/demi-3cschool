@@ -17,7 +17,7 @@
  * ```
  */
 
-import { LessonQuizzesListParams } from "../../types";
+import { ListQueryParams } from "@/shared/api";
 
 /**
  * Query key factory for lesson quizzes
@@ -50,7 +50,7 @@ export const lessonQuizKeys = {
     /**
      * Key for specific list with params
      */
-    list: (params?: LessonQuizzesListParams) =>
+    list: (params?: ListQueryParams) =>
         params
             ? ([...lessonQuizKeys.lists(), params] as const)
             : lessonQuizKeys.lists(),

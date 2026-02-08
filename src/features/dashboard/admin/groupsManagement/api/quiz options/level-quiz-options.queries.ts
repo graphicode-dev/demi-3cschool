@@ -29,7 +29,7 @@ import {
     LevelQuizOptionsListParams,
     LevelQuizOptionsMetadata,
 } from "../../types/level-quiz-options.types";
-import { PaginatedData } from "../../../learning/pages/levels";
+import { PaginatedData } from "@/shared/api";
 
 // ============================================================================
 // Metadata Query

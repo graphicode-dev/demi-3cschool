@@ -5,7 +5,6 @@
 // Types
 export type {
     TeacherRoleRef,
-    TeachersListParams,
     TeacherCreatePayload,
     TeacherUpdatePayload,
 } from "./types";

@@ -8,11 +8,6 @@ export interface TeacherRoleRef {
     caption: string;
 }
 
-export interface TeachersListParams {
-    page?: number;
-    search?: string;
-}
-
 export interface TeacherCreatePayload {
     name: string;
     email: string;

@@ -102,13 +102,3 @@ export interface StudentAttendanceItem {
 export interface StudentAttendancePayload {
     attendances: StudentAttendanceItem[];
 }
-
-// ============================================================================
-// API Response Types
-// ============================================================================
-
-export interface AttendanceApiResponse<T> {
-    success: boolean;
-    message: string;
-    data: T;
-}

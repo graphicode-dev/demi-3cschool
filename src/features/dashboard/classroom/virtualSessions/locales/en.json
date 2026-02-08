@@ -47,5 +47,15 @@
         "watchLessonVideos": "Watch Lesson Videos",
         "goToLessonVideos": "Go To The Lesson Videos In",
         "selfStudyContent": "Self Study Content"
+    },
+    "sitemap": {
+        "recording": {
+            "title": "Recording Navigation",
+            "description": "Select a session recording to view"
+        },
+        "routes": {
+            "sessionsList": "Virtual Sessions",
+            "sessionsListDesc": "View all virtual sessions"
+        }
     }
 }

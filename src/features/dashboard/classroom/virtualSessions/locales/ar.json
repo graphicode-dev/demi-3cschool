@@ -47,5 +47,15 @@
         "watchLessonVideos": "شاهد فيديوهات الدروس",
         "goToLessonVideos": "اذهب إلى فيديوهات الدروس في",
         "selfStudyContent": "محتوى الدراسة الذاتية"
+    },
+    "sitemap": {
+        "recording": {
+            "title": "التنقل في التسجيل",
+            "description": "اختر تسجيل جلسة للمشاهدة"
+        },
+        "routes": {
+            "sessionsList": "الجلسات الافتراضية",
+            "sessionsListDesc": "عرض جميع الجلسات الافتراضية"
+        }
     }
 }

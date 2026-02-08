@@ -7,14 +7,13 @@
  */
 
 import { api } from "@/shared/api/client";
-import { ApiResponse, PaginatedData } from "@/shared/api";
+import { ApiResponse, PaginatedData, PaginationMeta } from "@/shared/api";
 import {
     LessonVideoQuiz,
     LessonVideoQuizCreatePayload,
     LessonVideoQuizUpdatePayload,
     LessonVideoQuizzesListParams,
     LessonVideoQuizzesMetadata,
-    LessonVideoQuizzesPaginatedResponse,
 } from "../../types";
 
 const BASE_URL = "/lesson-video-quizzes";
@@ -51,7 +50,7 @@ export const lessonVideoQuizzesApi = {
     getList: async (
         params?: LessonVideoQuizzesListParams,
         signal?: AbortSignal
-    ): Promise<LessonVideoQuizzesPaginatedResponse> => {
+    ): Promise<{ data: LessonVideoQuiz[]; pagination: PaginationMeta }> => {
         // Convert params to snake_case for API
         const apiParams: Record<string, unknown> = {};
         if (params?.page) apiParams.page = params.page;

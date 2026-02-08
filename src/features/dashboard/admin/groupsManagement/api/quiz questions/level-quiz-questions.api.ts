@@ -24,7 +24,7 @@ import {
     LevelQuizQuestionsMetadata,
     LevelQuizQuestionUpdatePayload,
 } from "../../types/level-quiz-questions.types";
-import { PaginatedData } from "../../../learning/pages/levels";
+import { PaginatedData } from "@/shared/api";
 
 const BASE_URL = "/level-quiz-questions";
 

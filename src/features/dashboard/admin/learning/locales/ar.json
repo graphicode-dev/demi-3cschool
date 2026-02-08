@@ -249,6 +249,56 @@
         "empty": {
             "title": "لم يتم تحديد محتوى",
             "description": "اختر عنصر محتوى من القائمة أو أضف محتوى جديد للبدء"
+        },
+        "quiz": {
+            "title": "اختبار الدرس"
         }
+    },
+    "levels": {
+        "title": "المستويات",
+        "quiz": {
+            "title": "اختبار المستوى"
+        }
+    },
+    "sitemap": {
+        "grade": {
+            "title": "التنقل في الصف",
+            "description": "اختر صفحة للانتقال إليها ضمن هذا الصف"
+        },
+        "level": {
+            "title": "التنقل في المستوى",
+            "description": "اختر صفحة للانتقال إليها ضمن هذا المستوى"
+        },
+        "lesson": {
+            "title": "التنقل في الدرس",
+            "description": "اختر إجراء للدرس أو انتقل إلى الصفحات المتاحة",
+            "editTitle": "تعديل الدرس",
+            "editDescription": "اختر درساً للتعديل من قائمة الدروس",
+            "viewTitle": "عرض الدرس",
+            "viewDescription": "اختر درساً للعرض من قائمة الدروس",
+            "quizTitle": "اختبار الدرس",
+            "quizDescription": "اختر اختبار درس من قائمة الدروس"
+        },
+        "routes": {
+            "gradesList": "قائمة الصفوف",
+            "gradesListDesc": "عرض جميع الصفوف المتاحة",
+            "levelsList": "قائمة المستويات",
+            "levelsListDesc": "عرض جميع المستويات لهذا الصف",
+            "lessonsList": "قائمة الدروس",
+            "lessonsListDesc": "عرض جميع الدروس لهذا المستوى",
+            "createLesson": "إنشاء درس",
+            "createLessonDesc": "إنشاء درس جديد",
+            "editLesson": "تعديل الدرس",
+            "editLessonDesc": "تعديل تفاصيل الدرس",
+            "viewLesson": "عرض الدرس",
+            "viewLessonDesc": "عرض تفاصيل الدرس",
+            "levelQuiz": "اختبار المستوى",
+            "levelQuizDesc": "إدارة اختبار المستوى"
+        }
+    },
+    "breadcrumb": {
+        "grade": "الصف",
+        "level": "المستوى",
+        "lessons": "الدروس"
     }
 }

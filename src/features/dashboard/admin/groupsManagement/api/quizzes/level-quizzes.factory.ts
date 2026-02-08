@@ -20,7 +20,11 @@ import {
     createQueryKeys,
 } from "@/shared/api/crud";
 import { LevelQuiz } from "../../types";
-import { LevelQuizCreatePayload, LevelQuizUpdatePayload, LevelQuizzesListParams } from "../../types/level-quizzes.types";
+import {
+    LevelQuizCreatePayload,
+    LevelQuizUpdatePayload,
+} from "../../types/level-quizzes.types";
+import { ListQueryParams } from "@/shared/api";
 
 // ============================================================================
 // Query Keys (using factory)
@@ -44,7 +48,7 @@ export const levelQuizzesApiFactory = createCrudApi<
     LevelQuiz,
     LevelQuizCreatePayload,
     LevelQuizUpdatePayload,
-    LevelQuizzesListParams
+    ListQueryParams
 >({
     baseUrl: "/level-quizzes",
     useFormData: false,

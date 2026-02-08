@@ -9,7 +9,8 @@ import {
 import type { TableColumn, TableData } from "@/shared/types";
 import { StatCard } from "../components";
 import { GroupCard } from "../components/GroupCard";
-import { useGroupsByLevel, type Group, type PaginatedData } from "../api";
+import { useGroupsByLevel, type Group } from "../api";
+import { PaginatedData } from "@/shared/api";
 
 const TotalGroupsIcon = () => (
     <svg

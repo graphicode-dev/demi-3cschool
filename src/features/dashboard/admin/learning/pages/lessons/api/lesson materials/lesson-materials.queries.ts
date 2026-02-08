@@ -17,11 +17,8 @@
 import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
 import { lessonMaterialKeys } from "./lesson-materials.keys";
 import { lessonMaterialsApi } from "./lesson-materials.api";
-import {
-    LessonMaterial,
-    LessonMaterialsListParams,
-    PaginatedData,
-} from "../../types";
+import { LessonMaterial, LessonMaterialsListParams } from "../../types";
+import { PaginatedData } from "@/shared/api";
 
 // ============================================================================
 // List Queries

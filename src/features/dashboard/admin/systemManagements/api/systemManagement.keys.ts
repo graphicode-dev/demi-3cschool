@@ -17,7 +17,7 @@
  * ```
  */
 
-import type { StudentListParams } from "../types";
+import type { ListQueryParams } from "@/shared/api";
 
 /**
  * Query key factory for students
@@ -43,7 +43,7 @@ export const studentKeys = {
     /**
      * Key for specific list with params
      */
-    list: (params?: StudentListParams) =>
+    list: (params?: ListQueryParams) =>
         params
             ? ([...studentKeys.lists(), params] as const)
             : studentKeys.lists(),

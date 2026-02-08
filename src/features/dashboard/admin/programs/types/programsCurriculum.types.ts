@@ -73,50 +73,6 @@ export interface ProgramsCurriculumMetadata {
     fieldTypes: ProgramCurriculumFieldTypes;
 }
 
-// ============================================================================
-// API Response Types
-// ============================================================================
-
-/**
- * Paginated data structure
- */
-export interface ProgramCurriculumPaginatedData<T> {
-    perPage: number;
-    currentPage: number;
-    lastPage: number;
-    nextPageUrl: string | null;
-    items: T[];
-}
-
-/**
- * Paginated response wrapper
- */
-export interface ProgramCurriculumPaginatedResponse<T> {
-    success: boolean;
-    message: string;
-    data: ProgramCurriculumPaginatedData<T>;
-}
-
-// ============================================================================
-// Query Parameters
-// ============================================================================
-
-/**
- * List query parameters for programs curriculum
- */
-export interface ProgramsCurriculumListParams {
-    page?: number;
-    pageSize?: number;
-    search?: string;
-    sortBy?: string;
-    sortOrder?: "asc" | "desc";
-    [key: string]: unknown;
-}
-
-// ============================================================================
-// Payload Types
-// ============================================================================
-
 /**
  * Create programs curriculum payload
  */

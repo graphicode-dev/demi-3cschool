@@ -18,14 +18,7 @@
  */
 
 // Types - Student
-export type {
-    Student,
-    StudentRole,
-    UserInformation,
-    StudentListParams,
-    PaginatedStudentData,
-    StudentListResponse,
-} from "../types";
+export type { Student, StudentRole, UserInformation } from "../types";
 
 // Types - Grade
 export type { Grade, GradesResponse } from "../types";

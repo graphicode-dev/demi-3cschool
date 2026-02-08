@@ -17,12 +17,9 @@
 // Types
 export type {
     ProgramCurriculum,
-    ProgramsCurriculumListParams,
     ProgramCurriculumCreatePayload,
     ProgramCurriculumUpdatePayload,
     ProgramsCurriculumMetadata,
-    ProgramCurriculumPaginatedData,
-    ProgramCurriculumPaginatedResponse,
 } from "../types";
 
 // Query Keys

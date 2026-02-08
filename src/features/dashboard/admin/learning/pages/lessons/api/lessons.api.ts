@@ -24,10 +24,9 @@ import type {
     LessonCreatePayload,
     LessonUpdatePayload,
     LessonsMetadata,
-    GroupedResponse,
 } from "../types/lessons.types";
 import { ApiResponse } from "@/shared/api";
-import { PaginatedData, PaginatedResponse } from "../types";
+import { PaginatedData, PaginatedResponse } from "@/shared/api/types";
 
 const BASE_URL = "/lessons";
 
@@ -67,7 +66,7 @@ export const lessonsApi = {
         const { programs_curriculum, ...restParams } = params ?? {};
 
         const response = await api.get<
-            PaginatedResponse<Lesson> | GroupedResponse<LessonGroup>
+            PaginatedResponse<Lesson> | PaginatedResponse<LessonGroup>
         >(BASE_URL, {
             params: {
                 ...restParams,

@@ -237,5 +237,56 @@
     "common": {
         "back": "Back",
         "next": "Next"
+    },
+    "sitemap": {
+        "grade": {
+            "title": "Grade Navigation",
+            "description": "Select a page to navigate to within groups management"
+        },
+        "level": {
+            "title": "Level Navigation",
+            "description": "Select a page to navigate to within this level"
+        },
+        "group": {
+            "title": "Group Navigation",
+            "description": "Select a group action or navigate to available pages",
+            "viewTitle": "View Group",
+            "viewDescription": "Select a group to view from the groups list",
+            "editTitle": "Edit Group",
+            "editDescription": "Select a group to edit from the groups list",
+            "attendanceSessionTitle": "Session Attendance",
+            "attendanceSessionDescription": "Select a session to view attendance",
+            "teacherSessionTitle": "Teacher Session",
+            "teacherSessionDescription": "Select a session to manage teacher"
+        },
+        "routes": {
+            "gradesList": "Grades List",
+            "gradesListDesc": "View all available grades",
+            "levelsList": "Levels List",
+            "levelsListDesc": "View all levels for this grade",
+            "groupsList": "Groups List",
+            "groupsListDesc": "View all groups for this level",
+            "createGroup": "Create Group",
+            "createGroupDesc": "Create a new group",
+            "viewGroup": "View Group",
+            "viewGroupDesc": "View group details",
+            "editGroup": "Edit Group",
+            "editGroupDesc": "Edit group information",
+            "assignStudents": "Assign Students",
+            "assignStudentsDesc": "Assign students to this group",
+            "attendance": "Attendance",
+            "attendanceDesc": "Manage group attendance",
+            "instructor": "Instructor",
+            "instructorDesc": "Manage group instructor",
+            "sessions": "Sessions",
+            "sessionsDesc": "View group sessions",
+            "finalQuiz": "Final Quiz",
+            "finalQuizDesc": "Manage final level quiz"
+        }
+    },
+    "breadcrumb": {
+        "grade": "Grade",
+        "level": "Level",
+        "group": "Group"
     }
 }

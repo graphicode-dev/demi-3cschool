@@ -24,6 +24,21 @@ export const selfStudyRoutes: RouteConfig[] = [
         },
         // permissions: [lesson.viewAny],
     },
+    // Lesson SiteMap (placeholder for /self-study/lesson)
+    {
+        path: "self-study/lesson",
+        lazy: () =>
+            import("../pages/site_map/LessonSiteMap").then((m) => ({
+                default: m.default,
+            })),
+        meta: {
+            titleKey: "selfStudy:sitemap.lesson.title",
+            requiresAuth: true,
+        },
+        handle: {
+            crumb: "selfStudy:breadcrumb.lesson",
+        },
+    },
     {
         path: "self-study/lesson/:sessionId",
         lazy: () =>

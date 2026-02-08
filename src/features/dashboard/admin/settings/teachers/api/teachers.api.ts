@@ -1,17 +1,13 @@
 import { api } from "@/shared/api/client";
-import type { ApiResponse, PaginatedData } from "@/shared/api";
-import type {
-    TeachersListParams,
-    TeacherCreatePayload,
-    TeacherUpdatePayload,
-} from "../types";
+import type { ApiResponse, ListQueryParams, PaginatedData } from "@/shared/api";
+import type { TeacherCreatePayload, TeacherUpdatePayload } from "../types";
 import { User } from "@/auth/auth.types";
 
 const BASE_URL = "/system-managements/teachers";
 
 export const teachersApi = {
     list: async (
-        params?: TeachersListParams,
+        params?: ListQueryParams,
         signal?: AbortSignal
     ): Promise<PaginatedData<User>> => {
         const queryParams: Record<string, unknown> = {};

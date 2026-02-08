@@ -237,5 +237,56 @@
     "common": {
         "back": "رجوع",
         "next": "التالي"
+    },
+    "sitemap": {
+        "grade": {
+            "title": "التنقل في الصف",
+            "description": "اختر صفحة للانتقال إليها ضمن إدارة المجموعات"
+        },
+        "level": {
+            "title": "التنقل في المستوى",
+            "description": "اختر صفحة للانتقال إليها ضمن هذا المستوى"
+        },
+        "group": {
+            "title": "التنقل في المجموعة",
+            "description": "اختر إجراء للمجموعة أو انتقل إلى الصفحات المتاحة",
+            "viewTitle": "عرض المجموعة",
+            "viewDescription": "اختر مجموعة للعرض من قائمة المجموعات",
+            "editTitle": "تعديل المجموعة",
+            "editDescription": "اختر مجموعة للتعديل من قائمة المجموعات",
+            "attendanceSessionTitle": "حضور الجلسة",
+            "attendanceSessionDescription": "اختر جلسة لعرض الحضور",
+            "teacherSessionTitle": "جلسة المعلم",
+            "teacherSessionDescription": "اختر جلسة لإدارة المعلم"
+        },
+        "routes": {
+            "gradesList": "قائمة الصفوف",
+            "gradesListDesc": "عرض جميع الصفوف المتاحة",
+            "levelsList": "قائمة المستويات",
+            "levelsListDesc": "عرض جميع المستويات لهذا الصف",
+            "groupsList": "قائمة المجموعات",
+            "groupsListDesc": "عرض جميع المجموعات لهذا المستوى",
+            "createGroup": "إنشاء مجموعة",
+            "createGroupDesc": "إنشاء مجموعة جديدة",
+            "viewGroup": "عرض المجموعة",
+            "viewGroupDesc": "عرض تفاصيل المجموعة",
+            "editGroup": "تعديل المجموعة",
+            "editGroupDesc": "تعديل معلومات المجموعة",
+            "assignStudents": "تعيين الطلاب",
+            "assignStudentsDesc": "تعيين طلاب لهذه المجموعة",
+            "attendance": "الحضور",
+            "attendanceDesc": "إدارة حضور المجموعة",
+            "instructor": "المدرب",
+            "instructorDesc": "إدارة مدرب المجموعة",
+            "sessions": "الجلسات",
+            "sessionsDesc": "عرض جلسات المجموعة",
+            "finalQuiz": "الاختبار النهائي",
+            "finalQuizDesc": "إدارة اختبار المستوى النهائي"
+        }
+    },
+    "breadcrumb": {
+        "grade": "الصف",
+        "level": "المستوى",
+        "group": "المجموعة"
     }
 }

@@ -16,11 +16,9 @@
  */
 
 import { api } from "@/shared/api/client";
-import { ApiResponse, PaginatedData } from "@/shared/api";
+import { ApiResponse, PaginatedData, ListQueryParams } from "@/shared/api";
 import {
-    PaginatedStudentData,
     Student,
-    StudentListParams,
     Grade,
 } from "../types";
 
@@ -38,11 +36,11 @@ export const studentsApi = {
      * Get list of all students (paginated when page param is provided)
      */
     getList: async (
-        params?: StudentListParams,
+        params?: ListQueryParams,
         signal?: AbortSignal
-    ): Promise<Student[] | PaginatedStudentData> => {
+    ): Promise<Student[] | PaginatedData<Student>> => {
         const response = await api.get<
-            ApiResponse<Student[] | PaginatedStudentData>
+            ApiResponse<Student[] | PaginatedData<Student>>
         >(STUDENTS_BASE_URL, {
             params: params as Record<string, unknown>,
             signal,

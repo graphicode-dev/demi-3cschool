@@ -174,30 +174,6 @@ export interface GroupsMetadata {
     searchableColumns: string[];
 }
 
-// ============================================================================
-// API Response Types
-// ============================================================================
-
-/**
- * Paginated data structure
- */
-export interface PaginatedData<T> {
-    perPage: number;
-    currentPage: number;
-    lastPage: number;
-    nextPageUrl: string | null;
-    items: T[];
-}
-
-/**
- * Paginated response wrapper
- */
-export interface PaginatedResponse<T> {
-    success: boolean;
-    message: string;
-    data: PaginatedData<T>;
-}
-
 /**
  * List response wrapper (non-paginated)
  */

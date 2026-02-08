@@ -6,7 +6,13 @@
  */
 
 import { api } from "@/shared/api/client";
-import { AttendanceApiResponse, StudentAttendancePayload, StudentAttendanceRecord, TeacherAttendance, TeacherAttendancePayload } from "../../types";
+import {
+    StudentAttendancePayload,
+    StudentAttendanceRecord,
+    TeacherAttendance,
+    TeacherAttendancePayload,
+} from "../../types";
+import { ApiResponse } from "@/shared/api";
 
 const BASE_URL = "/group-sessions";
 
@@ -25,9 +31,10 @@ export const attendanceApi = {
         sessionId: string | number,
         signal?: AbortSignal
     ): Promise<TeacherAttendance[]> => {
-        const response = await api.get<
-            AttendanceApiResponse<TeacherAttendance[]>
-        >(`${BASE_URL}/${sessionId}/teacher-attendance`, { signal });
+        const response = await api.get<ApiResponse<TeacherAttendance[]>>(
+            `${BASE_URL}/${sessionId}/teacher-attendance`,
+            { signal }
+        );
 
         if (response.error) {
             throw response.error;
@@ -47,9 +54,10 @@ export const attendanceApi = {
         sessionId: string | number,
         payload: TeacherAttendancePayload
     ): Promise<TeacherAttendance> => {
-        const response = await api.put<
-            AttendanceApiResponse<TeacherAttendance>
-        >(`${BASE_URL}/${sessionId}/teacher-attendance`, payload);
+        const response = await api.put<ApiResponse<TeacherAttendance>>(
+            `${BASE_URL}/${sessionId}/teacher-attendance`,
+            payload
+        );
 
         if (response.error) {
             throw response.error;
@@ -73,9 +81,10 @@ export const attendanceApi = {
         sessionId: string | number,
         signal?: AbortSignal
     ): Promise<StudentAttendanceRecord[]> => {
-        const response = await api.get<
-            AttendanceApiResponse<StudentAttendanceRecord[]>
-        >(`${BASE_URL}/${sessionId}/student-attendance`, { signal });
+        const response = await api.get<ApiResponse<StudentAttendanceRecord[]>>(
+            `${BASE_URL}/${sessionId}/student-attendance`,
+            { signal }
+        );
 
         if (response.error) {
             throw response.error;
@@ -95,9 +104,10 @@ export const attendanceApi = {
         sessionId: string | number,
         payload: StudentAttendancePayload
     ): Promise<StudentAttendanceRecord[]> => {
-        const response = await api.put<
-            AttendanceApiResponse<StudentAttendanceRecord[]>
-        >(`${BASE_URL}/${sessionId}/student-attendance`, payload);
+        const response = await api.put<ApiResponse<StudentAttendanceRecord[]>>(
+            `${BASE_URL}/${sessionId}/student-attendance`,
+            payload
+        );
 
         if (response.error) {
             throw response.error;

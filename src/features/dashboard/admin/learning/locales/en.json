@@ -329,6 +329,56 @@
             "view": {
                 "title": "Lesson Details"
             }
+        },
+        "quiz": {
+            "title": "Lesson Quiz"
         }
+    },
+    "levels": {
+        "title": "Levels",
+        "quiz": {
+            "title": "Level Quiz"
+        }
+    },
+    "sitemap": {
+        "grade": {
+            "title": "Grade Navigation",
+            "description": "Select a page to navigate to within this grade"
+        },
+        "level": {
+            "title": "Level Navigation",
+            "description": "Select a page to navigate to within this level"
+        },
+        "lesson": {
+            "title": "Lesson Navigation",
+            "description": "Select a lesson action or navigate to available pages",
+            "editTitle": "Edit Lesson",
+            "editDescription": "Select a lesson to edit from the lessons list",
+            "viewTitle": "View Lesson",
+            "viewDescription": "Select a lesson to view from the lessons list",
+            "quizTitle": "Lesson Quiz",
+            "quizDescription": "Select a lesson quiz from the lessons list"
+        },
+        "routes": {
+            "gradesList": "Grades List",
+            "gradesListDesc": "View all available grades",
+            "levelsList": "Levels List",
+            "levelsListDesc": "View all levels for this grade",
+            "lessonsList": "Lessons List",
+            "lessonsListDesc": "View all lessons for this level",
+            "createLesson": "Create Lesson",
+            "createLessonDesc": "Create a new lesson",
+            "editLesson": "Edit Lesson",
+            "editLessonDesc": "Edit lesson details",
+            "viewLesson": "View Lesson",
+            "viewLessonDesc": "View lesson details",
+            "levelQuiz": "Level Quiz",
+            "levelQuizDesc": "Manage level quiz"
+        }
+    },
+    "breadcrumb": {
+        "grade": "Grade",
+        "level": "Level",
+        "lessons": "Lessons"
     }
 }

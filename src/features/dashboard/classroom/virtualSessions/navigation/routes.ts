@@ -24,6 +24,21 @@ export const virtualSessionsRoutes: RouteConfig[] = [
         },
         // permissions: [groupSession.viewAny],
     },
+    // Recording SiteMap (placeholder for /virtual-sessions/recording)
+    {
+        path: "virtual-sessions/recording",
+        lazy: () =>
+            import("../pages/site_map/RecordingSiteMap").then((m) => ({
+                default: m.default,
+            })),
+        meta: {
+            titleKey: "virtualSessions:sitemap.recording.title",
+            requiresAuth: true,
+        },
+        handle: {
+            crumb: "virtualSessions:breadcrumb.recording",
+        },
+    },
     {
         path: "virtual-sessions/recording/:sessionId",
         lazy: () =>

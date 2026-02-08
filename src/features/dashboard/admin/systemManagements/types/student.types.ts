@@ -40,27 +40,3 @@ export interface Student {
     createdAt: string;
     updatedAt: string;
 }
-
-// ============================================================================
-// API Response Types
-// ============================================================================
-
-export interface StudentListParams {
-    page?: number;
-    perPage?: number;
-    search?: string;
-}
-
-export interface PaginatedStudentData {
-    perPage: number;
-    currentPage: number;
-    lastPage: number;
-    nextPageUrl: string | null;
-    items: Student[];
-}
-
-export interface StudentListResponse {
-    success: boolean;
-    message: string;
-    data: Student[] | PaginatedStudentData;
-}

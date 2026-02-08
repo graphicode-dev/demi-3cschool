@@ -112,5 +112,29 @@
         "title": "معاينة المورد",
         "uploaded": "تم الرفع:",
         "videoPreview": "معاينة الفيديو:"
+    },
+    "sitemap": {
+        "folder": {
+            "title": "التنقل في المجلد",
+            "description": "اختر إجراء للمجلد أو انتقل إلى الصفحات المتاحة"
+        },
+        "resource": {
+            "title": "التنقل في المورد",
+            "description": "اختر إجراء للمورد أو انتقل إلى الصفحات المتاحة"
+        },
+        "routes": {
+            "resourcesList": "قائمة الموارد",
+            "resourcesListDesc": "عرض جميع مجلدات الموارد",
+            "folderDetails": "تفاصيل المجلد",
+            "folderDetailsDesc": "عرض الموارد في هذا المجلد",
+            "createFolder": "إنشاء مجلد",
+            "createFolderDesc": "إنشاء مجلد موارد جديد",
+            "editFolder": "تعديل المجلد",
+            "editFolderDesc": "تعديل معلومات المجلد",
+            "addResource": "إضافة مورد",
+            "addResourceDesc": "إضافة مورد جديد لهذا المجلد",
+            "editResource": "تعديل المورد",
+            "editResourceDesc": "تعديل معلومات المورد"
+        }
     }
 }

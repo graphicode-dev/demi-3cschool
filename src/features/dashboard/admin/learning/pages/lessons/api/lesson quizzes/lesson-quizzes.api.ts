@@ -16,14 +16,12 @@
  */
 
 import { api } from "@/shared/api/client";
-import { ApiResponse } from "@/shared/api";
+import { ApiResponse, ListQueryParams, PaginatedData } from "@/shared/api";
 import {
     LessonQuiz,
     LessonQuizCreatePayload,
     LessonQuizUpdatePayload,
-    LessonQuizzesListParams,
     LessonQuizzesMetadata,
-    PaginatedData,
 } from "../../types";
 
 const BASE_URL = "/lesson-quizzes";
@@ -58,7 +56,7 @@ export const lessonQuizzesApi = {
      * Get paginated list of all lesson quizzes
      */
     getList: async (
-        params?: LessonQuizzesListParams,
+        params?: ListQueryParams,
         signal?: AbortSignal
     ): Promise<PaginatedData<LessonQuiz>> => {
         const response = await api.get<ApiResponse<PaginatedData<LessonQuiz>>>(
@@ -85,7 +83,7 @@ export const lessonQuizzesApi = {
      */
     getListByLessonId: async (
         lessonId: string,
-        params?: LessonQuizzesListParams,
+        params?: ListQueryParams,
         signal?: AbortSignal
     ): Promise<PaginatedData<LessonQuiz>> => {
         const response = await api.get<ApiResponse<PaginatedData<LessonQuiz>>>(
@@ -112,7 +110,7 @@ export const lessonQuizzesApi = {
      */
     getListByLevelId: async (
         levelId: string,
-        params?: LessonQuizzesListParams,
+        params?: ListQueryParams,
         signal?: AbortSignal
     ): Promise<PaginatedData<LessonQuiz>> => {
         const response = await api.get<ApiResponse<PaginatedData<LessonQuiz>>>(

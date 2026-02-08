@@ -16,11 +16,10 @@
  */
 
 import { api } from "@/shared/api/client";
-import { ApiResponse } from "@/shared/api";
+import { ApiResponse, ListQueryParams } from "@/shared/api";
 import {
     LevelQuizCreatePayload,
     LevelQuizUpdatePayload,
-    LevelQuizzesListParams,
     LevelQuizzesMetadata,
 } from "../../types/level-quizzes.types";
 import { LevelQuiz } from "../../types";
@@ -61,7 +60,7 @@ export const levelQuizzesApi = {
      */
     getByLevelId: async (
         levelId: string,
-        params?: LevelQuizzesListParams,
+        params?: ListQueryParams,
         signal?: AbortSignal
     ): Promise<LevelQuiz[]> => {
         const response = await api.get<ApiResponse<LevelQuiz[]>>(

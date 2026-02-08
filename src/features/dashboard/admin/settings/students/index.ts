@@ -6,7 +6,6 @@
 export type {
     StudentRoleRef,
     StudentUserInformation,
-    StudentsListParams,
     StudentCreatePayload,
     StudentUpdatePayload,
 } from "./types";

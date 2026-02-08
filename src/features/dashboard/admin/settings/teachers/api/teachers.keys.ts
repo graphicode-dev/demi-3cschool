@@ -1,9 +1,10 @@
-import type { TeachersListParams } from "../types";
+import { ListQueryParams } from "@/shared/api";
 
 export const teachersKeys = {
     all: ["teachers"] as const,
     lists: () => [...teachersKeys.all, "list"] as const,
-    list: (params?: TeachersListParams) => [...teachersKeys.lists(), params ?? {}] as const,
+    list: (params?: ListQueryParams) =>
+        [...teachersKeys.lists(), params ?? {}] as const,
     details: () => [...teachersKeys.all, "detail"] as const,
     detail: (id: string | number) => [...teachersKeys.details(), id] as const,
 };

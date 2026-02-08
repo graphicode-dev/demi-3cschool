@@ -29,7 +29,7 @@ import {
     LevelQuizzesMetadata,
 } from "../../types/level-quizzes.types";
 import { LevelQuiz } from "../../types";
-import { PaginatedData } from "../../../courses";
+import { PaginatedData } from "@/shared/api";
 
 // ============================================================================
 // Metadata Query

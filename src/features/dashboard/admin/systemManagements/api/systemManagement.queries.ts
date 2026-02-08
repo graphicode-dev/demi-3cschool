@@ -19,15 +19,10 @@ import {
     keepPreviousData,
     type UseQueryOptions,
 } from "@tanstack/react-query";
-import {
-    PaginatedStudentData,
-    Student,
-    StudentListParams,
-    Grade,
-} from "../types";
+import { Student, Grade } from "../types";
 import { studentKeys, gradeKeys } from "./systemManagement.keys";
 import { studentsApi, gradesApi } from "./systemManagement.api";
-import { PaginatedData } from "@/shared/api";
+import { ListQueryParams, PaginatedData } from "@/shared/api";
 
 // ============================================================================
 // Student List Queries
@@ -50,8 +45,10 @@ import { PaginatedData } from "@/shared/api";
  * ```
  */
 export function useStudentsList(
-    params?: StudentListParams,
-    options?: Partial<UseQueryOptions<Student[] | PaginatedStudentData, Error>>
+    params?: ListQueryParams,
+    options?: Partial<
+        UseQueryOptions<Student[] | PaginatedData<Student>, Error>
+    >
 ) {
     return useQuery({
         queryKey: studentKeys.list(params),

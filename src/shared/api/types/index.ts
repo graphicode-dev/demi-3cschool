@@ -29,6 +29,21 @@ export interface PaginatedData<T> {
     items: T[];
 }
 
+export interface PaginatedResponse<T> {
+    success: boolean;
+    message: string;
+    data: PaginatedData<T>;
+}
+
+export interface ListQueryParams {
+    page?: number;
+    perPage?: number;
+    search?: string;
+    sortBy?: string;
+    sortOrder?: "asc" | "desc";
+    [key: string]: unknown;
+}
+
 /**
  * Validation errors structure from server
  * Maps field names to array of error messages
@@ -78,15 +93,6 @@ export interface ListResponse<T> {
 }
 
 /**
- * Paginated response structure from the backend
- * @example { data: [...], meta: { currentPage: 1, lastPage: 5, perPage: 10, total: 50 } }
- */
-export interface PaginatedResponse<T> {
-    data: T[];
-    meta: PaginationMeta;
-}
-
-/**
  * Page data structure for paginated list endpoints
  */
 export interface PageData<T> {
@@ -129,18 +135,6 @@ export interface RequestOptions {
  * HTTP methods supported by the client
  */
 export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
-
-/**
- * Generic query parameters for list endpoints
- */
-export interface ListQueryParams {
-    page?: number;
-    perPage?: number;
-    search?: string;
-    sortBy?: string;
-    sortOrder?: "asc" | "desc";
-    [key: string]: unknown;
-}
 
 /**
  * Query string parameters type for buildQueryString utility

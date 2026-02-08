@@ -105,19 +105,6 @@ export interface LessonsMetadata {
 }
 
 // ============================================================================
-// API Response Types
-// ============================================================================
-
-/**
- * Grouped response wrapper (when type=group)
- */
-export interface GroupedResponse<T> {
-    success: boolean;
-    message: string;
-    data: T[];
-}
-
-// ============================================================================
 // Query Parameters
 // ============================================================================
 

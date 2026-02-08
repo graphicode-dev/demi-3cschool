@@ -39,11 +39,6 @@ export interface StudentUserInformation {
     updatedAt: string | null;
 }
 
-export interface StudentsListParams {
-    page?: number;
-    search?: string;
-}
-
 export interface StudentCreatePayload {
     name: string;
     email: string;

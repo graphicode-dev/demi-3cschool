@@ -32,9 +32,9 @@ import type {
     CoursesListParams,
     CoursesByProgramParams,
     CoursesMetadata,
-    PaginatedData,
     ProgramType,
 } from "../types/courses.types";
+import { PaginatedData } from "@/shared/api";
 
 // ============================================================================
 // Metadata Query

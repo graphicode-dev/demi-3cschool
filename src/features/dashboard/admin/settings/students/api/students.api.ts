@@ -1,10 +1,6 @@
 import { api } from "@/shared/api/client";
-import type { ApiResponse, PaginatedData } from "@/shared/api";
-import type {
-    StudentsListParams,
-    StudentCreatePayload,
-    StudentUpdatePayload,
-} from "../types";
+import type { ApiResponse, ListQueryParams, PaginatedData } from "@/shared/api";
+import type { StudentCreatePayload, StudentUpdatePayload } from "../types";
 import { User } from "@/auth/auth.types";
 
 const BASE_URL = "/system-managements/students";
@@ -27,7 +23,7 @@ function normalizeStudentsList(
 
 export const studentsApi = {
     list: async (
-        params?: StudentsListParams,
+        params?: ListQueryParams,
         signal?: AbortSignal
     ): Promise<PaginatedData<User>> => {
         const queryParams: Record<string, unknown> = {};
@@ -56,10 +52,9 @@ export const studentsApi = {
         id: string | number,
         signal?: AbortSignal
     ): Promise<User> => {
-        const response = await api.get<ApiResponse<User>>(
-            `${BASE_URL}/${id}`,
-            { signal }
-        );
+        const response = await api.get<ApiResponse<User>>(`${BASE_URL}/${id}`, {
+            signal,
+        });
 
         if (response.error) {
             throw response.error;

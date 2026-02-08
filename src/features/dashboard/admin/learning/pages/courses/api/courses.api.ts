@@ -24,10 +24,8 @@ import type {
     CourseCreatePayload,
     CourseUpdatePayload,
     CoursesMetadata,
-    PaginatedResponse,
-    PaginatedData,
 } from "../types/courses.types";
-import { ApiResponse } from "@/shared/api";
+import { ApiResponse, PaginatedResponse, PaginatedData } from "@/shared/api";
 
 const BASE_URL = "/courses";
 

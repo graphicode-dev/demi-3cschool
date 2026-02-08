@@ -19,15 +19,3 @@ export interface TermUpdatePayload {
     description: string;
     isActive: 0 | 1;
 }
-
-export interface TermResponse {
-    success: boolean;
-    message: string;
-    data: Term;
-}
-
-export interface TermListResponse {
-    success: boolean;
-    message: string;
-    data: Term[];
-}

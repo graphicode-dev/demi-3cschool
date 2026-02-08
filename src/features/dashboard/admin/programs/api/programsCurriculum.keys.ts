@@ -14,7 +14,7 @@
  * ```
  */
 
-import type { ProgramsCurriculumListParams } from "../types";
+import type { ListQueryParams } from "@/shared/api";
 
 // ============================================================================
 // Query Key Factory
@@ -45,7 +45,7 @@ export const programsCurriculumKeys = {
     /**
      * Key for a specific list query with params
      */
-    list: (params?: ProgramsCurriculumListParams) =>
+    list: (params?: ListQueryParams) =>
         [...programsCurriculumKeys.lists(), params ?? {}] as const,
 
     /**

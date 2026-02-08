@@ -20,7 +20,6 @@
 export type {
     LevelQuiz,
     LevelQuizLevelRef,
-    LevelQuizzesListParams,
     LevelQuizCreatePayload,
     LevelQuizUpdatePayload,
     LevelQuizzesMetadata,

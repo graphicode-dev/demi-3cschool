@@ -37,8 +37,8 @@ import type {
     LevelsListParams,
     LevelsByCourseParams,
     LevelsMetadata,
-    PaginatedData,
 } from "../types/levels.types";
+import { PaginatedData } from "@/shared/api";
 
 // ============================================================================
 // Metadata Query

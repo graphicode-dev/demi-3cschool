@@ -102,30 +102,6 @@ export interface LessonVideoQuizzesListParams {
     lessonVideoId?: string | number;
 }
 
-/**
- * Paginated data structure for lesson video quizzes
- */
-export interface LessonVideoQuizzesPaginatedData {
-    perPage: number;
-    currentPage: number;
-    lastPage: number;
-    nextPageUrl: string | null;
-    items: LessonVideoQuiz[];
-}
-
-/**
- * Paginated response for lesson video quizzes list
- */
-export interface LessonVideoQuizzesPaginatedResponse {
-    data: LessonVideoQuiz[];
-    pagination: {
-        currentPage: number;
-        lastPage: number;
-        perPage: number;
-        total: number;
-    };
-}
-
 // ============================================================================
 // Payload Types
 // ============================================================================

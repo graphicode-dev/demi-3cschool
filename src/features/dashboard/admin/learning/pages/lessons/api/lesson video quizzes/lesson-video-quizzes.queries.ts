@@ -11,9 +11,8 @@ import {
     LessonVideoQuiz,
     LessonVideoQuizzesListParams,
     LessonVideoQuizzesMetadata,
-    LessonVideoQuizzesPaginatedResponse,
 } from "../../types";
-import { PaginatedData } from "@/shared/api";
+import { PaginatedData, PaginationMeta } from "@/shared/api";
 
 /**
  * Hook to fetch lesson video quizzes metadata
@@ -35,7 +34,10 @@ export function useLessonVideoQuizzesMetadata(
 export function useLessonVideoQuizzesList(
     params?: LessonVideoQuizzesListParams,
     options?: Partial<
-        UseQueryOptions<LessonVideoQuizzesPaginatedResponse, Error>
+        UseQueryOptions<
+            { data: LessonVideoQuiz[]; pagination: PaginationMeta },
+            Error
+        >
     >
 ) {
     return useQuery({

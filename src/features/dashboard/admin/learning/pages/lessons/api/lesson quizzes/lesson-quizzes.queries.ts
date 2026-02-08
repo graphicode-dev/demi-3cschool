@@ -24,12 +24,8 @@ import {
 } from "@tanstack/react-query";
 import { lessonQuizKeys } from "./lesson-quizzes.keys";
 import { lessonQuizzesApi } from "./lesson-quizzes.api";
-import {
-    LessonQuiz,
-    LessonQuizzesListParams,
-    LessonQuizzesMetadata,
-    PaginatedData,
-} from "../../types";
+import { LessonQuiz, LessonQuizzesMetadata } from "../../types";
+import { ListQueryParams, PaginatedData } from "@/shared/api";
 
 // ============================================================================
 // Metadata Query
@@ -92,7 +88,7 @@ export function useLessonQuizzesMetadata(
  * ```
  */
 export function useLessonQuizzesList(
-    params?: LessonQuizzesListParams,
+    params?: ListQueryParams,
     options?: Partial<UseQueryOptions<PaginatedData<LessonQuiz>, Error>>
 ) {
     return useQuery({
@@ -127,7 +123,7 @@ export function useLessonQuizzesList(
  */
 export function useLessonQuizzesByLesson(
     lessonId: string | undefined | null,
-    params?: LessonQuizzesListParams,
+    params?: ListQueryParams,
     options?: Partial<UseQueryOptions<PaginatedData<LessonQuiz>, Error>>
 ) {
     return useQuery({

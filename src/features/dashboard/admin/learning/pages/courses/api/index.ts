@@ -30,8 +30,6 @@ export type {
     CourseOperators,
     CourseFieldType,
     CourseFieldTypes,
-    PaginatedResponse,
-    PaginatedData,
     ProgramType,
 } from "../types/courses.types";
 

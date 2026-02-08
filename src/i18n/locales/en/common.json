@@ -1,3 +1,10 @@
 {
-    "dashboard": "Dashboard"
+    "dashboard": "Dashboard",
+    "sitemap": {
+        "title": "Feature Navigation",
+        "description": "Select a page to navigate to",
+        "availableRoutes": "Available Pages",
+        "goBack": "Go Back",
+        "goHome": "Go to Dashboard"
+    }
 }

@@ -96,5 +96,15 @@
         "noAssignments": "No assignments available for this lesson.",
         "noLessonQuiz": "No lesson quiz available.",
         "noMaterials": "No materials available for this lesson."
+    },
+    "sitemap": {
+        "lesson": {
+            "title": "Lesson Navigation",
+            "description": "Select a lesson from the self study content"
+        },
+        "routes": {
+            "selfStudyList": "Self Study Content",
+            "selfStudyListDesc": "View all available self study sessions"
+        }
     }
 }

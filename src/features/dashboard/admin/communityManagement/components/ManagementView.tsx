@@ -555,7 +555,7 @@ export function ManagementView({
                                             return (
                                                 <div
                                                     key={report.id}
-                                                    className="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-red-100 dark:border-red-900/30 shadow-sm"
+                                                    className="bg-white dark:bg-gray-800 p-6 rounded-24px border border-red-100 dark:border-red-900/30 shadow-sm"
                                                 >
                                                     <div className="flex items-center justify-between mb-4">
                                                         <div className="flex items-center gap-3">
@@ -652,7 +652,7 @@ export function ManagementView({
                                     {filteredPosts.map((post) => (
                                         <div
                                             key={post.id}
-                                            className="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm flex items-start justify-between group"
+                                            className="bg-white dark:bg-gray-800 p-6 rounded-24px border border-gray-100 dark:border-gray-700 shadow-sm flex items-start justify-between group"
                                         >
                                             <div className="flex gap-4">
                                                 <img
@@ -1051,7 +1051,7 @@ export function ManagementView({
                                         onChange={(e) =>
                                             setAnnouncement(e.target.value)
                                         }
-                                        className="w-full bg-gray-50 dark:bg-gray-700 border-none rounded-[24px] p-6 text-[15px] text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-[#00ADEF]/20 outline-none h-40 mb-6"
+                                        className="w-full bg-gray-50 dark:bg-gray-700 border-none rounded-24px p-6 text-[15px] text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-[#00ADEF]/20 outline-none h-40 mb-6"
                                     />
                                     <button
                                         onClick={() => {
@@ -1108,7 +1108,7 @@ export function ManagementView({
                                                         e.target.value
                                                     )
                                                 }
-                                                className="w-full bg-gray-50 dark:bg-gray-700 border-none rounded-[24px] p-6 text-[15px] text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-[#00ADEF]/20 outline-none h-40"
+                                                className="w-full bg-gray-50 dark:bg-gray-700 border-none rounded-24px p-6 text-[15px] text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-[#00ADEF]/20 outline-none h-40"
                                             />
                                         </div>
 

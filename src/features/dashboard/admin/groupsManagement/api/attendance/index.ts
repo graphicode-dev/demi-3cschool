@@ -13,7 +13,6 @@ export type {
     StudentAttendanceRecord,
     StudentAttendanceItem,
     StudentAttendancePayload,
-    AttendanceApiResponse,
 } from "../../types";
 
 // Query Keys

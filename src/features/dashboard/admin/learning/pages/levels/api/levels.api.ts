@@ -25,11 +25,8 @@ import type {
     LevelCreatePayload,
     LevelUpdatePayload,
     LevelsMetadata,
-    PaginatedResponse,
-    GroupedResponse,
-    PaginatedData,
 } from "../types/levels.types";
-import { ApiResponse } from "@/shared/api";
+import { ApiResponse, PaginatedData, PaginatedResponse } from "@/shared/api";
 
 const BASE_URL = "/levels";
 
@@ -96,7 +93,7 @@ export const levelsApi = {
         const { courseId, page, type, programs_curriculum } = params;
 
         const response = await api.get<
-            PaginatedResponse<Level> | GroupedResponse<LevelGroup>
+            PaginatedResponse<Level> | PaginatedResponse<LevelGroup>
         >(`${BASE_URL}/courses/${courseId}`, {
             params: {
                 ...(page && { page }),
@@ -205,10 +202,9 @@ export const levelsApi = {
         gradeId: string | number,
         signal?: AbortSignal
     ): Promise<PaginatedData<LevelByGrade>> => {
-        const response = await api.get<ApiResponse<PaginatedData<LevelByGrade>>>(
-            `${BASE_URL}/grade/${gradeId}`,
-            { signal }
-        );
+        const response = await api.get<
+            ApiResponse<PaginatedData<LevelByGrade>>
+        >(`${BASE_URL}/grade/${gradeId}`, { signal });
 
         if (response.error) {
             throw response.error;

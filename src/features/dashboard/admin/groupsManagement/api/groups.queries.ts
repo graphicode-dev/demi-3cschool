@@ -37,10 +37,10 @@ import type {
     GroupsMetadata,
     GroupRecommendPayload,
     GroupRecommendationsData,
-    PaginatedData,
     GroupType,
 } from "../types/groups.types";
 import type { GroupSession } from "../types/sessions.types";
+import { PaginatedData } from "@/shared/api";
 
 // ============================================================================
 // Metadata Query

@@ -25,12 +25,10 @@ import type {
     GroupsMetadata,
     GroupRecommendPayload,
     GroupRecommendationsData,
-    PaginatedResponse,
-    PaginatedData,
     ListResponse,
 } from "../types/groups.types";
 import type { GroupSession } from "../types/sessions.types";
-import { ApiResponse } from "@/shared/api";
+import { ApiResponse, PaginatedData, PaginatedResponse } from "@/shared/api";
 
 const BASE_URL = "/groups";
 

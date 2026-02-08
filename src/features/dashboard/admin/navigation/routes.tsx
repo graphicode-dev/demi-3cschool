@@ -70,6 +70,14 @@ const gradesRoutes: RouteConfig[] = [
         meta: { titleKey: "learning:grades.title" },
         handle: { crumb: "learning:grades.title" },
     },
+    // Grade SiteMap (placeholder for /grades/:gradeId)
+    {
+        path: "grades/:gradeId",
+        lazy: () =>
+            import("@/features/dashboard/admin/learning/pages/site_map/GradeSiteMap"),
+        meta: { titleKey: "learning:sitemap.grade.title" },
+        handle: { crumb: "learning:breadcrumb.grade" },
+    },
     // Levels List for a Grade
     {
         path: "grades/:gradeId/levels",
@@ -78,6 +86,14 @@ const gradesRoutes: RouteConfig[] = [
         // permissions: [lesson.viewAny],
         meta: { titleKey: "learning:levels.title" },
         handle: { crumb: "learning:levels.title" },
+    },
+    // Level SiteMap (placeholder for /grades/:gradeId/levels/:levelId)
+    {
+        path: "grades/:gradeId/levels/:levelId",
+        lazy: () =>
+            import("@/features/dashboard/admin/learning/pages/site_map/LevelSiteMap"),
+        meta: { titleKey: "learning:sitemap.level.title" },
+        handle: { crumb: "learning:breadcrumb.level" },
     },
     // Lessons List for a Level
     {
@@ -97,6 +113,14 @@ const gradesRoutes: RouteConfig[] = [
         meta: { titleKey: "learning:lessons.form.create.title" },
         handle: { crumb: "learning:lessons.form.create.title" },
     },
+    // Lesson Edit SiteMap (placeholder for /grades/:gradeId/levels/:levelId/lessons/edit)
+    {
+        path: "grades/:gradeId/levels/:levelId/lessons/edit",
+        lazy: () =>
+            import("@/features/dashboard/admin/learning/pages/site_map/LessonSiteMap"),
+        meta: { titleKey: "learning:sitemap.lesson.editTitle" },
+        handle: { crumb: "learning:lessons.form.edit.title" },
+    },
     // Edit Lesson
     {
         path: "grades/:gradeId/levels/:levelId/lessons/edit/:id",
@@ -106,6 +130,14 @@ const gradesRoutes: RouteConfig[] = [
         meta: { titleKey: "learning:lessons.form.edit.title" },
         handle: { crumb: "learning:lessons.form.edit.title" },
     },
+    // Lesson View SiteMap (placeholder for /grades/:gradeId/levels/:levelId/lessons/view)
+    {
+        path: "grades/:gradeId/levels/:levelId/lessons/view",
+        lazy: () =>
+            import("@/features/dashboard/admin/learning/pages/site_map/LessonSiteMap"),
+        meta: { titleKey: "learning:sitemap.lesson.viewTitle" },
+        handle: { crumb: "learning:lessons.form.view.title" },
+    },
     // View Lesson
     {
         path: "grades/:gradeId/levels/:levelId/lessons/view/:id",
@@ -114,6 +146,14 @@ const gradesRoutes: RouteConfig[] = [
         // permissions: [lesson.view],
         meta: { titleKey: "learning:lessons.form.view.title" },
         handle: { crumb: "learning:lessons.form.view.title" },
+    },
+    // Lesson Quiz SiteMap (placeholder for /grades/:gradeId/levels/:levelId/lessons/quiz)
+    {
+        path: "grades/:gradeId/levels/:levelId/lessons/quiz",
+        lazy: () =>
+            import("@/features/dashboard/admin/learning/pages/site_map/LessonSiteMap"),
+        meta: { titleKey: "learning:sitemap.lesson.quizTitle" },
+        handle: { crumb: "learning:lessons.quiz.title" },
     },
     // Lesson Quizzes
     {
@@ -154,6 +194,14 @@ const groupsManagementRoutes: RouteConfig[] = [
         meta: { titleKey: "groupsManagement:groups.grades.title" },
         handle: { crumb: "groupsManagement:groups.grades.title" },
     },
+    // Grade SiteMap (placeholder for /groups/grades/:gradeId)
+    {
+        path: "groups/grades/:gradeId",
+        lazy: () =>
+            import("@/features/dashboard/admin/groupsManagement/pages/site_map/GradeGroupSiteMap"),
+        meta: { titleKey: "groupsManagement:sitemap.grade.title" },
+        handle: { crumb: "groupsManagement:breadcrumb.grade" },
+    },
     // Levels List for a Grade
     {
         path: "groups/grades/:gradeId/levels",
@@ -162,6 +210,14 @@ const groupsManagementRoutes: RouteConfig[] = [
         // permissions: [group.viewAny],
         meta: { titleKey: "groupsManagement:groups.levels.title" },
         handle: { crumb: "groupsManagement:groups.levels.title" },
+    },
+    // Level SiteMap (placeholder for /groups/grades/:gradeId/levels/:levelId)
+    {
+        path: "groups/grades/:gradeId/levels/:levelId",
+        lazy: () =>
+            import("@/features/dashboard/admin/groupsManagement/pages/site_map/LevelGroupSiteMap"),
+        meta: { titleKey: "groupsManagement:sitemap.level.title" },
+        handle: { crumb: "groupsManagement:breadcrumb.level" },
     },
     // Groups List for a Level
     {
@@ -181,6 +237,14 @@ const groupsManagementRoutes: RouteConfig[] = [
         meta: { titleKey: "groupsManagement:groups.form.create.title" },
         handle: { crumb: "groupsManagement:groups.form.create.title" },
     },
+    // Group View SiteMap (placeholder for /groups/grades/:gradeId/levels/:levelId/group/view)
+    {
+        path: "groups/grades/:gradeId/levels/:levelId/group/view",
+        lazy: () =>
+            import("@/features/dashboard/admin/groupsManagement/pages/site_map/GroupSiteMap"),
+        meta: { titleKey: "groupsManagement:sitemap.group.viewTitle" },
+        handle: { crumb: "groupsManagement:groups.form.view.title" },
+    },
     // View Group
     {
         path: "groups/grades/:gradeId/levels/:levelId/group/view/:id",
@@ -189,6 +253,14 @@ const groupsManagementRoutes: RouteConfig[] = [
         // permissions: [group.view],
         meta: { titleKey: "groupsManagement:groups.form.view.title" },
         handle: { crumb: "groupsManagement:groups.form.view.title" },
+    },
+    // Group Edit SiteMap (placeholder for /groups/grades/:gradeId/levels/:levelId/group/edit)
+    {
+        path: "groups/grades/:gradeId/levels/:levelId/group/edit",
+        lazy: () =>
+            import("@/features/dashboard/admin/groupsManagement/pages/site_map/GroupSiteMap"),
+        meta: { titleKey: "groupsManagement:sitemap.group.editTitle" },
+        handle: { crumb: "groupsManagement:groups.edit.title" },
     },
     // Edit Group
     {
@@ -216,6 +288,16 @@ const groupsManagementRoutes: RouteConfig[] = [
         // permissions: [studentAttendance.viewAny],
         meta: { titleKey: "groupsManagement:groups.attendance.title" },
         handle: { crumb: "groupsManagement:groups.attendance.title" },
+    },
+    // Attendance Session SiteMap (placeholder for /groups/grades/:gradeId/levels/:levelId/group/:id/attendance/session)
+    {
+        path: "groups/grades/:gradeId/levels/:levelId/group/:id/attendance/session",
+        lazy: () =>
+            import("@/features/dashboard/admin/groupsManagement/pages/site_map/GroupSiteMap"),
+        meta: {
+            titleKey: "groupsManagement:sitemap.group.attendanceSessionTitle",
+        },
+        handle: { crumb: "groupsManagement:groups.sessionAttendance.title" },
     },
     // Session Attendance Details
     {
@@ -274,6 +356,16 @@ const groupsManagementRoutes: RouteConfig[] = [
         handle: { crumb: "groupsManagement:groups.reassignTeacher.title" },
     },
 
+    // Teacher Session SiteMap (placeholder for /groups/grades/:gradeId/levels/:levelId/group/:id/teacher-management/session)
+    {
+        path: "groups/grades/:gradeId/levels/:levelId/group/:id/teacher-management/session",
+        lazy: () =>
+            import("@/features/dashboard/admin/groupsManagement/pages/site_map/GroupSiteMap"),
+        meta: {
+            titleKey: "groupsManagement:sitemap.group.teacherSessionTitle",
+        },
+        handle: { crumb: "groupsManagement:groups.changeSessionTeacher.title" },
+    },
     // Change Session Teacher
     {
         path: "groups/grades/:gradeId/levels/:levelId/group/:id/teacher-management/session/:sessionId/change-teacher",
@@ -333,6 +425,14 @@ const resourcesRoutes: RouteConfig[] = [
         meta: { titleKey: "resources:title" },
         handle: { crumb: "resources:title" },
     },
+    // Folder SiteMap (placeholder for /resources/folder)
+    {
+        path: "resources/folder",
+        lazy: () =>
+            import("@/features/dashboard/admin/resources/pages/site_map/FolderSiteMap"),
+        meta: { titleKey: "resources:sitemap.folder.title" },
+        handle: { crumb: "resources:breadcrumb.folder" },
+    },
     // Create Folder
     {
         path: "resources/folder/create",
@@ -356,6 +456,14 @@ const resourcesRoutes: RouteConfig[] = [
             import("@/features/dashboard/admin/resources/pages/EditFolder"),
         meta: { titleKey: "resources:folder.edit" },
         handle: { crumb: "resources:folder.edit" },
+    },
+    // Resource SiteMap (placeholder for /resources/folder/:folderId/resource)
+    {
+        path: "resources/folder/:folderId/resource",
+        lazy: () =>
+            import("@/features/dashboard/admin/resources/pages/site_map/ResourceSiteMap"),
+        meta: { titleKey: "resources:sitemap.resource.title" },
+        handle: { crumb: "resources:breadcrumb.resource" },
     },
     // Add Resource
     {
@@ -419,6 +527,14 @@ export const adminRouteModule: FeatureRouteModule = {
                       ? undefined
                       : "tickets",
             })),
+            // Settings SiteMap (placeholder for /settings)
+            {
+                path: "settings",
+                lazy: () =>
+                    import("@/features/dashboard/admin/settings/pages/site_map/SettingsSiteMap"),
+                meta: { titleKey: "settings:sitemap.title" },
+                handle: { crumb: "settings:breadcrumb.settings" },
+            },
             // Slots (under settings)
             ...slotsRoutes,
             // Training Centers (under settings)

@@ -19,7 +19,12 @@ import {
     createCrudHooks,
     createQueryKeys,
 } from "@/shared/api/crud";
-import { LessonQuiz, LessonQuizCreatePayload, LessonQuizUpdatePayload, LessonQuizzesListParams } from "../../types";
+import {
+    LessonQuiz,
+    LessonQuizCreatePayload,
+    LessonQuizUpdatePayload,
+} from "../../types";
+import { ListQueryParams } from "@/shared/api";
 
 // ============================================================================
 // Query Keys (using factory)
@@ -43,7 +48,7 @@ export const lessonQuizzesApiFactory = createCrudApi<
     LessonQuiz,
     LessonQuizCreatePayload,
     LessonQuizUpdatePayload,
-    LessonQuizzesListParams
+    ListQueryParams
 >({
     baseUrl: "/lesson-quizzes",
     useFormData: false,

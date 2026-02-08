@@ -111,12 +111,6 @@ export interface VirtualSession {
     status?: VirtualSessionStatus;
 }
 
-export interface VirtualSessionsResponse {
-    success: boolean;
-    message: string;
-    data: VirtualSession[];
-}
-
 export interface VirtualSessionsData {
     terms: Term[];
     sessions: VirtualSession[];

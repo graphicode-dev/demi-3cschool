@@ -16,15 +16,12 @@
  */
 
 import { api } from "@/shared/api/client";
-import { ApiResponse } from "@/shared/api";
+import { ApiResponse, ListQueryParams, PaginatedData } from "@/shared/api";
 import type {
     ProgramCurriculum,
-    ProgramsCurriculumListParams,
     ProgramCurriculumCreatePayload,
     ProgramCurriculumUpdatePayload,
     ProgramsCurriculumMetadata,
-    ProgramCurriculumPaginatedResponse,
-    ProgramCurriculumPaginatedData,
 } from "../types";
 
 const BASE_URL = "/programs-curriculums";
@@ -59,7 +56,7 @@ export const programsCurriculumApi = {
      * Get list of all programs curriculums
      */
     getList: async (
-        params?: ProgramsCurriculumListParams,
+        params?: ListQueryParams,
         signal?: AbortSignal
     ): Promise<ProgramCurriculum[]> => {
         const { search, ...restParams } = params ?? {};
@@ -72,7 +69,7 @@ export const programsCurriculumApi = {
         }
 
         const response = await api.get<
-            ApiResponse<ProgramCurriculumPaginatedData<ProgramCurriculum>>
+            ApiResponse<PaginatedData<ProgramCurriculum>>
         >(BASE_URL, {
             params: queryParams,
             signal,

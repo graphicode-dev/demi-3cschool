@@ -28,8 +28,8 @@ import {
     LessonQuizQuestion,
     LessonQuizQuestionsListParams,
     LessonQuizQuestionsMetadata,
-    PaginatedData,
 } from "../../types";
+import { PaginatedData } from "@/shared/api";
 
 // ============================================================================
 // Metadata Query

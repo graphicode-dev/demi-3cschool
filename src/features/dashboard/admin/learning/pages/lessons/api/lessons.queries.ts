@@ -37,7 +37,7 @@ import type {
     LessonsByLevelParams,
     LessonsMetadata,
 } from "../types/lessons.types";
-import { PaginatedData } from "../types";
+import { PaginatedData } from "@/shared/api/types";
 
 // ============================================================================
 // Metadata Query

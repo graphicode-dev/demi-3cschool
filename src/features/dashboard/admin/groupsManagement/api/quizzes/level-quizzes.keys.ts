@@ -17,7 +17,7 @@
  * ```
  */
 
-import { LevelQuizzesListParams } from "../../types/level-quizzes.types";
+import { ListQueryParams } from "@/shared/api";
 
 /**
  * Query key factory for level quizzes
@@ -49,7 +49,7 @@ export const levelQuizKeys = {
     /**
      * Key for quizzes by level ID with optional params
      */
-    byLevel: (levelId: string, params?: LevelQuizzesListParams) =>
+    byLevel: (levelId: string, params?: ListQueryParams) =>
         params
             ? ([...levelQuizKeys.byLevelRoot(), levelId, params] as const)
             : ([...levelQuizKeys.byLevelRoot(), levelId] as const),

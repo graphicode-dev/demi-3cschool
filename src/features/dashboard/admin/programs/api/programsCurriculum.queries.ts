@@ -20,12 +20,8 @@
 import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
 import { programsCurriculumKeys } from "./programsCurriculum.keys";
 import { programsCurriculumApi } from "./programsCurriculum.api";
-import type {
-    ProgramCurriculum,
-    ProgramsCurriculumListParams,
-    ProgramsCurriculumMetadata,
-    ProgramCurriculumPaginatedData,
-} from "../types";
+import type { ProgramCurriculum, ProgramsCurriculumMetadata } from "../types";
+import { ListQueryParams } from "@/shared/api";
 
 // ============================================================================
 // Query Hooks
@@ -65,7 +61,7 @@ export function useProgramsCurriculumMetadata(
  * ```
  */
 export function useProgramsCurriculumList(
-    params?: ProgramsCurriculumListParams,
+    params?: ListQueryParams,
     options?: Partial<UseQueryOptions<ProgramCurriculum[], Error>>
 ) {
     return useQuery({
