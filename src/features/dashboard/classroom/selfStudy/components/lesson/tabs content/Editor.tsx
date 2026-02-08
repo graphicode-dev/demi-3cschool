@@ -239,7 +239,7 @@ export const EditorTab = memo(function EditorTab({ t }: EditorTabProps) {
             </div>
 
             {/* Editor container - overflow visible for autocomplete dropdown */}
-            <div className="flex-1 min-h-0 border border-gray-200 dark:border-gray-700 rounded-xl [&_.monaco-editor]:!overflow-visible [&_.overflow-guard]:!overflow-visible">
+            <div className="flex-1 min-h-0 border border-gray-200 dark:border-gray-700 rounded-xl [&_.monaco-editor]:overflow-visible! [&_.overflow-guard]:overflow-visible!">
                 <Editor
                     language={language}
                     theme="vs-dark"
