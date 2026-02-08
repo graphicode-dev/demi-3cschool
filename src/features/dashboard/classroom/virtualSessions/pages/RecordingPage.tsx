@@ -13,12 +13,8 @@ import { PageWrapper } from "@/design-system";
 import { CLASSROOM_PATH } from "../../navigation/constant";
 import { useLessonVideo } from "@/features/dashboard/admin/learning/pages/lessons/api";
 import { useDynamicBreadcrumb } from "@/navigation";
-
-// Format time from "HH:mm:ss" to "HH:mm"
-function formatTime(time: string): string {
-    const [hours, minutes] = time.split(":");
-    return `${hours}:${minutes}`;
-}
+import { BunnyStreamPlayer } from "@/features/dashboard/shared/components/BunnyStreamPlayer";
+import { useVideo } from "@/features/dashboard/shared";
 
 // Format date
 function formatDate(dateStr: string): string {
@@ -45,6 +41,8 @@ function RecordingPage() {
     const { setLabel: setDynamicBreadcrumb } = useDynamicBreadcrumb();
 
     const { data: lessonVideo, isLoading } = useLessonVideo(sessionId!);
+
+    const { setWatchInEnglish, watchInEnglish } = useVideo();
 
     // Set dynamic breadcrumb with recording title
     useEffect(() => {
@@ -79,15 +77,41 @@ function RecordingPage() {
                     {t("recording.backToVirtualSessions")}
                 </button>
 
-                {/* Video Preview */}
+                {/* Video Player */}
                 <div>
+                    <div className="flex items-center justify-end mb-3">
+                        <button
+                            onClick={() => setWatchInEnglish(false)}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                                !watchInEnglish
+                                    ? "bg-brand-500 text-white"
+                                    : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+                            }`}
+                        >
+                            AR
+                        </button>
+                        <button
+                            onClick={() => setWatchInEnglish(true)}
+                            className={`ms-2 flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                                watchInEnglish
+                                    ? "bg-brand-500 text-white"
+                                    : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+                            }`}
+                        >
+                            EN
+                        </button>
+                    </div>
                     {lessonVideo?.embedHtml ? (
-                        <div
-                            className="w-full rounded-xl overflow-hidden"
-                            dangerouslySetInnerHTML={{
-                                __html: lessonVideo.embedHtml,
-                            }}
-                        />
+                        <div className="relative bg-gray-900 rounded-2xl aspect-video flex items-center justify-center overflow-hidden">
+                            <BunnyStreamPlayer
+                                embedHtml={
+                                    watchInEnglish
+                                        ? lessonVideo.embedHtmlEn!
+                                        : lessonVideo.embedHtmlAr!
+                                }
+                                onState={() => {}}
+                            />
+                        </div>
                     ) : (
                         <div className="aspect-video bg-gray-900 rounded-xl flex flex-col items-center justify-center">
                             <div className="w-16 h-16 flex items-center justify-center rounded-full bg-gray-800 text-gray-500 mb-3">

@@ -5,7 +5,7 @@
  * Matches the design from the provided images.
  */
 
-import { useState, useEffect, useMemo, useRef, memo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Check, Play, Loader2, Trash2 } from "lucide-react";
 import { ConfirmDialog } from "@/design-system";
@@ -17,6 +17,7 @@ import {
 import { useMutationHandler } from "@/shared/api";
 import type { ApiError } from "@/shared/api/types";
 import { LessonVideo } from "../../../types";
+import { BunnyStreamPlayer } from "@/features/dashboard/shared/components/BunnyStreamPlayer";
 
 interface VideoEditorProps {
     lessonId: string;
@@ -27,77 +28,6 @@ interface VideoEditorProps {
 }
 
 type VideoPreviewTab = "arabic" | "english";
-
-function getIframeSrcFromEmbedHtml(embedHtml: string): string | null {
-    const m = embedHtml.match(/src="([^"]+)"/i);
-    return m?.[1] ?? null;
-}
-
-function setQueryParam(url: string, key: string, value: string) {
-    try {
-        const u = new URL(url);
-        u.searchParams.set(key, value);
-        return u.toString();
-    } catch {
-        return url;
-    }
-}
-
-const StableEmbedPlayer = memo(function StableEmbedPlayer({
-    embedHtml,
-}: {
-    embedHtml: string;
-}) {
-    const containerRef = useRef<HTMLDivElement | null>(null);
-    const lastHtmlRef = useRef<string>("");
-
-    const html = useMemo(() => {
-        return (embedHtml || "").replace("autoplay=true", "autoplay=false");
-    }, [embedHtml]);
-
-    useEffect(() => {
-        if (!containerRef.current) return;
-        if (lastHtmlRef.current === html) return;
-
-        lastHtmlRef.current = html;
-        containerRef.current.innerHTML = html;
-    }, [html]);
-
-    return <div ref={containerRef} className="w-full h-full" />;
-});
-
-const BunnyEmbedPreview = memo(function BunnyEmbedPreview({
-    embedHtml,
-}: {
-    embedHtml: string;
-}) {
-    const srcRaw = useMemo(
-        () => getIframeSrcFromEmbedHtml(embedHtml),
-        [embedHtml]
-    );
-    const src = useMemo(() => {
-        if (!srcRaw) return null;
-        let next = srcRaw;
-        next = setQueryParam(next, "autoplay", "false");
-        next = setQueryParam(next, "loop", "false");
-        return next;
-    }, [srcRaw]);
-
-    if (!src) {
-        return <StableEmbedPlayer embedHtml={embedHtml} />;
-    }
-
-    return (
-        <iframe
-            src={src}
-            className="w-full h-full"
-            allow="autoplay; encrypted-media; picture-in-picture"
-            allowFullScreen
-            style={{ border: 0 }}
-            title="video-preview"
-        />
-    );
-});
 
 export default function VideoEditor({
     lessonId,
@@ -469,7 +399,10 @@ export default function VideoEditor({
                     </div>
                     {previewEmbedHtml ? (
                         <div className="w-full rounded-xl overflow-hidden aspect-video bg-gray-900">
-                            <BunnyEmbedPreview embedHtml={previewEmbedHtml} />
+                            <BunnyStreamPlayer
+                                embedHtml={previewEmbedHtml}
+                                onState={() => {}}
+                            />
                         </div>
                     ) : (
                         <div className="aspect-video bg-gray-900 rounded-xl flex flex-col items-center justify-center">

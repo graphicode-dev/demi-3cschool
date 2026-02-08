@@ -68,13 +68,6 @@ export interface Lesson {
     currentVideoId: number;
 }
 
-export interface PlayerState {
-    isPlaying: boolean;
-    isEnded: boolean;
-    currentTime: number;
-    duration: number;
-}
-
 export type LessonTabType =
     | "about"
     | "review"
