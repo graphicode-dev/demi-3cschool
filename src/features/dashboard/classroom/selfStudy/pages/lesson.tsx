@@ -226,7 +226,7 @@ function LessonPage() {
                         )}
 
                         {/* Lesson Info Card */}
-                        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-theme-sm p-6">
+                        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-theme-sm p-6 overflow-visible">
                             {/* Tabs */}
                             <LessonTabs
                                 activeTab={activeTab}
@@ -234,7 +234,7 @@ function LessonPage() {
                             />
 
                             {/* Tab Content */}
-                            <div className="mt-6">
+                            <div className="mt-6 overflow-visible">
                                 <LessonContent
                                     lesson={lesson}
                                     activeTab={activeTab}
