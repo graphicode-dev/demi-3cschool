@@ -5,13 +5,23 @@
  * Provides instant search results without API calls.
  * Supports searching in both English and Arabic.
  * Results are displayed in the language of the search query.
+ * Filters results based on user role and permissions.
  */
 
 import { Navigation2 } from "lucide-react";
 import i18n from "@/i18n";
 import { navRegistry } from "@/navigation/navRegistry";
-import type { NavItem } from "@/navigation/nav.types";
+import { authStore } from "@/auth/auth.store";
+import { permissionStore } from "@/auth/permission.store";
+import type { NavItem, NavFilterOptions } from "@/navigation/nav.types";
 import type { SearchProvider, SearchableEntity } from "../types";
+import type { AcceptanceExamStatus } from "@/features/dashboard/classroom/acceptanceTest/types";
+
+// Admin-only sections that should not appear for classroom users
+const ADMIN_ONLY_SECTIONS: string[] = ["Admin"];
+
+// Classroom-only sections
+const CLASSROOM_ONLY_SECTIONS: string[] = ["Classroom"];
 
 /**
  * Detect if text contains Arabic characters
@@ -65,6 +75,88 @@ const matchesQuery = (item: NavItem, query: string): boolean => {
 };
 
 /**
+ * Get filtered navigation items based on user role and permissions
+ * Mirrors the filtering logic from useNavItems hook
+ */
+const getFilteredNavItems = (): NavItem[] => {
+    const user = authStore.getState().user;
+    const userRole = user?.role?.name?.toLowerCase();
+    const permissions = permissionStore.getState().permissions ?? [];
+
+    // Build filter options
+    const filterOptions: NavFilterOptions = {
+        role: userRole as NavFilterOptions["role"],
+        permissions,
+        includeHidden: false,
+    };
+
+    // Determine which dashboard section to show based on user role
+    const userDashboardSection =
+        userRole === "admin" || userRole === "super_admin"
+            ? "Admin"
+            : "Classroom";
+
+    // Get acceptance exam status for students (TEMPORARY: Bypassed)
+    const acceptanceExamStatus: AcceptanceExamStatus = "accepted";
+    const needsAcceptanceExam = acceptanceExamStatus !== "accepted";
+
+    // Get all sections with items
+    const allSections = navRegistry.getSectionsWithItems(filterOptions);
+
+    // Filter sections based on role
+    const filteredSections = allSections
+        .filter((section) => {
+            // For classroom users, hide all admin-only sections
+            if (userDashboardSection === "Classroom") {
+                if (ADMIN_ONLY_SECTIONS.includes(section.id)) {
+                    return false;
+                }
+            }
+
+            // For admin users, hide classroom-only sections
+            if (userDashboardSection === "Admin") {
+                if (CLASSROOM_ONLY_SECTIONS.includes(section.id)) {
+                    return false;
+                }
+            }
+
+            return true;
+        })
+        .map((section) => {
+            // If student needs acceptance exam, filter items in Classroom section
+            if (needsAcceptanceExam && section.id === "Classroom") {
+                const allowedKeys = [
+                    "acceptanceTest",
+                    "profile",
+                    "tickets-management",
+                ];
+                return {
+                    ...section,
+                    items: section.items.filter((item) =>
+                        allowedKeys.includes(item.key)
+                    ),
+                };
+            }
+
+            // If student has passed acceptance exam, hide acceptanceTest item
+            if (!needsAcceptanceExam && section.id === "Classroom") {
+                return {
+                    ...section,
+                    items: section.items.filter(
+                        (item) => item.key !== "acceptanceTest"
+                    ),
+                };
+            }
+
+            return section;
+        })
+        .filter((section) => section.items.length > 0);
+
+    // Flatten all items from filtered sections
+    return filteredSections.flatMap((section) => section.items);
+};
+
+/**
  * Navigation search provider
  */
 export const navigationSearchProvider: SearchProvider = {
@@ -78,8 +170,10 @@ export const navigationSearchProvider: SearchProvider = {
 
     search: async (query, options) => {
         const limit = options?.limit ?? 10;
-        const allItems = navRegistry.getFlatList({ includeHidden: false });
-        const flatItems = flattenNavItems(allItems);
+
+        // Get filtered items based on user role and permissions
+        const allowedItems = getFilteredNavItems();
+        const flatItems = flattenNavItems(allowedItems);
 
         // Detect input language based on query characters
         const inputIsArabic = isArabicText(query);
