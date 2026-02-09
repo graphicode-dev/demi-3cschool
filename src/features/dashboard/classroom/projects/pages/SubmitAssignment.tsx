@@ -13,9 +13,10 @@ import {
 } from "lucide-react";
 import { PageWrapper } from "@/design-system";
 import {
-    useLessonAssignment,
-    useCreateLessonAssignment,
-} from "@/features/dashboard/admin/learning/pages/lessons/api";
+    useAssignmentGroups,
+    useSubmitAssignment,
+    type AssignmentGroup,
+} from "../api";
 
 export function SubmitAssignmentPage() {
     const { t } = useTranslation("projects");
@@ -27,11 +28,10 @@ export function SubmitAssignmentPage() {
     const [previewFile, setPreviewFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-    const { data: assignment } = useLessonAssignment(projectId, {
-        enabled: !!projectId,
-    });
+    const { data: groups, isLoading } = useAssignmentGroups(projectId);
+    const group: AssignmentGroup | undefined = groups?.[0];
 
-    const createMutation = useCreateLessonAssignment();
+    const submitMutation = useSubmitAssignment();
 
     const handleDragOver = useCallback((e: React.DragEvent) => {
         e.preventDefault();
@@ -108,23 +108,30 @@ export function SubmitAssignmentPage() {
         if (files.length === 0 || !projectId) return;
 
         try {
-            // Submit each file as a separate assignment submission
-            for (const file of files) {
-                await createMutation.mutateAsync({
-                    lessonId: projectId,
-                    title: content || assignment?.title || "Submission",
-                    file,
-                });
-            }
+            await submitMutation.mutateAsync({
+                assignmentId: projectId,
+                student_notes: content,
+                files,
+            });
             navigate(-1);
         } catch (error) {
             // Error handled by mutation
         }
-    }, [content, files, projectId, navigate, createMutation, assignment]);
+    }, [content, files, projectId, navigate, submitMutation]);
 
-    const isSubmitDisabled = files.length === 0 || createMutation.isPending;
+    const isSubmitDisabled = files.length === 0 || submitMutation.isPending;
 
-    if (!assignment) {
+    if (isLoading) {
+        return (
+            <div className="flex flex-col items-center justify-center py-12">
+                <p className="text-gray-500 dark:text-gray-400">
+                    {t("loading", "Loading...")}
+                </p>
+            </div>
+        );
+    }
+
+    if (!group) {
         return (
             <div className="flex flex-col items-center justify-center py-12">
                 <p className="text-gray-500 dark:text-gray-400">
@@ -272,7 +279,7 @@ export function SubmitAssignmentPage() {
                                 : "bg-brand-500 hover:bg-brand-600 text-white shadow-lg shadow-brand-500/25"
                         }`}
                     >
-                        {createMutation.isPending ? (
+                        {submitMutation.isPending ? (
                             <>
                                 <Loader2 className="size-5 animate-spin" />
                                 {t("submit.submitting", "Submitting...")}

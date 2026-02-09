@@ -1,19 +1,28 @@
 import { useTranslation } from "react-i18next";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Clock, CheckCircle, GraduationCap } from "lucide-react";
 import { PageWrapper } from "@/design-system";
-import { useLessonAssignment } from "@/features/dashboard/admin/learning/pages/lessons/api";
+import { useAssignmentGroups, type AssignmentGroup } from "../api";
 
 export function HomeworkResultPage() {
     const { t } = useTranslation("projects");
     const { projectId } = useParams<{ projectId: string }>();
-    const navigate = useNavigate();
 
-    const { data: assignment } = useLessonAssignment(projectId, {
-        enabled: !!projectId,
-    });
+    const { data: groups, isLoading } = useAssignmentGroups(projectId);
 
-    if (!assignment) {
+    const group: AssignmentGroup | undefined = groups?.[0];
+
+    if (isLoading) {
+        return (
+            <div className="flex flex-col items-center justify-center py-12">
+                <p className="text-gray-500 dark:text-gray-400">
+                    {t("loading", "Loading...")}
+                </p>
+            </div>
+        );
+    }
+
+    if (!group) {
         return (
             <div className="flex flex-col items-center justify-center py-12">
                 <p className="text-gray-500 dark:text-gray-400">

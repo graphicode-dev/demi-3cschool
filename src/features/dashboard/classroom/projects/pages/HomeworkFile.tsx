@@ -1,19 +1,28 @@
 import { useTranslation } from "react-i18next";
-import { useParams, useNavigate } from "react-router-dom";
-import { FileText, Download, ArrowLeft } from "lucide-react";
+import { useParams } from "react-router-dom";
+import { FileText, Download } from "lucide-react";
 import { PageWrapper } from "@/design-system";
-import { useLessonAssignment } from "@/features/dashboard/admin/learning/pages/lessons/api";
+import { useAssignmentGroups, type AssignmentGroup } from "../api";
 
 export function HomeworkFilePage() {
     const { t } = useTranslation("projects");
     const { projectId } = useParams<{ projectId: string }>();
-    const navigate = useNavigate();
 
-    const { data: assignment } = useLessonAssignment(projectId, {
-        enabled: !!projectId,
-    });
+    const { data: groups, isLoading } = useAssignmentGroups(projectId);
 
-    if (!assignment) {
+    const group: AssignmentGroup | undefined = groups?.[0];
+
+    if (isLoading) {
+        return (
+            <div className="flex flex-col items-center justify-center py-12">
+                <p className="text-gray-500 dark:text-gray-400">
+                    {t("loading", "Loading...")}
+                </p>
+            </div>
+        );
+    }
+
+    if (!group) {
         return (
             <div className="flex flex-col items-center justify-center py-12">
                 <p className="text-gray-500 dark:text-gray-400">
@@ -24,9 +33,7 @@ export function HomeworkFilePage() {
     }
 
     const handleDownload = () => {
-        if (assignment.file?.url) {
-            window.open(assignment.file.url, "_blank");
-        }
+        // File URL would come from submission data when available
     };
 
     return (
@@ -50,17 +57,14 @@ export function HomeworkFilePage() {
                         {/* File Info */}
                         <div className="flex flex-col">
                             <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                                {assignment.file?.fileName || "Homework.pdf"}
+                                {group.groupName || "Homework.pdf"}
                             </h3>
                             <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                                 <span className="px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-800 text-xs font-semibold uppercase">
-                                    {assignment.file?.mimeType || "PDF"}
+                                    PDF
                                 </span>
                                 <span>•</span>
-                                <span>
-                                    {assignment.file?.humanReadableSize ||
-                                        "2.5 MB"}
-                                </span>
+                                <span>{group.levelName || "Assignment"}</span>
                             </div>
                         </div>
                     </div>

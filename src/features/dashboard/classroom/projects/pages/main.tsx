@@ -6,11 +6,7 @@ import { ProjectCard } from "../components";
 import type { Project } from "../types";
 import { PageWrapper } from "@/design-system";
 import { useMyAllSessions } from "@/features/dashboard/classroom/mySchedule/api";
-import {
-    useLessonAssignment,
-    useLessonAssignmentsList,
-    useLessonAssignmentsByLesson,
-} from "@/features/dashboard/admin/learning/pages/lessons/api";
+import { useAssignmentGroups } from "../api";
 
 export function ProjectsPage() {
     const { t } = useTranslation("projects");
@@ -19,9 +15,6 @@ export function ProjectsPage() {
         null
     );
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [selectedAssignmentId, setSelectedAssignmentId] = useState<
-        string | null
-    >(null);
 
     const { data: mySessionsData } = useMyAllSessions();
 
@@ -44,75 +37,35 @@ export function ProjectsPage() {
         return lessons.find((l) => l.id === selectedLessonId) ?? null;
     }, [selectedLessonId, lessons]);
 
-    const { data: allAssignments } = useLessonAssignmentsList({
-        enabled: selectedLessonId === null,
-    });
-
-    const { data: assignmentsData } = useLessonAssignmentsByLesson(
-        selectedLessonId ? String(selectedLessonId) : null,
-        undefined,
-        { enabled: !!selectedLessonId }
+    const { data: assignmentGroups } = useAssignmentGroups(
+        selectedLessonId ?? undefined
     );
 
-    useLessonAssignment(selectedAssignmentId, {
-        enabled: !!selectedAssignmentId,
-    });
-
-    const stringToStableInt = (value: string) => {
-        let hash = 0;
-        for (let i = 0; i < value.length; i++) {
-            hash = (hash * 31 + value.charCodeAt(i)) | 0;
-        }
-        return Math.abs(hash);
-    };
-
     const projects = useMemo(() => {
-        const items =
-            selectedLessonId === null
-                ? (allAssignments ?? [])
-                : (assignmentsData?.items ?? []);
+        const groups = assignmentGroups ?? [];
 
-        if (items.length === 0) return [] as Project[];
+        if (groups.length === 0) return [] as Project[];
 
-        return items.map((a) => {
-            const numericId = Number(a.id);
-            const id = Number.isFinite(numericId)
-                ? numericId
-                : stringToStableInt(a.id);
-
+        return groups.map((group) => {
             return {
-                id,
-                assignmentId: a.id,
-                lessonId: selectedLesson?.id ?? 0,
-                lessonTitle: selectedLesson?.title ?? t("allLessons"),
+                id: group.groupId,
+                assignmentId: String(group.groupId),
+                lessonId: group.levelId,
+                lessonTitle: group.levelName ?? group.groupName,
                 lessonOrder: 0,
-                title: a.title,
-                description: a.file?.fileName ?? a.file?.name ?? "",
+                title: group.groupName,
+                description: `${group.studentsCount} students`,
                 status: "new",
-                homeworkFile: a.file
-                    ? {
-                          name: a.file.fileName ?? a.file.name,
-                          type: a.file.mimeType,
-                          size: a.file.humanReadableSize,
-                          url: a.file.url,
-                      }
-                    : undefined,
+                homeworkFile: undefined,
             } satisfies Project;
         });
-    }, [
-        allAssignments,
-        assignmentsData?.items,
-        selectedLesson,
-        selectedLessonId,
-        t,
-    ]);
+    }, [assignmentGroups]);
 
     const handleViewHomework = useCallback(
         (projectId: number) => {
             const assignmentId =
                 projects.find((p) => p.id === projectId)?.assignmentId ??
                 String(projectId);
-            setSelectedAssignmentId(assignmentId);
             navigate(`homework/${assignmentId}`);
         },
         [navigate, projects]
