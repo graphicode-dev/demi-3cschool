@@ -6,19 +6,16 @@
  * Permission-controlled routes using learningPermissions config.
  */
 
-import type { RouteConfig, FeatureRouteModule } from "@/router/routes.types";
-import { learningPermissions } from "@/auth";
+import type { RouteConfig } from "@/router/routes.types";
 import { programsPaths } from "./paths";
-
-const { course } = learningPermissions;
 
 // ============================================================================
 // Programs Routes
 // ============================================================================
 
-const programsRoutes: RouteConfig[] = [
+export const programsRoutes: RouteConfig[] = [
     {
-        index: true,
+        path: "programs",
         lazy: () =>
             import("@/features/dashboard/admin/programs/pages/Programs"),
         // permissions: [course.viewAny],
@@ -26,37 +23,17 @@ const programsRoutes: RouteConfig[] = [
         handle: { crumb: "programs:programs.title" },
     },
     {
-        path: programsPaths.summerList(),
+        path: `programs/${programsPaths.summerList()}`,
         lazy: () =>
             import("@/features/dashboard/admin/programs/pages/SummerProgramList"),
         meta: { titleKey: "programs:summerProgram.title" },
         handle: { crumb: "programs:summerProgram.title" },
     },
     {
-        path: programsPaths.standardList(),
+        path: `programs/${programsPaths.standardList()}`,
         lazy: () =>
             import("@/features/dashboard/admin/programs/pages/StandardProgramList"),
         meta: { titleKey: "programs:programs.standardProgram.title" },
         handle: { crumb: "programs:programs.standardProgram.title" },
     },
 ];
-
-// ============================================================================
-// Feature Route Module
-// ============================================================================
-
-export const programsManagementRoutes: FeatureRouteModule = {
-    id: "programsManagement",
-    name: "Programs Management",
-    basePath: "/admin/programs",
-    layout: "dashboard",
-    routes: {
-        meta: {
-            titleKey: "programs:programs.title",
-            requiresAuth: true,
-        },
-        children: programsRoutes,
-    },
-};
-
-export default programsManagementRoutes;

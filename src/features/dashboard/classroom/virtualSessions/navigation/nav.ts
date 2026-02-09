@@ -7,13 +7,13 @@
 
 import type { NavItem } from "@/navigation/nav.types";
 import { Video } from "lucide-react";
-import { virtualSessions } from "./paths";
+import { virtualSessionsPaths } from "./paths";
 
 export const virtualSessionsNavItem: NavItem = {
     key: "virtual-sessions",
     labelKey: "virtualSessions:title",
     label: "Virtual Sessions",
-    href: virtualSessions.main(),
+    href: virtualSessionsPaths.main(),
     icon: Video,
     order: 2,
 };

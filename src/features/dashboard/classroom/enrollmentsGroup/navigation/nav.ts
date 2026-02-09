@@ -6,13 +6,13 @@
 
 import type { NavItem } from "@/navigation/nav.types";
 import { Users } from "lucide-react";
-import { ENROLLMENTS_GROUP_PATH } from "./paths";
+import { enrollmentsGroupPaths } from "./paths";
 
 export const enrollmentsGroupNavItem: NavItem = {
     key: "enrollmentsGroup",
     labelKey: "enrollmentsGroup:title",
     label: "Enrollments Group",
-    href: ENROLLMENTS_GROUP_PATH,
+    href: enrollmentsGroupPaths.root(),
     icon: Users,
     order: 25,
 };

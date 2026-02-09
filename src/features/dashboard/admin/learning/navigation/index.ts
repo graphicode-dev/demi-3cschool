@@ -2,7 +2,7 @@
  * Learning Feature - Navigation Exports
  */
 
-export { learningNav, default } from "./nav";
+export { default } from "./nav";
 export {
     gradesPaths,
     learningPaths,
@@ -10,4 +10,3 @@ export {
     SecondTermLearningPaths,
     SummerCampLearningPaths,
 } from "./paths";
-export { learningRoutes } from "./routes";

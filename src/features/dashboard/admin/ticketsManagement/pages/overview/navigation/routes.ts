@@ -1,7 +1,4 @@
 import type { RouteConfig } from "@/router";
-import { supportPermissions } from "@/auth";
-
-const { ticket } = supportPermissions;
 
 /**
  * Overview feature routes

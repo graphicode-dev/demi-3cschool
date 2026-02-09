@@ -7,13 +7,13 @@
 
 import type { NavItem } from "@/navigation/nav.types";
 import { FolderKanban } from "lucide-react";
-import { PROJECTS_PATH } from "./paths";
+import { projectsPaths } from "./paths";
 
 export const projectsNavItem: NavItem = {
     key: "projects",
     labelKey: "projects:title",
     label: "Projects",
-    href: PROJECTS_PATH,
+    href: projectsPaths.root(),
     icon: FolderKanban,
     order: 30,
 };

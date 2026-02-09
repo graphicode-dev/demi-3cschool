@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback, memo, useMemo } from "react";
 import { Play } from "lucide-react";
-import type { PlayerState } from "../../types";
+import { PlayerState } from "@/features/dashboard/shared/types";
 
 declare global {
     interface Window {

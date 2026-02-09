@@ -7,13 +7,13 @@
 
 import type { NavItem } from "@/navigation/nav.types";
 import { CalendarDays } from "lucide-react";
-import { MY_SCHEDULE_PATH } from "./paths";
+import { mySchedulePaths } from "./paths";
 
 export const myScheduleNavItem: NavItem = {
     key: "my-schedule",
     labelKey: "mySchedule:title",
     label: "My Schedule",
-    href: MY_SCHEDULE_PATH,
+    href: mySchedulePaths.root(),
     icon: CalendarDays,
     order: 50,
 };

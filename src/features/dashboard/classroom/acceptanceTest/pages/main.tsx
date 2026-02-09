@@ -17,7 +17,7 @@ import {
     useSubmitAnswer,
     useCompleteExam,
 } from "../api";
-import { acceptanceTest } from "../navigation";
+import { acceptanceTestPaths } from "../navigation";
 import { USE_MOCK_DATA, MOCK_EXAM, MOCK_ATTEMPT } from "../mocks";
 
 interface QuizData {
@@ -280,7 +280,7 @@ function AcceptanceExamTakePage() {
             });
 
             // Navigate to waiting page after submission
-            navigate(acceptanceTest.waiting());
+            navigate(acceptanceTestPaths.waiting());
         } catch (error: any) {
             addToast({
                 type: "error",

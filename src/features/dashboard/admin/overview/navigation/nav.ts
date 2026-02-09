@@ -12,24 +12,18 @@
  * ```
  */
 
-import type { FeatureNavModule } from "@/navigation/nav.types";
+import type { NavItem } from "@/navigation/nav.types";
 import { dashboardPermissions } from "@/auth/permission.config";
 import { overviewPaths } from "./paths";
 
-export const overviewManagementNav: FeatureNavModule = {
-    featureId: "overviewManagement",
-    section: "Curriculum Management",
-    items: [
-        {
-            order: 1,
-            key: "overview",
-            labelKey: "overview:overview.breadcrumb",
-            label: "Overview",
-            href: overviewPaths.list(),
-            hidden: true,
-            permissions: [dashboardPermissions.view],
-        },
-    ],
+export const overviewManagementNav: NavItem = {
+    order: 1,
+    key: "overview",
+    labelKey: "overview:overview.breadcrumb",
+    label: "Overview",
+    href: overviewPaths.list(),
+    hidden: true,
+    permissions: [dashboardPermissions.view],
 };
 
 export default overviewManagementNav;

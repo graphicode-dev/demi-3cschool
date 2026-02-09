@@ -7,13 +7,13 @@
 
 import type { NavItem } from "@/navigation/nav.types";
 import { Building2 } from "lucide-react";
-import { physicalSessions } from "./paths";
+import { physicalSessionsPaths } from "./paths";
 
 export const physicalSessionsNavItem: NavItem = {
     key: "physical-sessions",
     labelKey: "physicalSessions:title",
     label: "Physical Sessions",
-    href: physicalSessions.main(),
+    href: physicalSessionsPaths.main(),
     icon: Building2,
     order: 1,
 };

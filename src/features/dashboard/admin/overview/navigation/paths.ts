@@ -14,8 +14,6 @@
  * ```
  */
 
-import { registerFeaturePaths } from "@/router/paths.registry";
-
 // ============================================================================
 // Overview Paths
 // ============================================================================
@@ -25,20 +23,7 @@ export const overviewPaths = {
 } as const;
 
 // ============================================================================
-// Combined Overview Management Paths
-// ============================================================================
-
-export const OverviewManagementPaths = registerFeaturePaths(
-    "overviewManagement",
-    {
-        // Overview
-        programsList: overviewPaths.list,
-    }
-);
-
-// ============================================================================
 // Type Exports
 // ============================================================================
 
 export type OverviewPaths = typeof overviewPaths;
-export type OverviewManagementPaths = typeof OverviewManagementPaths;

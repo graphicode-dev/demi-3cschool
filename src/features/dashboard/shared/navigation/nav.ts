@@ -6,11 +6,11 @@
  */
 
 import type { NavItem } from "@/navigation/nav.types";
-import { User, MessageSquare, Award, FileText, Ticket } from "lucide-react";
-import { accountPermissions, supportPermissions } from "@/auth";
-import { getDashboardBasePath } from "./paths";
+import { User, MessageSquare, Award, FileText } from "lucide-react";
+import { accountPermissions } from "@/auth";
+import { CLASSROOM_PATH } from "../../classroom/navigation/constant";
+import { ADMIN_PATH } from "../../admin/navigation/constant";
 
-const { ticket } = supportPermissions;
 const { conversation, certificate, report } = accountPermissions;
 
 /**
@@ -19,7 +19,7 @@ const { conversation, certificate, report } = accountPermissions;
 export const createSharedNavItems = (
     section: "admin" | "classroom"
 ): NavItem[] => {
-    const basePath = `${getDashboardBasePath()}`;
+    const basePath = section === "classroom" ? CLASSROOM_PATH : ADMIN_PATH;
 
     return [
         {

@@ -29,7 +29,8 @@ export const gradesPaths = {
     /** List all grades */
     list: () => `${GRADES_BASE_PATH}`,
     /** Terms list for a specific grade */
-    terms: (gradeId: string | number) => `${GRADES_BASE_PATH}/${gradeId}/levels`,
+    terms: (gradeId: string | number) =>
+        `${GRADES_BASE_PATH}/${gradeId}/levels`,
     /** Lessons list for a specific grade and term */
     lessons: (gradeId: string | number, termId: string) =>
         `${GRADES_BASE_PATH}/${gradeId}/levels/${termId}/lessons`,

@@ -1,7 +1,4 @@
 import type { RouteConfig } from "@/router";
-import { groupsPermissions } from "@/auth";
-
-const { groupSession } = groupsPermissions;
 
 /**
  * Physical Sessions feature routes

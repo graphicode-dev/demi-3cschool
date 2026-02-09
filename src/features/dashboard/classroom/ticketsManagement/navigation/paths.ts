@@ -12,19 +12,12 @@
  * ```
  */
 
-import { registerFeaturePaths } from "@/router/paths.registry";
-import { overview, overviewPaths } from "../pages/overview/navigation";
-import {
-    teamStructure,
-    teamStructurePaths,
-} from "../pages/teamStructure/navigation";
-import { tickets, ticketsPagePaths } from "../pages/tickets/navigation";
-import {
-    distribution,
-    distributionPaths,
-} from "../pages/distribution/navigation";
-import { performance, performancePaths } from "../pages/performance/navigation";
-import { supportHelp, supportHelpPaths } from "../pages/supportHelp/navigation";
+import { overview } from "../pages/overview/navigation";
+import { teamStructure } from "../pages/teamStructure/navigation";
+import { tickets } from "../pages/tickets/navigation";
+import { distribution } from "../pages/distribution/navigation";
+import { performance } from "../pages/performance/navigation";
+import { supportHelp } from "../pages/supportHelp/navigation";
 import { TICKETS_BASE_PATH } from "./constants";
 
 // ============================================================================
@@ -72,29 +65,6 @@ export const ticketsPaths = {
      */
     supportHelpCreate: supportHelp.create,
 } as const;
-
-// ============================================================================
-// Register Feature Paths
-// ============================================================================
-
-export const ticketsManagementPaths = registerFeaturePaths(
-    "ticketsManagement",
-    {
-        root: ticketsPaths.root,
-        // Overview
-        ...overviewPaths,
-        // Team Structure
-        ...teamStructurePaths,
-        // Tickets
-        ...ticketsPagePaths,
-        // Distribution
-        ...distributionPaths,
-        // Performance
-        ...performancePaths,
-        // Support Help
-        ...supportHelpPaths,
-    }
-);
 
 // ============================================================================
 // Type Exports

@@ -7,8 +7,8 @@
 import { PageWrapper } from "@/design-system";
 import { useTranslation } from "react-i18next";
 import ProgramTypeCard from "../components/ProgramTypeCard";
-import { programsManagementPaths } from "../navigation";
 import { BookOpen, Sun } from "lucide-react";
+import { programsPaths } from "../navigation";
 
 function ProgramsPage() {
     const { t } = useTranslation();
@@ -25,7 +25,7 @@ function ProgramsPage() {
                     description={t(
                         "programs:programs.standardProgram.description"
                     )}
-                    href={programsManagementPaths.standardList()}
+                    href={programsPaths.standardList()}
                     icon={
                         <BookOpen className="w-6 h-6 text-brand-600 dark:text-brand-400" />
                     }
@@ -36,7 +36,7 @@ function ProgramsPage() {
                     description={t(
                         "programs:programs.summerProgram.description"
                     )}
-                    href={programsManagementPaths.summerList()}
+                    href={programsPaths.summerList()}
                     icon={
                         <Sun className="w-6 h-6 text-amber-600 dark:text-amber-400" />
                     }

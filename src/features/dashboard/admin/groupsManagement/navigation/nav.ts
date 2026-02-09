@@ -12,25 +12,18 @@
  * ```
  */
 
-import type { FeatureNavModule } from "@/navigation/nav.types";
-import { groupsPermissions, eligibleStudentsPermissions } from "@/auth";
+import type { NavItem } from "@/navigation/nav.types";
 import { groupsPaths } from "./paths";
+import { Users } from "lucide-react";
 
-const { group, groupSession } = groupsPermissions;
-
-export const groupsManagementNav: FeatureNavModule = {
-    featureId: "groupsManagement",
-    section: "Groups Management",
-    items: [
-        {
-            key: "groups",
-            labelKey: "groupsManagement:groups.title",
-            label: "Groups Management",
-            href: groupsPaths.gradesList(),
-            order: 1,
-            permissions: [group.viewAny],
-        },
-    ],
+export const groupsManagementNav: NavItem = {
+    key: "groups",
+    labelKey: "groupsManagement:groups.title",
+    label: "Groups Management",
+    href: groupsPaths.gradesList(),
+    icon: Users,
+    order: 5,
+    // permissions: [group.viewAny],
 };
 
 export default groupsManagementNav;

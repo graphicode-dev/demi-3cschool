@@ -7,16 +7,13 @@
 
 import type { NavItem } from "@/navigation/nav.types";
 import { BookOpen } from "lucide-react";
-import { learningPermissions } from "@/auth";
-import { selfStudy } from "./paths";
-
-const { lesson } = learningPermissions;
+import { selfStudyPaths } from "./paths";
 
 export const selfStudyNavItem: NavItem = {
     key: "self-study",
     labelKey: "selfStudy:title",
     label: "Self Study",
-    href: selfStudy.main(),
+    href: selfStudyPaths.main(),
     icon: BookOpen,
     order: 0,
     // permissions: [lesson.viewAny],

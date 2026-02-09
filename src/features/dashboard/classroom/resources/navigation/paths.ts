@@ -6,11 +6,9 @@
 
 import { CLASSROOM_PATH } from "@/features/dashboard/classroom/navigation/constant";
 
-export const RESOURCES_BASE_PATH = `${CLASSROOM_PATH}/resources`;
-
 export const resourcesPaths = {
-    root: () => RESOURCES_BASE_PATH,
-    session: (sessionId: string) => `${RESOURCES_BASE_PATH}/${sessionId}`,
+    root: () => `${CLASSROOM_PATH}/resources`,
+    session: (sessionId: string) => `${CLASSROOM_PATH}/resources/${sessionId}`,
 };
 
 export type ResourcesPaths = typeof resourcesPaths;

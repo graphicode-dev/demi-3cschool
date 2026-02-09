@@ -60,7 +60,7 @@ export function ChangeBlockPage() {
                 subtitle: t("manageTeam.changeBlock.pageSubtitleWithName", {
                     name: lead.name,
                 }),
-                backHref: paths.dashboard.admin.ticketsManagement.manageTeam(),
+                backHref: paths.dashboard.admin.ticketsPaths.teamStructure(),
                 backButton: true,
             }}
         >

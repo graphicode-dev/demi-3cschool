@@ -11,25 +11,18 @@
  * ```
  */
 
-import type { FeatureNavModule } from "@/navigation/nav.types";
-import { learningPermissions } from "@/auth";
+import type { NavItem } from "@/navigation/nav.types";
 import { gradesPaths } from "./paths";
+import { GraduationCap } from "lucide-react";
 
-const { lesson } = learningPermissions;
-
-export const learningNav: FeatureNavModule = {
-    featureId: "learning",
-    section: "Curriculum Management",
-    items: [
-        {
-            key: "grades",
-            labelKey: "learning:grades.navTitle",
-            label: "Grades",
-            href: gradesPaths.list(),
-            order: 2,
-            permissions: [lesson.viewAny],
-        },
-    ],
+export const gradesNav: NavItem = {
+    key: "grades",
+    labelKey: "learning:grades.navTitle",
+    label: "Grades",
+    href: gradesPaths.list(),
+    icon: GraduationCap,
+    order: 2,
+    // permissions: [lesson.viewAny],
 };
 
-export default learningNav;
+export default gradesNav;

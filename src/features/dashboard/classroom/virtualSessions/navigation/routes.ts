@@ -1,12 +1,8 @@
 import type { RouteConfig } from "@/router";
-import { groupsPermissions } from "@/auth";
-
-const { groupSession } = groupsPermissions;
 
 /**
  * Virtual Sessions feature routes
  * These routes are under the classroom dashboard
- * Permission-controlled using groupsPermissions config.
  */
 export const virtualSessionsRoutes: RouteConfig[] = [
     {

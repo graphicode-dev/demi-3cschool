@@ -23,6 +23,7 @@ import { enrollmentsGroupRoutes } from "../enrollmentsGroup/navigation";
 import { communityRoutes } from "../community/navigation";
 import { classroomPaths } from "./paths";
 import { CLASSROOM_PATH } from "./constant";
+import { ticketsManagementRoutes } from "../ticketsManagement/navigation/routes";
 
 /**
  * Classroom Route Module
@@ -41,14 +42,14 @@ export const classroomRouteModule: FeatureRouteModule = {
             },
             // Shared features (profile, chat, certificates, reports)
             ...classroomSharedRoutes,
+            // Acceptance Test feature
+            ...acceptanceTestRoutes,
             // Self Study feature
             ...selfStudyRoutes,
             // Physical Sessions feature
             ...physicalSessionsRoutes,
             // Virtual Sessions feature
             ...virtualSessionsRoutes,
-            // Acceptance Test feature
-            ...acceptanceTestRoutes,
             // Projects feature
             ...projectsRoutes,
             // Final Exams feature
@@ -61,6 +62,8 @@ export const classroomRouteModule: FeatureRouteModule = {
             ...resourcesRoutes,
             // Enrollments Group feature
             ...enrollmentsGroupRoutes,
+            // Tickets Management feature
+            ...ticketsManagementRoutes,
             // Community feature
             ...communityRoutes,
         ],

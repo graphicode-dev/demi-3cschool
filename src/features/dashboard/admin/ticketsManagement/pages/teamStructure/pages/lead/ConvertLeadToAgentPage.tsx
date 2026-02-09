@@ -61,7 +61,7 @@ export function ConvertLeadToAgentPage() {
             pageHeaderProps={{
                 title: t("manageTeam.convertLead.pageTitle"),
                 subtitle: t("manageTeam.convertLead.pageSubtitle"),
-                backHref: paths.dashboard.admin.ticketsManagement.manageTeam(),
+                backHref: paths.dashboard.admin.ticketsPaths.teamStructure(),
                 backButton: true,
             }}
         >

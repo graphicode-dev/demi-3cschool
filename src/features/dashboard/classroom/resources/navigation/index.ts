@@ -4,7 +4,6 @@
 
 export {
     resourcesPaths,
-    RESOURCES_BASE_PATH,
     type ResourcesPaths,
 } from "./paths";
 export { resourcesRoutes } from "./routes";

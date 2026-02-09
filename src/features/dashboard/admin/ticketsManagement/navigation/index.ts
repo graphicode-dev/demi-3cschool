@@ -6,11 +6,9 @@
 
 export {
     ticketsPaths,
-    ticketsManagementPaths,
     type TicketsPaths,
 } from "./paths";
 export {
-    ticketsManagementRouteModule,
     ticketsManagementRoutes,
 } from "./routes";
 export { ticketsManagementNavItem } from "./nav";

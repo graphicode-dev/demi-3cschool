@@ -62,7 +62,7 @@ export function PromoteAgentToLeadPage() {
                 subtitle: t("manageTeam.promoteAgent.pageSubtitleWithName", {
                     name: agent.name,
                 }),
-                backHref: paths.dashboard.admin.ticketsManagement.manageTeam(),
+                backHref: paths.dashboard.admin.ticketsPaths.teamStructure(),
                 backButton: true,
             }}
         >

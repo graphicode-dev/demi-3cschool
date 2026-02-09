@@ -11,7 +11,7 @@
 import { useEffect } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { authStore } from "@/auth/auth.store";
-import { acceptanceTest } from "../navigation";
+import { acceptanceTestPaths } from "../navigation";
 import { CLASSROOM_PATH } from "../../navigation/constant";
 import type { AcceptanceExamStatus } from "../types";
 
@@ -57,8 +57,8 @@ export function AcceptanceExamRouteGuard() {
 
         // Route user to correct page based on their status
         const isMainPage =
-            pathname === acceptanceTest.main() ||
-            pathname === `${acceptanceTest.main()}/`;
+            pathname === acceptanceTestPaths.main() ||
+            pathname === `${acceptanceTestPaths.main()}/`;
         const isWaitingPage = pathname.includes("/waiting");
         const isRejectedPage = pathname.includes("/rejected");
 
@@ -68,19 +68,19 @@ export function AcceptanceExamRouteGuard() {
             case "pending":
                 // User should be on main exam page
                 if (!isMainPage) {
-                    navigate(acceptanceTest.main(), { replace: true });
+                    navigate(acceptanceTestPaths.main(), { replace: true });
                 }
                 break;
             case "waiting":
                 // User should be on waiting page
                 if (!isWaitingPage) {
-                    navigate(acceptanceTest.waiting(), { replace: true });
+                    navigate(acceptanceTestPaths.waiting(), { replace: true });
                 }
                 break;
             case "rejected":
                 // User should be on rejected page
                 if (!isRejectedPage) {
-                    navigate(acceptanceTest.rejected(), { replace: true });
+                    navigate(acceptanceTestPaths.rejected(), { replace: true });
                 }
                 break;
         }

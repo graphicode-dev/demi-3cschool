@@ -1,7 +1,4 @@
 import type { RouteConfig } from "@/router";
-import { learningPermissions } from "@/auth";
-
-const { lesson } = learningPermissions;
 
 /**
  * Self Study feature routes

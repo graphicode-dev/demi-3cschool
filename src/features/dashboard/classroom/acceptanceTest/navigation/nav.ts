@@ -1,6 +1,6 @@
 import type { NavItem } from "@/navigation/nav.types";
 import { ClipboardCheck } from "lucide-react";
-import { acceptanceTest } from "./paths";
+import { acceptanceTestPaths } from "./paths";
 
 /**
  * Acceptance Test Navigation
@@ -10,7 +10,7 @@ export const acceptanceTestNavItem: NavItem = {
     key: "acceptanceTest",
     labelKey: "acceptanceTest:nav.exam",
     label: "Acceptance Exam",
-    href: acceptanceTest.main(),
+    href: acceptanceTestPaths.main(),
     icon: ClipboardCheck,
     order: -100,
 };

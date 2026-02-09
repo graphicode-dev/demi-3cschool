@@ -1,9 +1,6 @@
 import type { RouteConfig } from "@/router";
-import { supportPermissions } from "@/auth";
 import { Navigate } from "react-router-dom";
 import { teamStructure } from "./paths";
-
-const { ticket } = supportPermissions;
 
 /**
  * Team Structure feature routes

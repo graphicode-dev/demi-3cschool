@@ -81,7 +81,7 @@ export function EditAgentPage() {
                     name: agent.name,
                 }),
                 subtitle: t("manageTeam.editAgent.pageSubtitle"),
-                backHref: paths.dashboard.admin.ticketsManagement.manageTeam(),
+                backHref: paths.dashboard.admin.ticketsPaths.teamStructure(),
                 backButton: true,
             }}
         >

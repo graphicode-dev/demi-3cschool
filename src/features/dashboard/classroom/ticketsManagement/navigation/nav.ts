@@ -6,10 +6,7 @@
  */
 
 import { FeatureNavModule } from "@/navigation";
-import { supportPermissions } from "@/auth";
 import { ticketsPaths } from "./paths";
-
-const { ticket } = supportPermissions;
 
 export const ticketsManagementNav: FeatureNavModule = {
     featureId: "tickets-management",

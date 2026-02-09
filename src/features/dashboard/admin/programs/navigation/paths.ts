@@ -14,8 +14,6 @@
  * ```
  */
 
-import { registerFeaturePaths } from "@/router/paths.registry";
-
 // ============================================================================
 // Programs Paths
 // ============================================================================
@@ -27,22 +25,7 @@ export const programsPaths = {
 } as const;
 
 // ============================================================================
-// Combined Programs Management Paths
-// ============================================================================
-
-export const programsManagementPaths = registerFeaturePaths(
-    "programsManagement",
-    {
-        // Programs
-        programsList: programsPaths.main,
-        summerList: programsPaths.summerList,
-        standardList: programsPaths.standardList,
-    }
-);
-
-// ============================================================================
 // Type Exports
 // ============================================================================
 
 export type ProgramsPaths = typeof programsPaths;
-export type ProgramsManagementPaths = typeof programsManagementPaths;

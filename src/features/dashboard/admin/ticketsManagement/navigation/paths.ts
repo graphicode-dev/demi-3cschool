@@ -66,27 +66,6 @@ export const ticketsPaths = {
 } as const;
 
 // ============================================================================
-// Register Feature Paths
-// ============================================================================
-
-export const ticketsManagementPaths = registerFeaturePaths(
-    "ticketsManagement",
-    {
-        root: ticketsPaths.root,
-        // Overview
-        ...overviewPaths,
-        // Team Structure
-        ...teamStructurePaths,
-        // Tickets
-        ...ticketsPagePaths,
-        // Distribution
-        ...distributionPaths,
-        // Performance
-        ...performancePaths,
-    }
-);
-
-// ============================================================================
 // Type Exports
 // ============================================================================
 

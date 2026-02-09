@@ -13,23 +13,16 @@
  */
 
 import { BookOpen } from "lucide-react";
-import type { FeatureNavModule } from "@/navigation/nav.types";
+import type { NavItem } from "@/navigation/nav.types";
 import { programsPaths } from "./paths";
 
-export const programsManagementNav: FeatureNavModule = {
-    featureId: "programsManagement",
-    section: "Admin",
+export const programsManagementNav: NavItem = {
     order: 0,
-    items: [
-        {
-            order: 0,
-            key: "programs-management",
-            labelKey: "programs:programs.breadcrumb",
-            label: "Programs Management",
-            href: programsPaths.main(),
-            icon: BookOpen,
-        },
-    ],
+    key: "programs-management",
+    labelKey: "programs:programs.breadcrumb",
+    label: "Programs Management",
+    href: programsPaths.main(),
+    icon: BookOpen,
 };
 
 export default programsManagementNav;

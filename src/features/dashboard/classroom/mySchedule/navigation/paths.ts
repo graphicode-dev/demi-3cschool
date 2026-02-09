@@ -1,3 +1,5 @@
 import { CLASSROOM_PATH } from "../../navigation/constant";
 
-export const MY_SCHEDULE_PATH = `${CLASSROOM_PATH}/my-schedule`;
+export const mySchedulePaths = {
+    root: () => `${CLASSROOM_PATH}/my-schedule`,
+};
