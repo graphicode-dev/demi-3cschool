@@ -12,27 +12,19 @@ export const supportBlockKeys = {
     /**
      * Root key for all support block queries
      */
-    all: ["support-block"] as const,
+    all: ["support-blocks"] as const,
 
     /**
-     * Key for stats query
+     * Key for paginated list query
      */
-    stats: () => [...supportBlockKeys.all, "stats"] as const,
+    list: (page: number = 1) =>
+        [...supportBlockKeys.all, "list", { page }] as const,
 
     /**
-     * Key for blocks list query
+     * Key for single support block detail
      */
-    blocks: () => [...supportBlockKeys.all, "blocks"] as const,
-
-    /**
-     * Key for single block detail
-     */
-    block: (id: string) => [...supportBlockKeys.all, "block", id] as const,
-
-    /**
-     * Key for complete support block data
-     */
-    data: () => [...supportBlockKeys.all, "data"] as const,
+    detail: (id: number | string) =>
+        [...supportBlockKeys.all, "detail", id] as const,
 };
 
 /**
@@ -40,7 +32,5 @@ export const supportBlockKeys = {
  */
 export type SupportBlockQueryKey =
     | typeof supportBlockKeys.all
-    | ReturnType<typeof supportBlockKeys.stats>
-    | ReturnType<typeof supportBlockKeys.blocks>
-    | ReturnType<typeof supportBlockKeys.block>
-    | ReturnType<typeof supportBlockKeys.data>;
+    | ReturnType<typeof supportBlockKeys.list>
+    | ReturnType<typeof supportBlockKeys.detail>;

@@ -1,15 +1,15 @@
 /**
  * BlocksList Component
  *
- * Displays a list of block cards.
+ * Displays a list of support block cards.
  */
 
 import { useTranslation } from "react-i18next";
-import type { Block } from "../types";
+import type { SupportBlock } from "../types";
 import { BlockCard } from "./BlockCard";
 
 interface BlocksListProps {
-    blocks: Block[];
+    blocks: SupportBlock[];
     isLoading?: boolean;
 }
 

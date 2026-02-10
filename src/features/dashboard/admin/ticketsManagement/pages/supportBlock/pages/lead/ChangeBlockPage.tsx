@@ -10,46 +10,73 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Info } from "lucide-react";
 import { PageWrapper, useToast } from "@/design-system";
 import { supportBlock } from "../../navigation/paths";
-import { getMockLead, mockBlocks } from "../../mockData";
-import type { Lead } from "../../types";
-import { paths } from "@/router";
-
+import { useSupportBlocks, useUpdateSupportBlock } from "../../api";
 export function ChangeBlockPage() {
     const { t } = useTranslation("ticketsManagement");
     const navigate = useNavigate();
-    const { id } = useParams<{ id: string }>();
+    const { blockId, id } = useParams<{ blockId: string; id: string }>();
     const { addToast } = useToast();
 
-    const [lead, setLead] = useState<Lead | null>(null);
+    const { data: blocksData } = useSupportBlocks();
+    const blocks = blocksData?.items ?? [];
+    const updateBlockMutation = useUpdateSupportBlock();
+
+    // Find the lead from all blocks (leads are members with isLead=true)
+    const leadData = blocks
+        .flatMap((block) =>
+            block.members
+                .filter((member) => member.isLead)
+                .map((member) => ({
+                    ...member,
+                    blockId: block.id,
+                    blockName: block.name,
+                }))
+        )
+        .find((lead) => String(lead.id) === id);
+
     const [selectedBlockId, setSelectedBlockId] = useState("");
 
-    useEffect(() => {
-        if (id) {
-            const foundLead = getMockLead(id);
-            if (foundLead) {
-                setLead(foundLead);
-            }
-        }
-    }, [id]);
-
     const handleCancel = () => {
-        navigate(supportBlock.manageTeam());
+        navigate(supportBlock.manageTeam(blockId!));
     };
 
-    const handleSubmit = () => {
-        if (!lead || !selectedBlockId) return;
+    const handleSubmit = async () => {
+        if (!leadData || !selectedBlockId) return;
 
-        addToast({
-            type: "success",
-            title: t("manageTeam.changeBlock.submit"),
-        });
-        navigate(supportBlock.manageTeam());
+        try {
+            // Update the target block
+            const targetBlock = blocks.find(
+                (b) => String(b.id) === selectedBlockId
+            );
+            if (targetBlock) {
+                await updateBlockMutation.mutateAsync({
+                    id: targetBlock.id,
+                    payload: {
+                        name: targetBlock.name,
+                        description: targetBlock.description,
+                        is_active: targetBlock.isActive ? 1 : 0,
+                    },
+                });
+            }
+            addToast({
+                type: "success",
+                title: t("manageTeam.changeBlock.submit"),
+            });
+            navigate(supportBlock.manageTeam(blockId!));
+        } catch (err) {
+            addToast({
+                type: "error",
+                title: t("common.error", "Error changing block"),
+            });
+        }
     };
 
     const isFormValid =
-        lead && selectedBlockId && selectedBlockId !== lead.assignedBlockId;
+        leadData &&
+        selectedBlockId &&
+        selectedBlockId !== String(leadData.blockId);
 
-    if (!lead) {
+    if (!leadData) {
         return null;
     }
 
@@ -58,9 +85,9 @@ export function ChangeBlockPage() {
             pageHeaderProps={{
                 title: t("manageTeam.changeBlock.pageTitle"),
                 subtitle: t("manageTeam.changeBlock.pageSubtitleWithName", {
-                    name: lead.name,
+                    name: leadData.name,
                 }),
-                backHref: paths.dashboard.admin.ticketsPaths.supportBlock(),
+                backHref: supportBlock.manageTeam(blockId!),
                 backButton: true,
             }}
         >
@@ -92,7 +119,7 @@ export function ChangeBlockPage() {
                     </label>
                     <div className="px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900">
                         <span className="text-sm text-gray-900 dark:text-white">
-                            {lead.assignedBlock}
+                            {leadData.blockName}
                         </span>
                     </div>
                 </div>
@@ -110,12 +137,10 @@ export function ChangeBlockPage() {
                         <option value="">
                             {t("manageTeam.addLead.blockPlaceholder")}
                         </option>
-                        {mockBlocks
-                            .filter(
-                                (block) => block.id !== lead.assignedBlockId
-                            )
+                        {blocks
+                            .filter((block) => block.id !== leadData.blockId)
                             .map((block) => (
-                                <option key={block.id} value={block.id}>
+                                <option key={block.id} value={String(block.id)}>
                                     {block.name}
                                 </option>
                             ))}

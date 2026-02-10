@@ -177,7 +177,7 @@
             "edit": "Edit",
             "changeBlock": "Change Block",
             "convertToAgent": "Convert to Agent",
-            "promoteToLead": "Promote to Lead",
+            "reAssign": "Re-Assign",
             "remove": "Remove"
         },
         "addAgent": {
@@ -215,7 +215,7 @@
             "readyMessage": "By promoting <strong>{{name}}</strong>, they will gain management access to assigned blocks, manage sub-agents, and handle escalated tickets.",
             "assignedLeadBlock": "Assigned Lead Block",
             "cancel": "Cancel",
-            "submit": "Promote to lead",
+            "submit": "Re-Assign",
             "successMessage": "Agent promoted to lead successfully"
         },
         "removeAgent": {

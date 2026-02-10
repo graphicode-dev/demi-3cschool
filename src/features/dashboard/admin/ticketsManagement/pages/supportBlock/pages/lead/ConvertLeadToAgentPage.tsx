@@ -10,49 +10,83 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Info } from "lucide-react";
 import { PageWrapper, useToast } from "@/design-system";
 import { supportBlock } from "../../navigation/paths";
-import { getMockLead, mockBlocks, mockLeads } from "../../mockData";
-import type { Lead } from "../../types";
-import { paths } from "@/router";
-
+import { useSupportBlocks, useUpdateSupportBlock } from "../../api";
 export function ConvertLeadToAgentPage() {
     const { t } = useTranslation("ticketsManagement");
     const navigate = useNavigate();
-    const { id } = useParams<{ id: string }>();
+    const { blockId, id } = useParams<{ blockId: string; id: string }>();
     const { addToast } = useToast();
 
-    const [lead, setLead] = useState<Lead | null>(null);
+    const { data: blocksData } = useSupportBlocks();
+    const blocks = blocksData?.items ?? [];
+    const updateBlockMutation = useUpdateSupportBlock();
+
+    // Find the lead from all blocks (leads are members with isLead=true)
+    const leadData = blocks
+        .flatMap((block) =>
+            block.members
+                .filter((member) => member.isLead)
+                .map((member) => ({
+                    ...member,
+                    blockId: block.id,
+                    blockName: block.name,
+                }))
+        )
+        .find((lead) => String(lead.id) === id);
+
+    // Get all leads except the current one
+    const availableLeads = blocks
+        .flatMap((block) =>
+            block.members
+                .filter((member) => member.isLead)
+                .map((member) => ({
+                    ...member,
+                    blockId: block.id,
+                    blockName: block.name,
+                }))
+        )
+        .filter((lead) => String(lead.id) !== id);
+
     const [selectedBlockId, setSelectedBlockId] = useState("");
     const [selectedLeadId, setSelectedLeadId] = useState("");
 
-    useEffect(() => {
-        if (id) {
-            const foundLead = getMockLead(id);
-            if (foundLead) {
-                setLead(foundLead);
-                setSelectedBlockId(foundLead.assignedBlockId);
-            }
-        }
-    }, [id]);
-
     const handleCancel = () => {
-        navigate(supportBlock.manageTeam());
+        navigate(supportBlock.manageTeam(blockId!));
     };
 
-    const handleSubmit = () => {
-        if (!lead || !selectedBlockId || !selectedLeadId) return;
+    const handleSubmit = async () => {
+        if (!leadData || !selectedBlockId || !selectedLeadId) return;
 
-        addToast({
-            type: "success",
-            title: t("manageTeam.convertLead.submit"),
-        });
-        navigate(supportBlock.manageTeam());
+        try {
+            const targetBlock = blocks.find(
+                (b) => String(b.id) === selectedBlockId
+            );
+            if (targetBlock) {
+                await updateBlockMutation.mutateAsync({
+                    id: targetBlock.id,
+                    payload: {
+                        name: targetBlock.name,
+                        description: targetBlock.description,
+                        is_active: targetBlock.isActive ? 1 : 0,
+                    },
+                });
+            }
+            addToast({
+                type: "success",
+                title: t("manageTeam.convertLead.submit"),
+            });
+            navigate(supportBlock.manageTeam(blockId!));
+        } catch (err) {
+            addToast({
+                type: "error",
+                title: t("common.error", "Error converting lead"),
+            });
+        }
     };
 
-    const isFormValid = lead && selectedBlockId && selectedLeadId;
+    const isFormValid = leadData && selectedBlockId && selectedLeadId;
 
-    const availableLeads = mockLeads.filter((l) => l.id !== id);
-
-    if (!lead) {
+    if (!leadData) {
         return null;
     }
 
@@ -61,7 +95,7 @@ export function ConvertLeadToAgentPage() {
             pageHeaderProps={{
                 title: t("manageTeam.convertLead.pageTitle"),
                 subtitle: t("manageTeam.convertLead.pageSubtitle"),
-                backHref: paths.dashboard.admin.ticketsPaths.supportBlock(),
+                backHref: supportBlock.manageTeam(blockId!),
                 backButton: true,
             }}
         >
@@ -76,7 +110,7 @@ export function ConvertLeadToAgentPage() {
                                 __html: t(
                                     "manageTeam.convertLead.warningMessage",
                                     {
-                                        name: lead.name,
+                                        name: leadData.name,
                                     }
                                 ),
                             }}
@@ -97,8 +131,8 @@ export function ConvertLeadToAgentPage() {
                         <option value="">
                             {t("manageTeam.addLead.blockPlaceholder")}
                         </option>
-                        {mockBlocks.map((block) => (
-                            <option key={block.id} value={block.id}>
+                        {blocks.map((block) => (
+                            <option key={block.id} value={String(block.id)}>
                                 {block.name}
                             </option>
                         ))}
@@ -119,7 +153,7 @@ export function ConvertLeadToAgentPage() {
                             {t("manageTeam.convertLead.leadPlaceholder")}
                         </option>
                         {availableLeads.map((l) => (
-                            <option key={l.id} value={l.id}>
+                            <option key={l.id} value={String(l.id)}>
                                 {l.name}
                             </option>
                         ))}

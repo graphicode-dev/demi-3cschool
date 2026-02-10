@@ -5,6 +5,6 @@
  */
 
 export { TeamStatsRow } from "./TeamStatsRow";
-export { AgentCard } from "./AgentCard";
+export { LeadBadge } from "./LeadBadge";
 export { BlockCard } from "./BlockCard";
 export { BlocksList } from "./BlocksList";

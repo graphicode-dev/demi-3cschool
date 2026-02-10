@@ -6,58 +6,76 @@
 
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Search, User } from "lucide-react";
 import { PageWrapper, useToast } from "@/design-system";
 import { supportBlock } from "../../navigation/paths";
-import { mockUsers, mockBlocks } from "../../mockData";
-import type { User as UserType, AgentStatus } from "../../types";
-import { paths } from "@/router";
+import { useSupportBlock, useAddLead } from "../../api";
+
+interface UserOption {
+    id: string;
+    name: string;
+    email: string;
+}
 
 export function AddLeadPage() {
     const { t } = useTranslation("ticketsManagement");
     const navigate = useNavigate();
     const { addToast } = useToast();
+    const { blockId } = useParams<{ blockId: string }>();
+
+    const { data: blockData } = useSupportBlock(blockId);
+    const addLeadMutation = useAddLead();
 
     const [searchQuery, setSearchQuery] = useState("");
-    const [selectedUser, setSelectedUser] = useState<UserType | null>(null);
-    const [selectedBlockId, setSelectedBlockId] = useState("");
-    const [status, setStatus] = useState<AgentStatus>("available");
+    const [selectedUser, setSelectedUser] = useState<UserOption | null>(null);
     const [showUserDropdown, setShowUserDropdown] = useState(false);
 
-    const filteredUsers = searchQuery
-        ? mockUsers.filter(
-              (user) =>
-                  user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                  user.email.toLowerCase().includes(searchQuery.toLowerCase())
-          )
-        : [];
+    // TODO: Replace with real user search API when available
+    const filteredUsers: UserOption[] = [];
 
-    const handleSelectUser = (user: UserType) => {
+    const handleSelectUser = (user: UserOption) => {
         setSelectedUser(user);
         setSearchQuery(user.name);
         setShowUserDropdown(false);
     };
 
     const handleCancel = () => {
-        navigate(supportBlock.manageTeam());
+        navigate(supportBlock.manageTeam(blockId!));
     };
 
-    const handleSubmit = () => {
-        if (!selectedUser || !selectedBlockId) return;
+    const handleSubmit = async () => {
+        if (!selectedUser || !blockId) return;
 
-        addToast({ type: "success", title: t("manageTeam.addLead.pageTitle") });
-        navigate(supportBlock.manageTeam());
+        try {
+            await addLeadMutation.mutateAsync({
+                user_id: selectedUser.id,
+                support_block_id: blockId,
+            });
+            addToast({
+                type: "success",
+                title: t(
+                    "manageTeam.addLead.success",
+                    "Lead added successfully"
+                ),
+            });
+            navigate(supportBlock.manageTeam(blockId));
+        } catch (err) {
+            addToast({
+                type: "error",
+                title: t("common.error", "Error adding lead"),
+            });
+        }
     };
 
-    const isFormValid = selectedUser && selectedBlockId;
+    const isFormValid = selectedUser;
 
     return (
         <PageWrapper
             pageHeaderProps={{
                 title: t("manageTeam.addLead.pageTitle"),
                 subtitle: t("manageTeam.addLead.pageSubtitle"),
-                backHref: paths.dashboard.admin.ticketsPaths.supportBlock(),
+                backHref: supportBlock.manageTeam(blockId!),
                 backButton: true,
             }}
         >
@@ -120,59 +138,14 @@ export function AddLeadPage() {
                     </p>
                 </div>
 
-                {/* Assigned Block */}
+                {/* Assigned Block (Read-only) */}
                 <div className="space-y-2">
                     <label className="block text-sm font-medium text-gray-900 dark:text-white">
                         {t("manageTeam.addLead.assignedBlock")}
                     </label>
-                    <select
-                        value={selectedBlockId}
-                        onChange={(e) => setSelectedBlockId(e.target.value)}
-                        className="w-full px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 appearance-none"
-                    >
-                        <option value="">
-                            {t("manageTeam.addLead.blockPlaceholder")}
-                        </option>
-                        {mockBlocks.map((block) => (
-                            <option key={block.id} value={block.id}>
-                                {block.name}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-
-                {/* Initial Status */}
-                <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-900 dark:text-white">
-                        {t("manageTeam.addLead.initialStatus")}
-                    </label>
-                    <div className="flex rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-                        <button
-                            type="button"
-                            onClick={() => setStatus("available")}
-                            className={`flex-1 py-3 text-sm font-medium transition-colors ${
-                                status === "available"
-                                    ? "bg-success-50 dark:bg-success-500/15 text-success-600 dark:text-success-400 border-r border-gray-200 dark:border-gray-700"
-                                    : "bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 border-r border-gray-200 dark:border-gray-700"
-                            }`}
-                        >
-                            {t("supportBlock.status.available")}
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => setStatus("busy")}
-                            className={`flex-1 py-3 text-sm font-medium transition-colors ${
-                                status === "busy"
-                                    ? "bg-warning-50 dark:bg-warning-500/15 text-warning-600 dark:text-warning-400"
-                                    : "bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700"
-                            }`}
-                        >
-                            {t("supportBlock.status.busy")}
-                        </button>
+                    <div className="w-full px-4 py-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white">
+                        {blockData?.name || "-"}
                     </div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">
-                        {t("manageTeam.addLead.statusHint")}
-                    </p>
                 </div>
 
                 {/* Actions */}

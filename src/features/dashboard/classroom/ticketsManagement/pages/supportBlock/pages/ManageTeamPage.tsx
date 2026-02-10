@@ -171,7 +171,7 @@ export function ManageTeamPage() {
                     },
                     {
                         id: "promote",
-                        label: t("manageTeam.actions.promoteToLead"),
+                        label: t("manageTeam.actions.reAssign"),
                         onClick: () => {
                             const agent = agents.find((a) => a.id === row.id);
                             if (agent) handlePromoteAgent(agent);

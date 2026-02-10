@@ -7,11 +7,19 @@
 // Types
 export type {
     AgentStatus,
-    AgentRole,
-    Agent,
-    Block,
-    TeamStats,
-    SupportBlockData,
+    SupportBlockLead,
+    SupportBlock,
+    SupportBlocksListResponse,
+    CreateSupportBlockPayload,
+    UpdateSupportBlockPayload,
+    SupportBlockStats,
+    // Support Agent types
+    SupportAgent,
+    SupportAgentsListResponse,
+    AddLeadPayload,
+    AddAgentPayload,
+    UpdateAgentStatusPayload,
+    ReassignAgentPayload,
 } from "../types";
 
 // Query Keys
@@ -19,14 +27,27 @@ export {
     supportBlockKeys,
     type SupportBlockQueryKey,
 } from "./supportBlock.keys";
+export { supportAgentKeys } from "./supportAgent.keys";
 
 // API Functions
 export { supportBlockApi } from "./supportBlock.api";
+export { supportAgentApi } from "./supportAgent.api";
 
 // Query Hooks
+export { useSupportBlocks, useSupportBlock } from "./supportBlock.queries";
+export { useSupportAgentsByBlock } from "./supportAgent.queries";
+
+// Mutation Hooks
 export {
-    useTeamStats,
-    useBlocks,
-    useBlock,
-    useSupportBlockData,
-} from "./supportBlock.queries";
+    useCreateSupportBlock,
+    useUpdateSupportBlock,
+    useDeleteSupportBlock,
+} from "./supportBlock.mutations";
+
+export {
+    useAddLead,
+    useAddAgent,
+    useUpdateAgentStatus,
+    useReassignAgent,
+    useDeleteSupportAgent,
+} from "./supportAgent.mutations";

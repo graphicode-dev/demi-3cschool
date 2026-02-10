@@ -1,10 +1,15 @@
 import { useTranslation } from "react-i18next";
-import { Lead } from "../types";
+import { SupportBlockLead } from "../types";
 import { Crown, MoreHorizontal } from "lucide-react";
 import { ActionsDropdown, DropdownAction } from "@/design-system";
 
+interface LeadWithBlock extends SupportBlockLead {
+    blockId: number;
+    blockName: string;
+}
+
 interface LeadCardProps {
-    lead: Lead;
+    lead: LeadWithBlock;
     onEdit: () => void;
     onChangeBlock: () => void;
     onConvert: () => void;
@@ -69,7 +74,7 @@ export default function LeadCard({
                     </div>
                 </div>
                 <ActionsDropdown
-                    itemId={lead.id}
+                    itemId={String(lead.id)}
                     actions={
                         [
                             {
@@ -109,7 +114,7 @@ export default function LeadCard({
                     {t("manageTeam.leadCard.assignedBlock")}
                 </p>
                 <p className="text-sm font-medium text-gray-900 dark:text-white">
-                    {lead.assignedBlock}
+                    {lead.blockName}
                 </p>
             </div>
         </div>

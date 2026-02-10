@@ -1,6 +1,4 @@
 import type { RouteConfig } from "@/router";
-import { Navigate } from "react-router-dom";
-import { supportBlock } from "./paths";
 
 /**
  * Support Block feature routes
@@ -20,8 +18,34 @@ export const supportBlockRoutes: RouteConfig[] = [
             requiresAuth: true,
         },
     },
+    // Block management routes
     {
-        path: "support-block/manage",
+        path: "support-block/add",
+        lazy: () =>
+            import("../pages/block/AddBlockPage").then((m) => ({
+                default: m.default,
+            })),
+        meta: {
+            title: "Add Block",
+            titleKey: "ticketsManagement:supportBlock.addBlock.pageTitle",
+            requiresAuth: true,
+        },
+    },
+    {
+        path: "support-block/:blockId/edit",
+        lazy: () =>
+            import("../pages/block/EditBlockPage").then((m) => ({
+                default: m.default,
+            })),
+        meta: {
+            title: "Edit Block",
+            titleKey: "ticketsManagement:supportBlock.editBlock.pageTitle",
+            requiresAuth: true,
+        },
+    },
+    // Block-specific manage team
+    {
+        path: "support-block/:blockId/manage",
         lazy: () =>
             import("../pages/ManageTeamPage").then((m) => ({
                 default: m.default,
@@ -32,8 +56,9 @@ export const supportBlockRoutes: RouteConfig[] = [
             requiresAuth: true,
         },
     },
+    // Lead routes (block-specific)
     {
-        path: "support-block/manage/lead/add",
+        path: "support-block/:blockId/manage/lead/add",
         lazy: () =>
             import("../pages/lead/AddLeadPage").then((m) => ({
                 default: m.default,
@@ -45,7 +70,7 @@ export const supportBlockRoutes: RouteConfig[] = [
         },
     },
     {
-        path: "support-block/manage/lead/:id/edit",
+        path: "support-block/:blockId/manage/lead/:id/edit",
         lazy: () =>
             import("../pages/lead/EditLeadPage").then((m) => ({
                 default: m.default,
@@ -57,7 +82,7 @@ export const supportBlockRoutes: RouteConfig[] = [
         },
     },
     {
-        path: "support-block/manage/lead/:id/change-block",
+        path: "support-block/:blockId/manage/lead/:id/change-block",
         lazy: () =>
             import("../pages/lead/ChangeBlockPage").then((m) => ({
                 default: m.default,
@@ -69,7 +94,7 @@ export const supportBlockRoutes: RouteConfig[] = [
         },
     },
     {
-        path: "support-block/manage/lead/:id/convert",
+        path: "support-block/:blockId/manage/lead/:id/convert",
         lazy: () =>
             import("../pages/lead/ConvertLeadToAgentPage").then((m) => ({
                 default: m.default,
@@ -80,26 +105,9 @@ export const supportBlockRoutes: RouteConfig[] = [
             requiresAuth: true,
         },
     },
-    // Lead redirect routes (for breadcrumb navigation)
+    // Agent routes (block-specific)
     {
-        path: "support-block/manage/lead",
-        element: <Navigate to={supportBlock.manageTeam()} replace />,
-        meta: {
-            title: "Lead",
-            requiresAuth: true,
-        },
-    },
-    {
-        path: "support-block/manage/lead/:id",
-        element: <Navigate to={supportBlock.manageTeam()} replace />,
-        meta: {
-            title: "Lead",
-            requiresAuth: true,
-        },
-    },
-    // Agent routes
-    {
-        path: "support-block/manage/agent/add",
+        path: "support-block/:blockId/manage/agent/add",
         lazy: () =>
             import("../pages/agent/AddAgentPage").then((m) => ({
                 default: m.default,
@@ -111,7 +119,7 @@ export const supportBlockRoutes: RouteConfig[] = [
         },
     },
     {
-        path: "support-block/manage/agent/:id/edit",
+        path: "support-block/:blockId/manage/agent/:id/edit",
         lazy: () =>
             import("../pages/agent/EditAgentPage").then((m) => ({
                 default: m.default,
@@ -123,7 +131,7 @@ export const supportBlockRoutes: RouteConfig[] = [
         },
     },
     {
-        path: "support-block/manage/agent/:id/promote",
+        path: "support-block/:blockId/manage/agent/:id/promote",
         lazy: () =>
             import("../pages/agent/PromoteAgentToLeadPage").then((m) => ({
                 default: m.default,
@@ -131,23 +139,6 @@ export const supportBlockRoutes: RouteConfig[] = [
         meta: {
             title: "Promote Agent to Lead",
             titleKey: "ticketsManagement:manageTeam.promoteAgent.pageTitle",
-            requiresAuth: true,
-        },
-    },
-    // Agent redirect routes (for breadcrumb navigation)
-    {
-        path: "support-block/manage/agent",
-        element: <Navigate to={supportBlock.manageTeam()} replace />,
-        meta: {
-            title: "Agent",
-            requiresAuth: true,
-        },
-    },
-    {
-        path: "support-block/manage/agent/:id",
-        element: <Navigate to={supportBlock.manageTeam()} replace />,
-        meta: {
-            title: "Agent",
             requiresAuth: true,
         },
     },

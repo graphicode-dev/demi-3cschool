@@ -7,12 +7,12 @@
  */
 
 import { useTranslation } from "react-i18next";
-import type { TeamStats } from "../types";
+import type { SupportBlockStats } from "../types";
 import { Users, Crown, User } from "lucide-react";
 import type { ReactNode } from "react";
 
 interface TeamStatsRowProps {
-    stats: TeamStats;
+    stats: SupportBlockStats;
     isLoading?: boolean;
 }
 
@@ -68,7 +68,7 @@ export function TeamStatsRow({ stats, isLoading }: TeamStatsRowProps) {
             />
             <StatItem
                 icon={<Crown className="w-[18px] h-[18px]" />}
-                value={stats.blockLeads}
+                value={stats.totalLeads}
                 label={t("supportBlock.stats.blockLeads", "Block Leads")}
             />
             <StatItem

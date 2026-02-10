@@ -1,96 +1,58 @@
 /**
  * Support Block Feature - Query Hooks
  *
- * TanStack Query hooks for reading support block data.
- *
- * TODO: Remove mock data imports and uncomment real API calls when backend is ready.
+ * TanStack Query hooks for reading and mutating support block data.
  */
 
-import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
-import { supportBlockKeys } from "./supportBlock.keys";
 import {
-    getMockTeamStats,
-    getMockBlocks,
-    getMockSupportBlockData,
-    getMockBlock,
-} from "../mockData";
-import type { TeamStats, Block, SupportBlockData } from "../types";
+    useQuery,
+    useMutation,
+    useQueryClient,
+    type UseQueryOptions,
+} from "@tanstack/react-query";
+import { supportBlockKeys } from "./supportBlock.keys";
+import { supportBlockApi } from "./supportBlock.api";
+import type {
+    SupportBlock,
+    SupportBlocksListResponse,
+    CreateSupportBlockPayload,
+    UpdateSupportBlockPayload,
+} from "../types";
 
 // ============================================================================
-// Stats Query
+// List Query
 // ============================================================================
 
 /**
- * Hook to fetch support block statistics
+ * Hook to fetch paginated support blocks list
  */
-export function useTeamStats(
-    options?: Partial<UseQueryOptions<TeamStats, Error>>
+export function useSupportBlocks(
+    page: number = 1,
+    options?: Partial<UseQueryOptions<SupportBlocksListResponse, Error>>
 ) {
     return useQuery({
-        queryKey: supportBlockKeys.stats(),
-        // TODO: Uncomment when using real API
-        // queryFn: ({ signal }) => supportBlockApi.getStats(signal),
-        queryFn: () => Promise.resolve(getMockTeamStats()),
+        queryKey: supportBlockKeys.list(page),
+        queryFn: ({ signal }) => supportBlockApi.getList(page, signal),
         staleTime: 1000 * 60 * 5, // 5 minutes
         ...options,
     });
 }
 
 // ============================================================================
-// Blocks Query
+// Detail Query
 // ============================================================================
 
 /**
- * Hook to fetch all blocks
+ * Hook to fetch single support block by ID
  */
-export function useBlocks(options?: Partial<UseQueryOptions<Block[], Error>>) {
-    return useQuery({
-        queryKey: supportBlockKeys.blocks(),
-        // TODO: Uncomment when using real API
-        // queryFn: ({ signal }) => supportBlockApi.getBlocks(signal),
-        queryFn: () => Promise.resolve(getMockBlocks()),
-        staleTime: 1000 * 60 * 5, // 5 minutes
-        ...options,
-    });
-}
-
-// ============================================================================
-// Single Block Query
-// ============================================================================
-
-/**
- * Hook to fetch single block by ID
- */
-export function useBlock(
-    id: string | undefined | null,
-    options?: Partial<UseQueryOptions<Block | undefined, Error>>
+export function useSupportBlock(
+    id: number | string | undefined | null,
+    options?: Partial<UseQueryOptions<SupportBlock, Error>>
 ) {
     return useQuery({
-        queryKey: supportBlockKeys.block(id ?? ""),
-        // TODO: Uncomment when using real API
-        // queryFn: ({ signal }) => supportBlockApi.getBlock(id!, signal),
-        queryFn: () => Promise.resolve(getMockBlock(id!)),
+        queryKey: supportBlockKeys.detail(id ?? ""),
+        queryFn: ({ signal }) => supportBlockApi.getById(id!, signal),
         enabled: !!id,
-        staleTime: 1000 * 60 * 5, // 5 minutes
-        ...options,
-    });
-}
-
-// ============================================================================
-// Complete Support Block Data Query
-// ============================================================================
-
-/**
- * Hook to fetch complete support block data
- */
-export function useSupportBlockData(
-    options?: Partial<UseQueryOptions<SupportBlockData, Error>>
-) {
-    return useQuery({
-        queryKey: supportBlockKeys.data(),
-        // TODO: Uncomment when using real API
-        // queryFn: ({ signal }) => supportBlockApi.getData(signal),
-        queryFn: () => Promise.resolve(getMockSupportBlockData()),
         staleTime: 1000 * 60 * 5, // 5 minutes
         ...options,
     });

@@ -5,22 +5,29 @@
  */
 
 import { api } from "@/shared/api/client";
-import type { TeamStats, Block } from "../types";
-import { ApiResponse } from "@/shared/api";
-import { SupportBlockData } from "../types/supportBlock.types";
+import type {
+    SupportBlock,
+    SupportBlocksListResponse,
+    CreateSupportBlockPayload,
+    UpdateSupportBlockPayload,
+    ApiResponse,
+} from "../types";
 
-const BASE_URL = "/tickets/team-structure";
+const BASE_URL = "/support-blocks";
 
 /**
  * Support Block API functions
  */
 export const supportBlockApi = {
     /**
-     * Get support block statistics
+     * Get all support blocks (paginated)
      */
-    getStats: async (signal?: AbortSignal): Promise<TeamStats> => {
-        const response = await api.get<ApiResponse<TeamStats>>(
-            `${BASE_URL}/stats`,
+    getList: async (
+        page: number = 1,
+        signal?: AbortSignal
+    ): Promise<SupportBlocksListResponse> => {
+        const response = await api.get<ApiResponse<SupportBlocksListResponse>>(
+            `${BASE_URL}?page=${page}`,
             { signal }
         );
 
@@ -36,11 +43,14 @@ export const supportBlockApi = {
     },
 
     /**
-     * Get all blocks
+     * Get single support block by ID
      */
-    getBlocks: async (signal?: AbortSignal): Promise<Block[]> => {
-        const response = await api.get<ApiResponse<Block[]>>(
-            `${BASE_URL}/blocks`,
+    getById: async (
+        id: number | string,
+        signal?: AbortSignal
+    ): Promise<SupportBlock> => {
+        const response = await api.get<ApiResponse<SupportBlock>>(
+            `${BASE_URL}/${id}`,
             { signal }
         );
 
@@ -56,12 +66,14 @@ export const supportBlockApi = {
     },
 
     /**
-     * Get single block by ID
+     * Create a new support block
      */
-    getBlock: async (id: string, signal?: AbortSignal): Promise<Block> => {
-        const response = await api.get<ApiResponse<Block>>(
-            `${BASE_URL}/blocks/${id}`,
-            { signal }
+    create: async (
+        payload: CreateSupportBlockPayload
+    ): Promise<SupportBlocksListResponse> => {
+        const response = await api.post<ApiResponse<SupportBlocksListResponse>>(
+            BASE_URL,
+            payload
         );
 
         if (response.error) {
@@ -76,12 +88,15 @@ export const supportBlockApi = {
     },
 
     /**
-     * Get complete support block data
+     * Update an existing support block
      */
-    getData: async (signal?: AbortSignal): Promise<SupportBlockData> => {
-        const response = await api.get<ApiResponse<SupportBlockData>>(
-            `${BASE_URL}`,
-            { signal }
+    update: async (
+        id: number | string,
+        payload: UpdateSupportBlockPayload
+    ): Promise<SupportBlock> => {
+        const response = await api.patch<ApiResponse<SupportBlock>>(
+            `${BASE_URL}/${id}`,
+            payload
         );
 
         if (response.error) {
@@ -93,6 +108,17 @@ export const supportBlockApi = {
         }
 
         return response.data.data;
+    },
+
+    /**
+     * Delete a support block
+     */
+    delete: async (id: number | string): Promise<void> => {
+        const response = await api.delete(`${BASE_URL}/${id}`);
+
+        if (response.error) {
+            throw response.error;
+        }
     },
 };
 

@@ -10,78 +10,92 @@ import { useNavigate, useParams } from "react-router-dom";
 import { User } from "lucide-react";
 import { PageWrapper, useToast } from "@/design-system";
 import { supportBlock } from "../../navigation/paths";
-import { getMockAgent, mockBlocks, mockLeads } from "../../mockData";
-import type { Agent, AgentStatus } from "../../types";
-import { paths } from "@/router";
+import { useSupportBlocks, useUpdateSupportBlock } from "../../api";
+import type { AgentStatus, SupportBlockMember } from "../../types";
 
 export function EditAgentPage() {
     const { t } = useTranslation("ticketsManagement");
     const navigate = useNavigate();
-    const { id } = useParams<{ id: string }>();
+    const { blockId, id } = useParams<{ blockId: string; id: string }>();
     const { addToast } = useToast();
 
-    const [agent, setAgent] = useState<Agent | null>(null);
+    const { data: blocksData } = useSupportBlocks();
+    const blocks = blocksData?.items ?? [];
+    const updateBlockMutation = useUpdateSupportBlock();
+
+    // TODO: Replace with real agent API when available
+    // For now, we show a placeholder since agents are not directly available from the blocks API
+    const agentName = "Agent"; // Placeholder
+
     const [selectedBlockId, setSelectedBlockId] = useState("");
     const [selectedLeadId, setSelectedLeadId] = useState("");
     const [status, setStatus] = useState<AgentStatus>("available");
 
-    useEffect(() => {
-        if (id) {
-            const foundAgent: Agent | undefined = getMockAgent(id);
-            if (foundAgent) {
-                setAgent(foundAgent);
-                setSelectedBlockId(foundAgent.blockId || "");
-                setSelectedLeadId(foundAgent.managedBy || "");
-                setStatus(foundAgent.status);
-            }
-        }
-    }, [id]);
-
+    // Get leads for the selected block (leads are members with isLead=true)
     const availableLeads = useMemo(() => {
-        if (!selectedBlockId) return mockLeads;
-        return mockLeads.filter(
-            (lead) => lead.assignedBlockId === selectedBlockId
+        if (!selectedBlockId) {
+            return blocks.flatMap((block) =>
+                block.members.filter((member) => member.isLead)
+            );
+        }
+        const selectedBlock = blocks.find(
+            (block) => String(block.id) === selectedBlockId
         );
-    }, [selectedBlockId]);
+        return selectedBlock?.members.filter((member) => member.isLead) ?? [];
+    }, [selectedBlockId, blocks]);
 
     const currentPlacement = useMemo(() => {
-        if (!agent) return null;
-        const block = mockBlocks.find((b) => b.id === agent.blockId);
-        const lead = mockLeads.find((l) => l.id === agent.managedBy);
+        // TODO: Get actual placement from agent API
         return {
-            blockName: block?.name || agent.blockName || "",
-            leadName: lead?.name || agent.managedBy || "",
+            blockName: "Current Block",
+            leadName: "Current Lead",
         };
-    }, [agent]);
+    }, []);
 
     const handleCancel = () => {
-        navigate(supportBlock.manageTeam());
+        navigate(supportBlock.manageTeam(blockId!));
     };
 
-    const handleSubmit = () => {
-        if (agent && selectedBlockId && selectedLeadId) {
-            addToast({
-                type: "success",
-                title: t("manageTeam.editAgent.successMessage"),
-            });
-            navigate(supportBlock.manageTeam());
+    const handleSubmit = async () => {
+        if (selectedBlockId && selectedLeadId) {
+            try {
+                const targetBlock = blocks.find(
+                    (b) => String(b.id) === selectedBlockId
+                );
+                if (targetBlock) {
+                    await updateBlockMutation.mutateAsync({
+                        id: targetBlock.id,
+                        payload: {
+                            name: targetBlock.name,
+                            description: targetBlock.description,
+                            is_active: targetBlock.isActive ? 1 : 0,
+                        },
+                    });
+                }
+                addToast({
+                    type: "success",
+                    title: t("manageTeam.editAgent.successMessage"),
+                });
+                navigate(supportBlock.manageTeam(blockId!));
+            } catch (err) {
+                addToast({
+                    type: "error",
+                    title: t("common.error", "Error updating agent"),
+                });
+            }
         }
     };
 
     const isFormValid = selectedBlockId && selectedLeadId;
 
-    if (!agent) {
-        return null;
-    }
-
     return (
         <PageWrapper
             pageHeaderProps={{
                 title: t("manageTeam.editAgent.pageTitleWithName", {
-                    name: agent.name,
+                    name: agentName,
                 }),
                 subtitle: t("manageTeam.editAgent.pageSubtitle"),
-                backHref: paths.dashboard.admin.ticketsPaths.supportBlock(),
+                backHref: supportBlock.manageTeam(blockId!),
                 backButton: true,
             }}
         >
@@ -109,7 +123,7 @@ export function EditAgentPage() {
                             <User className="w-4 h-4 text-brand-600 dark:text-brand-400" />
                         </div>
                         <span className="text-sm text-gray-900 dark:text-white">
-                            {agent.name}
+                            {agentName}
                         </span>
                     </div>
                 </div>
@@ -130,8 +144,8 @@ export function EditAgentPage() {
                         <option value="">
                             {t("manageTeam.addAgent.blockPlaceholder")}
                         </option>
-                        {mockBlocks.map((block) => (
-                            <option key={block.id} value={block.id}>
+                        {blocks.map((block) => (
+                            <option key={block.id} value={String(block.id)}>
                                 {block.name}
                             </option>
                         ))}
@@ -151,8 +165,8 @@ export function EditAgentPage() {
                         <option value="">
                             {t("manageTeam.addAgent.leadPlaceholder")}
                         </option>
-                        {availableLeads.map((lead) => (
-                            <option key={lead.id} value={lead.id}>
+                        {availableLeads.map((lead: SupportBlockMember) => (
+                            <option key={lead.id} value={String(lead.id)}>
                                 {lead.name}
                             </option>
                         ))}

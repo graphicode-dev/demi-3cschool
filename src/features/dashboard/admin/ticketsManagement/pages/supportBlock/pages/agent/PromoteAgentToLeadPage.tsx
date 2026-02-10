@@ -8,61 +8,118 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { Crown } from "lucide-react";
-import { PageWrapper, useToast } from "@/design-system";
+import {
+    PageWrapper,
+    useToast,
+    LoadingState,
+    ErrorState,
+} from "@/design-system";
 import { supportBlock } from "../../navigation/paths";
-import { getMockAgent, mockBlocks } from "../../mockData";
-import type { Agent } from "../../types";
-import { paths } from "@/router";
+import {
+    useSupportBlocks,
+    useSupportAgentsByBlock,
+    useReassignAgent,
+} from "../../api";
 
 export function PromoteAgentToLeadPage() {
     const { t } = useTranslation("ticketsManagement");
     const navigate = useNavigate();
-    const { id } = useParams<{ id: string }>();
+    const { blockId, id } = useParams<{ blockId: string; id: string }>();
     const { addToast } = useToast();
 
-    const [agent, setAgent] = useState<Agent | null>(null);
+    const { data: blocksData } = useSupportBlocks();
+    const blocks = blocksData?.items ?? [];
+
+    const {
+        data: agentsData,
+        isLoading,
+        error,
+    } = useSupportAgentsByBlock(blockId);
+    const reassignMutation = useReassignAgent();
+
+    // Find the agent from agents list
+    const agentData = agentsData?.items?.find(
+        (agent) => String(agent.id) === id && !agent.isLead
+    );
+
     const [selectedBlockId, setSelectedBlockId] = useState("");
 
     useEffect(() => {
-        if (id) {
-            const foundAgent: Agent | undefined = getMockAgent(id);
-            if (foundAgent) {
-                setAgent(foundAgent);
-                setSelectedBlockId(
-                    foundAgent.blockId || mockBlocks[0]?.id || ""
-                );
-            }
+        if (blockId) {
+            setSelectedBlockId(blockId);
         }
-    }, [id]);
+    }, [blockId]);
 
     const handleCancel = () => {
-        navigate(supportBlock.manageTeam());
+        navigate(supportBlock.manageTeam(blockId!));
     };
 
-    const handleSubmit = () => {
-        if (agent && selectedBlockId) {
+    const handleSubmit = async () => {
+        if (!id || !selectedBlockId) return;
+
+        try {
+            await reassignMutation.mutateAsync({
+                agentId: id,
+                payload: {
+                    support_block_id: selectedBlockId,
+                    lead_id: null, // null lead_id means promoting to lead
+                },
+            });
             addToast({
                 type: "success",
-                title: t("manageTeam.promoteAgent.successMessage"),
+                title: t(
+                    "manageTeam.promoteAgent.successMessage",
+                    "Agent promoted to lead successfully"
+                ),
             });
-            navigate(supportBlock.manageTeam());
+            navigate(supportBlock.manageTeam(blockId!));
+        } catch (err) {
+            addToast({
+                type: "error",
+                title: t("common.error", "Error promoting agent"),
+            });
         }
     };
 
-    const isFormValid = selectedBlockId;
-
-    if (!agent) {
-        return null;
+    if (isLoading) {
+        return <LoadingState />;
     }
+
+    if (error) {
+        return (
+            <ErrorState
+                title={t("supportBlock.error", "Error loading data")}
+                message={
+                    (error as Error)?.message ||
+                    t("supportBlock.unknownError", "Unknown error")
+                }
+            />
+        );
+    }
+
+    if (!agentData) {
+        return (
+            <ErrorState
+                title={t("manageTeam.promoteAgent.notFound", "Agent not found")}
+                message={t(
+                    "manageTeam.promoteAgent.notFoundMessage",
+                    "The agent you are looking for does not exist."
+                )}
+            />
+        );
+    }
+
+    const agentName = agentData.user.name;
+    const isFormValid = selectedBlockId;
 
     return (
         <PageWrapper
             pageHeaderProps={{
                 title: t("manageTeam.promoteAgent.pageTitle"),
                 subtitle: t("manageTeam.promoteAgent.pageSubtitleWithName", {
-                    name: agent.name,
+                    name: agentName,
                 }),
-                backHref: paths.dashboard.admin.ticketsPaths.supportBlock(),
+                backHref: supportBlock.manageTeam(blockId!),
                 backButton: true,
             }}
         >
@@ -79,7 +136,7 @@ export function PromoteAgentToLeadPage() {
                         className="text-sm text-success-600 dark:text-success-400/80"
                         dangerouslySetInnerHTML={{
                             __html: t("manageTeam.promoteAgent.readyMessage", {
-                                name: agent.name,
+                                name: agentName,
                             }),
                         }}
                     />
@@ -98,8 +155,8 @@ export function PromoteAgentToLeadPage() {
                         <option value="">
                             {t("manageTeam.addLead.blockPlaceholder")}
                         </option>
-                        {mockBlocks.map((block) => (
-                            <option key={block.id} value={block.id}>
+                        {blocks.map((block) => (
+                            <option key={block.id} value={String(block.id)}>
                                 {block.name}
                             </option>
                         ))}

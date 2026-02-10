@@ -1,14 +1,21 @@
 /**
  * ManageTeamPage Component
  *
- * Main page for managing team leads and agents.
+ * Page for managing team leads and agents for a specific support block.
  * Displays lead cards and agents table.
  */
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
-import { Plus, Search, MoreHorizontal, Filter } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+    Plus,
+    Search,
+    MoreHorizontal,
+    Filter,
+    Pencil,
+    Trash2,
+} from "lucide-react";
 import {
     PageWrapper,
     useToast,
@@ -16,26 +23,55 @@ import {
     DropdownAction,
     DynamicTable,
     ConfirmDialog,
+    LoadingState,
+    ErrorState,
 } from "@/design-system";
+import Pagination from "@/design-system/components/table/Pagination";
 import { supportBlock } from "../navigation/paths";
-import { mockLeads, mockTeamAgents, mockLeads as leadsData } from "../mockData";
-import type { Lead, Agent } from "../types";
+import {
+    useSupportBlock,
+    useSupportAgentsByBlock,
+    useDeleteSupportAgent,
+    useDeleteSupportBlock,
+} from "../api";
+import type { SupportAgent } from "../types";
 import type { TableColumn, TableData } from "@/shared/types";
-import LeadCard from "../components/LeadCard";
 
 export function ManageTeamPage() {
     const { t } = useTranslation("ticketsManagement");
     const navigate = useNavigate();
     const { addToast } = useToast();
+    const { blockId } = useParams<{ blockId: string }>();
 
-    const [leads] = useState<Lead[]>(mockLeads);
-    const [agents] = useState<Agent[]>(mockTeamAgents);
+    const [currentPage, setCurrentPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState("");
-    const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
-    const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
+    const [selectedAgent, setSelectedAgent] = useState<SupportAgent | null>(
+        null
+    );
     const [showRemoveDialog, setShowRemoveDialog] = useState(false);
-    const [showRemoveAgentDialog, setShowRemoveAgentDialog] = useState(false);
-    const [reassignLeadId, setReassignLeadId] = useState("");
+
+    // Fetch block details
+    const {
+        data: blockData,
+        isLoading: blockLoading,
+        error: blockError,
+    } = useSupportBlock(blockId);
+
+    // Fetch agents for this block
+    const {
+        data: agentsData,
+        isLoading: agentsLoading,
+        error: agentsError,
+        refetch,
+    } = useSupportAgentsByBlock(blockId, currentPage);
+
+    const deleteAgentMutation = useDeleteSupportAgent();
+    const deleteBlockMutation = useDeleteSupportBlock();
+
+    const [showDeleteBlockDialog, setShowDeleteBlockDialog] = useState(false);
+
+    const isLoading = blockLoading || agentsLoading;
+    const error = blockError || agentsError;
 
     const statusColors = {
         available:
@@ -45,66 +81,103 @@ export function ManageTeamPage() {
             "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-400",
     };
 
+    // Separate leads and agents from the API response
+    const agents = agentsData?.items ?? [];
+    const leads = useMemo(
+        () => agents.filter((agent) => agent.isLead),
+        [agents]
+    );
+    const regularAgents = useMemo(
+        () => agents.filter((agent) => !agent.isLead),
+        [agents]
+    );
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+    };
+
     const handleAddLead = () => {
-        navigate(supportBlock.addLead());
+        navigate(supportBlock.addLead(blockId!));
     };
 
-    const handleEditLead = (lead: Lead) => {
-        navigate(supportBlock.editLead(lead.id));
+    const handleEditLead = (agent: SupportAgent) => {
+        navigate(supportBlock.editLead(blockId!, String(agent.id)));
     };
 
-    const handleChangeBlock = (lead: Lead) => {
-        navigate(supportBlock.changeLeadBlock(lead.id));
+    const handleEditBlock = () => {
+        navigate(supportBlock.editBlock(blockId!));
     };
 
-    const handleConvertToAgent = (lead: Lead) => {
-        navigate(supportBlock.convertLeadToAgent(lead.id));
+    const handleDeleteBlock = () => {
+        setShowDeleteBlockDialog(true);
     };
 
-    const handleRemoveLead = (lead: Lead) => {
-        setSelectedLead(lead);
+    const handleConfirmDeleteBlock = async () => {
+        if (blockId) {
+            try {
+                await deleteBlockMutation.mutateAsync(blockId);
+                addToast({
+                    type: "success",
+                    title: t(
+                        "manageTeam.deleteBlock.success",
+                        "Block deleted successfully"
+                    ),
+                });
+                navigate(supportBlock.root());
+            } catch (err) {
+                addToast({
+                    type: "error",
+                    title: t(
+                        "manageTeam.deleteBlock.error",
+                        "Failed to delete block"
+                    ),
+                });
+            }
+        }
+        setShowDeleteBlockDialog(false);
+    };
+
+    const handleRemoveAgent = (agent: SupportAgent) => {
+        setSelectedAgent(agent);
         setShowRemoveDialog(true);
     };
 
-    const handleConfirmRemove = () => {
-        if (selectedLead) {
-            addToast({
-                type: "success",
-                title: t("manageTeam.removeLead.title"),
-            });
-            setShowRemoveDialog(false);
-            setSelectedLead(null);
-            setReassignLeadId("");
+    const handleConfirmRemove = async () => {
+        if (selectedAgent) {
+            try {
+                await deleteAgentMutation.mutateAsync(selectedAgent.id);
+                addToast({
+                    type: "success",
+                    title: t(
+                        "manageTeam.removeAgent.success",
+                        "Agent removed successfully"
+                    ),
+                });
+                setShowRemoveDialog(false);
+                setSelectedAgent(null);
+            } catch (err) {
+                addToast({
+                    type: "error",
+                    title: t(
+                        "manageTeam.removeAgent.error",
+                        "Failed to remove agent"
+                    ),
+                });
+            }
         }
     };
 
     // Agent handlers
     const handleAddAgent = () => {
-        navigate(supportBlock.addAgent());
+        navigate(supportBlock.addAgent(blockId!));
     };
 
-    const handleEditAgent = (agent: Agent) => {
-        navigate(supportBlock.editAgent(agent.id));
+    const handleEditAgent = (agentId: string) => {
+        navigate(supportBlock.editAgent(blockId!, agentId));
     };
 
-    const handlePromoteAgent = (agent: Agent) => {
-        navigate(supportBlock.promoteAgentToLead(agent.id));
-    };
-
-    const handleRemoveAgent = (agent: Agent) => {
-        setSelectedAgent(agent);
-        setShowRemoveAgentDialog(true);
-    };
-
-    const handleConfirmRemoveAgent = () => {
-        if (selectedAgent) {
-            addToast({
-                type: "success",
-                title: t("manageTeam.removeAgent.title"),
-            });
-            setShowRemoveAgentDialog(false);
-            setSelectedAgent(null);
-        }
+    const handlePromoteAgent = (agentId: string) => {
+        navigate(supportBlock.promoteAgentToLead(blockId!, agentId));
     };
 
     const columns: TableColumn[] = [
@@ -119,17 +192,6 @@ export function ManageTeamPage() {
             header: t("manageTeam.table.agentName"),
             accessorKey: "name",
             sortable: true,
-        },
-        {
-            id: "blockAssignment",
-            header: t("manageTeam.table.blockAssignment"),
-            accessorKey: "blockName",
-            sortable: true,
-            cell: ({ row }) => (
-                <span className="text-brand-500 hover:underline cursor-pointer">
-                    {row.columns.blockName}
-                </span>
-            ),
         },
         {
             id: "managedBy",
@@ -160,28 +222,24 @@ export function ManageTeamPage() {
             accessorKey: "action",
             sortable: false,
             cell: ({ row }) => {
+                const agent = regularAgents.find(
+                    (a) => String(a.id) === row.id
+                );
                 const agentActions: DropdownAction[] = [
                     {
                         id: "edit",
                         label: t("manageTeam.actions.edit"),
-                        onClick: () => {
-                            const agent = agents.find((a) => a.id === row.id);
-                            if (agent) handleEditAgent(agent);
-                        },
+                        onClick: () => handleEditAgent(row.id),
                     },
                     {
                         id: "promote",
-                        label: t("manageTeam.actions.promoteToLead"),
-                        onClick: () => {
-                            const agent = agents.find((a) => a.id === row.id);
-                            if (agent) handlePromoteAgent(agent);
-                        },
+                        label: t("manageTeam.actions.reAssign"),
+                        onClick: () => handlePromoteAgent(row.id),
                     },
                     {
                         id: "remove",
                         label: t("manageTeam.actions.remove"),
                         onClick: () => {
-                            const agent = agents.find((a) => a.id === row.id);
                             if (agent) handleRemoveAgent(agent);
                         },
                         className:
@@ -201,13 +259,12 @@ export function ManageTeamPage() {
         },
     ];
 
-    const tableData: TableData[] = agents.map((agent, index) => ({
-        id: agent.id,
+    const tableData: TableData[] = regularAgents.map((agent, index) => ({
+        id: String(agent.id),
         columns: {
             id: index + 1,
-            name: agent.name,
-            blockName: agent.blockName || "",
-            managedBy: agent.managedBy || "",
+            name: agent.user.name,
+            managedBy: agent.lead?.name || "-",
             status: agent.status,
             action: "",
         },
@@ -221,12 +278,52 @@ export function ManageTeamPage() {
           )
         : tableData;
 
+    if (isLoading) {
+        return <LoadingState />;
+    }
+
+    if (error) {
+        return (
+            <ErrorState
+                title={t("supportBlock.error", "Error loading data")}
+                message={
+                    (error as Error)?.message ||
+                    t("supportBlock.unknownError", "Unknown error")
+                }
+                onRetry={() => refetch()}
+            />
+        );
+    }
+
     return (
         <PageWrapper
             pageHeaderProps={{
-                title: t("manageTeam.pageTitle"),
+                title: blockData?.name
+                    ? t("manageTeam.pageTitleWithBlock", {
+                          blockName: blockData.name,
+                          defaultValue: `Manage Team - ${blockData.name}`,
+                      })
+                    : t("manageTeam.pageTitle"),
                 subtitle: t("manageTeam.pageSubtitle"),
                 backButton: true,
+                actions: (
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={handleEditBlock}
+                            className="inline-flex items-center gap-2 px-4 py-2.5 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg text-sm font-medium transition-colors"
+                        >
+                            <Pencil className="w-4 h-4" />
+                            {t("manageTeam.editBlock", "Edit Block")}
+                        </button>
+                        <button
+                            onClick={handleDeleteBlock}
+                            className="inline-flex items-center gap-2 px-4 py-2.5 bg-error-500 hover:bg-error-600 text-white rounded-lg text-sm font-medium transition-colors"
+                        >
+                            <Trash2 className="w-4 h-4" />
+                            {t("manageTeam.deleteBlock", "Delete Block")}
+                        </button>
+                    </div>
+                ),
             }}
         >
             {/* Team Leads Section */}
@@ -245,17 +342,87 @@ export function ManageTeamPage() {
                 </div>
 
                 {/* Lead Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4">
-                    {leads.map((lead) => (
-                        <LeadCard
-                            key={lead.id}
-                            lead={lead}
-                            onEdit={() => handleEditLead(lead)}
-                            onChangeBlock={() => handleChangeBlock(lead)}
-                            onConvert={() => handleConvertToAgent(lead)}
-                            onRemove={() => handleRemoveLead(lead)}
-                        />
-                    ))}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {leads.length === 0 ? (
+                        <div className="col-span-full text-center py-8 text-gray-500 dark:text-gray-400">
+                            {t("manageTeam.noLeads", "No leads found")}
+                        </div>
+                    ) : (
+                        leads.map((lead) => (
+                            <div
+                                key={lead.id}
+                                className="relative flex flex-col gap-3 p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl"
+                            >
+                                <div className="flex items-start justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <div className="relative">
+                                            <div className="w-10 h-10 rounded-full bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center text-brand-600 dark:text-brand-400 font-medium text-sm">
+                                                {lead.user.name
+                                                    .split(" ")
+                                                    .map((n) => n[0])
+                                                    .join("")
+                                                    .toUpperCase()
+                                                    .slice(0, 2)}
+                                            </div>
+                                            <div
+                                                className={`absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full border-2 border-white dark:border-gray-800 ${
+                                                    lead.status === "available"
+                                                        ? "bg-success-500"
+                                                        : lead.status === "busy"
+                                                          ? "bg-warning-500"
+                                                          : "bg-gray-400"
+                                                }`}
+                                            />
+                                        </div>
+                                        <div>
+                                            <span className="font-semibold text-gray-900 dark:text-white text-sm">
+                                                {lead.user.name}
+                                            </span>
+                                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                {lead.user.email}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <ActionsDropdown
+                                        itemId={String(lead.id)}
+                                        actions={[
+                                            {
+                                                id: "edit",
+                                                label: t(
+                                                    "manageTeam.actions.edit"
+                                                ),
+                                                onClick: () =>
+                                                    handleEditLead(lead),
+                                            },
+                                            {
+                                                id: "remove",
+                                                label: t(
+                                                    "manageTeam.actions.remove"
+                                                ),
+                                                onClick: () =>
+                                                    handleRemoveAgent(lead),
+                                                className:
+                                                    "text-error-600 dark:text-error-400 hover:bg-gray-100 dark:hover:bg-gray-700",
+                                            },
+                                        ]}
+                                        triggerIcon={
+                                            <MoreHorizontal className="w-4 h-4 text-gray-400" />
+                                        }
+                                        triggerClassName="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                                    />
+                                </div>
+                                <div className="pt-2 border-t border-gray-100 dark:border-gray-700">
+                                    <span
+                                        className={`px-2 py-0.5 rounded-full text-xs font-medium ${statusColors[lead.status]}`}
+                                    >
+                                        {t(
+                                            `supportBlock.status.${lead.status}`
+                                        )}
+                                    </span>
+                                </div>
+                            </div>
+                        ))
+                    )}
                 </div>
             </div>
 
@@ -301,87 +468,72 @@ export function ManageTeamPage() {
                     noPadding
                     disableRowClick
                 />
+
+                {/* Pagination */}
+                {agentsData && agentsData.lastPage > 1 && (
+                    <div className="mt-6">
+                        <Pagination
+                            currentPage={agentsData.currentPage}
+                            totalPages={agentsData.lastPage}
+                            goToNextPage={() =>
+                                handlePageChange(currentPage + 1)
+                            }
+                            goToPreviousPage={() =>
+                                handlePageChange(currentPage - 1)
+                            }
+                            setPage={handlePageChange}
+                            itemsPerPage={agentsData.perPage}
+                            totalItems={
+                                agentsData.lastPage * agentsData.perPage
+                            }
+                        />
+                    </div>
+                )}
             </div>
 
-            {/* Remove Lead Dialog */}
+            {/* Remove Agent Dialog */}
             <ConfirmDialog
                 isOpen={showRemoveDialog}
                 onClose={() => {
                     setShowRemoveDialog(false);
-                    setSelectedLead(null);
-                    setReassignLeadId("");
-                }}
-                title={t("manageTeam.removeLead.title")}
-                variant="danger"
-                message={
-                    <div className="space-y-4">
-                        <p
-                            dangerouslySetInnerHTML={{
-                                __html: t("manageTeam.removeLead.message", {
-                                    name: selectedLead?.name || "",
-                                }),
-                            }}
-                        />
-                        {selectedLead && selectedLead.agentsCount > 0 && (
-                            <div className="p-4 bg-warning-50 dark:bg-warning-500/15 border border-warning-200 dark:border-warning-500/30 rounded-lg">
-                                <p className="text-sm font-medium text-warning-700 dark:text-warning-400 mb-1">
-                                    {t("manageTeam.removeLead.warningTitle")}
-                                </p>
-                                <p className="text-sm text-warning-600 dark:text-warning-400/80">
-                                    {t("manageTeam.removeLead.warningMessage")}
-                                </p>
-                            </div>
-                        )}
-                        {selectedLead && selectedLead.agentsCount > 0 && (
-                            <select
-                                value={reassignLeadId}
-                                onChange={(e) =>
-                                    setReassignLeadId(e.target.value)
-                                }
-                                className="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
-                            >
-                                <option value="">
-                                    {t(
-                                        "manageTeam.removeLead.reassignPlaceholder"
-                                    )}
-                                </option>
-                                {leadsData
-                                    .filter((l) => l.id !== selectedLead?.id)
-                                    .map((lead) => (
-                                        <option key={lead.id} value={lead.id}>
-                                            {lead.name}
-                                        </option>
-                                    ))}
-                            </select>
-                        )}
-                    </div>
-                }
-                confirmText={t("manageTeam.removeLead.submit")}
-                cancelText={t("manageTeam.removeLead.cancel")}
-                onConfirm={handleConfirmRemove}
-            />
-
-            {/* Remove Agent Dialog */}
-            <ConfirmDialog
-                isOpen={showRemoveAgentDialog}
-                onClose={() => {
-                    setShowRemoveAgentDialog(false);
                     setSelectedAgent(null);
                 }}
-                title={t("manageTeam.removeAgent.title")}
+                title={t("manageTeam.removeAgent.title", "Remove Agent")}
                 variant="danger"
                 message={
                     <p
                         dangerouslySetInnerHTML={{
                             __html: t("manageTeam.removeAgent.message", {
-                                name: selectedAgent?.name || "",
+                                name: selectedAgent?.user.name || "",
+                                defaultValue: `Are you sure you want to remove <strong>${selectedAgent?.user.name || ""}</strong>?`,
                             }),
                         }}
                     />
                 }
-                confirmText={t("manageTeam.removeAgent.submit")}
-                cancelText={t("manageTeam.removeAgent.cancel")}
-                onConfirm={handleConfirmRemoveAgent}
+                confirmText={t("manageTeam.removeAgent.confirm", "Remove")}
+                cancelText={t("manageTeam.removeAgent.cancel", "Cancel")}
+                onConfirm={handleConfirmRemove}
+            />
+
+            {/* Delete Block Dialog */}
+            <ConfirmDialog
+                isOpen={showDeleteBlockDialog}
+                onClose={() => setShowDeleteBlockDialog(false)}
+                title={t("manageTeam.deleteBlock.title", "Delete Block")}
+                variant="danger"
+                message={
+                    <p
+                        dangerouslySetInnerHTML={{
+                            __html: t("manageTeam.deleteBlock.message", {
+                                name: blockData?.name || "",
+                                defaultValue: `Are you sure you want to delete <strong>${blockData?.name || ""}</strong>? This action cannot be undone.`,
+                            }),
+                        }}
+                    />
+                }
+                confirmText={t("manageTeam.deleteBlock.confirm", "Delete")}
+                cancelText={t("manageTeam.deleteBlock.cancel", "Cancel")}
+                onConfirm={handleConfirmDeleteBlock}
             />
         </PageWrapper>
     );

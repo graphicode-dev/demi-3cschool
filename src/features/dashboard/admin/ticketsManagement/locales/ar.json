@@ -177,7 +177,7 @@
             "edit": "تعديل",
             "changeBlock": "تغيير القسم",
             "convertToAgent": "تحويل إلى وكيل",
-            "promoteToLead": "ترقية إلى قائد",
+            "reAssign": "إعادة التعيين",
             "remove": "إزالة"
         },
         "addAgent": {
