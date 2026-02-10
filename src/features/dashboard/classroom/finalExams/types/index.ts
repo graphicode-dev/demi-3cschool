@@ -1,58 +1,175 @@
-export type ExamStatus = "completed" | "available" | "locked";
-export type ExamResultStatus = "passed" | "failed" | "under_review";
-export type QuestionType = "true_false" | "single_choice" | "multiple_choice";
+// ============================================================================
+// API Response Types - Matching exact API structure
+// ============================================================================
 
-export interface FinalExam {
+/**
+ * Level reference in final exam
+ */
+export interface FinalExamLevel {
     id: number;
-    title: string;
-    period: number;
-    duration: number; // in minutes
-    questionsCount: number;
-    status: ExamStatus;
-    takenDate?: string;
-    opensDate?: string;
-    score?: number;
-    totalScore?: number;
-    attempts?: number;
-    maxAttempts?: number;
-    availableUntil?: string;
-    questions?: FinalExamQuestion[];
+    name: string;
 }
 
+/**
+ * Quiz option in question
+ */
 export interface FinalExamQuestionOption {
     id: number;
-    questionId: number;
     optionText: string;
-    isCorrect?: boolean;
-    order: number;
 }
 
+/**
+ * Quiz question
+ */
 export interface FinalExamQuestion {
     id: number;
-    examId: number;
     question: string;
-    type: QuestionType;
+    questionType: string | null;
     points: number;
-    order: number;
-    explanation?: string;
     options: FinalExamQuestionOption[];
 }
 
-export interface FinalExamAttempt {
+/**
+ * Quiz details in final exam
+ */
+export interface FinalExamQuiz {
     id: number;
-    examId: number;
-    studentId: number;
+    timeLimit: number;
+    passingScore: number;
+    maxAttempts: number;
+    shuffleQuestions: number;
+    showAnswers: number;
+    questionsCount: number;
+    questions: FinalExamQuestion[];
+}
+
+/**
+ * Last attempt reference
+ */
+export interface FinalExamLastAttempt {
+    id: number;
+    status: "in_progress" | "completed";
+    score: string;
+    totalPoints: string;
+    scorePercentage: number;
+    isPassed: boolean;
+    completedAt: string | null;
+}
+
+/**
+ * Final Exam entity from /level-quiz-attempts/my-final-exam
+ */
+export interface FinalExam {
+    id: number;
+    level: FinalExamLevel;
+    assignedAt: string;
+    quiz: FinalExamQuiz;
+    attemptsCount: number;
+    canAttempt: boolean;
+    hasPassed: boolean;
+    lastAttempt: FinalExamLastAttempt | null;
+    createdAt: string;
+    updatedAt: string;
+}
+
+// ============================================================================
+// Attempt Types
+// ============================================================================
+
+/**
+ * User reference in attempt
+ */
+export interface AttemptUser {
+    id: number;
+    name: string;
+    email: string;
+}
+
+/**
+ * Level quiz reference in attempt
+ */
+export interface AttemptLevelQuiz {
+    id: number;
+    timeLimit: number;
+    passingScore: number;
+    maxAttempts: number;
+}
+
+/**
+ * Quiz attempt from /level-quiz-attempts
+ */
+export interface QuizAttempt {
+    id: number;
+    user: AttemptUser;
+    levelQuiz: AttemptLevelQuiz;
+    startedAt: string;
+    completedAt: string | null;
+    score: string | null;
+    totalPoints: string;
+    scorePercentage: number;
+    isPassed: boolean | null;
     attemptNumber: number;
     status: "in_progress" | "completed";
-    score?: number;
-    totalPoints?: number;
-    percentage?: number;
-    passed?: boolean;
-    startedAt: string;
-    completedAt?: string;
-    exam?: FinalExam;
-    questions?: FinalExamQuestion[];
+    answersCount: number;
+    createdAt: string;
+    updatedAt: string;
 }
+
+// ============================================================================
+// Answer Types
+// ============================================================================
+
+/**
+ * Question reference in answer response
+ */
+export interface AnswerQuestion {
+    id: number;
+    question: string;
+    type: string;
+    points: number;
+}
+
+/**
+ * Answer response from /level-quiz-attempts/:id/answer
+ */
+export interface QuizAnswerResponse {
+    id: number;
+    levelQuizAttemptId: number;
+    question: AnswerQuestion;
+    selectedOptionId: number;
+    textAnswer: string | null;
+    isCorrect: boolean;
+    pointsEarned: string;
+    answeredAt: string;
+    createdAt: string;
+}
+
+// ============================================================================
+// Payload Types
+// ============================================================================
+
+/**
+ * Start attempt payload
+ */
+export interface StartAttemptPayload {
+    levelQuizId: number;
+}
+
+/**
+ * Submit answer payload
+ */
+export interface SubmitAnswerPayload {
+    level_quiz_question_id: number;
+    selected_option_id: number;
+    text_answer?: string;
+}
+
+// ============================================================================
+// Legacy types for backward compatibility (to be removed)
+// ============================================================================
+
+export type ExamStatus = "completed" | "available" | "locked";
+export type ExamResultStatus = "passed" | "failed" | "under_review";
 
 export interface FinalExamResult {
     id: number;
@@ -65,15 +182,4 @@ export interface FinalExamResult {
     completedAt?: string;
     reviewedAt?: string;
     feedback?: string;
-}
-
-export interface FinalExamSubmitAnswerPayload {
-    selectedOptionId?: number;
-    selectedOptionIds?: number[];
-    booleanAnswer?: boolean;
-}
-
-export interface FinalExamSubmitAnswerResponse {
-    success: boolean;
-    message: string;
 }

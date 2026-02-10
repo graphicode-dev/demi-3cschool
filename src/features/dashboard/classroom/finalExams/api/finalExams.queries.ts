@@ -9,89 +9,54 @@ import { finalExamsApi } from "./finalExams.api";
 import { finalExamsKeys } from "./finalExams.keys";
 import type {
     FinalExam,
-    FinalExamAttempt,
-    FinalExamResult,
-    FinalExamSubmitAnswerPayload,
-    FinalExamSubmitAnswerResponse,
+    QuizAttempt,
+    QuizAnswerResponse,
+    SubmitAnswerPayload,
 } from "../types";
 
 /**
- * Hook to fetch all available exams
+ * Hook to fetch my final exams
  */
-export function useExams(
+export function useMyFinalExams(
     options?: Omit<UseQueryOptions<FinalExam[], Error>, "queryKey" | "queryFn">
 ) {
     return useQuery({
-        queryKey: finalExamsKeys.lists(),
-        queryFn: () => finalExamsApi.getExams(),
+        queryKey: finalExamsKeys.myFinalExams(),
+        queryFn: ({ signal }) => finalExamsApi.getMyFinalExams(signal),
         ...options,
     });
 }
 
 /**
- * Hook to fetch a single exam by ID
+ * Hook to fetch attempts history for a quiz
  */
-export function useExam(
-    examId: string,
-    options?: Omit<UseQueryOptions<FinalExam, Error>, "queryKey" | "queryFn">
-) {
-    return useQuery({
-        queryKey: finalExamsKeys.detail(examId),
-        queryFn: () => finalExamsApi.getExamById(examId),
-        enabled: !!examId,
-        ...options,
-    });
-}
-
-/**
- * Hook to fetch attempt result
- */
-export function useAttemptResult(
-    attemptId: string,
+export function useAttemptsHistory(
+    quizId: string,
     options?: Omit<
-        UseQueryOptions<FinalExamResult, Error>,
+        UseQueryOptions<QuizAttempt[], Error>,
         "queryKey" | "queryFn"
     >
 ) {
     return useQuery({
-        queryKey: finalExamsKeys.result(attemptId),
-        queryFn: () => finalExamsApi.getAttemptResult(attemptId),
-        enabled: !!attemptId,
+        queryKey: finalExamsKeys.attemptsHistory(quizId),
+        queryFn: ({ signal }) =>
+            finalExamsApi.getAttemptsHistory(quizId, signal),
+        enabled: !!quizId,
         ...options,
     });
 }
 
 /**
- * Hook to fetch my attempts for an exam
+ * Hook to start a quiz attempt
  */
-export function useMyAttempts(
-    examId: string,
-    options?: Omit<
-        UseQueryOptions<FinalExamAttempt[], Error>,
-        "queryKey" | "queryFn"
-    >
-) {
-    return useQuery({
-        queryKey: finalExamsKeys.myAttempts(examId),
-        queryFn: () => finalExamsApi.getMyAttempts(examId),
-        enabled: !!examId,
-        ...options,
-    });
-}
-
-/**
- * Hook to start an exam
- */
-export function useStartExam(
-    options?: Omit<
-        UseMutationOptions<FinalExamAttempt, Error, string>,
-        "mutationFn"
-    >
+export function useStartAttempt(
+    options?: Omit<UseMutationOptions<QuizAttempt, Error, number>, "mutationFn">
 ) {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: (examId: string) => finalExamsApi.startExam(examId),
+        mutationFn: (levelQuizId: number) =>
+            finalExamsApi.startAttempt(levelQuizId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: finalExamsKeys.all });
         },
@@ -105,45 +70,31 @@ export function useStartExam(
 export function useSubmitAnswer(
     options?: Omit<
         UseMutationOptions<
-            FinalExamSubmitAnswerResponse,
+            QuizAnswerResponse,
             Error,
-            {
-                attemptId: string;
-                questionId: string;
-                data: FinalExamSubmitAnswerPayload;
-            }
+            { attemptId: string; payload: SubmitAnswerPayload }
         >,
         "mutationFn"
     >
 ) {
     return useMutation({
-        mutationFn: ({
-            attemptId,
-            questionId,
-            data,
-        }: {
-            attemptId: string;
-            questionId: string;
-            data: FinalExamSubmitAnswerPayload;
-        }) => finalExamsApi.submitAnswer(attemptId, questionId, data),
+        mutationFn: ({ attemptId, payload }) =>
+            finalExamsApi.submitAnswer(attemptId, payload),
         ...options,
     });
 }
 
 /**
- * Hook to complete an exam
+ * Hook to complete a quiz attempt
  */
-export function useCompleteExam(
-    options?: Omit<
-        UseMutationOptions<FinalExamResult, Error, string>,
-        "mutationFn"
-    >
+export function useCompleteAttempt(
+    options?: Omit<UseMutationOptions<QuizAttempt, Error, string>, "mutationFn">
 ) {
     const queryClient = useQueryClient();
 
     return useMutation({
         mutationFn: (attemptId: string) =>
-            finalExamsApi.completeExam(attemptId),
+            finalExamsApi.completeAttempt(attemptId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: finalExamsKeys.all });
         },

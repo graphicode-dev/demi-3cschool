@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Clock, ChevronLeft, ChevronRight, Flag } from "lucide-react";
 import PreExam from "./PreExam";
 import { ExamSuccessModal } from "../components";
-import type { FinalExamQuestion } from "../types";
+import type { FinalExam, FinalExamQuestion } from "../types";
 import {
     PageWrapper,
     ErrorState,
@@ -12,23 +12,18 @@ import {
     useToast,
 } from "@/design-system";
 import {
-    useExam,
-    useStartExam,
+    useMyFinalExams,
+    useStartAttempt,
     useSubmitAnswer,
-    useCompleteExam,
+    useCompleteAttempt,
 } from "../api";
 import { finalExamsPaths } from "../navigation";
-import {
-    USE_MOCK_DATA,
-    MOCK_EXAM_WITH_QUESTIONS,
-    MOCK_ATTEMPT,
-} from "../mocks";
 
 interface QuizData {
     id: number;
     title: string;
     questions: FinalExamQuestion[];
-    timeLimit?: number;
+    timeLimit: number;
 }
 
 export function TakeExamPage() {
@@ -48,18 +43,21 @@ export function TakeExamPage() {
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const submittingAnswerRef = useRef(false);
 
-    // Fetch exam data
+    // Fetch all final exams and find the one matching examId
     const {
-        data: realExam,
+        data: exams,
         isLoading: examLoading,
         error: examError,
-    } = useExam(examId ?? "", { enabled: !!examId && !USE_MOCK_DATA });
+    } = useMyFinalExams();
 
-    const exam = USE_MOCK_DATA ? MOCK_EXAM_WITH_QUESTIONS : realExam;
+    // Find the exam by ID from the list
+    const exam: FinalExam | undefined = exams?.find(
+        (e) => String(e.id) === examId
+    );
 
-    const { mutateAsync: startExamMutation } = useStartExam();
+    const { mutateAsync: startAttemptMutation } = useStartAttempt();
     const { mutateAsync: submitAnswerMutation } = useSubmitAnswer();
-    const { mutateAsync: completeExamMutation } = useCompleteExam();
+    const { mutateAsync: completeAttemptMutation } = useCompleteAttempt();
 
     // Initialize timer when exam starts
     useEffect(() => {
@@ -105,19 +103,19 @@ export function TakeExamPage() {
             [questionId]: optionId,
         }));
 
-        if (!USE_MOCK_DATA) {
-            submittingAnswerRef.current = true;
-            try {
-                await submitAnswerMutation({
-                    attemptId,
-                    questionId: String(questionId),
-                    data: { selectedOptionId: optionId },
-                });
-            } catch (error) {
-                console.error("Failed to submit answer:", error);
-            } finally {
-                submittingAnswerRef.current = false;
-            }
+        submittingAnswerRef.current = true;
+        try {
+            await submitAnswerMutation({
+                attemptId,
+                payload: {
+                    level_quiz_question_id: questionId,
+                    selected_option_id: optionId,
+                },
+            });
+        } catch (error) {
+            console.error("Failed to submit answer:", error);
+        } finally {
+            submittingAnswerRef.current = false;
         }
     };
 
@@ -134,22 +132,16 @@ export function TakeExamPage() {
 
         setIsStarting(true);
         try {
-            let newAttemptId: string;
-
-            if (USE_MOCK_DATA) {
-                newAttemptId = String(MOCK_ATTEMPT.id);
-            } else {
-                const response = await startExamMutation(String(exam.id));
-                newAttemptId = String(response.id);
-            }
+            const response = await startAttemptMutation(exam.quiz.id);
+            const newAttemptId = String(response.id);
 
             if (newAttemptId) {
                 setAttemptId(newAttemptId);
                 setQuiz({
-                    id: exam.id,
-                    title: exam.title,
-                    questions: exam.questions || [],
-                    timeLimit: exam.duration,
+                    id: exam.quiz.id,
+                    title: exam.level.name,
+                    questions: exam.quiz.questions,
+                    timeLimit: exam.quiz.timeLimit,
                 });
             }
         } catch (error: any) {
@@ -169,10 +161,7 @@ export function TakeExamPage() {
 
         setIsSubmitting(true);
         try {
-            if (!USE_MOCK_DATA) {
-                await completeExamMutation(attemptId);
-            }
-
+            await completeAttemptMutation(attemptId);
             setShowSuccessModal(true);
         } catch (error: any) {
             addToast({
@@ -183,7 +172,7 @@ export function TakeExamPage() {
         } finally {
             setIsSubmitting(false);
         }
-    }, [attemptId, completeExamMutation, addToast, t]);
+    }, [attemptId, completeAttemptMutation, addToast, t]);
 
     const confirmSubmit = () => {
         const answeredCount = Object.keys(answers).length;

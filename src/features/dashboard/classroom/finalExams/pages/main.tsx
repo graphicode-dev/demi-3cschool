@@ -1,13 +1,15 @@
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { ExamCard } from "../components";
-import { MOCK_FINAL_EXAMS } from "../mocks";
+import { useMyFinalExams } from "../api";
 import { finalExamsPaths } from "../navigation";
-import { PageWrapper } from "@/design-system";
+import { PageWrapper, LoadingState, ErrorState } from "@/design-system";
 
 export function FinalExamsPage() {
     const { t } = useTranslation("finalExams");
     const navigate = useNavigate();
+
+    const { data: exams, isLoading, error, refetch } = useMyFinalExams();
 
     const handleStartExam = (examId: number) => {
         navigate(finalExamsPaths.take(examId));
@@ -17,6 +19,20 @@ export function FinalExamsPage() {
         navigate(finalExamsPaths.result(examId));
     };
 
+    if (isLoading) {
+        return <LoadingState />;
+    }
+
+    if (error) {
+        return (
+            <ErrorState
+                title={t("failedToLoad")}
+                message={(error as Error)?.message || t("unknownError")}
+                onRetry={() => refetch()}
+            />
+        );
+    }
+
     return (
         <PageWrapper
             pageHeaderProps={{
@@ -25,16 +41,24 @@ export function FinalExamsPage() {
             }}
         >
             {/* Exams Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {MOCK_FINAL_EXAMS.map((exam) => (
-                    <ExamCard
-                        key={exam.id}
-                        exam={exam}
-                        onStartExam={handleStartExam}
-                        onViewResults={handleViewResults}
-                    />
-                ))}
-            </div>
+            {exams && exams.length > 0 ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {exams.map((exam) => (
+                        <ExamCard
+                            key={exam.id}
+                            exam={exam}
+                            onStartExam={handleStartExam}
+                            onViewResults={handleViewResults}
+                        />
+                    ))}
+                </div>
+            ) : (
+                <div className="text-center py-12">
+                    <p className="text-gray-500 dark:text-gray-400">
+                        {t("noExamsAvailable")}
+                    </p>
+                </div>
+            )}
         </PageWrapper>
     );
 }

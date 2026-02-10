@@ -1,10 +1,10 @@
 import { api } from "@/shared/api/client";
+import { ApiResponse } from "@/shared/api";
 import type {
     FinalExam,
-    FinalExamAttempt,
-    FinalExamResult,
-    FinalExamSubmitAnswerPayload,
-    FinalExamSubmitAnswerResponse,
+    QuizAttempt,
+    QuizAnswerResponse,
+    SubmitAnswerPayload,
 } from "../types";
 
 /**
@@ -12,60 +12,100 @@ import type {
  * Student endpoints for final exam operations
  */
 export const finalExamsApi = {
-    // Get all available exams for student - GET /api/final-exams
-    getExams: async (): Promise<FinalExam[]> => {
-        const response = await api.get<FinalExam[]>("/final-exams");
-        return response.data ?? [];
-    },
-
-    // Get exam by ID - GET /api/final-exams/{id}
-    getExamById: async (examId: string): Promise<FinalExam> => {
-        const response = await api.get<FinalExam>(`/final-exams/${examId}`);
-        return response.data!;
-    },
-
-    // Start exam - POST /api/final-exams/{examId}/start
-    startExam: async (examId: string): Promise<FinalExamAttempt> => {
-        const response = await api.post<FinalExamAttempt>(
-            `/final-exams/${examId}/start`
+    /**
+     * Get my final exams - GET /level-quiz-attempts/my-final-exam
+     */
+    getMyFinalExams: async (signal?: AbortSignal): Promise<FinalExam[]> => {
+        const response = await api.get<ApiResponse<FinalExam[]>>(
+            "/level-quiz-attempts/my-final-exam",
+            { signal }
         );
-        return response.data!;
+
+        if (response.error) {
+            throw response.error;
+        }
+
+        return response.data?.data ?? [];
     },
 
-    // Submit answer - POST /api/final-exams/attempts/{attemptId}/questions/{questionId}/answer
+    /**
+     * Get quiz attempts history - GET /level-quiz-attempts/quiz/:quizId/history
+     */
+    getAttemptsHistory: async (
+        quizId: string,
+        signal?: AbortSignal
+    ): Promise<QuizAttempt[]> => {
+        const response = await api.get<ApiResponse<QuizAttempt[]>>(
+            `/level-quiz-attempts/quiz/${quizId}/history`,
+            { signal }
+        );
+
+        if (response.error) {
+            throw response.error;
+        }
+
+        return response.data?.data ?? [];
+    },
+
+    /**
+     * Start quiz attempt - POST /level-quiz-attempts
+     */
+    startAttempt: async (levelQuizId: number): Promise<QuizAttempt> => {
+        const response = await api.post<ApiResponse<QuizAttempt>>(
+            "/level-quiz-attempts",
+            { levelQuizId }
+        );
+
+        if (response.error) {
+            throw response.error;
+        }
+
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
+        }
+
+        return response.data.data;
+    },
+
+    /**
+     * Submit answer - POST /level-quiz-attempts/:id/answer
+     */
     submitAnswer: async (
         attemptId: string,
-        questionId: string,
-        data: FinalExamSubmitAnswerPayload
-    ): Promise<FinalExamSubmitAnswerResponse> => {
-        const response = await api.post<FinalExamSubmitAnswerResponse>(
-            `/final-exams/attempts/${attemptId}/questions/${questionId}/answer`,
-            data
+        payload: SubmitAnswerPayload
+    ): Promise<QuizAnswerResponse> => {
+        const response = await api.post<ApiResponse<QuizAnswerResponse>>(
+            `/level-quiz-attempts/${attemptId}/answer`,
+            payload
         );
-        return response.data!;
+
+        if (response.error) {
+            throw response.error;
+        }
+
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
+        }
+
+        return response.data.data;
     },
 
-    // Complete exam - POST /api/final-exams/attempts/{attemptId}/complete
-    completeExam: async (attemptId: string): Promise<FinalExamResult> => {
-        const response = await api.post<FinalExamResult>(
-            `/final-exams/attempts/${attemptId}/complete`
+    /**
+     * Complete quiz attempt - POST /level-quiz-attempts/:id/complete
+     */
+    completeAttempt: async (attemptId: string): Promise<QuizAttempt> => {
+        const response = await api.post<ApiResponse<QuizAttempt>>(
+            `/level-quiz-attempts/${attemptId}/complete`
         );
-        return response.data!;
-    },
 
-    // Get attempt result - GET /api/final-exams/attempts/{attemptId}/result
-    getAttemptResult: async (attemptId: string): Promise<FinalExamResult> => {
-        const response = await api.get<FinalExamResult>(
-            `/final-exams/attempts/${attemptId}/result`
-        );
-        return response.data!;
-    },
+        if (response.error) {
+            throw response.error;
+        }
 
-    // Get my attempts for an exam - GET /api/final-exams/{examId}/my-attempts
-    getMyAttempts: async (examId: string): Promise<FinalExamAttempt[]> => {
-        const response = await api.get<FinalExamAttempt[]>(
-            `/final-exams/${examId}/my-attempts`
-        );
-        return response.data ?? [];
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
+        }
+
+        return response.data.data;
     },
 };

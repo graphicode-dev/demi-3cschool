@@ -9,6 +9,7 @@ import {
     ArrowRight,
     BarChart3,
     XCircle,
+    Target,
 } from "lucide-react";
 import type { FinalExam } from "../types";
 
@@ -21,9 +22,14 @@ interface ExamCardProps {
 export function ExamCard({ exam, onStartExam, onViewResults }: ExamCardProps) {
     const { t } = useTranslation("finalExams");
 
-    const isCompleted = exam.status === "completed";
-    const isAvailable = exam.status === "available";
-    const isLocked = exam.status === "locked";
+    const isCompleted =
+        exam.hasPassed || exam.lastAttempt?.status === "completed";
+    const isAvailable = exam.canAttempt && !isCompleted;
+    const isLocked = !exam.canAttempt && !isCompleted;
+
+    const formatDate = (dateStr: string) => {
+        return new Date(dateStr).toLocaleDateString();
+    };
 
     return (
         <div
@@ -57,7 +63,7 @@ export function ExamCard({ exam, onStartExam, onViewResults }: ExamCardProps) {
 
             {/* Title */}
             <h3 className="text-lg font-bold text-gray-900 dark:text-white text-center mb-4">
-                {exam.title}
+                {exam.level.name}
             </h3>
 
             {/* Info Box */}
@@ -67,7 +73,7 @@ export function ExamCard({ exam, onStartExam, onViewResults }: ExamCardProps) {
                     <div className="flex items-center gap-3">
                         <Clock className="size-5 text-gray-400" />
                         <span className="text-sm text-gray-500 dark:text-gray-400">
-                            {exam.duration} {t("minutes")}
+                            {exam.quiz.timeLimit} {t("minutes")}
                         </span>
                     </div>
 
@@ -75,7 +81,15 @@ export function ExamCard({ exam, onStartExam, onViewResults }: ExamCardProps) {
                     <div className="flex items-center gap-3">
                         <List className="size-5 text-gray-400" />
                         <span className="text-sm text-gray-500 dark:text-gray-400">
-                            {exam.questionsCount} {t("questions")}
+                            {exam.quiz.questionsCount} {t("questions")}
+                        </span>
+                    </div>
+
+                    {/* Passing Score */}
+                    <div className="flex items-center gap-3">
+                        <Target className="size-5 text-gray-400" />
+                        <span className="text-sm text-gray-500 dark:text-gray-400">
+                            {t("passingScore")}: {exam.quiz.passingScore}%
                         </span>
                     </div>
 
@@ -89,9 +103,9 @@ export function ExamCard({ exam, onStartExam, onViewResults }: ExamCardProps) {
                                     : "text-gray-500 dark:text-gray-400"
                             }`}
                         >
-                            {isCompleted && `${t("takenOn")} ${exam.takenDate}`}
-                            {isAvailable && `${t("takenOn")} ${exam.takenDate}`}
-                            {isLocked && `${t("opens")} ${exam.opensDate}`}
+                            {isCompleted && exam.lastAttempt?.completedAt
+                                ? `${t("takenOn")} ${formatDate(exam.lastAttempt.completedAt)}`
+                                : `${t("assignedOn")} ${formatDate(exam.assignedAt)}`}
                         </span>
                     </div>
                 </div>
@@ -113,13 +127,19 @@ export function ExamCard({ exam, onStartExam, onViewResults }: ExamCardProps) {
                     {isCompleted && (
                         <>
                             <CheckCircle className="size-4" />
-                            {t("finishedExam")}
+                            {exam.hasPassed ? t("passed") : t("finishedExam")}
                         </>
                     )}
                     {isAvailable && (
                         <>
                             <AlertCircle className="size-4" />
-                            {t("oneAttemptOnly")}
+                            {exam.quiz.maxAttempts === 1
+                                ? t("oneAttemptOnly")
+                                : t("attemptsRemaining", {
+                                      count:
+                                          exam.quiz.maxAttempts -
+                                          exam.attemptsCount,
+                                  })}
                         </>
                     )}
                     {isLocked && (

@@ -3,7 +3,7 @@ import {
     Clock,
     List,
     AlertTriangle,
-    Calendar,
+    Target,
     CheckCircle,
     XCircle,
     Timer,
@@ -55,7 +55,7 @@ export function PreExam({
             <div className="max-w-lg mx-auto">
                 {/* Title */}
                 <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                    {exam.title}
+                    {exam.level.name}
                 </h1>
                 <p className="text-gray-500 dark:text-gray-400 mb-6">
                     {t("preExam.readInstructions")}
@@ -74,7 +74,7 @@ export function PreExam({
                                     {t("preExam.duration")}
                                 </p>
                                 <p className="text-lg font-bold text-gray-900 dark:text-white">
-                                    {exam.duration} {t("minutes")}
+                                    {exam.quiz.timeLimit} {t("minutes")}
                                 </p>
                             </div>
                         </div>
@@ -91,7 +91,7 @@ export function PreExam({
                                     {t("preExam.questionsLabel")}
                                 </p>
                                 <p className="text-lg font-bold text-gray-900 dark:text-white">
-                                    {exam.questionsCount} {t("questions")}
+                                    {exam.quiz.questionsCount} {t("questions")}
                                 </p>
                             </div>
                         </div>
@@ -108,24 +108,28 @@ export function PreExam({
                                     {t("preExam.attempts")}
                                 </p>
                                 <p className="text-lg font-bold text-gray-900 dark:text-white">
-                                    {t("preExam.oneAttemptOnly")}
+                                    {exam.quiz.maxAttempts === 1
+                                        ? t("preExam.oneAttemptOnly")
+                                        : t("preExam.attemptsCount", {
+                                              count: exam.quiz.maxAttempts,
+                                          })}
                                 </p>
                             </div>
                         </div>
                     </div>
 
-                    {/* Availability */}
+                    {/* Passing Score */}
                     <div className="bg-brand-50 dark:bg-brand-500/10 border border-brand-200 dark:border-brand-500/20 rounded-xl p-4">
                         <div className="flex items-center gap-3">
                             <div className="flex items-center justify-center size-10 rounded-full bg-brand-100 dark:bg-brand-500/20">
-                                <Calendar className="size-5 text-brand-600 dark:text-brand-400" />
+                                <Target className="size-5 text-brand-600 dark:text-brand-400" />
                             </div>
                             <div>
                                 <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                                    {t("preExam.availability")}
+                                    {t("preExam.passingScore")}
                                 </p>
                                 <p className="text-lg font-bold text-gray-900 dark:text-white">
-                                    {exam.availableUntil || t("preExam.availableNow")}
+                                    {exam.quiz.passingScore}%
                                 </p>
                             </div>
                         </div>

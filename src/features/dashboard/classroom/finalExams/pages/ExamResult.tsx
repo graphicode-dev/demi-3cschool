@@ -1,31 +1,20 @@
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
-import { Star, Clock } from "lucide-react";
+import { Star, Clock, XCircle } from "lucide-react";
 import { PageWrapper, ErrorState, LoadingState } from "@/design-system";
-import { useAttemptResult } from "../api";
+import { useMyFinalExams } from "../api";
 import { finalExamsPaths } from "../navigation";
-import {
-    USE_MOCK_DATA,
-    MOCK_RESULT_PASSED,
-    MOCK_RESULT_UNDER_REVIEW,
-} from "../mocks";
 
 export function ExamResultPage() {
     const { t } = useTranslation("finalExams");
     const navigate = useNavigate();
     const { examId } = useParams<{ examId: string }>();
 
-    // For demo purposes, use passed result for exam 1, under review for others
-    const mockResult =
-        examId === "1" ? MOCK_RESULT_PASSED : MOCK_RESULT_UNDER_REVIEW;
+    const { data: exams, isLoading, error, refetch } = useMyFinalExams();
 
-    const {
-        data: realResult,
-        isLoading,
-        error,
-    } = useAttemptResult(examId ?? "", { enabled: !!examId && !USE_MOCK_DATA });
-
-    const result = USE_MOCK_DATA ? mockResult : realResult;
+    // Find the exam by ID from the list
+    const exam = exams?.find((e) => String(e.id) === examId);
+    const lastAttempt = exam?.lastAttempt;
 
     const handleBackToExams = () => {
         navigate(finalExamsPaths.list());
@@ -37,13 +26,13 @@ export function ExamResultPage() {
         return (
             <ErrorState
                 title={t("result.failedToLoad")}
-                message={(error as any)?.message || t("result.unknownError")}
-                onRetry={() => window.location.reload()}
+                message={(error as Error)?.message || t("result.unknownError")}
+                onRetry={() => refetch()}
             />
         );
     }
 
-    if (!result) {
+    if (!exam || !lastAttempt) {
         return (
             <ErrorState
                 title={t("result.notFound")}
@@ -52,8 +41,9 @@ export function ExamResultPage() {
         );
     }
 
-    const isPassed = result.status === "passed";
-    const isUnderReview = result.status === "under_review";
+    const isPassed = lastAttempt.isPassed;
+    const isCompleted = lastAttempt.status === "completed";
+    const isInProgress = lastAttempt.status === "in_progress";
 
     return (
         <PageWrapper>
@@ -114,14 +104,17 @@ export function ExamResultPage() {
                             : t("result.underReviewDescription")}
                     </p>
 
-                    {/* Score Box (only for passed) */}
-                    {isPassed && (
+                    {/* Score Box (only for completed) */}
+                    {isCompleted && (
                         <div className="bg-white dark:bg-gray-900 rounded-xl border border-success-200 dark:border-success-500/20 p-4 mb-4">
                             <p className="text-center text-sm text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">
                                 {t("result.score")}
                             </p>
                             <p className="text-center text-3xl font-bold text-success-600 dark:text-success-400">
-                                {result.score} / {result.totalPoints}
+                                {lastAttempt.score} / {lastAttempt.totalPoints}
+                            </p>
+                            <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                ({lastAttempt.scorePercentage}%)
                             </p>
                         </div>
                     )}
