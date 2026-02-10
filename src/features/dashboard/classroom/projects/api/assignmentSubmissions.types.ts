@@ -2,54 +2,35 @@
  * Assignment Submissions Types
  */
 
-export interface AssignmentFile {
+export interface SubmissionFile {
     id: number;
     name: string;
     url: string;
-    size: number;
-    mimeType: string;
 }
 
-export interface AssignmentInfo {
-    id: number;
-    title: string;
-    lessonId: number;
-    lesson: Record<string, unknown>;
-    fileUrl: string;
-}
+export type AssignmentStatus = "not_started" | "submitted" | "reviewed";
+export type AssignmentResult = "passed" | "failed" | "needs_revision";
 
-export interface StudentInfo {
-    id: number;
-    name: string;
-    email?: string;
-}
-
-export interface ReviewerInfo {
-    id: number;
-    name: string;
-}
-
-export type SubmissionStatus = "submitted" | "reviewed" | "pending";
-export type SubmissionResult = "passed" | "failed" | "needs_revision";
-
-export interface AssignmentSubmission {
-    id: number;
-    studentNotes: string;
-    status: SubmissionStatus;
-    submittedAt: string | null;
-    reviewedAt: string | null;
-    teacherComment: string | null;
+export interface Assignment {
+    assignmentId: number;
+    assignmentTitle: string;
+    assignmentFileUrl: string | null;
+    submissionId: number | null;
+    status: AssignmentStatus;
+    result: AssignmentResult | null;
     starsRating: number | null;
-    result: SubmissionResult | null;
     score: number | null;
     maxScore: number | null;
-    scorePercentage: number | null;
-    assignment: AssignmentInfo;
-    student: StudentInfo;
-    reviewer: ReviewerInfo | Record<string, unknown>;
-    files: AssignmentFile[];
-    createdAt: string;
-    updatedAt: string;
+    teacherComment: string | null;
+    submittedAt: string | null;
+    reviewedAt: string | null;
+    files: SubmissionFile[];
+}
+
+export interface Lesson {
+    lessonId: number;
+    lessonTitle: string;
+    assignments: Assignment[];
 }
 
 export interface AssignmentGroup {
@@ -57,8 +38,8 @@ export interface AssignmentGroup {
     groupName: string;
     levelId: number;
     levelName: string | null;
-    studentsCount: number;
-    students: StudentInfo[];
+    enrolledAt: string;
+    lessons: Lesson[];
 }
 
 export interface SubmitAssignmentPayload {
@@ -69,7 +50,21 @@ export interface SubmitAssignmentPayload {
 export interface ReviewAssignmentPayload {
     teacher_comment: string;
     stars_rating: string;
-    result: SubmissionResult;
+    result: AssignmentResult;
     score: string;
     max_score: string;
+}
+
+export interface AssignmentSubmissionResponse {
+    id: number;
+    studentNotes: string;
+    status: AssignmentStatus;
+    submittedAt: string | null;
+    reviewedAt: string | null;
+    teacherComment: string | null;
+    starsRating: number | null;
+    result: AssignmentResult | null;
+    score: number | null;
+    maxScore: number | null;
+    files: SubmissionFile[];
 }

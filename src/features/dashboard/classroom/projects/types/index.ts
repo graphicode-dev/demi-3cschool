@@ -3,6 +3,7 @@ export type ProjectStatus = "new" | "under_review" | "reviewed" | "completed";
 export interface Project {
     id: number;
     assignmentId?: string;
+    groupId?: number;
     lessonId: number;
     lessonTitle: string;
     lessonOrder: number;

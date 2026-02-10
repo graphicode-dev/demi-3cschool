@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
 import {
@@ -15,12 +15,15 @@ import { PageWrapper } from "@/design-system";
 import {
     useAssignmentGroups,
     useSubmitAssignment,
-    type AssignmentGroup,
+    type Assignment,
 } from "../api";
 
 export function SubmitAssignmentPage() {
     const { t } = useTranslation("projects");
-    const { projectId } = useParams<{ projectId: string }>();
+    const { groupId, assignmentId } = useParams<{
+        groupId: string;
+        assignmentId: string;
+    }>();
     const navigate = useNavigate();
     const [content, setContent] = useState("");
     const [files, setFiles] = useState<File[]>([]);
@@ -28,8 +31,20 @@ export function SubmitAssignmentPage() {
     const [previewFile, setPreviewFile] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
-    const { data: groups, isLoading } = useAssignmentGroups(projectId);
-    const group: AssignmentGroup | undefined = groups?.[0];
+    const { data: groups, isLoading } = useAssignmentGroups(groupId);
+
+    const assignment: Assignment | undefined = useMemo(() => {
+        if (!groups || !assignmentId) return undefined;
+        for (const group of groups) {
+            for (const lesson of group.lessons) {
+                const found = lesson.assignments.find(
+                    (a) => String(a.assignmentId) === assignmentId
+                );
+                if (found) return found;
+            }
+        }
+        return undefined;
+    }, [groups, assignmentId]);
 
     const submitMutation = useSubmitAssignment();
 
@@ -105,11 +120,11 @@ export function SubmitAssignmentPage() {
     }, []);
 
     const handleSubmit = useCallback(async () => {
-        if (files.length === 0 || !projectId) return;
+        if (files.length === 0 || !assignmentId) return;
 
         try {
             await submitMutation.mutateAsync({
-                assignmentId: projectId,
+                assignmentId,
                 student_notes: content,
                 files,
             });
@@ -117,7 +132,7 @@ export function SubmitAssignmentPage() {
         } catch (error) {
             // Error handled by mutation
         }
-    }, [content, files, projectId, navigate, submitMutation]);
+    }, [content, files, assignmentId, navigate, submitMutation]);
 
     const isSubmitDisabled = files.length === 0 || submitMutation.isPending;
 
@@ -131,7 +146,7 @@ export function SubmitAssignmentPage() {
         );
     }
 
-    if (!group) {
+    if (!assignment) {
         return (
             <div className="flex flex-col items-center justify-center py-12">
                 <p className="text-gray-500 dark:text-gray-400">

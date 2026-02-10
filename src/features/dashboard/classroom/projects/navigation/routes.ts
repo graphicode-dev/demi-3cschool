@@ -17,7 +17,7 @@ export const projectsRoutes: RouteConfig[] = [
         },
     },
     {
-        path: "projects/homework/:projectId",
+        path: "projects/homework/:groupId/:assignmentId",
         lazy: () =>
             import("../pages/HomeworkFile").then((m) => ({
                 default: m.default,
@@ -28,7 +28,7 @@ export const projectsRoutes: RouteConfig[] = [
         },
     },
     {
-        path: "projects/results/:projectId",
+        path: "projects/results/:groupId/:assignmentId",
         lazy: () =>
             import("../pages/HomeworkResult").then((m) => ({
                 default: m.default,
@@ -39,7 +39,7 @@ export const projectsRoutes: RouteConfig[] = [
         },
     },
     {
-        path: "projects/submit/:projectId",
+        path: "projects/submit/:groupId/:assignmentId",
         lazy: () =>
             import("../pages/SubmitAssignment").then((m) => ({
                 default: m.default,

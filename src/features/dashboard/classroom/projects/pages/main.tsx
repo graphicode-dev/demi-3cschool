@@ -5,8 +5,7 @@ import { ChevronDown, BookOpen } from "lucide-react";
 import { ProjectCard } from "../components";
 import type { Project } from "../types";
 import { PageWrapper } from "@/design-system";
-import { useMyAllSessions } from "@/features/dashboard/classroom/mySchedule/api";
-import { useAssignmentGroups } from "../api";
+import { useAssignmentGroups, type Assignment } from "../api";
 
 export function ProjectsPage() {
     const { t } = useTranslation("projects");
@@ -16,73 +15,112 @@ export function ProjectsPage() {
     );
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-    const { data: mySessionsData } = useMyAllSessions();
+    const { data: assignmentGroups } = useAssignmentGroups();
 
     const lessons = useMemo(() => {
-        const items = mySessionsData?.items ?? [];
+        const groups = assignmentGroups ?? [];
         const unique = new Map<number, { id: number; title: string }>();
-        for (const s of items) {
-            const lessonId = s.lesson?.id;
-            const lessonTitle = s.lesson?.title;
-            if (!lessonId || !lessonTitle) continue;
-            if (!unique.has(lessonId)) {
-                unique.set(lessonId, { id: lessonId, title: lessonTitle });
+        for (const group of groups) {
+            for (const lesson of group.lessons) {
+                if (!unique.has(lesson.lessonId)) {
+                    unique.set(lesson.lessonId, {
+                        id: lesson.lessonId,
+                        title: lesson.lessonTitle,
+                    });
+                }
             }
         }
         return Array.from(unique.values()).sort((a, b) => a.id - b.id);
-    }, [mySessionsData?.items]);
+    }, [assignmentGroups]);
 
     const selectedLesson = useMemo(() => {
         if (!selectedLessonId) return null;
         return lessons.find((l) => l.id === selectedLessonId) ?? null;
     }, [selectedLessonId, lessons]);
 
-    const { data: assignmentGroups } = useAssignmentGroups(
-        selectedLessonId ?? undefined
-    );
+    const mapAssignmentStatus = (
+        status: Assignment["status"]
+    ): Project["status"] => {
+        switch (status) {
+            case "not_started":
+                return "new";
+            case "submitted":
+                return "under_review";
+            case "reviewed":
+                return "reviewed";
+            default:
+                return "new";
+        }
+    };
 
     const projects = useMemo(() => {
         const groups = assignmentGroups ?? [];
+        const result: Project[] = [];
 
-        if (groups.length === 0) return [] as Project[];
+        for (const group of groups) {
+            for (const lesson of group.lessons) {
+                if (
+                    selectedLessonId !== null &&
+                    lesson.lessonId !== selectedLessonId
+                ) {
+                    continue;
+                }
+                for (const assignment of lesson.assignments) {
+                    result.push({
+                        id: assignment.assignmentId,
+                        assignmentId: String(assignment.assignmentId),
+                        groupId: group.groupId,
+                        lessonId: lesson.lessonId,
+                        lessonTitle: lesson.lessonTitle,
+                        lessonOrder: 0,
+                        title: assignment.assignmentTitle,
+                        description: group.groupName,
+                        status: mapAssignmentStatus(assignment.status),
+                        submissionDate: assignment.submittedAt ?? undefined,
+                        grade: assignment.score ?? undefined,
+                        maxGrade: assignment.maxScore ?? undefined,
+                        feedback: assignment.teacherComment ?? undefined,
+                        homeworkFile: assignment.assignmentFileUrl
+                            ? {
+                                  name: assignment.assignmentTitle,
+                                  type: "application/pdf",
+                                  size: "",
+                                  url: assignment.assignmentFileUrl,
+                              }
+                            : undefined,
+                    });
+                }
+            }
+        }
 
-        return groups.map((group) => {
-            return {
-                id: group.groupId,
-                assignmentId: String(group.groupId),
-                lessonId: group.levelId,
-                lessonTitle: group.levelName ?? group.groupName,
-                lessonOrder: 0,
-                title: group.groupName,
-                description: `${group.studentsCount} students`,
-                status: "new",
-                homeworkFile: undefined,
-            } satisfies Project;
-        });
-    }, [assignmentGroups]);
+        return result;
+    }, [assignmentGroups, selectedLessonId]);
 
     const handleViewHomework = useCallback(
         (projectId: number) => {
-            const assignmentId =
-                projects.find((p) => p.id === projectId)?.assignmentId ??
-                String(projectId);
-            navigate(`homework/${assignmentId}`);
+            const project = projects.find((p) => p.id === projectId);
+            if (!project) return;
+            navigate(`homework/${project.groupId}/${project.assignmentId}`);
         },
         [navigate, projects]
     );
 
     const handleSubmit = useCallback(
         (projectId: number) => {
-            navigate(`submit/${projectId}`);
+            const project = projects.find((p) => p.id === projectId);
+            if (!project) return;
+            navigate(`submit/${project.groupId}/${project.assignmentId}`);
         },
-        [navigate]
+        [navigate, projects]
     );
 
     const handleViewResults = useCallback(
         (projectId: number) => {
-            navigate(`results/${projectId}`);
+            const project = projects.find((p) => p.id === projectId);
+            if (!project) return;
+            navigate(`results/${project.groupId}/${project.assignmentId}`);
         },
-        [navigate]
+        [navigate, projects]
     );
 
     return (

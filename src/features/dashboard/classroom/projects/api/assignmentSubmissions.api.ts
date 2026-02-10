@@ -2,7 +2,7 @@ import { api } from "@/shared/api/client";
 import { ApiResponse } from "@/shared/api";
 import type {
     AssignmentGroup,
-    AssignmentSubmission,
+    AssignmentSubmissionResponse,
     ReviewAssignmentPayload,
 } from "./assignmentSubmissions.types";
 
@@ -39,22 +39,20 @@ export const assignmentSubmissionsApi = {
     submitAssignment: async (
         assignmentId: number | string,
         payload: { student_notes: string; files: File[] }
-    ): Promise<AssignmentSubmission> => {
+    ): Promise<AssignmentSubmissionResponse> => {
         const formData = new FormData();
         formData.append("student_notes", payload.student_notes);
         payload.files.forEach((file, index) => {
             formData.append(`files[${index}]`, file);
         });
 
-        const response = await api.post<ApiResponse<AssignmentSubmission>>(
-            `/assignment-submissions/${assignmentId}/submit`,
-            formData,
-            {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            }
-        );
+        const response = await api.post<
+            ApiResponse<AssignmentSubmissionResponse>
+        >(`/assignment-submissions/${assignmentId}/submit`, formData, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        });
 
         if (response.error) {
             throw response.error;
@@ -70,11 +68,10 @@ export const assignmentSubmissionsApi = {
     reviewAssignment: async (
         assignmentId: number | string,
         payload: ReviewAssignmentPayload
-    ): Promise<AssignmentSubmission> => {
-        const response = await api.post<ApiResponse<AssignmentSubmission>>(
-            `/assignment-submissions/${assignmentId}/review`,
-            payload
-        );
+    ): Promise<AssignmentSubmissionResponse> => {
+        const response = await api.post<
+            ApiResponse<AssignmentSubmissionResponse>
+        >(`/assignment-submissions/${assignmentId}/review`, payload);
 
         if (response.error) {
             throw response.error;

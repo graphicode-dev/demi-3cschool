@@ -1,16 +1,31 @@
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { Clock, CheckCircle, GraduationCap } from "lucide-react";
 import { PageWrapper } from "@/design-system";
-import { useAssignmentGroups, type AssignmentGroup } from "../api";
+import { useAssignmentGroups, type Assignment } from "../api";
 
 export function HomeworkResultPage() {
     const { t } = useTranslation("projects");
-    const { projectId } = useParams<{ projectId: string }>();
+    const { groupId, assignmentId } = useParams<{
+        groupId: string;
+        assignmentId: string;
+    }>();
 
-    const { data: groups, isLoading } = useAssignmentGroups(projectId);
+    const { data: groups, isLoading } = useAssignmentGroups(groupId);
 
-    const group: AssignmentGroup | undefined = groups?.[0];
+    const assignment: Assignment | undefined = useMemo(() => {
+        if (!groups || !assignmentId) return undefined;
+        for (const group of groups) {
+            for (const lesson of group.lessons) {
+                const found = lesson.assignments.find(
+                    (a) => String(a.assignmentId) === assignmentId
+                );
+                if (found) return found;
+            }
+        }
+        return undefined;
+    }, [groups, assignmentId]);
 
     if (isLoading) {
         return (
@@ -22,7 +37,7 @@ export function HomeworkResultPage() {
         );
     }
 
-    if (!group) {
+    if (!assignment) {
         return (
             <div className="flex flex-col items-center justify-center py-12">
                 <p className="text-gray-500 dark:text-gray-400">
@@ -32,7 +47,8 @@ export function HomeworkResultPage() {
         );
     }
 
-    const isUnderReview = true;
+    const isUnderReview = assignment.status === "submitted";
+    const isReviewed = assignment.status === "reviewed";
 
     return (
         <PageWrapper
@@ -85,19 +101,19 @@ export function HomeworkResultPage() {
                     </p>
 
                     {/* Points Card (Reviewed only) */}
-                    {!isUnderReview && false && (
+                    {isReviewed && assignment.score !== null && (
                         <div className="w-full max-w-sm bg-success-500/10 border border-success-500/50 rounded-2xl p-6 flex flex-col items-center gap-2">
                             <span className="text-lg font-semibold text-success-600">
                                 {t("result.points")}
                             </span>
                             <span className="text-3xl font-bold text-success-600 tracking-wider">
-                                0/10
+                                {assignment.score}/{assignment.maxScore}
                             </span>
                         </div>
                     )}
 
                     {/* Teacher Feedback (Reviewed only) */}
-                    {!isUnderReview && false && (
+                    {isReviewed && assignment.teacherComment && (
                         <div className="w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6">
                             <div className="flex items-center gap-4 mb-3">
                                 <div className="size-12 rounded-full bg-brand-500 flex items-center justify-center">
@@ -108,7 +124,7 @@ export function HomeworkResultPage() {
                                 </span>
                             </div>
                             <p className="text-base text-gray-600 dark:text-gray-300 leading-relaxed">
-                                ""
+                                {assignment.teacherComment}
                             </p>
                         </div>
                     )}

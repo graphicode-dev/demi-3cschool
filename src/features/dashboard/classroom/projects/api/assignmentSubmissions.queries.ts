@@ -8,7 +8,6 @@ import { assignmentSubmissionsApi } from "./assignmentSubmissions.api";
 import { assignmentSubmissionsKeys } from "./assignmentSubmissions.keys";
 import type {
     AssignmentGroup,
-    AssignmentSubmission,
     ReviewAssignmentPayload,
 } from "./assignmentSubmissions.types";
 

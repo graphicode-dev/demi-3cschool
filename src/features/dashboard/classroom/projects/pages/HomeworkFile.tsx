@@ -1,16 +1,31 @@
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
 import { FileText, Download } from "lucide-react";
 import { PageWrapper } from "@/design-system";
-import { useAssignmentGroups, type AssignmentGroup } from "../api";
+import { useAssignmentGroups, type Assignment } from "../api";
 
 export function HomeworkFilePage() {
     const { t } = useTranslation("projects");
-    const { projectId } = useParams<{ projectId: string }>();
+    const { groupId, assignmentId } = useParams<{
+        groupId: string;
+        assignmentId: string;
+    }>();
 
-    const { data: groups, isLoading } = useAssignmentGroups(projectId);
+    const { data: groups, isLoading } = useAssignmentGroups(groupId);
 
-    const group: AssignmentGroup | undefined = groups?.[0];
+    const assignment: Assignment | undefined = useMemo(() => {
+        if (!groups || !assignmentId) return undefined;
+        for (const group of groups) {
+            for (const lesson of group.lessons) {
+                const found = lesson.assignments.find(
+                    (a) => String(a.assignmentId) === assignmentId
+                );
+                if (found) return found;
+            }
+        }
+        return undefined;
+    }, [groups, assignmentId]);
 
     if (isLoading) {
         return (
@@ -22,7 +37,7 @@ export function HomeworkFilePage() {
         );
     }
 
-    if (!group) {
+    if (!assignment) {
         return (
             <div className="flex flex-col items-center justify-center py-12">
                 <p className="text-gray-500 dark:text-gray-400">
@@ -33,7 +48,9 @@ export function HomeworkFilePage() {
     }
 
     const handleDownload = () => {
-        // File URL would come from submission data when available
+        if (assignment.assignmentFileUrl) {
+            window.open(assignment.assignmentFileUrl, "_blank");
+        }
     };
 
     return (
@@ -57,14 +74,14 @@ export function HomeworkFilePage() {
                         {/* File Info */}
                         <div className="flex flex-col">
                             <h3 className="text-lg font-bold text-gray-900 dark:text-white">
-                                {group.groupName || "Homework.pdf"}
+                                {assignment.assignmentTitle || "Homework.pdf"}
                             </h3>
                             <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                                 <span className="px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-800 text-xs font-semibold uppercase">
                                     PDF
                                 </span>
                                 <span>•</span>
-                                <span>{group.levelName || "Assignment"}</span>
+                                <span>{t("homeworkFile.assignment")}</span>
                             </div>
                         </div>
                     </div>
