@@ -50,12 +50,16 @@
         "review": {
             "helpUsImprove": "كيف كان هذا الدرس بالنسبة لك؟ ملاحظاتك تساعدنا على تحسين كيد كود!",
             "rateThisLesson": "قيّم هذا الدرس",
+            "updateRating": "تحديث التقييم",
+            "noRating": "لا يوجد تقييم بعد",
+            "thankYou": "شكراً لملاحظاتك!",
             "modal": {
                 "title": "كيف كان هذا الدرس؟",
                 "subtitle": "رأيك يهمنا!",
                 "feedbackLabel": "أخبرنا المزيد (اختياري)",
                 "feedbackPlaceholder": "ما الذي أعجبك أكثر؟",
-                "submit": "إرسال التقييم"
+                "submit": "إرسال التقييم",
+                "submitting": "جاري الإرسال..."
             }
         },
         "quiz": {

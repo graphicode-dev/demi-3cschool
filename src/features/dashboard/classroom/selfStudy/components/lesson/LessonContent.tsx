@@ -20,6 +20,8 @@ interface LessonContentProps {
 }
 
 export function LessonContent({ lesson, activeTab }: LessonContentProps) {
+    console.log("Lesson: ", JSON.stringify(lesson, null, 2));
+
     const { t } = useTranslation("selfStudy");
 
     // Fetch materials only when materials tab is active
@@ -49,7 +51,7 @@ export function LessonContent({ lesson, activeTab }: LessonContentProps) {
             return <AboutTab lesson={lesson} t={t} />;
 
         case "review":
-            return <ReviewTab t={t} />;
+            return <ReviewTab t={t} sessionId={lesson.sessionId} />;
 
         case "assignments":
             return (

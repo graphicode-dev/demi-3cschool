@@ -25,7 +25,10 @@
         "joinSession": "Join Session",
         "sessionInfo": "Session Info",
         "viewRecording": "View Recording",
-        "viewAllHistory": "View All History"
+        "viewAllHistory": "View All History",
+        "attendance": "Attendance",
+        "reviews": "Reviews",
+        "rateSession": "Rate Session"
     },
     "modal": {
         "classSchedule": "Class Schedule",
@@ -37,6 +40,32 @@
         "yourInstructor": "Your Instructor",
         "whatYouLearn": "What we'll learn",
         "remindMe": "Remind Me"
+    },
+    "attendance": {
+        "title": "Session Attendance",
+        "close": "Close",
+        "status": {
+            "present": "Present",
+            "absent": "Absent",
+            "late": "Late",
+            "excused": "Excused"
+        }
+    },
+    "reviews": {
+        "title": "Student Reviews",
+        "close": "Close",
+        "noReviews": "No reviews yet",
+        "totalReviews": "{{count}} reviews"
+    },
+    "rating": {
+        "modal": {
+            "title": "Rate This Session",
+            "subtitle": "Your feedback helps us improve",
+            "feedbackLabel": "Share your feedback (optional)",
+            "feedbackPlaceholder": "Tell us about your experience...",
+            "submit": "Submit Rating",
+            "submitting": "Submitting..."
+        }
     },
     "recording": {
         "backToVirtualSessions": "Back to Virtual Sessions",

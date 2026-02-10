@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Star, MessageSquare, Send } from "lucide-react";
 
-interface RatingModalProps {
+interface SessionRatingModalProps {
     isOpen: boolean;
     onClose: () => void;
     onSubmit: (rating: number, feedback: string) => void;
@@ -11,15 +11,15 @@ interface RatingModalProps {
     isSubmitting?: boolean;
 }
 
-export function RatingModal({
+export function SessionRatingModal({
     isOpen,
     onClose,
     onSubmit,
     initialRating = 0,
     initialComment = "",
     isSubmitting = false,
-}: RatingModalProps) {
-    const { t } = useTranslation("selfStudy");
+}: SessionRatingModalProps) {
+    const { t } = useTranslation("virtualSessions");
     const [rating, setRating] = useState(initialRating);
     const [hoveredRating, setHoveredRating] = useState(0);
     const [feedback, setFeedback] = useState(initialComment);
@@ -53,10 +53,10 @@ export function RatingModal({
 
                 {/* Title */}
                 <h2 className="text-xl font-bold text-gray-900 dark:text-white text-center mb-1">
-                    {t("lesson.review.modal.title")}
+                    {t("rating.modal.title")}
                 </h2>
                 <p className="text-sm text-gray-500 dark:text-gray-400 text-center mb-6">
-                    {t("lesson.review.modal.subtitle")}
+                    {t("rating.modal.subtitle")}
                 </p>
 
                 {/* Star Rating */}
@@ -86,15 +86,13 @@ export function RatingModal({
                     <div className="flex items-center gap-2 mb-2">
                         <MessageSquare className="size-4 text-gray-500" />
                         <span className="text-sm text-gray-700 dark:text-gray-300">
-                            {t("lesson.review.modal.feedbackLabel")}
+                            {t("rating.modal.feedbackLabel")}
                         </span>
                     </div>
                     <textarea
                         value={feedback}
                         onChange={(e) => setFeedback(e.target.value)}
-                        placeholder={t(
-                            "lesson.review.modal.feedbackPlaceholder"
-                        )}
+                        placeholder={t("rating.modal.feedbackPlaceholder")}
                         className="w-full h-24 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
                     />
                 </div>
@@ -107,12 +105,12 @@ export function RatingModal({
                 >
                     <Send className="size-4" />
                     {isSubmitting
-                        ? t("lesson.review.modal.submitting")
-                        : t("lesson.review.modal.submit")}
+                        ? t("rating.modal.submitting")
+                        : t("rating.modal.submit")}
                 </button>
             </div>
         </div>
     );
 }
 
-export default RatingModal;
+export default SessionRatingModal;

@@ -50,12 +50,16 @@
         "review": {
             "helpUsImprove": "How was this lesson for you? Your feedback helps us make KidCode better!",
             "rateThisLesson": "Rate This Lesson",
+            "updateRating": "Update Rating",
+            "noRating": "No rating yet",
+            "thankYou": "Thank you for your feedback!",
             "modal": {
                 "title": "How was this lesson?",
                 "subtitle": "Your Opinion Matters To Us!",
                 "feedbackLabel": "Tell us more (optional)",
                 "feedbackPlaceholder": "What did you like the most?",
-                "submit": "Submit Rating"
+                "submit": "Submit Rating",
+                "submitting": "Submitting..."
             }
         },
         "quiz": {

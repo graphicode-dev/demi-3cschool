@@ -25,7 +25,10 @@
         "joinSession": "انضم للجلسة",
         "sessionInfo": "معلومات الجلسة",
         "viewRecording": "مشاهدة التسجيل",
-        "viewAllHistory": "عرض كل السجل"
+        "viewAllHistory": "عرض كل السجل",
+        "attendance": "الحضور",
+        "reviews": "التقييمات",
+        "rateSession": "تقييم الجلسة"
     },
     "modal": {
         "classSchedule": "جدول الحصة",
@@ -37,6 +40,32 @@
         "yourInstructor": "معلمك",
         "whatYouLearn": "ماذا سنتعلم",
         "remindMe": "ذكرني"
+    },
+    "attendance": {
+        "title": "حضور الجلسة",
+        "close": "إغلاق",
+        "status": {
+            "present": "حاضر",
+            "absent": "غائب",
+            "late": "متأخر",
+            "excused": "معذور"
+        }
+    },
+    "reviews": {
+        "title": "تقييمات الطلاب",
+        "close": "إغلاق",
+        "noReviews": "لا توجد تقييمات بعد",
+        "totalReviews": "{{count}} تقييمات"
+    },
+    "rating": {
+        "modal": {
+            "title": "قيّم هذه الجلسة",
+            "subtitle": "ملاحظاتك تساعدنا على التحسين",
+            "feedbackLabel": "شارك ملاحظاتك (اختياري)",
+            "feedbackPlaceholder": "أخبرنا عن تجربتك...",
+            "submit": "إرسال التقييم",
+            "submitting": "جاري الإرسال..."
+        }
     },
     "recording": {
         "backToVirtualSessions": "العودة للجلسات الافتراضية",
