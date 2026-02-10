@@ -8,8 +8,12 @@
 export type {
     TicketStatus,
     TicketPriority,
+    TicketCategory,
     RequesterType,
     MessageSender,
+    TicketUser,
+    TicketSupportBlock,
+    TicketAssignedAgent,
     Requester,
     TicketMessage,
     InternalNote,
@@ -17,9 +21,14 @@ export type {
     TicketListItem,
     TicketFilters,
     PaginatedTicketData,
+    TicketsStats,
+    CreateTicketPayload,
+    UpdateTicketPayload,
+    AssignTicketPayload,
+    UpdateTicketStatusPayload,
+    UpdateTicketPriorityPayload,
     SendMessagePayload,
     AddNotePayload,
-    UpdateTicketPayload,
 } from "../types";
 
 // Query Keys
@@ -29,11 +38,22 @@ export { ticketsKeys, type TicketsQueryKey } from "./tickets.keys";
 export { ticketsApi } from "./tickets.api";
 
 // Query Hooks
-export { useTicketsList, useTicket, useFilterOptions } from "./tickets.queries";
+export {
+    useTicketsList,
+    useUnassignedTickets,
+    useTicketsStats,
+    useTicket,
+    useFilterOptions,
+} from "./tickets.queries";
 
 // Mutation Hooks
 export {
+    useCreateTicket,
+    useUpdateTicket,
+    useDeleteTicket,
+    useAssignTicket,
+    useUpdateTicketStatus,
+    useUpdateTicketPriority,
     useSendMessage,
     useAddNote,
-    useUpdateTicket,
 } from "./tickets.mutations";

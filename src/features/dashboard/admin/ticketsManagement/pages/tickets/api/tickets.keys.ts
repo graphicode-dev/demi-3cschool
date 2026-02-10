@@ -29,6 +29,17 @@ export const ticketsKeys = {
             : ticketsKeys.lists(),
 
     /**
+     * Key for unassigned tickets list
+     */
+    unassigned: (page?: number) =>
+        [...ticketsKeys.all, "unassigned", page] as const,
+
+    /**
+     * Key for tickets stats
+     */
+    stats: () => [...ticketsKeys.all, "stats"] as const,
+
+    /**
      * Key for all ticket details
      */
     details: () => [...ticketsKeys.all, "detail"] as const,
@@ -51,6 +62,8 @@ export type TicketsQueryKey =
     | typeof ticketsKeys.all
     | ReturnType<typeof ticketsKeys.lists>
     | ReturnType<typeof ticketsKeys.list>
+    | ReturnType<typeof ticketsKeys.unassigned>
+    | ReturnType<typeof ticketsKeys.stats>
     | ReturnType<typeof ticketsKeys.details>
     | ReturnType<typeof ticketsKeys.detail>
     | ReturnType<typeof ticketsKeys.filterOptions>;

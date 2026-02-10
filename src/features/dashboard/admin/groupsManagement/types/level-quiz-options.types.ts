@@ -17,7 +17,7 @@
  * Question reference in option
  */
 export interface LevelQuizOptionQuestionRef {
-    id: string;
+    id: number;
     question: string;
 }
 
@@ -25,7 +25,7 @@ export interface LevelQuizOptionQuestionRef {
  * Level Quiz Option entity
  */
 export interface LevelQuizOption {
-    id: string;
+    id: number;
     question: LevelQuizOptionQuestionRef;
     optionText: string;
     isCorrect: number;

@@ -17,7 +17,7 @@
  * Level reference in quiz
  */
 export interface LevelQuizLevelRef {
-    id: string;
+    id: number;
     title: string;
 }
 
@@ -25,7 +25,7 @@ export interface LevelQuizLevelRef {
  * Level Quiz entity
  */
 export interface LevelQuiz {
-    id: string;
+    id: number;
     level: LevelQuizLevelRef;
     timeLimit: number;
     passingScore: number;

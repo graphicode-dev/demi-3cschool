@@ -9,23 +9,110 @@
  */
 
 // ============================================================================
-// Enums - Reuse from overview where applicable
+// Enums
 // ============================================================================
 
 export type TicketStatus = "open" | "in_progress" | "resolved" | "closed";
 
 export type TicketPriority = "low" | "medium" | "high" | "urgent";
 
+export type TicketCategory =
+    | "access"
+    | "technical"
+    | "billing"
+    | "account"
+    | "certificate"
+    | "general";
+
 export type RequesterType = "student" | "instructor" | "parent";
 
 export type MessageSender = "requester" | "agent";
 
 // ============================================================================
-// Entity Types
+// API Response Types
 // ============================================================================
 
 /**
- * Requester information
+ * User info within ticket
+ */
+export interface TicketUser {
+    id: number;
+    name: string;
+    email: string;
+}
+
+/**
+ * Support block info within ticket
+ */
+export interface TicketSupportBlock {
+    id: number;
+    name: string;
+    slug: string;
+}
+
+/**
+ * Assigned agent info within ticket
+ */
+export interface TicketAssignedAgent {
+    id: number;
+    userId: number;
+    name: string;
+    email: string;
+}
+
+/**
+ * Raw ticket entity from API (internal use)
+ */
+export interface RawTicket {
+    id: number;
+    ticketNumber: string;
+    subject: string;
+    description: string;
+    status: TicketStatus;
+    priority: TicketPriority;
+    category: TicketCategory;
+    userId: number;
+    supportBlockId: number;
+    assignedAgentId: number | null;
+    user: TicketUser;
+    supportBlock: TicketSupportBlock;
+    assignedAgent: TicketAssignedAgent | null;
+    resolvedAt: string | null;
+    createdAt: string;
+    updatedAt: string;
+}
+
+/**
+ * Ticket entity with UI compatibility fields
+ * Used throughout the application
+ */
+export interface Ticket extends Omit<RawTicket, "id"> {
+    // Override id to be string for UI compatibility
+    id: string;
+    // UI compatibility fields (derived from user object)
+    requesterName: string;
+    requesterType: RequesterType;
+    requesterAvatar?: string;
+    assignedAgentName?: string;
+    messageCount: number;
+    // Requester object for UI components
+    requester: Requester;
+    // For full ticket detail view
+    messages: TicketMessage[];
+    internalNotes: InternalNote[];
+}
+
+/**
+ * Ticket list item (same as Ticket)
+ */
+export type TicketListItem = Ticket;
+
+// ============================================================================
+// Legacy Types (for UI compatibility)
+// ============================================================================
+
+/**
+ * @deprecated Use TicketUser instead
  */
 export interface Requester {
     id: string;
@@ -38,6 +125,7 @@ export interface Requester {
 
 /**
  * Message in a ticket conversation
+ * TODO: Update when messages API is provided
  */
 export interface TicketMessage {
     id: string;
@@ -51,6 +139,7 @@ export interface TicketMessage {
 
 /**
  * Internal note on a ticket
+ * TODO: Update when notes API is provided
  */
 export interface InternalNote {
     id: string;
@@ -59,44 +148,6 @@ export interface InternalNote {
     authorName: string;
     content: string;
     createdAt: string;
-}
-
-/**
- * Ticket entity
- */
-export interface Ticket {
-    id: string;
-    ticketNumber: string;
-    subject: string;
-    status: TicketStatus;
-    priority: TicketPriority;
-    requester: Requester;
-    assignedAgentId?: string;
-    assignedAgentName?: string;
-    category?: string;
-    blockId?: string;
-    blockName?: string;
-    createdAt: string;
-    updatedAt: string;
-    messages: TicketMessage[];
-    internalNotes: InternalNote[];
-}
-
-/**
- * Ticket list item (lighter version for list display)
- */
-export interface TicketListItem {
-    id: string;
-    ticketNumber: string;
-    subject: string;
-    status: TicketStatus;
-    priority: TicketPriority;
-    requesterName: string;
-    requesterType: RequesterType;
-    requesterAvatar?: string;
-    assignedAgentName?: string;
-    createdAt: string;
-    messageCount: number;
 }
 
 // ============================================================================
@@ -126,8 +177,21 @@ export interface PaginatedTicketData {
     currentPage: number;
     lastPage: number;
     nextPageUrl: string | null;
-    total: number;
     items: TicketListItem[];
+    total: number; // Computed from lastPage * perPage for UI compatibility
+}
+
+/**
+ * Tickets stats response
+ */
+export interface TicketsStats {
+    totalOpen: number;
+    byStatus: {
+        closed: number;
+        inProgress: number;
+        open: number;
+        resolved: number;
+    };
 }
 
 // ============================================================================
@@ -135,7 +199,51 @@ export interface PaginatedTicketData {
 // ============================================================================
 
 /**
+ * Create ticket payload
+ */
+export interface CreateTicketPayload {
+    support_block_id: string;
+    subject: string;
+    description: string;
+    priority: string;
+    category: string;
+}
+
+/**
+ * Update ticket payload (PUT)
+ */
+export interface UpdateTicketPayload {
+    support_block_id?: string;
+    subject?: string;
+    description?: string;
+    priority?: string;
+    category?: string;
+}
+
+/**
+ * Assign ticket payload
+ */
+export interface AssignTicketPayload {
+    agentId: number;
+}
+
+/**
+ * Update ticket status payload
+ */
+export interface UpdateTicketStatusPayload {
+    status: TicketStatus;
+}
+
+/**
+ * Update ticket priority payload
+ */
+export interface UpdateTicketPriorityPayload {
+    priority: TicketPriority;
+}
+
+/**
  * Send message payload
+ * TODO: Update when messages API is provided
  */
 export interface SendMessagePayload {
     ticketId: string;
@@ -144,17 +252,9 @@ export interface SendMessagePayload {
 
 /**
  * Add internal note payload
+ * TODO: Update when notes API is provided
  */
 export interface AddNotePayload {
     ticketId: string;
     content: string;
-}
-
-/**
- * Update ticket payload
- */
-export interface UpdateTicketPayload {
-    status?: TicketStatus;
-    priority?: TicketPriority;
-    assignedAgentId?: string;
 }

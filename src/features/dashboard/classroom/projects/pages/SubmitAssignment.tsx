@@ -349,7 +349,7 @@ export function SubmitAssignmentPage() {
                                     />
                                 ) : isPdfFile(previewFile) ? (
                                     <iframe
-                                        src={previewUrl}
+                                        src={`${previewUrl}#toolbar=0`}
                                         title={previewFile.name}
                                         className="w-full h-[60vh] rounded-lg border border-gray-200 dark:border-gray-700"
                                     />

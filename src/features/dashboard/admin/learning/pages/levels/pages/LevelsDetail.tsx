@@ -150,6 +150,12 @@ export default function LearningLevelsDetail() {
 
     const [expandedQuizzes, setExpandedQuizzes] = useState<string[]>([]);
     const [expandedQuestions, setExpandedQuestions] = useState<string[]>([]);
+    // Selected quiz for fetching questions
+    const [selectedQuizId, setSelectedQuizId] = useState<string | null>(null);
+    // Selected question for fetching options
+    const [selectedQuestionId, setSelectedQuestionId] = useState<string | null>(
+        null
+    );
     const [isAddingQuiz, setIsAddingQuiz] = useState(false);
     const [isAddingQuestion, setIsAddingQuestion] = useState<string | null>(
         null
@@ -184,35 +190,29 @@ export default function LearningLevelsDetail() {
 
     const quizzes = quizzesData?.items || [];
 
-    // Get the first expanded quiz ID for fetching questions
-    const firstExpandedQuizId = expandedQuizzes[0] || null;
-
-    // Fetch questions only for expanded quizzes
+    // Fetch questions only for selected quiz
     const {
         data: questionsData,
         isLoading: questionsLoading,
         refetch: refetchQuestions,
     } = useLevelQuizQuestionsByQuiz(
-        firstExpandedQuizId,
+        selectedQuizId,
         { page: 1 },
         {
-            enabled: !!firstExpandedQuizId,
+            enabled: !!selectedQuizId,
         }
     );
 
-    // Get the first expanded question ID for fetching options
-    const firstExpandedQuestionId = expandedQuestions[0] || null;
-
-    // Fetch options only for expanded questions
+    // Fetch options only for selected question
     const {
         data: optionsData,
         isLoading: optionsLoading,
         refetch: refetchOptions,
     } = useLevelQuizOptionsByQuestion(
-        firstExpandedQuestionId,
+        selectedQuestionId,
         { page: 1 },
         {
-            enabled: !!firstExpandedQuestionId,
+            enabled: !!selectedQuestionId,
         }
     );
 
@@ -224,19 +224,37 @@ export default function LearningLevelsDetail() {
     );
 
     const toggleQuizExpand = (quizId: string) => {
-        setExpandedQuizzes((prev) =>
-            prev.includes(quizId)
-                ? prev.filter((qid) => qid !== quizId)
-                : [...prev, quizId]
-        );
+        setExpandedQuizzes((prev) => {
+            const isExpanding = !prev.includes(quizId);
+            if (isExpanding) {
+                // Set selected quiz to fetch its questions
+                setSelectedQuizId(quizId);
+                return [...prev, quizId];
+            } else {
+                // Clear selected quiz when collapsing
+                if (selectedQuizId === quizId) {
+                    setSelectedQuizId(null);
+                }
+                return prev.filter((qid) => qid !== quizId);
+            }
+        });
     };
 
     const toggleQuestionExpand = (questionId: string) => {
-        setExpandedQuestions((prev) =>
-            prev.includes(questionId)
-                ? prev.filter((qid) => qid !== questionId)
-                : [...prev, questionId]
-        );
+        setExpandedQuestions((prev) => {
+            const isExpanding = !prev.includes(questionId);
+            if (isExpanding) {
+                // Set selected question to fetch its options
+                setSelectedQuestionId(questionId);
+                return [...prev, questionId];
+            } else {
+                // Clear selected question when collapsing
+                if (selectedQuestionId === questionId) {
+                    setSelectedQuestionId(null);
+                }
+                return prev.filter((qid) => qid !== questionId);
+            }
+        });
     };
 
     const resetNewQuiz = () => setNewQuiz(DEFAULT_NEW_QUIZ);
@@ -408,7 +426,7 @@ export default function LearningLevelsDetail() {
                     createdQuestions.length > 0 &&
                     newQuestion.options.length > 0
                 ) {
-                    const questionId = createdQuestions[0].id;
+                    const questionId = String(createdQuestions[0].id);
                     await createOptionAsync({
                         question_id: questionId,
                         options: newQuestion.options.map((opt, index) => ({

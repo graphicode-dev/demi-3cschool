@@ -17,7 +17,7 @@
  * Quiz reference in question
  */
 export interface LevelQuizQuestionQuizRef {
-    id: string;
+    id: number;
 }
 
 /**
@@ -33,7 +33,7 @@ export type QuestionType =
  * Level Quiz Question entity
  */
 export interface LevelQuizQuestion {
-    id: string;
+    id: number;
     quiz: LevelQuizQuestionQuizRef;
     question: string;
     type: QuestionType;

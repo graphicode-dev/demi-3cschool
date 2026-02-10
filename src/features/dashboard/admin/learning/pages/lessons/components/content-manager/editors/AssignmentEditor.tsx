@@ -496,7 +496,7 @@ export default function AssignmentEditor({
                                     ""
                             ) === "pdf" ? (
                                 <iframe
-                                    src={previewUrl}
+                                    src={`${previewUrl}#toolbar=0`}
                                     className="w-full h-[70vh] border-0"
                                     title="PDF Preview"
                                 />

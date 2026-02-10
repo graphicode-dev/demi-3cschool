@@ -83,7 +83,7 @@ export const levelQuizOptionsApi = {
         };
     },
 
-/**
+    /**
      * Get list of level quiz options by question ID
      */
     getByQuestionId: async (
@@ -91,28 +91,26 @@ export const levelQuizOptionsApi = {
         params?: LevelQuizOptionsListParams,
         signal?: AbortSignal
     ): Promise<PaginatedData<LevelQuizOption>> => {
-        const response = await api.get<ApiResponse<LevelQuizOption[]>>(
-            `${BASE_URL}/question/${questionId}`,
-            {
-                params: params as Record<string, unknown> | undefined,
-                signal,
-            }
-        );
+        const response = await api.get<
+            ApiResponse<PaginatedData<LevelQuizOption>>
+        >(`${BASE_URL}/question/${questionId}`, {
+            params: params as Record<string, unknown> | undefined,
+            signal,
+        });
 
         if (response.error) {
             throw response.error;
         }
 
-        const items = response.data!.data!;
+        const paginatedData = response.data!.data!;
         return {
-            items,
-            perPage: items.length,
-            currentPage: 1,
-            lastPage: 1,
-            nextPageUrl: null,
+            items: paginatedData.items || [],
+            perPage: paginatedData.perPage,
+            currentPage: paginatedData.currentPage,
+            lastPage: paginatedData.lastPage,
+            nextPageUrl: paginatedData.nextPageUrl,
         };
     },
-
 
     /**
      * Get single level quiz option by ID
