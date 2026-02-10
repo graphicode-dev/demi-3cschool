@@ -17,7 +17,7 @@ export interface QuizQuestion {
     type: "single_choice" | "multiple_choice" | "true_false" | "short_answer";
     points: number;
     order: number;
-    explanation?: string;
+    explanation: string;
     isActive?: number;
 }
 export interface NewQuestionData {

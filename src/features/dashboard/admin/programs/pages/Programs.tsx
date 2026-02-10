@@ -41,6 +41,7 @@ function ProgramsPage() {
                         <Sun className="w-6 h-6 text-amber-600 dark:text-amber-400" />
                     }
                     iconBg="bg-amber-100 dark:bg-amber-900/30"
+                    disabled
                 />
             </div>
         </PageWrapper>

@@ -111,20 +111,13 @@ function transformQuizToUI(
 
 export default function FinalLevelQuizPage() {
     const { t } = useTranslation();
-    const { id } = useParams<{ id: string }>();
-
-    const {
-        data: level,
-        isLoading: levelLoading,
-        error: levelError,
-        refetch: refetchLevel,
-    } = useLevel(id);
+    const { id, levelId } = useParams<{ id: string; levelId: string }>();
 
     const {
         data: quizzesData,
         isLoading: quizzesLoading,
         refetch: refetchQuizzes,
-    } = useLevelQuizzesByLevel(id);
+    } = useLevelQuizzesByLevel(levelId);
 
     // Selected quiz for fetching questions
     const [selectedQuizId, setSelectedQuizId] = useState<string | null>(null);
@@ -247,12 +240,12 @@ export default function FinalLevelQuizPage() {
     const resetNewQuestion = () => setNewQuestion(DEFAULT_NEW_QUESTION);
 
     const handleCreateQuiz = () => {
-        if (!id) return;
+        if (!id || !levelId) return;
 
         execute(
             () =>
                 createQuizAsync({
-                    levelId: id,
+                    levelId: levelId!,
                     timeLimit: newQuiz.timeLimit,
                     passingScore: newQuiz.passingScore,
                     maxAttempts: newQuiz.maxAttempts,
@@ -347,7 +340,7 @@ export default function FinalLevelQuizPage() {
             type: question.type,
             points: question.points,
             order: question.order,
-            explanation: question.explanation || "",
+            explanation: question.explanation,
             isActive: Boolean(question.isActive ?? true),
             options: question.options.map((opt) => ({
                 text: opt.text,
@@ -465,23 +458,10 @@ export default function FinalLevelQuizPage() {
         });
     };
 
-    const isLoading =
-        levelLoading || quizzesLoading || questionsLoading || optionsLoading;
+    const isLoading = quizzesLoading || questionsLoading || optionsLoading;
 
     if (isLoading) {
         return <LoadingState message={t("common.loading", "Loading...")} />;
-    }
-
-    if (levelError) {
-        return (
-            <ErrorState
-                message={
-                    levelError.message ||
-                    t("errors.fetchFailed", "Failed to load level")
-                }
-                onRetry={refetchLevel}
-            />
-        );
     }
 
     return (

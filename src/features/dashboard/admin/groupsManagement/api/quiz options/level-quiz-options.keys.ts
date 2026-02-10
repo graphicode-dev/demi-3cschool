@@ -71,6 +71,23 @@ export const levelQuizOptionKeys = {
      * Key for specific level quiz option detail
      */
     detail: (id: string) => [...levelQuizOptionKeys.details(), id] as const,
+
+    /**
+     * Key for options by question ID
+     */
+    byQuestion: (questionId: string, params?: LevelQuizOptionsListParams) =>
+        params
+            ? ([
+                  ...levelQuizOptionKeys.all,
+                  "by-question",
+                  questionId,
+                  params,
+              ] as const)
+            : ([
+                  ...levelQuizOptionKeys.all,
+                  "by-question",
+                  questionId,
+              ] as const),
 };
 
 /**
@@ -83,4 +100,5 @@ export type LevelQuizOptionQueryKey =
     | ReturnType<typeof levelQuizOptionKeys.list>
     | ReturnType<typeof levelQuizOptionKeys.infinite>
     | ReturnType<typeof levelQuizOptionKeys.details>
-    | ReturnType<typeof levelQuizOptionKeys.detail>;
+    | ReturnType<typeof levelQuizOptionKeys.detail>
+    | ReturnType<typeof levelQuizOptionKeys.byQuestion>;

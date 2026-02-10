@@ -65,7 +65,6 @@ export function useLevelQuizQuestionsMetadata(
     });
 }
 
-
 // ============================================================================
 // List Queries
 // ============================================================================
@@ -132,14 +131,23 @@ export function useLevelQuizQuestionsByQuiz(
     options?: Partial<UseQueryOptions<PaginatedData<LevelQuizQuestion>, Error>>
 ) {
     return useQuery({
-        queryKey: levelQuizQuestionKeys.listsByQuiz(params),
-        queryFn: ({ signal }) =>
-            levelQuizQuestionsApi.getByQuizId(quizId!, params, signal),
+        queryKey: levelQuizQuestionKeys.byQuiz(quizId ?? "", params),
+        queryFn: ({ signal }) => {
+            if (!quizId) {
+                return Promise.resolve({
+                    items: [],
+                    currentPage: 1,
+                    perPage: 0,
+                    lastPage: 1,
+                    nextPageUrl: null,
+                });
+            }
+            return levelQuizQuestionsApi.getByQuizId(quizId, params, signal);
+        },
         enabled: !!quizId,
         ...options,
     });
 }
-
 
 /**
  * Hook to fetch infinite list of all level quiz questions (for infinite scroll)

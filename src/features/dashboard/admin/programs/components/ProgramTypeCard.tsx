@@ -7,6 +7,7 @@ interface ProgramTypeCardProps {
     icon: React.ReactNode;
     iconBg?: string;
     testId?: string;
+    disabled?: boolean;
 }
 
 export function ProgramTypeCard({
@@ -16,14 +17,19 @@ export function ProgramTypeCard({
     icon,
     iconBg = "bg-brand-100 dark:bg-brand-900/30",
     testId,
+    disabled,
 }: ProgramTypeCardProps) {
     return (
         <div
             data-testid={testId}
-            className="group p-6 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-brand-300 dark:hover:border-brand-600 hover:shadow-lg transition-all duration-200"
+            className={`group p-6 bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-brand-300 dark:hover:border-brand-600 hover:shadow-lg transition-all duration-200 ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
+            data-disabled={disabled}
         >
             <div className="flex items-start justify-between">
-                <Link to={href} className="flex items-start gap-4 flex-1">
+                <Link
+                    to={href}
+                    className={`flex items-start gap-4 flex-1 ${disabled ? "pointer-events-none" : ""}`}
+                >
                     <div
                         className={`w-12 h-12 rounded-xl ${iconBg} flex items-center justify-center shrink-0`}
                     >

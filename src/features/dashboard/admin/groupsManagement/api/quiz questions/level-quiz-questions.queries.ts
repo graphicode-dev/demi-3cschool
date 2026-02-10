@@ -195,9 +195,23 @@ export function useLevelQuizQuestionsByQuiz(
     options?: Partial<UseQueryOptions<PaginatedData<LevelQuizQuestion>, Error>>
 ) {
     return useQuery({
-        queryKey: ["level-quiz-questions", "by-quiz", quizId, params],
-        queryFn: ({ signal }) =>
-            levelQuizQuestionsApi.getListByQuizId(quizId!, params, signal),
+        queryKey: ["level-quiz-questions", "by-quiz", quizId ?? "", params],
+        queryFn: ({ signal }) => {
+            if (!quizId) {
+                return Promise.resolve({
+                    items: [],
+                    currentPage: 1,
+                    perPage: 0,
+                    lastPage: 1,
+                    nextPageUrl: null,
+                });
+            }
+            return levelQuizQuestionsApi.getListByQuizId(
+                quizId,
+                params,
+                signal
+            );
+        },
         enabled: !!quizId,
         ...options,
     });
