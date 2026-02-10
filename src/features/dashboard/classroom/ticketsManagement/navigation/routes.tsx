@@ -8,7 +8,7 @@
 import type { RouteConfig } from "@/router/routes.types";
 import { Navigate } from "react-router-dom";
 import { overviewRoutes } from "../pages/overview/navigation";
-import { teamStructureRoutes } from "../pages/teamStructure/navigation";
+import { supportBlockRoutes } from "../pages/supportBlock/navigation";
 import { ticketsPageRoutes } from "../pages/tickets/navigation";
 import { distributionRoutes } from "../pages/distribution/navigation";
 import { performanceRoutes } from "../pages/performance/navigation";
@@ -26,8 +26,8 @@ export const ticketsManagementRoutes: RouteConfig[] = [
     // Overview routes
     ...overviewRoutes,
 
-    // Team Structure routes
-    ...teamStructureRoutes,
+    // Support Block routes
+    ...supportBlockRoutes,
 
     // Tickets routes
     ...ticketsPageRoutes,

@@ -2,7 +2,7 @@
     "nav": {
         "title": "إدارة التذاكر",
         "overview": "نظرة عامة",
-        "teamStructure": "هيكل الفريق",
+        "supportBlock": "هيكل الفريق",
         "tickets": "التذاكر",
         "distribution": "التوزيع",
         "performance": "الأداء"
@@ -65,8 +65,8 @@
         },
         "quickNav": {
             "title": "التنقل السريع",
-            "teamStructure": "هيكل الفريق",
-            "teamStructureDesc": "عرض التسلسل الهرمي للفريق",
+            "supportBlock": "هيكل الفريق",
+            "supportBlockDesc": "عرض التسلسل الهرمي للفريق",
             "tickets": "التذاكر",
             "ticketsDesc": "إدارة تذاكر الدعم",
             "distribution": "التوزيع",
@@ -75,7 +75,7 @@
             "performanceDesc": "التحليلات والتقارير"
         }
     },
-    "teamStructure": {
+    "supportBlock": {
         "pageTitle": "هيكل الفريق",
         "pageSubtitle": "فهم التسلسل الهرمي للفريق والتنظيم",
         "manageTeam": "إدارة الفريق",

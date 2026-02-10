@@ -2,7 +2,7 @@
     "nav": {
         "title": "Tickets Management",
         "overview": "Overview",
-        "teamStructure": "Team Structure",
+        "supportBlock": "Support Block",
         "tickets": "Tickets",
         "distribution": "Distribution",
         "performance": "Performance"
@@ -65,8 +65,8 @@
         },
         "quickNav": {
             "title": "Quick Navigation",
-            "teamStructure": "Team Structure",
-            "teamStructureDesc": "View team hierarchy",
+            "supportBlock": "Support Block",
+            "supportBlockDesc": "View support block structure",
             "tickets": "Tickets",
             "ticketsDesc": "Manage support tickets",
             "distribution": "Distribution",
@@ -75,10 +75,10 @@
             "performanceDesc": "Analytics & reports"
         }
     },
-    "teamStructure": {
-        "pageTitle": "Team Structure",
-        "pageSubtitle": "Understand team hierarchy and organization",
-        "manageTeam": "Manage Team",
+    "supportBlock": {
+        "pageTitle": "Support Block",
+        "pageSubtitle": "Understand support block structure and organization",
+        "manageTeam": "Manage Support Block",
         "stats": {
             "totalBlocks": "Total Blocks",
             "blockLeads": "Block Leads",

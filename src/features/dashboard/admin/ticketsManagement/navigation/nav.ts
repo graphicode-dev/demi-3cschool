@@ -24,10 +24,10 @@ export const ticketsManagementNavItem: NavItem = {
             href: ticketsPaths.overview(),
         },
         {
-            key: "team-structure",
-            label: "Team Structure",
-            labelKey: "ticketsManagement:nav.teamStructure",
-            href: ticketsPaths.teamStructure(),
+            key: "support-block",
+            label: "Support Block",
+            labelKey: "ticketsManagement:nav.supportBlock",
+            href: ticketsPaths.supportBlock(),
         },
         {
             key: "tickets",

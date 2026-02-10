@@ -12,21 +12,11 @@
  * ```
  */
 
-import { registerFeaturePaths } from "@/router/paths.registry";
-import { overview, overviewPaths } from "../pages/overview/navigation/paths";
-import {
-    teamStructure,
-    teamStructurePaths,
-} from "../pages/teamStructure/navigation/paths";
-import { tickets, ticketsPagePaths } from "../pages/tickets/navigation/paths";
-import {
-    distribution,
-    distributionPaths,
-} from "../pages/distribution/navigation/paths";
-import {
-    performance,
-    performancePaths,
-} from "../pages/performance/navigation/paths";
+import { overview } from "../pages/overview/navigation/paths";
+import { supportBlock } from "../pages/supportBlock/navigation/paths";
+import { tickets } from "../pages/tickets/navigation/paths";
+import { distribution } from "../pages/distribution/navigation/paths";
+import { performance } from "../pages/performance/navigation/paths";
 import { TICKETS_BASE_PATH } from "./constants";
 
 // ============================================================================
@@ -45,9 +35,9 @@ export const ticketsPaths = {
     overview: overview.root,
 
     /**
-     * Team Structure path
+     * Support Block path
      */
-    teamStructure: teamStructure.root,
+    supportBlock: supportBlock.root,
 
     /**
      * Tickets path

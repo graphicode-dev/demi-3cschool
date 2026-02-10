@@ -27,14 +27,14 @@ export function QuickNavigation({ isLoading }: QuickNavigationProps) {
 
     const navItems: QuickNavItem[] = [
         {
-            id: "team-structure",
-            title: t("overview.quickNav.teamStructure", "Team Structure"),
+            id: "support-block",
+            title: t("overview.quickNav.supportBlock", "Support Block"),
             description: t(
-                "overview.quickNav.teamStructureDesc",
-                "View team hierarchy"
+                "overview.quickNav.supportBlockDesc",
+                "View support block structure"
             ),
             icon: <Users className="w-5 h-5" />,
-            path: ticketsPaths.teamStructure(),
+            path: ticketsPaths.supportBlock(),
         },
         {
             id: "tickets",

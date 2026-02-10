@@ -13,7 +13,7 @@
  */
 
 import { overview } from "../pages/overview/navigation";
-import { teamStructure } from "../pages/teamStructure/navigation";
+import { supportBlock } from "../pages/supportBlock/navigation";
 import { tickets } from "../pages/tickets/navigation";
 import { distribution } from "../pages/distribution/navigation";
 import { performance } from "../pages/performance/navigation";
@@ -36,9 +36,9 @@ export const ticketsPaths = {
     overview: overview.root,
 
     /**
-     * Team Structure path
+     * Support Block path
      */
-    teamStructure: teamStructure.root,
+    supportBlock: supportBlock.root,
 
     /**
      * Tickets path
