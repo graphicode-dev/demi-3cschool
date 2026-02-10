@@ -9,6 +9,7 @@ import { useTranslation } from "react-i18next";
 import { Send, Paperclip } from "lucide-react";
 import type { TicketMessage, RequesterType } from "../types";
 import { format } from "date-fns";
+import { authStore } from "@/auth/auth.store";
 
 interface ConversationTabProps {
     messages: TicketMessage[];
@@ -45,6 +46,8 @@ export function ConversationTab({
 }: ConversationTabProps) {
     const { t } = useTranslation("ticketsManagement");
     const [newMessage, setNewMessage] = useState("");
+    const currentUser = authStore((state) => state.user);
+    const currentUserId = currentUser?.id ? Number(currentUser.id) : null;
 
     const handleSend = () => {
         if (newMessage.trim()) {
@@ -74,24 +77,29 @@ export function ConversationTab({
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 {messages.map((message) => {
-                    const isAgent = message.sender === "agent";
+                    // Check if message is from current user by comparing senderId
+                    // Current user's messages appear on the right, others on the left
+                    const isCurrentUser =
+                        currentUserId !== null &&
+                        message.senderId === currentUserId;
                     const senderType =
-                        message.senderType || (isAgent ? "agent" : "student");
+                        message.senderType ||
+                        (isCurrentUser ? "agent" : "student");
 
                     return (
                         <div
                             key={message.id}
-                            className={`flex gap-3 ${isAgent ? "flex-row-reverse" : ""}`}
+                            className={`flex gap-3 ${isCurrentUser ? "flex-row-reverse" : ""}`}
                         >
                             <div
-                                className={`flex-1 max-w-[80%] space-y-3 ${isAgent ? "text-right" : ""}`}
+                                className={`flex-1 max-w-[80%] space-y-3 ${isCurrentUser ? "text-right" : ""}`}
                             >
                                 {/* Header */}
                                 <div
-                                    className={`flex items-center gap-3 ${isAgent ? "justify-end" : ""}`}
+                                    className={`flex items-center gap-3 ${isCurrentUser ? "justify-end" : ""}`}
                                 >
                                     {/* Avatar - show first for non-agent */}
-                                    {!isAgent && (
+                                    {!isCurrentUser && (
                                         <div className="w-10 h-10 rounded-full bg-gray-800 shrink-0 flex items-center justify-center text-white text-xs font-medium">
                                             {getInitials(message.senderName)}
                                         </div>
@@ -99,7 +107,7 @@ export function ConversationTab({
 
                                     {/* Name and Badge */}
                                     <div
-                                        className={`flex items-center gap-2 ${isAgent ? "flex-row-reverse" : ""}`}
+                                        className={`flex items-center gap-2 ${isCurrentUser ? "flex-row-reverse" : ""}`}
                                     >
                                         <span className="text-sm font-medium text-gray-900 dark:text-white">
                                             {message.senderName}
@@ -120,7 +128,7 @@ export function ConversationTab({
                                     </div>
 
                                     {/* Avatar - show last for agent */}
-                                    {isAgent && (
+                                    {isCurrentUser && (
                                         <div className="w-10 h-10 rounded-full bg-gray-800 shrink-0 flex items-center justify-center text-white text-xs font-medium">
                                             {getInitials(message.senderName)}
                                         </div>
@@ -130,7 +138,7 @@ export function ConversationTab({
                                 {/* Message */}
                                 <div
                                     className={`p-4 rounded-xl ${
-                                        isAgent
+                                        isCurrentUser
                                             ? "bg-gray-100 dark:bg-gray-700 border-2  border-gray-300"
                                             : "bg-brand-50 dark:bg-gray-800 border-2 border-brand-500"
                                     }`}

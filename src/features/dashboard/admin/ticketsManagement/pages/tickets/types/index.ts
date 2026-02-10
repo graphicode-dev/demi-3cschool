@@ -14,7 +14,9 @@ export type {
     TicketSupportBlock,
     TicketAssignedAgent,
     Requester,
+    RawTicketMessage,
     TicketMessage,
+    RawInternalNote,
     InternalNote,
     RawTicket,
     Ticket,
@@ -29,4 +31,5 @@ export type {
     UpdateTicketPriorityPayload,
     SendMessagePayload,
     AddNotePayload,
+    DeleteNotePayload,
 } from "./tickets.types";

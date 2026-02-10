@@ -15,8 +15,11 @@ export type {
     TicketSupportBlock,
     TicketAssignedAgent,
     Requester,
+    RawTicketMessage,
     TicketMessage,
+    RawInternalNote,
     InternalNote,
+    RawTicket,
     Ticket,
     TicketListItem,
     TicketFilters,
@@ -29,6 +32,7 @@ export type {
     UpdateTicketPriorityPayload,
     SendMessagePayload,
     AddNotePayload,
+    DeleteNotePayload,
 } from "../types";
 
 // Query Keys
@@ -44,6 +48,8 @@ export {
     useTicketsStats,
     useTicket,
     useFilterOptions,
+    useTicketMessages,
+    useTicketNotes,
 } from "./tickets.queries";
 
 // Mutation Hooks
@@ -55,5 +61,7 @@ export {
     useUpdateTicketStatus,
     useUpdateTicketPriority,
     useSendMessage,
+    useMarkMessagesRead,
     useAddNote,
+    useDeleteNote,
 } from "./tickets.mutations";

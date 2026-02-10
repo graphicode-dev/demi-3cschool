@@ -53,6 +53,18 @@ export const ticketsKeys = {
      * Key for filter options (agents, blocks)
      */
     filterOptions: () => [...ticketsKeys.all, "filter-options"] as const,
+
+    /**
+     * Key for ticket messages
+     */
+    messages: (ticketId: string | number) =>
+        [...ticketsKeys.all, "messages", String(ticketId)] as const,
+
+    /**
+     * Key for ticket notes
+     */
+    notes: (ticketId: string | number) =>
+        [...ticketsKeys.all, "notes", String(ticketId)] as const,
 };
 
 /**
@@ -66,4 +78,6 @@ export type TicketsQueryKey =
     | ReturnType<typeof ticketsKeys.stats>
     | ReturnType<typeof ticketsKeys.details>
     | ReturnType<typeof ticketsKeys.detail>
-    | ReturnType<typeof ticketsKeys.filterOptions>;
+    | ReturnType<typeof ticketsKeys.filterOptions>
+    | ReturnType<typeof ticketsKeys.messages>
+    | ReturnType<typeof ticketsKeys.notes>;

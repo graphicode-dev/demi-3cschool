@@ -15,8 +15,6 @@ import {
     ChevronDown,
 } from "lucide-react";
 import type { Ticket, TicketStatus, TicketPriority } from "../types";
-import { TicketStatusBadge } from "./TicketStatusBadge";
-import { TicketPriorityBadge } from "./TicketPriorityBadge";
 import { RequesterTypeBadge } from "./RequesterTypeBadge";
 import { format } from "date-fns";
 

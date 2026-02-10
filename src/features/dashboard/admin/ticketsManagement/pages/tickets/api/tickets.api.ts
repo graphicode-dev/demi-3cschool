@@ -19,12 +19,47 @@ import type {
     UpdateTicketPriorityPayload,
     SendMessagePayload,
     AddNotePayload,
+    DeleteNotePayload,
+    RawTicketMessage,
     TicketMessage,
+    RawInternalNote,
     InternalNote,
 } from "../types";
 import { ApiResponse } from "@/shared/api";
 
 const BASE_URL = "/tickets";
+
+/**
+ * Transform raw API message to UI-compatible TicketMessage
+ */
+function transformMessage(message: RawTicketMessage): TicketMessage {
+    return {
+        id: String(message.id),
+        ticketId: String(message.ticketId),
+        senderId: message.userId,
+        sender: message.isFromAgent ? "agent" : "requester",
+        senderName: message.user.name,
+        senderType: message.isFromAgent ? "agent" : "student",
+        content: message.message,
+        createdAt: message.createdAt,
+        isRead: message.readAt !== null,
+        attachments: message.attachments,
+    };
+}
+
+/**
+ * Transform raw API note to UI-compatible InternalNote
+ */
+function transformNote(note: RawInternalNote): InternalNote {
+    return {
+        id: String(note.id),
+        ticketId: String(note.ticketId),
+        authorId: String(note.userId),
+        authorName: note.user.name,
+        content: note.note,
+        createdAt: note.createdAt,
+    };
+}
 
 /**
  * Transform raw API ticket to UI-compatible Ticket
@@ -316,15 +351,39 @@ export const ticketsApi = {
     },
 
     /**
+     * Get messages for a ticket
+     * GET /tickets/:ticket/messages
+     */
+    getMessages: async (
+        ticketId: string | number,
+        signal?: AbortSignal
+    ): Promise<TicketMessage[]> => {
+        const response = await api.get<ApiResponse<RawTicketMessage[]>>(
+            `${BASE_URL}/${ticketId}/messages`,
+            { signal }
+        );
+
+        if (response.error) {
+            throw response.error;
+        }
+
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
+        }
+
+        return response.data.data.map(transformMessage);
+    },
+
+    /**
      * Send a message to a ticket
-     * TODO: Update when messages API is provided
+     * POST /tickets/:ticket/messages
      */
     sendMessage: async (
         payload: SendMessagePayload
     ): Promise<TicketMessage> => {
-        const response = await api.post<ApiResponse<TicketMessage>>(
+        const response = await api.post<ApiResponse<RawTicketMessage>>(
             `${BASE_URL}/${payload.ticketId}/messages`,
-            { content: payload.content }
+            { message: payload.message }
         );
 
         if (response.error) {
@@ -335,17 +394,55 @@ export const ticketsApi = {
             throw new Error("No data returned from server");
         }
 
-        return response.data.data;
+        return transformMessage(response.data.data);
+    },
+
+    /**
+     * Mark messages as read
+     * POST /tickets/:ticket/messages/read
+     */
+    markMessagesRead: async (ticketId: string | number): Promise<void> => {
+        const response = await api.post<ApiResponse<void>>(
+            `${BASE_URL}/${ticketId}/messages/read`
+        );
+
+        if (response.error) {
+            throw response.error;
+        }
+    },
+
+    /**
+     * Get notes for a ticket
+     * GET /tickets/:ticket/notes
+     */
+    getNotes: async (
+        ticketId: string | number,
+        signal?: AbortSignal
+    ): Promise<InternalNote[]> => {
+        const response = await api.get<ApiResponse<RawInternalNote[]>>(
+            `${BASE_URL}/${ticketId}/notes`,
+            { signal }
+        );
+
+        if (response.error) {
+            throw response.error;
+        }
+
+        if (!response.data?.data) {
+            throw new Error("No data returned from server");
+        }
+
+        return response.data.data.map(transformNote);
     },
 
     /**
      * Add an internal note to a ticket
-     * TODO: Update when notes API is provided
+     * POST /tickets/:ticket/notes
      */
     addNote: async (payload: AddNotePayload): Promise<InternalNote> => {
-        const response = await api.post<ApiResponse<InternalNote>>(
+        const response = await api.post<ApiResponse<RawInternalNote>>(
             `${BASE_URL}/${payload.ticketId}/notes`,
-            { content: payload.content }
+            { note: payload.note }
         );
 
         if (response.error) {
@@ -356,7 +453,21 @@ export const ticketsApi = {
             throw new Error("No data returned from server");
         }
 
-        return response.data.data;
+        return transformNote(response.data.data);
+    },
+
+    /**
+     * Delete an internal note
+     * DELETE /tickets/:ticket/notes/:noteId
+     */
+    deleteNote: async (payload: DeleteNotePayload): Promise<void> => {
+        const response = await api.delete<ApiResponse<void>>(
+            `${BASE_URL}/${payload.ticketId}/notes/${payload.noteId}`
+        );
+
+        if (response.error) {
+            throw response.error;
+        }
     },
 };
 

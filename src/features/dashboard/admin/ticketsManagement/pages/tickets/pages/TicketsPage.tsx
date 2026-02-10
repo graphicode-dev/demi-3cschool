@@ -18,7 +18,8 @@ import {
     useFilterOptions,
     useSendMessage,
     useAddNote,
-    useUpdateTicket,
+    useUpdateTicketStatus,
+    useUpdateTicketPriority,
 } from "../api";
 import type {
     TicketFilters as TicketFiltersType,
@@ -43,13 +44,14 @@ export function TicketsPage() {
     // Mutations
     const sendMessageMutation = useSendMessage();
     const addNoteMutation = useAddNote();
-    const updateTicketMutation = useUpdateTicket();
+    const updateStatusMutation = useUpdateTicketStatus();
+    const updatePriorityMutation = useUpdateTicketPriority();
 
     const handleSendMessage = (content: string) => {
         if (!selectedTicketId) return;
         sendMessageMutation.mutate({
             ticketId: selectedTicketId,
-            content,
+            message: content,
         });
     };
 
@@ -57,24 +59,30 @@ export function TicketsPage() {
         if (!selectedTicketId) return;
         addNoteMutation.mutate({
             ticketId: selectedTicketId,
-            content,
+            note: content,
         });
     };
 
     const handleUpdateTicket = (updates: {
-        status?: string;
-        priority?: string;
+        status?: TicketStatus;
+        priority?: TicketPriority;
         assignedAgentId?: string;
     }) => {
         if (!selectedTicketId) return;
-        updateTicketMutation.mutate({
-            id: selectedTicketId,
-            payload: updates as {
-                status?: TicketStatus;
-                priority?: TicketPriority;
-                assignedAgentId?: string;
-            },
-        });
+
+        if (updates.status) {
+            updateStatusMutation.mutate({
+                id: selectedTicketId,
+                payload: { status: updates.status },
+            });
+        }
+
+        if (updates.priority) {
+            updatePriorityMutation.mutate({
+                id: selectedTicketId,
+                payload: { priority: updates.priority },
+            });
+        }
     };
 
     return (

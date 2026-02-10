@@ -124,22 +124,67 @@ export interface Requester {
 }
 
 /**
- * Message in a ticket conversation
- * TODO: Update when messages API is provided
+ * Message user info from API
+ */
+export interface MessageUser {
+    id: number;
+    name: string;
+    email: string;
+}
+
+/**
+ * Raw message from API
+ */
+export interface RawTicketMessage {
+    id: number;
+    ticketId: number;
+    userId: number;
+    message: string;
+    isFromAgent: boolean;
+    readAt: string | null;
+    user: MessageUser;
+    attachments: string[];
+    createdAt: string;
+}
+
+/**
+ * Message in a ticket conversation (UI compatible)
  */
 export interface TicketMessage {
     id: string;
     ticketId: string;
+    senderId: number;
     sender: MessageSender;
     senderName: string;
     senderType?: RequesterType | "agent";
     content: string;
     createdAt: string;
+    isRead: boolean;
+    attachments: string[];
 }
 
 /**
- * Internal note on a ticket
- * TODO: Update when notes API is provided
+ * Note user info from API
+ */
+export interface NoteUser {
+    id: number;
+    name: string;
+}
+
+/**
+ * Raw note from API
+ */
+export interface RawInternalNote {
+    id: number;
+    ticketId: number;
+    userId: number;
+    note: string;
+    user: NoteUser;
+    createdAt: string;
+}
+
+/**
+ * Internal note on a ticket (UI compatible)
  */
 export interface InternalNote {
     id: string;
@@ -243,18 +288,24 @@ export interface UpdateTicketPriorityPayload {
 
 /**
  * Send message payload
- * TODO: Update when messages API is provided
  */
 export interface SendMessagePayload {
-    ticketId: string;
-    content: string;
+    ticketId: string | number;
+    message: string;
 }
 
 /**
  * Add internal note payload
- * TODO: Update when notes API is provided
  */
 export interface AddNotePayload {
-    ticketId: string;
-    content: string;
+    ticketId: string | number;
+    note: string;
+}
+
+/**
+ * Delete note payload
+ */
+export interface DeleteNotePayload {
+    ticketId: string | number;
+    noteId: string | number;
 }

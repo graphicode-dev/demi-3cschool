@@ -16,6 +16,7 @@ import type {
     UpdateTicketPriorityPayload,
     SendMessagePayload,
     AddNotePayload,
+    DeleteNotePayload,
     TicketMessage,
     InternalNote,
     Ticket,
@@ -187,7 +188,6 @@ export function useUpdateTicketPriority() {
 
 /**
  * Hook to send a message to a ticket
- * TODO: Update when messages API is provided
  */
 export function useSendMessage() {
     const queryClient = useQueryClient();
@@ -196,7 +196,26 @@ export function useSendMessage() {
         mutationFn: ticketsApi.sendMessage,
         onSuccess: (_, variables) => {
             queryClient.invalidateQueries({
-                queryKey: ticketsKeys.detail(variables.ticketId),
+                queryKey: ticketsKeys.messages(variables.ticketId),
+            });
+            queryClient.invalidateQueries({
+                queryKey: ticketsKeys.detail(String(variables.ticketId)),
+            });
+        },
+    });
+}
+
+/**
+ * Hook to mark messages as read
+ */
+export function useMarkMessagesRead() {
+    const queryClient = useQueryClient();
+
+    return useMutation<void, ApiError, string | number>({
+        mutationFn: ticketsApi.markMessagesRead,
+        onSuccess: (_, ticketId) => {
+            queryClient.invalidateQueries({
+                queryKey: ticketsKeys.messages(ticketId),
             });
         },
     });
@@ -208,7 +227,6 @@ export function useSendMessage() {
 
 /**
  * Hook to add an internal note to a ticket
- * TODO: Update when notes API is provided
  */
 export function useAddNote() {
     const queryClient = useQueryClient();
@@ -217,7 +235,26 @@ export function useAddNote() {
         mutationFn: ticketsApi.addNote,
         onSuccess: (_, variables) => {
             queryClient.invalidateQueries({
-                queryKey: ticketsKeys.detail(variables.ticketId),
+                queryKey: ticketsKeys.notes(variables.ticketId),
+            });
+            queryClient.invalidateQueries({
+                queryKey: ticketsKeys.detail(String(variables.ticketId)),
+            });
+        },
+    });
+}
+
+/**
+ * Hook to delete an internal note
+ */
+export function useDeleteNote() {
+    const queryClient = useQueryClient();
+
+    return useMutation<void, ApiError, DeleteNotePayload>({
+        mutationFn: ticketsApi.deleteNote,
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({
+                queryKey: ticketsKeys.notes(variables.ticketId),
             });
         },
     });

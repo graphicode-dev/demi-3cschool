@@ -4,7 +4,7 @@
  * Main panel for displaying ticket details with tabs.
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { MessageSquare, FileText, StickyNote } from "lucide-react";
 import type { Ticket, TicketStatus, TicketPriority } from "../types";
@@ -12,6 +12,7 @@ import { TicketDetailHeader } from "./TicketDetailHeader";
 import { ConversationTab } from "./ConversationTab";
 import { DetailsTab } from "./DetailsTab";
 import { InternalNotesTab } from "./InternalNotesTab";
+import { useTicketMessages, useTicketNotes, useMarkMessagesRead } from "../api";
 
 type TabId = "conversation" | "details" | "notes";
 
@@ -41,6 +42,23 @@ export function TicketDetailPanel({
     const { t } = useTranslation("ticketsManagement");
     const [activeTab, setActiveTab] = useState<TabId>("conversation");
 
+    // Fetch messages and notes from API
+    const { data: messages = [], isLoading: isLoadingMessages } =
+        useTicketMessages(ticket.id);
+    const { data: notes = [], isLoading: isLoadingNotes } = useTicketNotes(
+        ticket.id
+    );
+
+    // Mark messages as read mutation
+    const markMessagesReadMutation = useMarkMessagesRead();
+
+    // Auto-open conversation tab and mark messages as read when ticket is selected
+    useEffect(() => {
+        setActiveTab("conversation");
+        // Mark messages as read when ticket is selected
+        markMessagesReadMutation.mutate(ticket.id);
+    }, [ticket.id]);
+
     const tabs: {
         id: TabId;
         label: string;
@@ -51,7 +69,7 @@ export function TicketDetailPanel({
             id: "conversation",
             label: t("tickets.tabs.conversation", "Conversation"),
             icon: <MessageSquare className="w-4 h-4" />,
-            count: ticket.messages.length,
+            count: messages.length,
         },
         {
             id: "details",
@@ -62,7 +80,7 @@ export function TicketDetailPanel({
             id: "notes",
             label: t("tickets.tabs.internalNotes", "Internal notes"),
             icon: <StickyNote className="w-4 h-4" />,
-            count: ticket.internalNotes.length,
+            count: notes.length,
         },
     ];
 
@@ -98,9 +116,9 @@ export function TicketDetailPanel({
             <div className="flex-1 overflow-hidden">
                 {activeTab === "conversation" && (
                     <ConversationTab
-                        messages={ticket.messages}
+                        messages={messages}
                         onSendMessage={onSendMessage}
-                        isLoading={isLoading}
+                        isLoading={isLoading || isLoadingMessages}
                     />
                 )}
                 {activeTab === "details" && (
@@ -112,9 +130,9 @@ export function TicketDetailPanel({
                 )}
                 {activeTab === "notes" && (
                     <InternalNotesTab
-                        notes={ticket.internalNotes}
+                        notes={notes}
                         onAddNote={onAddNote}
-                        isLoading={isLoading}
+                        isLoading={isLoading || isLoadingNotes}
                     />
                 )}
             </div>

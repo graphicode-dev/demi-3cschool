@@ -16,6 +16,8 @@ import type {
     TicketFilters,
     PaginatedTicketData,
     TicketsStats,
+    TicketMessage,
+    InternalNote,
 } from "../types";
 
 // ============================================================================
@@ -116,6 +118,46 @@ export function useFilterOptions(
                 blocks: [],
             }),
         staleTime: 1000 * 60 * 10, // 10 minutes
+        ...options,
+    });
+}
+
+// ============================================================================
+// Messages Query
+// ============================================================================
+
+/**
+ * Hook to fetch messages for a ticket
+ */
+export function useTicketMessages(
+    ticketId: string | number | undefined | null,
+    options?: Partial<UseQueryOptions<TicketMessage[], Error>>
+) {
+    return useQuery({
+        queryKey: ticketsKeys.messages(ticketId ?? ""),
+        queryFn: ({ signal }) => ticketsApi.getMessages(ticketId!, signal),
+        enabled: !!ticketId,
+        staleTime: 1000 * 30, // 30 seconds - messages should refresh frequently
+        ...options,
+    });
+}
+
+// ============================================================================
+// Notes Query
+// ============================================================================
+
+/**
+ * Hook to fetch notes for a ticket
+ */
+export function useTicketNotes(
+    ticketId: string | number | undefined | null,
+    options?: Partial<UseQueryOptions<InternalNote[], Error>>
+) {
+    return useQuery({
+        queryKey: ticketsKeys.notes(ticketId ?? ""),
+        queryFn: ({ signal }) => ticketsApi.getNotes(ticketId!, signal),
+        enabled: !!ticketId,
+        staleTime: 1000 * 60, // 1 minute
         ...options,
     });
 }
