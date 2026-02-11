@@ -85,14 +85,6 @@ const MOCK_REPORT: ReportData = {
     },
 };
 
-const PERFORMANCE_OPTIONS: { value: PerformanceRating; label: string }[] = [
-    { value: "excellent", label: "Excellent" },
-    { value: "very_good", label: "Very Good" },
-    { value: "good", label: "Good" },
-    { value: "fair", label: "Fair" },
-    { value: "needs_improvement", label: "Needs Improvement" },
-];
-
 const getStatusBadgeClass = (status: ReportStatus) => {
     switch (status) {
         case "draft":
@@ -106,50 +98,41 @@ const getStatusBadgeClass = (status: ReportStatus) => {
     }
 };
 
-const getStatusLabel = (status: ReportStatus) => {
-    switch (status) {
-        case "draft":
-            return "Draft";
-        case "ready":
-            return "Ready";
-        case "sent":
-            return "Sent";
-        default:
-            return status;
-    }
-};
-
-const getReportTypeLabel = (type: string) => {
-    switch (type) {
-        case "mid_report":
-            return "Mid Report";
-        case "final_report":
-            return "Final Report";
-        default:
-            return type;
-    }
-};
-
-const getPerformanceLabel = (rating: PerformanceRating) => {
-    switch (rating) {
-        case "excellent":
-            return "Excellent";
-        case "very_good":
-            return "Very Good";
-        case "good":
-            return "Good";
-        case "fair":
-            return "Fair";
-        case "needs_improvement":
-            return "Needs Improvement";
-        default:
-            return rating;
-    }
-};
-
 function ReportViewPage() {
     const { t } = useTranslation("account");
     const { id } = useParams<{ id: string }>();
+
+    const getStatusLabel = (status: ReportStatus) => {
+        return t(`reports.status.${status}`, status);
+    };
+
+    const getReportTypeLabel = (type: string) => {
+        return t(`reports.reportType.${type}`, type);
+    };
+
+    const getPerformanceLabel = (rating: PerformanceRating) => {
+        return t(`reports.performance.${rating}`, rating);
+    };
+
+    const PERFORMANCE_OPTIONS: { value: PerformanceRating; label: string }[] = [
+        {
+            value: "excellent",
+            label: t("reports.performance.excellent", "Excellent"),
+        },
+        {
+            value: "very_good",
+            label: t("reports.performance.very_good", "Very Good"),
+        },
+        { value: "good", label: t("reports.performance.good", "Good") },
+        { value: "fair", label: t("reports.performance.fair", "Fair") },
+        {
+            value: "needs_improvement",
+            label: t(
+                "reports.performance.needs_improvement",
+                "Needs Improvement"
+            ),
+        },
+    ];
 
     const [report, setReport] = useState<ReportData>(MOCK_REPORT);
     const [feedback, setFeedback] = useState(

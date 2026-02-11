@@ -18,7 +18,7 @@ export function BlockWorkloadOverviewSection({
     blocks,
     isLoading,
 }: BlockWorkloadOverviewSectionProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
 
     if (isLoading) {
         return (

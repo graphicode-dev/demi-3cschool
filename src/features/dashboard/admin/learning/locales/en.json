@@ -24,6 +24,7 @@
         "navTitle": "Grades",
         "title": "Grades",
         "subtitle": "Select a grade to view its learning content",
+        "cardDescription": "Explore learning content for {{gradeName}} students",
         "totalLessons": "Total Lessons",
         "items": {
             "grade4": {
@@ -60,82 +61,14 @@
             }
         }
     },
-    "courses": {
-        "breadcrumb": "Courses",
-        "title": "Courses",
-        "description": "Manage courses and their content",
-        "entity": "Course",
-        "fields": {
-            "title": "Course Title",
-            "titlePlaceholder": "e.g., Advanced Programming",
-            "term": "Term",
-            "termPlaceholder": "Select a term",
-            "grade": "Grade",
-            "gradePlaceholder": "Select a grade",
-            "slug": "Slug",
-            "slugPlaceholder": "e.g., advanced-programming",
-            "description": "Description",
-            "descriptionPlaceholder": "Enter course description...",
-            "image": "Course Image",
-            "isActive": "Active Status",
-            "setActive": "Set as active course"
-        },
-        "columns": {
-            "title": "Course Title",
-            "term": "Term",
-            "grade": "Grade",
-            "slug": "Slug",
-            "status": "Status",
-            "created": "Created"
-        },
-        "cards": {
-            "total": "Total Courses",
-            "active": "Active Courses",
-            "inactive": "Inactive Courses"
-        },
-        "list": "Courses List",
-        "form": {
-            "create": {
-                "title": "Create New Course",
-                "description": "Add a new course to the system"
-            },
-            "edit": {
-                "title": "Edit Course",
-                "description": "Update course information"
-            },
-            "view": {
-                "title": "Course Details",
-                "idLabel": "Course ID"
-            }
-        },
-        "actions": {
-            "add": "Add New Course",
-            "view": "View Course",
-            "edit": "Edit Course",
-            "delete": "Delete Course"
-        },
-        "messages": {
-            "createSuccess": "Course created successfully",
-            "createError": "Failed to create course",
-            "updateSuccess": "Course updated successfully",
-            "updateError": "Failed to update course",
-            "deleteSuccess": "Course deleted successfully",
-            "deleteError": "Course deletion failed",
-            "deleteConfirm": "Are you sure you want to delete this course? This action cannot be undone.",
-            "deleteConfirmNamed": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone.",
-            "failedToLoad": "Failed to load courses",
-            "errorHelp": "Please check your connection and try again.",
-            "notAvailable": "N/A",
-            "noImage": "No image"
-        },
-        "validation": {
-            "titleMin": "Title must be at least 3 characters",
-            "termRequired": "Term is required",
-            "slugRequired": "Slug is required",
-            "descriptionRequired": "Description is required"
-        }
-    },
     "lessons": {
+        "title": "Lessons",
+        "subtitle": "Manage lessons for this grade and term",
+        "searchPlaceholder": "Search lessons...",
+        "showing": "Showing",
+        "of": "of",
+        "lessonsLabel": "lessons",
+        "lessonsCount": "{{count}} Lessons",
         "addItem": "Add Item",
         "itemSingular": "item",
         "itemPlural": "items",
@@ -144,182 +77,242 @@
             "active": "Active",
             "draft": "Draft"
         },
-        "fields": {
-            "title": "Title",
-            "titlePlaceholder": "Enter title...",
-            "description": "Description",
-            "descriptionPlaceholder": "Provide a brief description...",
-            "duration": "Duration (minutes)",
-            "provider": "Video Provider",
-            "videoRefAr": "Video Reference (Arabic)",
-            "videoRefEn": "Video Reference (English)",
-            "videoIdAr": "Video ID (Arabic)",
-            "videoIdEn": "Video ID (English)",
-            "active": "Active",
-            "videoPreview": "Video Preview",
-            "arabicVideo": "Arabic Video",
-            "englishVideo": "English Video",
-            "clickToPreview": "Click to preview",
-            "noVideoUploaded": "No video uploaded",
-            "addVideoUrl": "Add a video URL to preview"
-        },
-        "videos": {
-            "listTitle": "Video List",
-            "editor": {
-                "title": "Video Editor",
-                "subtitle": "Configure content details and settings"
-            },
-            "toast": {
-                "createSuccess": "Video created",
-                "createSuccessMessage": "Video has been created successfully",
-                "updateSuccess": "Video updated",
-                "updateSuccessMessage": "Video has been updated successfully",
-                "deleteSuccess": "Video deleted",
-                "deleteSuccessMessage": "Video has been deleted successfully",
-                "error": "Error",
-                "errorMessage": "Failed to save video",
-                "deleteErrorMessage": "Failed to delete video"
-            },
-            "deleteDialog": {
-                "title": "Delete Video",
-                "message": "Are you sure you want to delete this video? This action cannot be undone."
-            }
-        },
-        "quizzes": {
-            "listTitle": "Quiz List",
-            "titlePlaceholder": "Enter quiz title...",
-            "instructions": "Description / Instructions",
-            "instructionsPlaceholder": "Provide quiz instructions...",
-            "timeLimit": "Time Limit (minutes)",
-            "passingScore": "Passing Score (%)",
-            "attemptsAllowed": "Attempts Allowed",
-            "questions": "Quiz Questions",
-            "addQuestion": "Add Question",
-            "noQuestions": "No questions yet. Click 'Add Question' to create one.",
-            "questionEditorPlaceholder": "Question editor will be implemented with API integration",
-            "newQuestion": "New Question",
-            "points": "points",
-            "questionTypes": {
-                "singleChoice": "Single Choice",
-                "multipleChoice": "Multiple Choice",
-                "trueFalse": "True/False"
-            },
-            "editor": {
-                "title": "Quiz Editor",
-                "subtitle": "Configure content details and settings"
-            },
-            "toast": {
-                "createSuccess": "Quiz created",
-                "createSuccessMessage": "Quiz has been created successfully",
-                "updateSuccess": "Quiz updated",
-                "updateSuccessMessage": "Quiz has been updated successfully",
-                "deleteSuccess": "Quiz deleted",
-                "deleteSuccessMessage": "Quiz has been deleted successfully",
-                "error": "Error",
-                "errorMessage": "Failed to save quiz",
-                "deleteErrorMessage": "Failed to delete quiz"
-            },
-            "deleteDialog": {
-                "title": "Delete Quiz",
-                "message": "Are you sure you want to delete this quiz? This action cannot be undone."
-            }
-        },
-        "assignments": {
-            "listTitle": "Assignment List",
-            "titlePlaceholder": "Enter assignment title...",
-            "filePreview": "File Preview",
-            "uploadFile": "Click to upload file",
-            "changeFile": "Change file",
-            "removeFile": "Remove file",
-            "downloadLink": "Download Link",
-            "downloadFile": "Download File",
-            "editor": {
-                "title": "Assignment Editor",
-                "subtitle": "Configure content details and settings"
-            },
-            "toast": {
-                "createSuccess": "Assignment created",
-                "createSuccessMessage": "Assignment has been created successfully",
-                "updateSuccess": "Assignment updated",
-                "updateSuccessMessage": "Assignment has been updated successfully",
-                "deleteSuccess": "Assignment deleted",
-                "deleteSuccessMessage": "Assignment has been deleted successfully",
-                "error": "Error",
-                "errorMessage": "Failed to save assignment",
-                "deleteErrorMessage": "Failed to delete assignment"
-            },
-            "deleteDialog": {
-                "title": "Delete Assignment",
-                "message": "Are you sure you want to delete this assignment? This action cannot be undone."
-            }
-        },
-        "materials": {
-            "listTitle": "Material List",
-            "titlePlaceholder": "Enter material title...",
-            "filePreview": "File Preview",
-            "uploadFile": "Click to upload file",
-            "changeFile": "Change file",
-            "removeFile": "Remove file",
-            "downloadLink": "Download Link",
-            "downloadFile": "Download File",
-            "editor": {
-                "title": "Material Editor",
-                "subtitle": "Configure content details and settings"
-            },
-            "toast": {
-                "createSuccess": "Material created",
-                "createSuccessMessage": "Material has been created successfully",
-                "updateSuccess": "Material updated",
-                "updateSuccessMessage": "Material has been updated successfully",
-                "deleteSuccess": "Material deleted",
-                "deleteSuccessMessage": "Material has been deleted successfully",
-                "error": "Error",
-                "errorMessage": "Failed to save material",
-                "deleteErrorMessage": "Failed to delete material"
-            },
-            "deleteDialog": {
-                "title": "Delete Material",
-                "message": "Are you sure you want to delete this material? This action cannot be undone."
-            }
-        },
         "tabs": {
             "videos": "Videos",
             "quizzes": "Quizzes",
             "assignments": "Assignments",
             "materials": "Materials"
         },
-        "emptyState": {
-            "title": "Select an item",
-            "description": "Choose an item from the list to edit or create a new one"
-        },
         "empty": {
-            "title": "No Content Selected",
-            "description": "Select a content item from the list or add new content to get started",
+            "title": "No lessons found",
+            "description": "Get started by creating your first lesson",
             "message": "Create your first lesson to get started",
             "searchMessage": "No lessons match your search criteria"
         },
-        "title": "Lessons",
-        "subtitle": "Manage lessons for this grade and term",
-        "searchPlaceholder": "Search lessons...",
-        "showing": "Showing",
-        "of": "of",
-        "lessonsLabel": "lessons",
         "actions": {
             "add": "Add Lesson",
             "edit": "Edit Lesson",
             "delete": "Delete Lesson",
             "view": "View Lesson"
         },
-        "deleteDialog": {
+        "delete": {
             "title": "Delete Lesson",
-            "message": "Are you sure you want to delete this lesson? This action cannot be undone."
+            "message": "Are you sure you want to delete this lesson? This action cannot be undone.",
+            "success": "Lesson deleted successfully"
         },
-        "toast": {
-            "deleteSuccess": "Lesson deleted successfully"
+        "messages": {
+            "createSuccess": "Lesson created successfully",
+            "updateSuccess": "Lesson updated successfully"
+        },
+        "overview": {
+            "title": "Lesson Overview",
+            "description": "Lesson Description"
+        },
+        "filter": {
+            "chooseLevel": "Choose Level",
+            "selectAll": "Select All"
+        },
+        "content": {
+            "subtitle": "Manage videos, quizzes, assignments, and materials",
+            "addItem": "Add Item",
+            "itemSingular": "item",
+            "itemPlural": "items",
+            "tabs": {
+                "videos": "Videos",
+                "quizzes": "Quizzes",
+                "assignments": "Assignments",
+                "materials": "Materials"
+            },
+            "empty": {
+                "title": "No Content Selected",
+                "description": "Select a content item from the list or add new content to get started"
+            },
+            "fields": {
+                "title": "Title",
+                "titlePlaceholder": "Enter title...",
+                "description": "Description",
+                "descriptionPlaceholder": "Provide a brief description...",
+                "duration": "Duration (minutes)",
+                "provider": "Video Provider",
+                "videoIdAr": "Video ID (Arabic)",
+                "videoIdEn": "Video ID (English)",
+                "active": "Active",
+                "videoPreview": "Video Preview",
+                "arabicVideo": "Arabic Video",
+                "englishVideo": "English Video",
+                "noVideoUploaded": "No video uploaded",
+                "addVideoUrl": "Add a video URL to preview"
+            },
+            "videos": {
+                "listTitle": "Video List",
+                "editor": {
+                    "title": "Video Editor",
+                    "subtitle": "Configure content details and settings"
+                },
+                "toast": {
+                    "createSuccessMessage": "Video has been created successfully",
+                    "updateSuccessMessage": "Video has been updated successfully",
+                    "deleteSuccessMessage": "Video has been deleted successfully"
+                },
+                "deleteDialog": {
+                    "title": "Delete Video",
+                    "message": "Are you sure you want to delete this video? This action cannot be undone."
+                }
+            },
+            "quizzes": {
+                "listTitle": "Quiz List",
+                "editor": {
+                    "title": "Quiz Editor",
+                    "subtitle": "Configure content details and settings"
+                },
+                "titlePlaceholder": "Enter quiz title...",
+                "instructions": "Description / Instructions",
+                "instructionsPlaceholder": "Provide quiz instructions...",
+                "timeLimit": "Time Limit (minutes)",
+                "passingScore": "Passing Score (%)",
+                "attemptsAllowed": "Attempts Allowed",
+                "questions": "Quiz Questions",
+                "addQuestion": "Add Question",
+                "newQuestion": "New Question",
+                "questionText": "Question Text",
+                "questionPlaceholder": "Enter question...",
+                "questionType": "Type",
+                "points": "Points",
+                "explanation": "Explanation",
+                "explanationPlaceholder": "Explanation shown after answering...",
+                "noQuestions": "No questions yet. Click 'Add Question' to create one.",
+                "questionTypes": {
+                    "singleChoice": "Single Choice",
+                    "multipleChoice": "Multiple Choice",
+                    "trueFalse": "True/False",
+                    "shortAnswer": "Short Answer"
+                },
+                "options": "Options",
+                "addOption": "Add Option",
+                "optionPlaceholder": "Enter option text...",
+                "markCorrectHint": "Check the box if this is a correct answer",
+                "emptyOption": "(empty)",
+                "noOptions": "No options added yet",
+                "optionCreated": "Option created successfully",
+                "optionUpdated": "Option updated successfully",
+                "optionDeleted": "Option deleted successfully",
+                "deleteOptionTitle": "Delete Option",
+                "deleteOptionDescription": "Are you sure you want to delete this option? This action cannot be undone.",
+                "toast": {
+                    "createSuccessMessage": "Quiz has been created successfully",
+                    "updateSuccessMessage": "Quiz has been updated successfully",
+                    "deleteSuccessMessage": "Quiz has been deleted successfully",
+                    "questionAddedMessage": "New question has been added",
+                    "questionUpdatedMessage": "Question has been updated",
+                    "questionDeletedMessage": "Question has been deleted"
+                },
+                "deleteDialog": {
+                    "title": "Delete Quiz",
+                    "message": "Are you sure you want to delete this quiz? This action cannot be undone."
+                },
+                "deleteQuestionDialog": {
+                    "title": "Delete Question",
+                    "message": "Are you sure you want to delete this question? All options will also be deleted."
+                }
+            },
+            "assignments": {
+                "listTitle": "Assignment List",
+                "editor": {
+                    "title": "Assignment Editor",
+                    "subtitle": "Configure content details and settings"
+                },
+                "titlePlaceholder": "Enter assignment title...",
+                "filePreview": "File Preview",
+                "changeFile": "Change file",
+                "removeFile": "Remove file",
+                "previewFile": "Preview file",
+                "uploadFile": "Click to upload file",
+                "downloadLink": "Download Link",
+                "downloadFile": "Download File",
+                "toast": {
+                    "createSuccessMessage": "Assignment has been created successfully",
+                    "updateSuccessMessage": "Assignment has been updated successfully",
+                    "deleteSuccessMessage": "Assignment has been deleted successfully"
+                },
+                "deleteDialog": {
+                    "title": "Delete Assignment",
+                    "message": "Are you sure you want to delete this assignment? This action cannot be undone."
+                }
+            },
+            "materials": {
+                "listTitle": "Material List",
+                "editor": {
+                    "title": "Material Editor",
+                    "subtitle": "Configure content details and settings"
+                },
+                "titlePlaceholder": "Enter material title...",
+                "filePreview": "File Preview",
+                "changeFile": "Change file",
+                "removeFile": "Remove file",
+                "uploadFile": "Click to upload file",
+                "downloadLink": "Download Link",
+                "downloadFile": "Download File",
+                "toast": {
+                    "createSuccessMessage": "Material has been created successfully",
+                    "updateSuccessMessage": "Material has been updated successfully",
+                    "deleteSuccessMessage": "Material has been deleted successfully"
+                },
+                "deleteDialog": {
+                    "title": "Delete Material",
+                    "message": "Are you sure you want to delete this material? This action cannot be undone."
+                }
+            }
+        },
+        "videoQuiz": {
+            "quizzesList": "Video Quizzes",
+            "addQuiz": "Add Quiz",
+            "newQuiz": "New Quiz",
+            "quizTitle": "Quiz",
+            "timeLimit": "Time Limit (min)",
+            "passingScore": "Passing Score (%)",
+            "maxAttempts": "Max Attempts",
+            "noQuizzes": "No quizzes yet. Click 'Add Quiz' to create one.",
+            "questions": "Questions",
+            "addQuestion": "Add Question",
+            "newQuestion": "New Question",
+            "questionText": "Question Text",
+            "questionPlaceholder": "Enter question...",
+            "questionType": "Type",
+            "points": "Points",
+            "noQuestions": "No questions yet. Click 'Add Question' to create one.",
+            "options": "Options",
+            "addOption": "Add Option",
+            "optionPlaceholder": "Enter option text...",
+            "markCorrectHint": "Check the box if this is a correct answer",
+            "emptyOption": "(empty)",
+            "noOptions": "No options yet. Click 'Add Option' to create one.",
+            "messages": {
+                "createSuccess": "Quiz created successfully",
+                "updateSuccess": "Quiz updated successfully",
+                "deleteSuccess": "Quiz deleted successfully",
+                "questionAdded": "Question added successfully",
+                "questionUpdated": "Question updated successfully",
+                "questionDeleted": "Question deleted successfully",
+                "optionAdded": "Option added successfully",
+                "optionUpdated": "Option updated successfully",
+                "optionDeleted": "Option deleted successfully"
+            },
+            "deleteDialog": {
+                "title": "Delete Video Quiz",
+                "message": "Are you sure you want to delete this video quiz? This action cannot be undone."
+            },
+            "deleteQuestionDialog": {
+                "title": "Delete Question",
+                "message": "Are you sure you want to delete this question? All options will also be deleted."
+            },
+            "deleteOptionDialog": {
+                "title": "Delete Option",
+                "message": "Are you sure you want to delete this option?"
+            }
         },
         "form": {
             "create": {
-                "title": "Create Lesson",
+                "title": "Create New Lesson",
                 "subtitle": "Add a new lesson"
             },
             "edit": {
@@ -328,16 +321,186 @@
             },
             "view": {
                 "title": "Lesson Details"
+            },
+            "fields": {
+                "title": {
+                    "label": "Lesson Title",
+                    "placeholder": "Enter lesson title"
+                },
+                "description": {
+                    "label": "Description",
+                    "placeholder": "Enter lesson description"
+                },
+                "level": {
+                    "label": "Level",
+                    "placeholder": "Select a level"
+                },
+                "status": {
+                    "label": "Status"
+                },
+                "active": {
+                    "label": "Active"
+                }
             }
         },
         "quiz": {
-            "title": "Lesson Quiz"
+            "title": "Lesson Quiz",
+            "lessonQuizInfo": "Lesson Quiz",
+            "lessonQuizInfoDescription": "These quizzes help students reinforce their understanding of the lesson content.",
+            "lessonQuizzes": "Lesson Quizzes",
+            "quizzesCount": "{{count}} Quizzes",
+            "addLessonQuiz": "Add Lesson Quiz",
+            "noQuizzes": "No quizzes yet",
+            "addFirstQuiz": "Click 'Add Lesson Quiz' to create your first quiz",
+            "editQuiz": "Edit Quiz",
+            "editQuestion": "Edit Question",
+            "quizPurpose": "Quiz Purpose",
+            "quizPurposeDescription": "Lesson quizzes are designed to test student comprehension of specific lesson content and provide immediate feedback.",
+            "messages": {
+                "createSuccess": "Quiz created successfully",
+                "updateSuccess": "Quiz updated successfully",
+                "deleteSuccess": "Quiz deleted successfully",
+                "questionCreateSuccess": "Question created successfully",
+                "questionUpdateSuccess": "Question updated successfully",
+                "questionDeleteSuccess": "Question deleted successfully"
+            },
+            "deleteDialog": {
+                "title": "Delete Quiz",
+                "message": "Are you sure you want to delete this quiz? All questions and options will be permanently removed. This action cannot be undone."
+            },
+            "deleteQuestionDialog": {
+                "title": "Delete Question",
+                "message": "Are you sure you want to delete this question? All options will be permanently removed. This action cannot be undone."
+            }
         }
     },
     "levels": {
         "title": "Levels",
+        "subtitle": "Select a level to view lessons for {{gradeName}}",
+        "overview": "Levels Overview",
+        "viewLessons": "View lessons",
+        "capacity": "Capacity: {{count}}",
+        "updated": "Updated: {{date}}",
+        "quizzes": "Quizzes",
+        "goToQuizzes": "Go to Quizzes",
+        "list": {
+            "subtitle": "Manage levels within courses"
+        },
+        "filter": {
+            "chooseCourse": "Choose Course",
+            "selectAll": "Select All"
+        },
+        "empty": {
+            "title": "No levels found",
+            "description": "Get started by creating your first level"
+        },
+        "actions": {
+            "add": "Add Level"
+        },
+        "delete": {
+            "title": "Delete Level",
+            "message": "Are you sure you want to delete this level? This action cannot be undone.",
+            "success": "Level deleted successfully"
+        },
+        "messages": {
+            "createSuccess": "Level created successfully",
+            "updateSuccess": "Level updated successfully"
+        },
+        "form": {
+            "create": {
+                "title": "Create New Level",
+                "subtitle": "Add a new level"
+            },
+            "edit": {
+                "title": "Edit Level",
+                "subtitle": "Update level details"
+            },
+            "fields": {
+                "course": {
+                    "label": "Course",
+                    "placeholder": "Select a course"
+                },
+                "title": {
+                    "label": "Level Title",
+                    "placeholder": "Enter level title"
+                },
+                "description": {
+                    "label": "Description",
+                    "placeholder": "Enter level description"
+                },
+                "status": {
+                    "label": "Status"
+                },
+                "active": {
+                    "label": "Active"
+                }
+            }
+        },
+        "levelQuiz": "Level Quiz",
+        "levelQuizzes": "Level Quizzes",
+        "examsCount": "{{count}} Exams",
+        "addLevelQuiz": "Add Level Quiz",
+        "progressionGate": "Progression Gate",
+        "progressionGateDescription": "Students must pass this quiz to unlock the next level. This quiz serves as a checkpoint to ensure mastery of all concepts.",
+        "lockBehavior": "Lock Behavior",
+        "lockBehaviorDescription": "When students complete this quiz with a passing score (75% or higher), the next level will automatically unlock for them.",
         "quiz": {
-            "title": "Level Quiz"
+            "title": "Level Quiz",
+            "quizTitle": "Quiz #{{id}}",
+            "min": "min",
+            "attempts": "attempts",
+            "questions": "questions",
+            "questionsTitle": "Questions",
+            "addQuestion": "Add Question",
+            "noQuestions": "No questions yet",
+            "addFirstQuestion": "Click 'Add Question' to create your first question",
+            "shuffleEnabled": "Shuffle enabled",
+            "resultsVisible": "Results visible",
+            "noQuizzes": "No quizzes yet",
+            "addFirstQuiz": "Click 'Add Level Quiz' to create your first quiz",
+            "editQuiz": "Edit Quiz",
+            "editQuestion": "Edit Question",
+            "createNew": "Create New Quiz",
+            "timeLimit": "Time Limit (minutes)",
+            "passingScore": "Passing Score (%)",
+            "maxAttempts": "Max Attempts",
+            "shuffleQuestions": "Shuffle Questions",
+            "showAnswers": "Show Answers",
+            "pts": "pts",
+            "options": "Options",
+            "explanation": "Explanation",
+            "newQuestion": "New Question",
+            "questionText": "Question",
+            "questionPlaceholder": "Enter your question",
+            "questionType": "Type",
+            "points": "Points",
+            "order": "Order",
+            "addOption": "Add Option",
+            "optionPlaceholder": "Option text",
+            "explanationPlaceholder": "Explain the correct answer",
+            "saveQuestion": "Save Question",
+            "questionTypes": {
+                "singleChoice": "Single Choice",
+                "multipleChoice": "Multiple Choice",
+                "trueFalse": "True/False",
+                "shortAnswer": "Short Answer"
+            },
+            "messages": {
+                "createSuccess": "Quiz created successfully",
+                "updateSuccess": "Quiz updated successfully",
+                "deleteSuccess": "Quiz deleted successfully",
+                "questionCreateSuccess": "Question created successfully",
+                "questionUpdateSuccess": "Question updated successfully",
+                "questionDeleteSuccess": "Question deleted successfully"
+            },
+            "deleteDialog": {
+                "title": "Delete Quiz",
+                "message": "Are you sure you want to delete this quiz? All questions and options will be permanently removed. This action cannot be undone."
+            },
+            "deleteQuestionDialog": {
+                "title": "Delete Question",
+                "message": "Are you sure you want to delete this question? All options will be permanently removed. This action cannot be undone."
+            }
         }
     },
     "sitemap": {

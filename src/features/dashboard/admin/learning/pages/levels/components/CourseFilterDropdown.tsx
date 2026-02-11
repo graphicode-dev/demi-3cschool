@@ -31,7 +31,7 @@ export function CourseFilterDropdown({
     return (
         <div className={className}>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                {t("levels:levels.filter.chooseCourse", "Choose Course")}
+                {t("learning:levels.filter.chooseCourse", "Choose Course")}
             </label>
             <div className="relative">
                 <select
@@ -48,7 +48,7 @@ export function CourseFilterDropdown({
                     className="block w-full px-4 py-3 text-sm text-gray-900 bg-white border border-gray-200 rounded-lg appearance-none focus:ring-brand-500 focus:border-brand-500 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:focus:ring-brand-500 dark:focus:border-brand-500 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     <option value="all">
-                        {t("levels:levels.filter.selectAll", "Select All")}
+                        {t("learning:levels.filter.selectAll", "Select All")}
                     </option>
                     {courses.map((course) => (
                         <option key={course.id} value={course.id}>

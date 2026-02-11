@@ -23,7 +23,7 @@ export default function LeadCard({
     onConvert,
     onRemove,
 }: LeadCardProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
 
     const statusColors = {
         available: "text-success-500",

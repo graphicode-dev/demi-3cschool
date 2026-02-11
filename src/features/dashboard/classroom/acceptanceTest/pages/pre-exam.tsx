@@ -100,10 +100,16 @@ function PreExam({ startExam, isStarting, studentExam }: PreExamProps) {
                                                     .passingScore) && (
                                                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 font-medium">
                                                     <Target className="h-3.5 w-3.5" />
-                                                    {studentExam.passingScore ||
-                                                        (studentExam as any)
-                                                            .passingScore}
-                                                    % pass
+                                                    {t(
+                                                        "exam.passingScoreLabel",
+                                                        {
+                                                            score:
+                                                                studentExam.passingScore ||
+                                                                (
+                                                                    studentExam as any
+                                                                ).passingScore,
+                                                        }
+                                                    )}
                                                 </span>
                                             )}
                                             <span

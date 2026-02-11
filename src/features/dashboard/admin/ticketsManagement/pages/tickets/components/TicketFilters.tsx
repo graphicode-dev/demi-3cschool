@@ -25,7 +25,7 @@ export function TicketFilters({
     agents,
     blocks,
 }: TicketFiltersProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
 
     const statusOptions: { value: TicketStatus | "all"; label: string }[] = [
         { value: "all", label: t("tickets.filters.allStatus", "All Status") },

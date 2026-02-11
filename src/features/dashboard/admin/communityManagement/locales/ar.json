@@ -73,5 +73,31 @@
     },
     "deleteConfirmMessage": "هل أنت متأكد من حذف هذا المنشور؟ لا يمكن التراجع عن هذا الإجراء.",
     "dismissConfirmMessage": "هل أنت متأكد من رفض هذا البلاغ؟",
-    "cancel": "إلغاء"
+    "cancel": "إلغاء",
+    "postCard": {
+        "pinnedPost": "منشور مثبت",
+        "teacher": "معلم",
+        "student": "طالب",
+        "isFeeling": "يشعر بـ",
+        "lvl": "المستوى",
+        "edit": "تعديل",
+        "copyLink": "نسخ الرابط",
+        "report": "إبلاغ",
+        "delete": "حذف",
+        "saveChanges": "حفظ التغييرات",
+        "like": "إعجاب",
+        "comment": "تعليق",
+        "forward": "إعادة توجيه",
+        "discussionThread": "سلسلة النقاش",
+        "beFirstToComment": "كن أول من يعلق على هذا المنشور",
+        "addComment": "أضف تعليقاً...",
+        "bestSolution": "أفضل حل",
+        "helpful": "مفيد",
+        "reply": "رد",
+        "replyTo": "الرد على {{name}}...",
+        "linkCopied": "تم نسخ الرابط!",
+        "reportReason": "سبب الإبلاغ عن هذا المنشور؟",
+        "reportSubmitted": "تم إرسال البلاغ لمديري المجتمع.",
+        "noComments": "لا توجد تعليقات بعد"
+    }
 }

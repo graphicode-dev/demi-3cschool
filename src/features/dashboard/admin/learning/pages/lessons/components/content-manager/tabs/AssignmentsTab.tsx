@@ -82,7 +82,7 @@ export default function AssignmentsTab({ lessonId }: AssignmentsTabProps) {
             {/* Assignment List */}
             <ContentList
                 title={t(
-                    "lessons:content.assignments.listTitle",
+                    "learning:lessons.content.assignments.listTitle",
                     "Assignment List"
                 )}
                 count={assignmentsData?.items?.length || 0}

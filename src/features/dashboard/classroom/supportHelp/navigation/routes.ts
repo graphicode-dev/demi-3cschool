@@ -14,7 +14,7 @@ export const supportHelpRoutes: RouteConfig[] = [
             })),
         meta: {
             title: "Support & Help",
-            titleKey: "ticketsManagement:supportHelp.pageTitle",
+            titleKey: "supportHelp:supportHelp.pageTitle",
             requiresAuth: true,
         },
     },
@@ -26,7 +26,7 @@ export const supportHelpRoutes: RouteConfig[] = [
             })),
         meta: {
             title: "Need Help?",
-            titleKey: "ticketsManagement:supportHelp.createTicket.pageTitle",
+            titleKey: "supportHelp:supportHelp.createTicket.pageTitle",
             requiresAuth: true,
         },
     },

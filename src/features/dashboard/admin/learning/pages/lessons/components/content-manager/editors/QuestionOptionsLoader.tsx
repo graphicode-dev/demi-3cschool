@@ -88,7 +88,7 @@ export default function QuestionOptionsLoader({
                 }),
             {
                 successMessage: t(
-                    "lessons:content.quizzes.optionCreated",
+                    "learning:lessons.content.quizzes.optionCreated",
                     "Option created successfully"
                 ),
                 onSuccess: () => {
@@ -127,7 +127,7 @@ export default function QuestionOptionsLoader({
                 }),
             {
                 successMessage: t(
-                    "lessons:content.quizzes.optionUpdated",
+                    "learning:lessons.content.quizzes.optionUpdated",
                     "Option updated successfully"
                 ),
                 onSuccess: () => {
@@ -148,7 +148,7 @@ export default function QuestionOptionsLoader({
 
         execute(() => deleteOptionAsync(deleteOptionId), {
             successMessage: t(
-                "lessons:content.quizzes.optionDeleted",
+                "learning:lessons.content.quizzes.optionDeleted",
                 "Option deleted successfully"
             ),
             onSuccess: () => {
@@ -198,7 +198,7 @@ export default function QuestionOptionsLoader({
         <div className="p-4 bg-gray-50 dark:bg-gray-800/50 border-t border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between mb-3">
                 <p className="text-xs font-medium text-gray-500 dark:text-gray-400">
-                    {t("lessons:content.quizzes.options", "Options")}:
+                    {t("learning:lessons.content.quizzes.options", "Options")}:
                 </p>
                 <button
                     onClick={handleShowAddOptionForm}
@@ -206,7 +206,10 @@ export default function QuestionOptionsLoader({
                     className="flex items-center gap-1 px-2 py-1 text-xs font-medium text-brand-500 hover:bg-brand-50 dark:hover:bg-brand-500/10 rounded-lg transition-colors disabled:opacity-50"
                 >
                     <Plus className="w-3 h-3" />
-                    {t("lessons:content.quizzes.addOption", "Add Option")}
+                    {t(
+                        "learning:lessons.content.quizzes.addOption",
+                        "Add Option"
+                    )}
                 </button>
             </div>
 
@@ -236,7 +239,7 @@ export default function QuestionOptionsLoader({
                             }
                             className="flex-1 px-2 py-1 text-sm rounded border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                             placeholder={t(
-                                "lessons:content.quizzes.optionPlaceholder",
+                                "learning:lessons.content.quizzes.optionPlaceholder",
                                 "Enter option text..."
                             )}
                             autoFocus
@@ -264,7 +267,7 @@ export default function QuestionOptionsLoader({
                     </div>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 ml-6">
                         {t(
-                            "lessons:content.quizzes.markCorrectHint",
+                            "learning:lessons.content.quizzes.markCorrectHint",
                             "Check the box if this is a correct answer"
                         )}
                     </p>
@@ -305,7 +308,7 @@ export default function QuestionOptionsLoader({
                                             }
                                             className="flex-1 px-2 py-1 text-sm rounded border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                                             placeholder={t(
-                                                "lessons:content.quizzes.optionPlaceholder",
+                                                "learning:lessons.content.quizzes.optionPlaceholder",
                                                 "Enter option text..."
                                             )}
                                         />
@@ -356,7 +359,7 @@ export default function QuestionOptionsLoader({
                                         <span className="flex-1 text-sm text-gray-900 dark:text-gray-100">
                                             {option.optionText ||
                                                 t(
-                                                    "lessons:content.quizzes.emptyOption",
+                                                    "learning:lessons.content.quizzes.emptyOption",
                                                     "(empty)"
                                                 )}
                                         </span>
@@ -386,7 +389,7 @@ export default function QuestionOptionsLoader({
             ) : (
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                     {t(
-                        "lessons:content.quizzes.noOptions",
+                        "learning:lessons.content.quizzes.noOptions",
                         "No options added yet"
                     )}
                 </p>
@@ -398,11 +401,11 @@ export default function QuestionOptionsLoader({
                 onClose={() => setShowDeleteOptionDialog(false)}
                 onConfirm={handleDeleteOption}
                 title={t(
-                    "lessons:content.quizzes.deleteOptionTitle",
+                    "learning:lessons.content.quizzes.deleteOptionTitle",
                     "Delete Option"
                 )}
                 message={t(
-                    "lessons:content.quizzes.deleteOptionDescription",
+                    "learning:lessons.content.quizzes.deleteOptionDescription",
                     "Are you sure you want to delete this option? This action cannot be undone."
                 )}
                 confirmText={t("common.delete", "Delete")}

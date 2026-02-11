@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Filter, User, Download, Send } from "lucide-react";
-import { PageWrapper, DynamicTable ,useToast} from "@/design-system";
+import { PageWrapper, DynamicTable, useToast } from "@/design-system";
 import type { TableColumn, TableData } from "@/shared/types";
 import { useCertificatesList } from "../api";
 import type { Certificate, CertificateStatus } from "../types";
@@ -20,19 +20,6 @@ const getStatusBadgeClass = (status: CertificateStatus) => {
     }
 };
 
-const getStatusLabel = (status: CertificateStatus) => {
-    switch (status) {
-        case "passed":
-            return "Passed";
-        case "failed":
-            return "Failed";
-        case "pending":
-            return "Pending";
-        default:
-            return status;
-    }
-};
-
 const transformCertificateToTableData = (
     certificate: Certificate
 ): TableData => ({
@@ -44,14 +31,14 @@ const transformCertificateToTableData = (
         student: certificate.studentName,
         program: certificate.program,
         levelName: certificate.levelName,
-        finalQuizStatus: getStatusLabel(certificate.finalQuizStatus),
+        finalQuizStatus: certificate.finalQuizStatus,
         statusRaw: certificate.finalQuizStatus,
         certificateDate: certificate.certificateDate,
     },
 });
 
 function CertificatesPage() {
-    const { t } = useTranslation("account");
+    const { t } = useTranslation("shared");
     const { addToast } = useToast();
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
@@ -76,6 +63,19 @@ function CertificatesPage() {
         () => certificates?.map(transformCertificateToTableData) || [],
         [certificates]
     );
+
+    const getStatusLabel = (status: CertificateStatus) => {
+        switch (status) {
+            case "passed":
+                return t("certificates.status.passed", "Passed");
+            case "failed":
+                return t("certificates.status.failed", "Failed");
+            case "pending":
+                return t("certificates.status.pending", "Pending");
+            default:
+                return status;
+        }
+    };
 
     const handlePageChange = useCallback((page: number) => {
         setCurrentPage(page);
@@ -184,7 +184,9 @@ function CertificatesPage() {
                             row.columns.statusRaw as CertificateStatus
                         )}`}
                     >
-                        {row.columns.finalQuizStatus}
+                        {getStatusLabel(
+                            row.columns.statusRaw as CertificateStatus
+                        )}
                     </span>
                 ),
             },
@@ -256,7 +258,13 @@ function CertificatesPage() {
                 ),
             },
         ],
-        [t, handleViewStudent, handleDownloadCertificate, handleSendCertificate]
+        [
+            t,
+            getStatusLabel,
+            handleViewStudent,
+            handleDownloadCertificate,
+            handleSendCertificate,
+        ]
     );
 
     return (

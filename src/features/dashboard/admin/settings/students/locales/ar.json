@@ -1,0 +1,34 @@
+{
+    "title": "الطلاب",
+    "description": "إدارة الطلاب",
+    "loading": "جاري التحميل...",
+    "error": "فشل التحميل",
+    "confirmDelete": "هل أنت متأكد من حذف هذا الطالب؟",
+    "fields": {
+        "name": "الاسم",
+        "email": "البريد الإلكتروني",
+        "password": "كلمة المرور",
+        "role": "الدور"
+    },
+    "actions": {
+        "create": "إنشاء",
+        "edit": "تعديل",
+        "view": "عرض",
+        "delete": "حذف",
+        "save": "حفظ",
+        "cancel": "إلغاء"
+    },
+    "messages": {
+        "createSuccess": "تم إنشاء الطالب بنجاح",
+        "updateSuccess": "تم تحديث الطالب بنجاح",
+        "deleteSuccess": "تم حذف الطالب بنجاح"
+    },
+    "table": {
+        "id": "المعرف",
+        "actions": "الإجراءات"
+    },
+    "common": {
+        "delete": "حذف",
+        "cancel": "إلغاء"
+    }
+}

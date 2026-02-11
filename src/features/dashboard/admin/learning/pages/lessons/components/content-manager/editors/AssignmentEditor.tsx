@@ -176,7 +176,7 @@ export default function AssignmentEditor({
                 () => updateMutateAsync({ id: assignment.id, data: payload }),
                 {
                     successMessage: t(
-                        "lessons:content.assignments.toast.updateSuccessMessage",
+                        "learning:lessons.content.assignments.toast.updateSuccessMessage",
                         "Assignment has been updated successfully"
                     ),
                     onSuccess: () => {
@@ -189,7 +189,7 @@ export default function AssignmentEditor({
         } else {
             execute(() => createMutateAsync(payload), {
                 successMessage: t(
-                    "lessons:content.assignments.toast.createSuccessMessage",
+                    "learning:lessons.content.assignments.toast.createSuccessMessage",
                     "Assignment has been created successfully"
                 ),
                 onSuccess: () => {
@@ -206,7 +206,7 @@ export default function AssignmentEditor({
 
         execute(() => deleteMutateAsync(assignment.id), {
             successMessage: t(
-                "lessons:content.assignments.toast.deleteSuccessMessage",
+                "learning:lessons.content.assignments.toast.deleteSuccessMessage",
                 "Assignment has been deleted successfully"
             ),
             onSuccess: () => {
@@ -234,13 +234,13 @@ export default function AssignmentEditor({
                 <div>
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                         {t(
-                            "lessons:content.assignments.editor.title",
+                            "learning:lessons.content.assignments.editor.title",
                             "Assignment Editor"
                         )}
                     </h3>
                     <p className="text-sm text-gray-500 dark:text-gray-400">
                         {t(
-                            "lessons:content.assignments.editor.subtitle",
+                            "learning:lessons.content.assignments.editor.subtitle",
                             "Configure content details and settings"
                         )}
                     </p>
@@ -258,14 +258,14 @@ export default function AssignmentEditor({
                 {/* Title */}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        {t("lessons:content.fields.title", "Title")} *
+                        {t("learning:lessons.content.fields.title", "Title")} *
                     </label>
                     <input
                         type="text"
                         value={formData.title}
                         onChange={(e) => handleChange("title", e.target.value)}
                         placeholder={t(
-                            "lessons:content.assignments.titlePlaceholder",
+                            "learning:lessons.content.assignments.titlePlaceholder",
                             "Enter assignment title..."
                         )}
                         className={`w-full px-4 py-2.5 rounded-xl border bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none ${fieldErrors.title ? "border-red-500" : "border-gray-200 dark:border-gray-600"}`}
@@ -281,7 +281,7 @@ export default function AssignmentEditor({
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         {t(
-                            "lessons:content.assignments.filePreview",
+                            "learning:lessons.content.assignments.filePreview",
                             "File Preview"
                         )}
                     </label>
@@ -315,7 +315,7 @@ export default function AssignmentEditor({
                                         className="mt-3 text-xs text-brand-500 hover:text-brand-600"
                                     >
                                         {t(
-                                            "lessons:content.assignments.changeFile",
+                                            "learning:lessons.content.assignments.changeFile",
                                             "Change file"
                                         )}
                                     </button>
@@ -326,7 +326,7 @@ export default function AssignmentEditor({
                                         className="mt-3 text-xs text-red-500 hover:text-red-600"
                                     >
                                         {t(
-                                            "lessons:content.assignments.removeFile",
+                                            "learning:lessons.content.assignments.removeFile",
                                             "Remove file"
                                         )}
                                     </button>
@@ -338,7 +338,7 @@ export default function AssignmentEditor({
                                     >
                                         <Eye className="w-3 h-3" />
                                         {t(
-                                            "lessons:content.assignments.previewFile",
+                                            "learning:lessons.content.assignments.previewFile",
                                             "Preview file"
                                         )}
                                     </button>
@@ -353,7 +353,7 @@ export default function AssignmentEditor({
                             <Upload className="w-8 h-8 text-gray-400 mb-2" />
                             <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
                                 {t(
-                                    "lessons:content.assignments.uploadFile",
+                                    "learning:lessons.content.assignments.uploadFile",
                                     "Click to upload file"
                                 )}
                             </p>
@@ -374,7 +374,7 @@ export default function AssignmentEditor({
                     <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             {t(
-                                "lessons:content.assignments.downloadLink",
+                                "learning:lessons.content.assignments.downloadLink",
                                 "Download Link"
                             )}
                         </label>
@@ -386,7 +386,7 @@ export default function AssignmentEditor({
                         >
                             <ExternalLink className="w-4 h-4" />
                             {t(
-                                "lessons:content.assignments.downloadFile",
+                                "learning:lessons.content.assignments.downloadFile",
                                 "Download File"
                             )}
                         </a>
@@ -408,7 +408,7 @@ export default function AssignmentEditor({
                         htmlFor="isPublished"
                         className="text-sm font-medium text-gray-700 dark:text-gray-300"
                     >
-                        {t("lessons:content.fields.active", "Active")}
+                        {t("learning:lessons.content.fields.active", "Active")}
                     </label>
                 </div>
             </div>
@@ -458,11 +458,11 @@ export default function AssignmentEditor({
                 onClose={() => setShowDeleteDialog(false)}
                 variant="danger"
                 title={t(
-                    "lessons:content.assignments.deleteDialog.title",
+                    "learning:lessons.content.assignments.deleteDialog.title",
                     "Delete Assignment"
                 )}
                 message={t(
-                    "lessons:content.assignments.deleteDialog.message",
+                    "learning:lessons.content.assignments.deleteDialog.message",
                     "Are you sure you want to delete this assignment? This action cannot be undone."
                 )}
                 confirmText={t("common.delete", "Delete")}
@@ -478,7 +478,7 @@ export default function AssignmentEditor({
                         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
                             <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                                 {t(
-                                    "lessons:content.assignments.filePreview",
+                                    "learning:lessons.content.assignments.filePreview",
                                     "File Preview"
                                 )}
                             </h3>

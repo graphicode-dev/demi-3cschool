@@ -18,7 +18,7 @@ interface BlockCardProps {
 }
 
 export function BlockCard({ block, defaultExpanded = false }: BlockCardProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
     const navigate = useNavigate();
     const [isExpanded, setIsExpanded] = useState(defaultExpanded);
 
@@ -29,7 +29,7 @@ export function BlockCard({ block, defaultExpanded = false }: BlockCardProps) {
 
     // Get leads from members
     const leads = useMemo(
-        () => block.members.filter((member) => member.isLead),
+        () => block.members?.filter((member) => member.isLead) ?? [],
         [block.members]
     );
 
@@ -89,10 +89,10 @@ export function BlockCard({ block, defaultExpanded = false }: BlockCardProps) {
             </div>
 
             {/* Expanded Content - Show members using LeadBadge */}
-            {isExpanded && block.members.length > 0 && (
+            {isExpanded && (block.members?.length ?? 0) > 0 && (
                 <div className="px-4 pb-4 pt-2 border-t border-gray-100 dark:border-gray-700">
                     <div className="flex flex-wrap gap-3">
-                        {block.members.map((member) => (
+                        {block.members?.map((member) => (
                             <LeadBadge key={member.id} member={member} />
                         ))}
                     </div>

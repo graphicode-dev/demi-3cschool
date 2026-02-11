@@ -259,7 +259,7 @@ export default function LessonsQuizDetail() {
                 }),
             {
                 successMessage: t(
-                    "lessons:quiz.messages.createSuccess",
+                    "learning:lessons.quiz.messages.createSuccess",
                     "Quiz created successfully"
                 ),
                 onSuccess: () => {
@@ -279,7 +279,7 @@ export default function LessonsQuizDetail() {
         if (!deleteQuizDialog.quizId) return;
         await execute(() => deleteQuizAsync(deleteQuizDialog.quizId!), {
             successMessage: t(
-                "lessons:quiz.messages.deleteSuccess",
+                "learning:lessons.quiz.messages.deleteSuccess",
                 "Quiz deleted successfully"
             ),
             onSuccess: () => refetchQuizzes(),
@@ -316,7 +316,7 @@ export default function LessonsQuizDetail() {
                 }),
             {
                 successMessage: t(
-                    "lessons:quiz.messages.updateSuccess",
+                    "learning:lessons.quiz.messages.updateSuccess",
                     "Quiz updated successfully"
                 ),
                 onSuccess: () => {
@@ -373,7 +373,7 @@ export default function LessonsQuizDetail() {
                 }),
             {
                 successMessage: t(
-                    "lessons:quiz.messages.questionUpdateSuccess",
+                    "learning:lessons.quiz.messages.questionUpdateSuccess",
                     "Question updated successfully"
                 ),
                 onSuccess: () => {
@@ -400,7 +400,7 @@ export default function LessonsQuizDetail() {
             () => deleteQuestionAsync(deleteQuestionDialog.questionId!),
             {
                 successMessage: t(
-                    "lessons:quiz.messages.questionDeleteSuccess",
+                    "learning:lessons.quiz.messages.questionDeleteSuccess",
                     "Question deleted successfully"
                 ),
                 onSuccess: () => refetchQuestions(),
@@ -442,7 +442,7 @@ export default function LessonsQuizDetail() {
             },
             {
                 successMessage: t(
-                    "lessons:quiz.messages.questionCreateSuccess",
+                    "learning:lessons.quiz.messages.questionCreateSuccess",
                     "Question created successfully"
                 ),
                 onSuccess: () => {
@@ -477,7 +477,7 @@ export default function LessonsQuizDetail() {
     return (
         <PageWrapper
             pageHeaderProps={{
-                title: `${lesson.title} - ${t("lessons:quiz.title", "Lesson Quiz")}`,
+                title: `${lesson.title} - ${t("learning:lessons.quiz.title", "Lesson Quiz")}`,
                 backButton: true,
             }}
         >
@@ -487,11 +487,14 @@ export default function LessonsQuizDetail() {
                     <AlertTriangle className="w-5 h-5 text-blue-500 mt-0.5 shrink-0" />
                     <div>
                         <h3 className="text-sm font-medium text-blue-800 dark:text-blue-200">
-                            {t("lessons:quiz.lessonQuizInfo", "Lesson Quiz")}
+                            {t(
+                                "learning:lessons.quiz.lessonQuizInfo",
+                                "Lesson Quiz"
+                            )}
                         </h3>
                         <p className="text-sm text-blue-700 dark:text-blue-300 mt-1">
                             {t(
-                                "lessons:quiz.lessonQuizInfoDescription",
+                                "learning:lessons.quiz.lessonQuizInfoDescription",
                                 "These quizzes help students reinforce their understanding of the lesson content."
                             )}
                         </p>
@@ -504,11 +507,14 @@ export default function LessonsQuizDetail() {
                 <div className="flex items-center justify-between">
                     <div>
                         <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                            {t("lessons:quiz.lessonQuizzes", "Lesson Quizzes")}
+                            {t(
+                                "learning:lessons.quiz.lessonQuizzes",
+                                "Lesson Quizzes"
+                            )}
                         </h2>
                         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                             {t(
-                                "lessons:quiz.quizzesCount",
+                                "learning:lessons.quiz.quizzesCount",
                                 "{{count}} Quizzes",
                                 {
                                     count: transformedQuizzes.length,
@@ -523,7 +529,10 @@ export default function LessonsQuizDetail() {
                         className="inline-flex items-center gap-2 px-4 py-2.5 bg-brand-500 text-white text-sm font-medium rounded-lg hover:bg-brand-600 transition-colors disabled:opacity-50"
                     >
                         <Plus className="w-4 h-4" />
-                        {t("lessons:quiz.addLessonQuiz", "Add Lesson Quiz")}
+                        {t(
+                            "learning:lessons.quiz.addLessonQuiz",
+                            "Add Lesson Quiz"
+                        )}
                     </button>
                 </div>
 
@@ -546,11 +555,14 @@ export default function LessonsQuizDetail() {
                     {transformedQuizzes.length === 0 ? (
                         <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
                             <p className="text-gray-500 dark:text-gray-400">
-                                {t("lessons:quiz.noQuizzes", "No quizzes yet")}
+                                {t(
+                                    "learning:lessons.quiz.noQuizzes",
+                                    "No quizzes yet"
+                                )}
                             </p>
                             <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
                                 {t(
-                                    "lessons:quiz.addFirstQuiz",
+                                    "learning:lessons.quiz.addFirstQuiz",
                                     "Click 'Add Lesson Quiz' to create your first quiz"
                                 )}
                             </p>
@@ -599,10 +611,11 @@ export default function LessonsQuizDetail() {
             <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg p-4">
                 <p className="text-sm text-orange-800 dark:text-orange-200">
                     <span className="font-medium">
-                        {t("lessons:quiz.quizPurpose", "Quiz Purpose")}:
+                        {t("learning:lessons.quiz.quizPurpose", "Quiz Purpose")}
+                        :
                     </span>{" "}
                     {t(
-                        "lessons:quiz.quizPurposeDescription",
+                        "learning:lessons.quiz.quizPurposeDescription",
                         "Lesson quizzes are designed to test student comprehension of specific lesson content and provide immediate feedback."
                     )}
                 </p>
@@ -613,7 +626,7 @@ export default function LessonsQuizDetail() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
                     <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-lg mx-4">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                            {t("lessons:quiz.editQuiz", "Edit Quiz")}
+                            {t("learning:lessons.quiz.editQuiz", "Edit Quiz")}
                         </h3>
                         <QuizForm
                             quiz={editQuizData}
@@ -633,9 +646,12 @@ export default function LessonsQuizDetail() {
                     setDeleteQuizDialog({ isOpen: false, quizId: null })
                 }
                 variant="danger"
-                title={t("lessons:quiz.deleteDialog.title", "Delete Quiz")}
+                title={t(
+                    "learning:lessons.quiz.deleteDialog.title",
+                    "Delete Quiz"
+                )}
                 message={t(
-                    "lessons:quiz.deleteDialog.message",
+                    "learning:lessons.quiz.deleteDialog.message",
                     "Are you sure you want to delete this quiz? All questions and options will be permanently removed. This action cannot be undone."
                 )}
                 confirmText={t("common.delete", "Delete")}
@@ -656,11 +672,11 @@ export default function LessonsQuizDetail() {
                 }
                 variant="danger"
                 title={t(
-                    "lessons:quiz.deleteQuestionDialog.title",
+                    "learning:lessons.quiz.deleteQuestionDialog.title",
                     "Delete Question"
                 )}
                 message={t(
-                    "lessons:quiz.deleteQuestionDialog.message",
+                    "learning:lessons.quiz.deleteQuestionDialog.message",
                     "Are you sure you want to delete this question? All options will be permanently removed. This action cannot be undone."
                 )}
                 confirmText={t("common.delete", "Delete")}
@@ -674,7 +690,10 @@ export default function LessonsQuizDetail() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
                     <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                            {t("lessons:quiz.editQuestion", "Edit Question")}
+                            {t(
+                                "learning:lessons.quiz.editQuestion",
+                                "Edit Question"
+                            )}
                         </h3>
                         <QuestionForm
                             question={editQuestionData}

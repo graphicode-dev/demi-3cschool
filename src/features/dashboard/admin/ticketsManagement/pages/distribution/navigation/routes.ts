@@ -12,7 +12,7 @@ export const distributionRoutes: RouteConfig[] = [
             })),
         meta: {
             title: "Distribution",
-            titleKey: "ticketsManagement:distribution.pageTitle",
+            titleKey: "adminTicketsManagement:distribution.pageTitle",
             requiresAuth: true,
         },
     },

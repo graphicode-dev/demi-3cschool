@@ -113,7 +113,7 @@ function transformQuizToUI(
 }
 
 export default function FinalLevelQuizPage() {
-    const { t } = useTranslation();
+    const { t } = useTranslation("groupsManagement");
     const { id, levelId } = useParams<{ id: string; levelId: string }>();
 
     const {

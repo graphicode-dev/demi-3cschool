@@ -82,7 +82,7 @@ export default function MaterialsTab({ lessonId }: MaterialsTabProps) {
             {/* Material List */}
             <ContentList
                 title={t(
-                    "lessons:content.materials.listTitle",
+                    "learning:lessons.content.materials.listTitle",
                     "Material List"
                 )}
                 count={materialsData?.items?.length || 0}

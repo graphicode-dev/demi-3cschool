@@ -5,5 +5,92 @@
         "certificates": "الشهادات",
         "reports": "التقارير"
     },
-    "title": "مشترك"
+    "title": "مشترك",
+    "certificates": {
+        "title": "الشهادات",
+        "subtitle": "شهادات الطلاب التي تم إنشاؤها بعد اجتياز الاختبار النهائي بنجاح",
+        "listTitle": "الشهادات الصادرة",
+        "listSubtitle": "الشهادات التي تم إنشاؤها بعد اجتياز الطلاب للاختبار النهائي بنجاح",
+        "table": {
+            "id": "المعرف",
+            "student": "الطالب",
+            "program": "البرنامج",
+            "levelName": "اسم المستوى",
+            "finalQuizStatus": "حالة الاختبار النهائي",
+            "certificateDate": "تاريخ الشهادة",
+            "action": "الإجراء"
+        },
+        "status": {
+            "passed": "ناجح",
+            "failed": "راسب",
+            "pending": "قيد الانتظار"
+        },
+        "actions": {
+            "viewStudent": "عرض الطالب",
+            "download": "تحميل الشهادة",
+            "send": "إرسال الشهادة"
+        },
+        "filters": {
+            "title": "الفلاتر",
+            "searchPlaceholder": "ابحث باسم الطالب أو رقم الطالب"
+        },
+        "messages": {
+            "downloadSuccess": "تم تحميل الشهادة بنجاح",
+            "sendSuccess": "تم إرسال الشهادة إلى {{studentName}} بنجاح"
+        },
+        "errors": {
+            "loadFailed": "فشل تحميل الشهادات"
+        }
+    },
+    "breadcrumb": {
+        "dashboard": "لوحة التحكم",
+        "classroom": "الفصل الدراسي",
+        "admin": "الإدارة"
+    },
+    "userDropdown": {
+        "editProfile": "تعديل الملف الشخصي",
+        "accountSettings": "إعدادات الحساب",
+        "support": "الدعم",
+        "signOut": "تسجيل الخروج"
+    },
+    "notifications": {
+        "title": "الإشعارات",
+        "viewAll": "عرض جميع الإشعارات",
+        "requestsPermission": "يطلب إذن لتغيير",
+        "project": "المشروع",
+        "minAgo": "منذ {{count}} دقيقة",
+        "hrAgo": "منذ {{count}} ساعة",
+        "noNotifications": "لا توجد إشعارات جديدة"
+    },
+    "sessionBanner": {
+        "loadingTitle": "جاري تحميل الجلسة...",
+        "errorTitle": "خطأ في تحميل الجلسة",
+        "emptyTitle": "لا توجد جلسة قادمة",
+        "loadingSubtitle": "يرجى الانتظار...",
+        "errorSubtitle": "يرجى المحاولة مرة أخرى",
+        "emptySubtitle": "تحقق من جدولك",
+        "fallbackDayTime": "--",
+        "liveNow": "مباشر الآن",
+        "upcoming": "قادمة",
+        "startsIn": "تبدأ في",
+        "endsIn": "تنتهي في",
+        "online": "أونلاين",
+        "offline": "في المركز",
+        "timeRange": "الوقت",
+        "sessionId": "رقم الجلسة",
+        "state": "الحالة",
+        "status": "الوضع",
+        "reason": "السبب",
+        "openLocation": "فتح الموقع",
+        "lateBy": "متأخر بـ",
+        "join": "انضم الآن",
+        "details": "التفاصيل",
+        "currentTerm": "الفصل الحالي",
+        "time": {
+            "d": "أيام",
+            "h": "ساعات",
+            "m": "دقائق",
+            "s": "ثواني"
+        }
+    }
 }

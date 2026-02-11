@@ -35,7 +35,7 @@ export function TicketPriorityBadge({
     priority,
     size = "sm",
 }: TicketPriorityBadgeProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
 
     const priorityLabels: Record<TicketPriority, string> = {
         low: t("tickets.priority.low", "Low"),

@@ -19,6 +19,7 @@
         "6": "Sat"
     },
     "onlineSession": "Online Session",
+    "offlineSession": "Offline Session",
     "offlineCenter": "Offline (Center)",
     "cancelled": "Cancelled"
 }

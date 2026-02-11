@@ -42,7 +42,7 @@ function StatCard({
 }
 
 export default function AttendanceTab({ stats, records }: AttendanceTabProps) {
-    const { t } = useTranslation();
+    const { t } = useTranslation("profile");
 
     const getStatusBadge = (status: AttendanceRecord["status"]) => {
         const styles = {
@@ -59,7 +59,7 @@ export default function AttendanceTab({ stats, records }: AttendanceTabProps) {
             {/* Stats Cards */}
             <div className="rounded-b-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
-                    {t("account:profile.attendance.title", "Attendance")}
+                    {t("profile.attendance.title", "Attendance")}
                 </h2>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -67,22 +67,19 @@ export default function AttendanceTab({ stats, records }: AttendanceTabProps) {
                         icon={
                             <CheckCircle className="w-6 h-6 text-green-500" />
                         }
-                        label={t(
-                            "account:profile.attendance.present",
-                            "Present"
-                        )}
+                        label={t("profile.attendance.present", "Present")}
                         value={stats.present}
                         color="bg-green-100 dark:bg-green-900/30"
                     />
                     <StatCard
                         icon={<XCircle className="w-6 h-6 text-red-500" />}
-                        label={t("account:profile.attendance.absent", "Absent")}
+                        label={t("profile.attendance.absent", "Absent")}
                         value={stats.absent}
                         color="bg-red-100 dark:bg-red-900/30"
                     />
                     <StatCard
                         icon={<Clock className="w-6 h-6 text-orange-500" />}
-                        label={t("account:profile.attendance.late", "Late")}
+                        label={t("profile.attendance.late", "Late")}
                         value={stats.late}
                         color="bg-orange-100 dark:bg-orange-900/30"
                     />
@@ -93,7 +90,7 @@ export default function AttendanceTab({ stats, records }: AttendanceTabProps) {
                             </span>
                         }
                         label={t(
-                            "account:profile.attendance.attendanceRate",
+                            "profile.attendance.attendanceRate",
                             "Attendance Rate"
                         )}
                         value={`${stats.attendanceRate}%`}
@@ -105,10 +102,7 @@ export default function AttendanceTab({ stats, records }: AttendanceTabProps) {
             {/* Attendance History Table */}
             <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
                 <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-4">
-                    {t(
-                        "account:profile.attendance.history",
-                        "Attendance History"
-                    )}
+                    {t("profile.attendance.history", "Attendance History")}
                 </h3>
 
                 <div className="overflow-x-auto">
@@ -116,28 +110,19 @@ export default function AttendanceTab({ stats, records }: AttendanceTabProps) {
                         <thead>
                             <tr className="border-b border-gray-200 dark:border-gray-700">
                                 <th className="text-start py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    {t(
-                                        "account:profile.attendance.date",
-                                        "Date"
-                                    )}
+                                    {t("profile.attendance.date", "Date")}
+                                </th>
+                                <th className="text-start py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">
+                                    {t("profile.attendance.lesson", "Lesson")}
                                 </th>
                                 <th className="text-start py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">
                                     {t(
-                                        "account:profile.attendance.lesson",
-                                        "Lesson"
-                                    )}
-                                </th>
-                                <th className="text-start py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    {t(
-                                        "account:profile.attendance.instructor",
+                                        "profile.attendance.instructor",
                                         "Instructor"
                                     )}
                                 </th>
                                 <th className="text-start py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">
-                                    {t(
-                                        "account:profile.attendance.status",
-                                        "Status"
-                                    )}
+                                    {t("profile.attendance.status", "Status")}
                                 </th>
                             </tr>
                         </thead>
@@ -161,7 +146,7 @@ export default function AttendanceTab({ stats, records }: AttendanceTabProps) {
                                             className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${getStatusBadge(record.status)}`}
                                         >
                                             {t(
-                                                `account:profile.attendance.${record.status}`,
+                                                `profile.attendance.${record.status}`,
                                                 record.status
                                             )}
                                         </span>

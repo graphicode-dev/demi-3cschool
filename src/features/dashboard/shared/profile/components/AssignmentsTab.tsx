@@ -11,7 +11,7 @@ interface AssignmentsTabProps {
 }
 
 export default function AssignmentsTab({ assignments }: AssignmentsTabProps) {
-    const { t } = useTranslation();
+    const { t } = useTranslation("profile");
 
     const getStatusBadge = (status: AssignmentRecord["status"]) => {
         const styles = {
@@ -27,7 +27,7 @@ export default function AssignmentsTab({ assignments }: AssignmentsTabProps) {
     return (
         <div className="rounded-b-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
-                {t("account:profile.assignments.title", "Assignments")}
+                {t("profile.assignments.title", "Assignments")}
             </h2>
 
             <div className="overflow-x-auto">
@@ -36,39 +36,27 @@ export default function AssignmentsTab({ assignments }: AssignmentsTabProps) {
                         <tr className="border-b border-gray-200 dark:border-gray-700">
                             <th className="text-start py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">
                                 {t(
-                                    "account:profile.assignments.assignmentTitle",
+                                    "profile.assignments.assignmentTitle",
                                     "Assignment Title"
                                 )}
                             </th>
                             <th className="text-start py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">
-                                {t(
-                                    "account:profile.assignments.course",
-                                    "Course"
-                                )}
+                                {t("profile.assignments.course", "Course")}
+                            </th>
+                            <th className="text-start py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">
+                                {t("profile.assignments.lesson", "Lesson")}
+                            </th>
+                            <th className="text-start py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">
+                                {t("profile.assignments.dueDate", "Due Date")}
                             </th>
                             <th className="text-start py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">
                                 {t(
-                                    "account:profile.assignments.lesson",
-                                    "Lesson"
-                                )}
-                            </th>
-                            <th className="text-start py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">
-                                {t(
-                                    "account:profile.assignments.dueDate",
-                                    "Due Date"
-                                )}
-                            </th>
-                            <th className="text-start py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">
-                                {t(
-                                    "account:profile.assignments.submissionDate",
+                                    "profile.assignments.submissionDate",
                                     "Submission Date"
                                 )}
                             </th>
                             <th className="text-start py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">
-                                {t(
-                                    "account:profile.assignments.status",
-                                    "Status"
-                                )}
+                                {t("profile.assignments.status", "Status")}
                             </th>
                         </tr>
                     </thead>
@@ -105,7 +93,7 @@ export default function AssignmentsTab({ assignments }: AssignmentsTabProps) {
                                         className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${getStatusBadge(assignment.status)}`}
                                     >
                                         {t(
-                                            `account:profile.assignments.${assignment.status}`,
+                                            `profile.assignments.${assignment.status}`,
                                             assignment.status
                                         )}
                                     </span>

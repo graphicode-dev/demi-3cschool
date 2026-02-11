@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { usePostComments } from "@/features/dashboard/classroom/community/api";
 import {
     Heart,
@@ -51,6 +52,7 @@ export function PostCard({
     onComment,
     showReportCount = false,
 }: PostCardProps) {
+    const { t } = useTranslation("communityManagement");
     const [showComments, setShowComments] = useState(false);
     const [voted, setVoted] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
@@ -110,15 +112,22 @@ export function PostCard({
     const copyLink = () => {
         const postUrl = `${window.location.origin}/post/${post.id}`;
         navigator.clipboard.writeText(postUrl);
-        alert("Link copied to clipboard!");
+        alert(t("postCard.linkCopied", "Link copied to clipboard!"));
         setShowMenu(false);
     };
 
     const handleReport = () => {
-        const reason = window.prompt("Reason for reporting this post?");
+        const reason = window.prompt(
+            t("postCard.reportReason", "Reason for reporting this post?")
+        );
         if (reason && onReport) {
             onReport(post.id, reason);
-            alert("Report submitted to community managers.");
+            alert(
+                t(
+                    "postCard.reportSubmitted",
+                    "Report submitted to community managers."
+                )
+            );
         }
         setShowMenu(false);
     };
@@ -184,8 +193,11 @@ export function PostCard({
                         >
                             {comment.isSolution && (
                                 <div className="flex items-center gap-1.5 mb-2 px-2.5 py-1 bg-emerald-500 text-white rounded-full text-[9px] font-black uppercase tracking-widest w-fit">
-                                    <Check size={12} strokeWidth={3} /> Best
-                                    Solution
+                                    <Check size={12} strokeWidth={3} />{" "}
+                                    {t(
+                                        "postCard.bestSolution",
+                                        "Best Solution"
+                                    )}
                                 </div>
                             )}
                             <div className="flex items-center justify-between mb-1 gap-4">
@@ -216,7 +228,8 @@ export function PostCard({
                         </div>
                         <div className="flex items-center gap-5 mt-2 ml-2">
                             <button className="text-[11px] font-bold text-gray-400 hover:text-[#00ADEF] transition-colors flex items-center gap-1">
-                                <ThumbsUp size={12} /> Helpful
+                                <ThumbsUp size={12} />{" "}
+                                {t("postCard.helpful", "Helpful")}
                             </button>
                             <button
                                 onClick={() => {
@@ -229,7 +242,7 @@ export function PostCard({
                                 }}
                                 className={`text-[11px] font-bold transition-colors ${replyingTo === comment.id ? "text-[#00ADEF]" : "text-gray-400 hover:text-[#00ADEF]"}`}
                             >
-                                Reply
+                                {t("postCard.reply", "Reply")}
                             </button>
                         </div>
 
@@ -267,7 +280,10 @@ export function PostCard({
                                                 setReplyText("");
                                             }
                                         }}
-                                        placeholder={`Reply to ${comment.author.name}...`}
+                                        placeholder={t("postCard.replyTo", {
+                                            name: comment.author.name,
+                                            defaultValue: `Reply to ${comment.author.name}...`,
+                                        })}
                                         className="flex-1 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl py-2 px-4 text-[13px] text-gray-800 dark:text-gray-200 outline-none focus:ring-2 focus:ring-[#00ADEF]/20 focus:border-[#00ADEF] transition-all"
                                         autoFocus
                                     />
@@ -318,7 +334,7 @@ export function PostCard({
                 <div className="bg-[#E0F4FF] dark:bg-[#00ADEF]/20 px-8 py-2.5 flex items-center gap-2">
                     <Pin size={14} className="text-[#00ADEF] fill-[#00ADEF]" />
                     <span className="text-[10px] font-black text-[#00ADEF] uppercase tracking-widest">
-                        Pinned Post
+                        {t("postCard.pinnedPost", "Pinned Post")}
                     </span>
                 </div>
             )}
@@ -380,13 +396,15 @@ export function PostCard({
                                 )}
                                 {post.author.role === "instructor" && (
                                     <span className="text-[9px] bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-1.5 py-0.5 rounded font-black uppercase">
-                                        Teacher
+                                        {t("postCard.teacher", "Teacher")}
                                     </span>
                                 )}
                             </div>
                             <div className="flex items-center gap-2 text-[11px] text-gray-400 dark:text-gray-500 font-medium">
                                 <span>
-                                    Lvl {post.author.gradeLevel || 1} Student
+                                    {t("postCard.lvl", "Lvl")}{" "}
+                                    {post.author.gradeLevel || 1}{" "}
+                                    {t("postCard.student", "Student")}
                                 </span>
                                 <span className="w-1 h-1 bg-gray-300 dark:bg-gray-600 rounded-full"></span>
                                 <span>
@@ -425,20 +443,23 @@ export function PostCard({
                                         }}
                                         className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                                     >
-                                        <Edit3 size={16} /> Edit
+                                        <Edit3 size={16} />{" "}
+                                        {t("postCard.edit", "Edit")}
                                     </button>
                                 ) : null}
                                 <button
                                     onClick={copyLink}
                                     className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                                 >
-                                    <Link2 size={16} /> Copy Link
+                                    <Link2 size={16} />{" "}
+                                    {t("postCard.copyLink", "Copy Link")}
                                 </button>
                                 <button
                                     onClick={handleReport}
                                     className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-colors"
                                 >
-                                    <Flag size={16} /> Report
+                                    <Flag size={16} />{" "}
+                                    {t("postCard.report", "Report")}
                                 </button>
                                 <div className="h-px bg-gray-50 dark:bg-gray-700 my-1.5 mx-2"></div>
                                 <button
@@ -448,7 +469,8 @@ export function PostCard({
                                     }}
                                     className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                                 >
-                                    <Trash2 size={16} /> Delete
+                                    <Trash2 size={16} />{" "}
+                                    {t("postCard.delete", "Delete")}
                                 </button>
                             </div>
                         )}
@@ -471,7 +493,7 @@ export function PostCard({
                                     }}
                                     className="bg-[#00ADEF] text-white px-5 py-2 rounded-xl text-xs font-bold shadow-lg shadow-[#00ADEF]/20"
                                 >
-                                    Save Changes
+                                    {t("postCard.saveChanges", "Save Changes")}
                                 </button>
                                 <button
                                     onClick={() => setIsEditing(false)}
@@ -587,7 +609,11 @@ export function PostCard({
                                     post.likes > 0 ? "text-[#00ADEF]" : ""
                                 }
                             />
-                            <span>{post.likes > 0 ? post.likes : "Like"}</span>
+                            <span>
+                                {post.likes > 0
+                                    ? post.likes
+                                    : t("postCard.like", "Like")}
+                            </span>
                         </button>
 
                         <button
@@ -598,13 +624,15 @@ export function PostCard({
                             <span>
                                 {post.commentsCount}{" "}
                                 <span className="hidden sm:inline">
-                                    Comment
+                                    {t("postCard.comment", "Comment")}
                                 </span>
                             </span>
                         </button>
                         <button className="flex items-center gap-2 text-[#64748b] dark:text-gray-400 hover:text-green-600 transition-all font-bold text-[13px]">
                             <Forward size={18} />
-                            <span className="hidden sm:inline">Forward</span>
+                            <span className="hidden sm:inline">
+                                {t("postCard.forward", "Forward")}
+                            </span>
                         </button>
                     </div>
                     <div className="flex items-center gap-2">
@@ -632,7 +660,10 @@ export function PostCard({
                 {showComments && (
                     <div className="mt-8 space-y-4 pt-6 bg-[#fcfdfe] dark:bg-gray-700/30 border-t border-gray-50 dark:border-gray-700 rounded-[40px] px-8 pb-8 -mx-8 -mb-8 animate-in slide-in-from-bottom-4 duration-300">
                         <h5 className="text-[11px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">
-                            Discussion Thread
+                            {t(
+                                "postCard.discussionThread",
+                                "Discussion Thread"
+                            )}
                         </h5>
 
                         {commentsLoading ? (
@@ -648,7 +679,10 @@ export function PostCard({
                             ))
                         ) : (
                             <p className="text-center py-6 text-[13px] text-gray-400 dark:text-gray-500 font-medium">
-                                No comments yet. Start the conversation!
+                                {t(
+                                    "postCard.beFirstToComment",
+                                    "Be the first to comment on this post"
+                                )}
                             </p>
                         )}
 
@@ -678,7 +712,10 @@ export function PostCard({
                                             setCommentText("");
                                         }
                                     }}
-                                    placeholder="Add a comment..."
+                                    placeholder={t(
+                                        "postCard.addComment",
+                                        "Add a comment..."
+                                    )}
                                     className="flex-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-2xl py-3 px-5 text-[14px] text-gray-800 dark:text-gray-200 outline-none focus:ring-2 focus:ring-[#00ADEF]/10 focus:border-[#00ADEF] transition-all shadow-sm"
                                 />
                                 <button

@@ -119,7 +119,7 @@ function FeatureSiteMap({
                                     isCurrentPath
                                         ? "text-brand-500"
                                         : "text-gray-400"
-                                }`}
+                                } rtl:rotate-180`}
                             />
                         </div>
                         {routeDescription && (

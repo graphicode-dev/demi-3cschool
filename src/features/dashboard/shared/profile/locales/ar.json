@@ -1,0 +1,98 @@
+{
+    "profile": {
+        "yearsOld": "سنة",
+        "editProfile": "تعديل الملف الشخصي",
+        "assignToGroup": "تعيين لمجموعة",
+        "createInvoice": "إنشاء فاتورة",
+        "status": {
+            "active": "نشط",
+            "inactive": "غير نشط"
+        },
+        "tabs": {
+            "personal": "البيانات الشخصية",
+            "academic": "البيانات الأكاديمية",
+            "groups": "سجل المجموعات",
+            "attendance": "الحضور",
+            "assignments": "الواجبات",
+            "invoices": "الفواتير",
+            "installments": "الأقساط"
+        },
+        "personal": {
+            "title": "البيانات الشخصية",
+            "editDetails": "تعديل البيانات",
+            "fullName": "الاسم الكامل",
+            "dateOfBirth": "تاريخ الميلاد",
+            "age": "العمر",
+            "parentName": "اسم ولي الأمر",
+            "phone": "الهاتف",
+            "email": "البريد الإلكتروني",
+            "registrationDate": "تاريخ التسجيل"
+        },
+        "academic": {
+            "title": "البيانات الأكاديمية الحالية",
+            "programType": "نوع البرنامج",
+            "course": "الدورة",
+            "groupType": "نوع المجموعة",
+            "groupName": "اسم المجموعة",
+            "instructor": "المدرب",
+            "schedule": "الجدول"
+        },
+        "groups": {
+            "title": "سجل المجموعات",
+            "instructor": "المدرب",
+            "current": "الحالية",
+            "completed": "مكتملة"
+        },
+        "attendance": {
+            "title": "الحضور",
+            "present": "حاضر",
+            "absent": "غائب",
+            "late": "متأخر",
+            "attendanceRate": "نسبة الحضور",
+            "history": "سجل الحضور",
+            "date": "التاريخ",
+            "lesson": "الدرس",
+            "instructor": "المدرب",
+            "status": "الحالة"
+        },
+        "assignments": {
+            "title": "الواجبات",
+            "assignmentTitle": "عنوان الواجب",
+            "course": "الدورة",
+            "lesson": "الدرس",
+            "dueDate": "تاريخ التسليم",
+            "submissionDate": "تاريخ الإرسال",
+            "status": "الحالة",
+            "submitted": "تم التسليم",
+            "missing": "مفقود",
+            "late": "متأخر"
+        },
+        "invoices": {
+            "title": "الفواتير",
+            "invoiceId": "رقم الفاتورة",
+            "programType": "نوع البرنامج",
+            "courseLevel": "الدورة والمستوى",
+            "totalAmount": "المبلغ الإجمالي",
+            "paidAmount": "المبلغ المدفوع",
+            "remaining": "المتبقي",
+            "status": "الحالة",
+            "createdAt": "تاريخ الإنشاء",
+            "action": "الإجراء",
+            "pay": "دفع",
+            "paid": "مدفوع",
+            "partial": "جزئي",
+            "unpaid": "غير مدفوع"
+        },
+        "installments": {
+            "title": "الأقساط",
+            "invoiceId": "رقم الفاتورة",
+            "amount": "المبلغ",
+            "dueDate": "تاريخ الاستحقاق",
+            "paymentDate": "تاريخ الدفع",
+            "status": "الحالة",
+            "paid": "مدفوع",
+            "pending": "قيد الانتظار",
+            "overdue": "متأخر"
+        }
+    }
+}

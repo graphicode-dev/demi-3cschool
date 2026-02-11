@@ -1,0 +1,99 @@
+{
+    "reports": {
+        "title": "تقارير الطلاب",
+        "subtitle": "مراجعة وإدارة تقارير الطلاب قبل إرسالها لأولياء الأمور",
+        "listTitle": "التقارير",
+        "table": {
+            "id": "المعرف",
+            "student": "الطالب",
+            "level": "المستوى",
+            "track": "المسار",
+            "reportType": "نوع التقرير",
+            "status": "الحالة",
+            "instructor": "المدرب",
+            "updated": "آخر تحديث",
+            "action": "الإجراء"
+        },
+        "actions": {
+            "view": "عرض"
+        },
+        "stats": {
+            "totalReports": "إجمالي التقارير",
+            "draft": "مسودة",
+            "ready": "جاهز",
+            "sent": "تم الإرسال"
+        },
+        "status": {
+            "draft": "مسودة",
+            "ready": "جاهز",
+            "sent": "تم الإرسال"
+        },
+        "reportType": {
+            "mid_report": "تقرير نصفي",
+            "final_report": "تقرير نهائي"
+        },
+        "performance": {
+            "excellent": "ممتاز",
+            "very_good": "جيد جداً",
+            "good": "جيد",
+            "fair": "مقبول",
+            "needs_improvement": "يحتاج تحسين"
+        },
+        "errors": {
+            "loadFailed": "فشل تحميل التقارير"
+        },
+        "view": {
+            "title": "مراجعة تقرير الطالب",
+            "subtitle": "مراجعة وتأكيد تفاصيل التقرير قبل إرساله لولي الأمر",
+            "pdfTitle": "تقرير الطالب",
+            "mockFeedback": "أظهر أحمد تحسناً مستمراً في مهاراته البرمجية خلال النصف الأول من الدورة. يشارك بنشاط في المناقشات الصفية ويُظهر قدرات قوية في حل المشكلات. كان عمله في المشاريع عالي الجودة، يُظهر الاهتمام بالتفاصيل والإبداع.",
+            "actions": {
+                "saveAsDraft": "حفظ كمسودة",
+                "markAsReady": "تحديد كجاهز",
+                "downloadPDF": "تحميل معاينة PDF",
+                "sendReport": "إرسال التقرير"
+            },
+            "studentInfo": {
+                "title": "معلومات الطالب",
+                "studentName": "اسم الطالب",
+                "studentId": "رقم الطالب"
+            },
+            "academicDetails": {
+                "title": "البيانات الأكاديمية",
+                "levelName": "اسم المستوى",
+                "trackName": "اسم المسار",
+                "groupName": "اسم المجموعة",
+                "instructorName": "اسم المدرب"
+            },
+            "reportDetails": {
+                "title": "تفاصيل التقرير",
+                "reportType": "نوع التقرير",
+                "sessionsRange": "نطاق الجلسات",
+                "status": "الحالة"
+            },
+            "feedback": {
+                "title": "الملاحظات",
+                "placeholder": "أدخل ملاحظات للطالب...",
+                "characters": "حرف"
+            },
+            "performance": {
+                "title": "تقييم الأداء",
+                "doingTasks": "أداء المهام",
+                "attendanceOnTime": "الحضور في الوقت",
+                "interactionDuringSession": "التفاعل أثناء الجلسة",
+                "behaviorDuringSession": "السلوك أثناء الجلسة",
+                "searchingCooperation": "البحث والتعاون",
+                "teamwork": "العمل الجماعي"
+            },
+            "sendDialog": {
+                "title": "إرسال التقرير لولي الأمر",
+                "message": "أنت على وشك إرسال التقرير الخاص بـ",
+                "to": "إلى",
+                "warning": "بمجرد الإرسال، سيصبح التقرير للقراءة فقط ولا يمكن تعديله.",
+                "confirm": "هل أنت متأكد أنك تريد المتابعة؟",
+                "sendButton": "إرسال التقرير",
+                "cancelButton": "إلغاء"
+            }
+        }
+    }
+}

@@ -22,7 +22,7 @@ export const AboutTab = ({
             <div className="flex items-center gap-4 mt-2">
                 <div className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                     <Clock className="size-4" />
-                    <span>15 mins</span>
+                    <span>15 {t("common.mins")}</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-brand-500">
                     <PlayCircle className="size-4" />

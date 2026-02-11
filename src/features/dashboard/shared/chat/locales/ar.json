@@ -1,0 +1,22 @@
+{
+    "chat": {
+        "title": "المحادثات",
+        "chat": "المحادثات",
+        "search": "البحث في المحادثات...",
+        "searchUsers": "البحث عن مستخدمين...",
+        "newConversation": "محادثة جديدة",
+        "selectConversation": "اختر محادثة",
+        "selectConversationDesc": "اختر محادثة من القائمة لبدء الدردشة",
+        "noMessages": "لا توجد رسائل بعد. ابدأ المحادثة!",
+        "loadOlderMessages": "تحميل رسائل أقدم",
+        "typeMessage": "اكتب رسالة...",
+        "viewMore": "عرض المزيد",
+        "delete": "حذف",
+        "noUsersFound": "لم يتم العثور على مستخدمين",
+        "noUsersAvailable": "لا يوجد مستخدمين متاحين",
+        "failedToSendMessage": "فشل إرسال الرسالة",
+        "failedToCreateConversation": "فشل إنشاء المحادثة",
+        "online": "متصل",
+        "offline": "غير متصل"
+    }
+}

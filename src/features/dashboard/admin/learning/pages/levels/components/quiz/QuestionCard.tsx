@@ -35,19 +35,22 @@ export function QuestionCard({
         switch (type) {
             case "single_choice":
                 return t(
-                    "levels:quiz.questionTypes.singleChoice",
+                    "learning:levels.quiz.questionTypes.singleChoice",
                     "Single Choice"
                 );
             case "multiple_choice":
                 return t(
-                    "levels:quiz.questionTypes.multipleChoice",
+                    "learning:levels.quiz.questionTypes.multipleChoice",
                     "Multiple Choice"
                 );
             case "true_false":
-                return t("levels:quiz.questionTypes.trueFalse", "True/False");
+                return t(
+                    "learning:levels.quiz.questionTypes.trueFalse",
+                    "True/False"
+                );
             case "short_answer":
                 return t(
-                    "levels:quiz.questionTypes.shortAnswer",
+                    "learning:levels.quiz.questionTypes.shortAnswer",
                     "Short Answer"
                 );
             default:
@@ -76,7 +79,7 @@ export function QuestionCard({
                                 </span>
                                 <span>
                                     {question.points}{" "}
-                                    {t("levels:quiz.pts", "pts")}
+                                    {t("learning:levels.quiz.pts", "pts")}
                                 </span>
                             </div>
                         </div>
@@ -105,7 +108,7 @@ export function QuestionCard({
             {isExpanded && (
                 <div className="border-t border-gray-200 dark:border-gray-700 p-4 bg-gray-50 dark:bg-gray-850">
                     <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        {t("levels:quiz.options", "Options")}:
+                        {t("learning:levels.quiz.options", "Options")}:
                     </p>
                     <div className="space-y-2">
                         {question.options.map((option, oIndex) => (
@@ -137,7 +140,11 @@ export function QuestionCard({
                     {question.explanation && (
                         <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
                             <p className="text-sm font-medium text-blue-700 dark:text-blue-300 mb-1">
-                                {t("levels:quiz.explanation", "Explanation")}:
+                                {t(
+                                    "learning:levels.quiz.explanation",
+                                    "Explanation"
+                                )}
+                                :
                             </p>
                             <p className="text-sm text-blue-600 dark:text-blue-400">
                                 {question.explanation}

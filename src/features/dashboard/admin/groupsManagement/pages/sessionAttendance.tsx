@@ -64,7 +64,7 @@ const StatusBadge: React.FC<{ status: string; size?: "sm" | "md" }> = ({
 };
 
 export const SessionAttendancePage = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation("groupsManagement");
     const navigate = useNavigate();
     const {
         gradeId,

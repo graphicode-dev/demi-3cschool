@@ -56,6 +56,7 @@
     },
     "channel": {
         "follow": "متابعة",
+        "unfollow": "إلغاء المتابعة",
         "following": "متابَع",
         "followers": "متابعين",
         "subscribers": "مشتركين",
@@ -80,6 +81,14 @@
         "joinMentorSquad": "انضم لفريق المرشدين",
         "mentorDescription": "ساعد الآخرين في حل تحديات البرمجة واحصل على مكافآت حصرية.",
         "applyToHelp": "تقدم للمساعدة"
+    },
+    "toasts": {
+        "postDeleted": "تم حذف المنشور بنجاح",
+        "postUpdated": "تم تحديث المنشور بنجاح",
+        "postCreated": "تم إنشاء المنشور بنجاح",
+        "postReported": "تم الإبلاغ عن المنشور بنجاح",
+        "replyAdded": "تمت إضافة الرد",
+        "commentAdded": "تمت إضافة التعليق"
     },
     "empty": {
         "noUpdates": "لا توجد تحديثات بعد",

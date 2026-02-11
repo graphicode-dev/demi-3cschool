@@ -29,7 +29,7 @@ import type {
 import { PageWrapper } from "@/design-system";
 
 export function TicketsPage() {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
     const [filters, setFilters] = useState<TicketFiltersType>({});
     const [selectedTicketId, setSelectedTicketId] = useState<string | null>(
         null

@@ -29,12 +29,15 @@ export function QuizForm({
     return (
         <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
             <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">
-                {t("levels:quiz.createNew", "Create New Quiz")}
+                {t("groupsManagement:quiz.createNew", "Create New Quiz")}
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        {t("levels:quiz.timeLimit", "Time Limit (minutes)")}
+                        {t(
+                            "groupsManagement:quiz.timeLimit",
+                            "Time Limit (minutes)"
+                        )}
                     </label>
                     <input
                         type="number"
@@ -51,7 +54,10 @@ export function QuizForm({
                 </div>
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        {t("levels:quiz.passingScore", "Passing Score (%)")}
+                        {t(
+                            "groupsManagement:quiz.passingScore",
+                            "Passing Score (%)"
+                        )}
                     </label>
                     <input
                         type="number"
@@ -69,7 +75,7 @@ export function QuizForm({
                 </div>
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        {t("levels:quiz.maxAttempts", "Max Attempts")}
+                        {t("groupsManagement:quiz.maxAttempts", "Max Attempts")}
                     </label>
                     <input
                         type="number"
@@ -99,7 +105,7 @@ export function QuizForm({
                         />
                         <span className="text-sm text-gray-700 dark:text-gray-300">
                             {t(
-                                "levels:quiz.shuffleQuestions",
+                                "groupsManagement:quiz.shuffleQuestions",
                                 "Shuffle Questions"
                             )}
                         </span>
@@ -117,7 +123,10 @@ export function QuizForm({
                             className="w-4 h-4 text-brand-500 border-gray-300 rounded focus:ring-brand-500"
                         />
                         <span className="text-sm text-gray-700 dark:text-gray-300">
-                            {t("levels:quiz.showAnswers", "Show Answers")}
+                            {t(
+                                "groupsManagement:quiz.showAnswers",
+                                "Show Answers"
+                            )}
                         </span>
                     </label>
                 </div>

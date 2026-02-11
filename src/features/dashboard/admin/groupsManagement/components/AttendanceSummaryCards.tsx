@@ -76,7 +76,7 @@ export const AttendanceSummaryCards: React.FC<AttendanceSummaryCardsProps> = ({
     loading = false,
     className = "",
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation("groupsManagement");
 
     return (
         <div

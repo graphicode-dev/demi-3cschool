@@ -46,7 +46,7 @@ export function DistributionStatsRow({
     stats,
     isLoading,
 }: DistributionStatsRowProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
 
     if (isLoading) {
         return (

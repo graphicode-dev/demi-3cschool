@@ -16,14 +16,14 @@ export function FolderSiteMap() {
     const routes: SiteMapRoute[] = [
         {
             path: "/admin/resources",
-            labelKey: "resources:sitemap.routes.resourcesList",
-            descriptionKey: "resources:sitemap.routes.resourcesListDesc",
+            labelKey: "adminResources:sitemap.routes.resourcesList",
+            descriptionKey: "adminResources:sitemap.routes.resourcesListDesc",
             icon: FolderOpen,
         },
         {
             path: "/admin/resources/folder/create",
-            labelKey: "resources:sitemap.routes.createFolder",
-            descriptionKey: "resources:sitemap.routes.createFolderDesc",
+            labelKey: "adminResources:sitemap.routes.createFolder",
+            descriptionKey: "adminResources:sitemap.routes.createFolderDesc",
             icon: FolderPlus,
         },
     ];
@@ -32,14 +32,15 @@ export function FolderSiteMap() {
         routes.push(
             {
                 path: `/admin/resources/folder/${folderId}`,
-                labelKey: "resources:sitemap.routes.folderDetails",
-                descriptionKey: "resources:sitemap.routes.folderDetailsDesc",
+                labelKey: "adminResources:sitemap.routes.folderDetails",
+                descriptionKey:
+                    "adminResources:sitemap.routes.folderDetailsDesc",
                 icon: FolderOpen,
             },
             {
                 path: `/admin/resources/folder/${folderId}/edit`,
-                labelKey: "resources:sitemap.routes.editFolder",
-                descriptionKey: "resources:sitemap.routes.editFolderDesc",
+                labelKey: "adminResources:sitemap.routes.editFolder",
+                descriptionKey: "adminResources:sitemap.routes.editFolderDesc",
                 icon: Pencil,
             }
         );
@@ -48,8 +49,8 @@ export function FolderSiteMap() {
     return (
         <FeatureSiteMap
             featureKey="resources"
-            titleKey="resources:sitemap.folder.title"
-            descriptionKey="resources:sitemap.folder.description"
+            titleKey="adminResources:sitemap.folder.title"
+            descriptionKey="adminResources:sitemap.folder.description"
             routes={routes}
             homePath="/admin/resources"
         />

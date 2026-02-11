@@ -17,7 +17,7 @@ import { Plus } from "lucide-react";
 import { supportBlock } from "../navigation/paths";
 
 export function SupportBlockPage() {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -49,7 +49,7 @@ export function SupportBlockPage() {
                 : items.length,
             totalLeads: items.reduce(
                 (acc, block) =>
-                    acc + block.members.filter((m) => m.isLead).length,
+                    acc + (block.members?.filter((m) => m.isLead).length ?? 0),
                 0
             ),
             totalAgents: items.reduce(

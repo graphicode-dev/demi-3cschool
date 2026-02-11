@@ -92,7 +92,7 @@ export default function LearningLevelsEdit() {
                 }),
             {
                 successMessage: t(
-                    "levels:levels.messages.updateSuccess",
+                    "learning:levels.messages.updateSuccess",
                     "Level updated successfully"
                 ),
                 onSuccess: () => navigate(paths.levels.list()),
@@ -123,7 +123,7 @@ export default function LearningLevelsEdit() {
     return (
         <PageWrapper
             pageHeaderProps={{
-                title: t("levels:levels.form.edit.title", "Edit Level"),
+                title: t("learning:levels.form.edit.title", "Edit Level"),
                 subtitle: level?.title,
                 backButton: true,
             }}
@@ -142,7 +142,7 @@ export default function LearningLevelsEdit() {
                     type={{
                         type: "dropdown",
                         placeholder: t(
-                            "levels:levels.form.fields.course.placeholder",
+                            "learning:levels.form.fields.course.placeholder",
                             "Select a course"
                         ),
                         options: courses.map((course) => ({
@@ -152,7 +152,7 @@ export default function LearningLevelsEdit() {
                     }}
                     label={{
                         text: t(
-                            "levels:levels.form.fields.course.label",
+                            "learning:levels.form.fields.course.label",
                             "Course"
                         ),
                         required: true,
@@ -166,13 +166,13 @@ export default function LearningLevelsEdit() {
                     type={{
                         type: "text",
                         placeholder: t(
-                            "levels:levels.form.fields.title.placeholder",
+                            "learning:levels.form.fields.title.placeholder",
                             "Enter level title"
                         ),
                     }}
                     label={{
                         text: t(
-                            "levels:levels.form.fields.title.label",
+                            "learning:levels.form.fields.title.label",
                             "Level Title"
                         ),
                         required: true,
@@ -186,13 +186,13 @@ export default function LearningLevelsEdit() {
                     type={{
                         type: "checkbox",
                         label: t(
-                            "levels:levels.form.fields.active.label",
+                            "learning:levels.form.fields.active.label",
                             "Active"
                         ),
                     }}
                     label={{
                         text: t(
-                            "levels:levels.form.fields.status.label",
+                            "learning:levels.form.fields.status.label",
                             "Status"
                         ),
                     }}
@@ -205,14 +205,14 @@ export default function LearningLevelsEdit() {
                     type={{
                         type: "textarea",
                         placeholder: t(
-                            "levels:levels.form.fields.description.placeholder",
+                            "learning:levels.form.fields.description.placeholder",
                             "Enter level description"
                         ),
                         rows: 4,
                     }}
                     label={{
                         text: t(
-                            "levels:levels.form.fields.description.label",
+                            "learning:levels.form.fields.description.label",
                             "Description"
                         ),
                         required: true,

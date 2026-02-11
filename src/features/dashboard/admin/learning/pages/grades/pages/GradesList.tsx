@@ -93,10 +93,10 @@ export default function GradesList() {
                         <NavigationCard
                             key={grade.id}
                             title={grade.name}
-                            description={t(
-                                "learning:grades.cardDescription",
-                                `Explore learning content for ${grade.name} students`
-                            )}
+                            description={t("learning:grades.cardDescription", {
+                                gradeName: grade.name,
+                                defaultValue: `Explore learning content for ${grade.name} students`,
+                            })}
                             href={`/admin/grades/${grade.id}/levels`}
                             icon={<GradeIcon gradeCode={grade.code} />}
                             iconBg={getIconBg(index)}

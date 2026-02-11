@@ -1,0 +1,34 @@
+{
+    "title": "المعلمون",
+    "description": "إدارة المعلمين",
+    "loading": "جاري التحميل...",
+    "error": "فشل التحميل",
+    "confirmDelete": "هل أنت متأكد من حذف هذا المعلم؟",
+    "fields": {
+        "name": "الاسم",
+        "email": "البريد الإلكتروني",
+        "password": "كلمة المرور",
+        "role": "الدور"
+    },
+    "actions": {
+        "create": "إنشاء",
+        "edit": "تعديل",
+        "view": "عرض",
+        "delete": "حذف",
+        "save": "حفظ",
+        "cancel": "إلغاء"
+    },
+    "messages": {
+        "createSuccess": "تم إنشاء المعلم بنجاح",
+        "updateSuccess": "تم تحديث المعلم بنجاح",
+        "deleteSuccess": "تم حذف المعلم بنجاح"
+    },
+    "table": {
+        "id": "المعرف",
+        "actions": "الإجراءات"
+    },
+    "common": {
+        "delete": "حذف",
+        "cancel": "إلغاء"
+    }
+}

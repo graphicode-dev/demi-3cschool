@@ -17,7 +17,7 @@ import { supportBlock } from "../../navigation/paths";
 import { useSupportBlock, useUpdateSupportBlock } from "../../api";
 
 export function EditBlockPage() {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
     const navigate = useNavigate();
     const { addToast } = useToast();
     const { blockId } = useParams<{ blockId: string }>();

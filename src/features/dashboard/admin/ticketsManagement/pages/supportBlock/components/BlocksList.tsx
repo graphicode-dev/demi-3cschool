@@ -14,7 +14,7 @@ interface BlocksListProps {
 }
 
 export function BlocksList({ blocks, isLoading }: BlocksListProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
 
     if (isLoading) {
         return (

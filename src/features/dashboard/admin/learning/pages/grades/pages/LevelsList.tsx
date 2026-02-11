@@ -8,7 +8,12 @@
 
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
-import {PageWrapper, LoadingState, ErrorState, EmptyState } from "@/design-system";
+import {
+    PageWrapper,
+    LoadingState,
+    ErrorState,
+    EmptyState,
+} from "@/design-system";
 import { useLevelsByGrade } from "../../levels";
 import { NavigationCard, CardGrid } from "../components";
 
@@ -132,10 +137,10 @@ export default function LevelsList() {
         <PageWrapper
             pageHeaderProps={{
                 title: t("learning:levels.title", "Levels"),
-                subtitle: t(
-                    "learning:levels.subtitle",
-                    `Select a level to view lessons for ${gradeName}`
-                ),
+                subtitle: t("learning:levels.subtitle", {
+                    gradeName,
+                    defaultValue: `Select a level to view lessons for ${gradeName}`,
+                }),
                 backButton: true,
             }}
         >

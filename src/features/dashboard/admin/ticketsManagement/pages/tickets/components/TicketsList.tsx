@@ -23,7 +23,7 @@ export function TicketsList({
     onSelectTicket,
     isLoading,
 }: TicketsListProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
 
     if (isLoading) {
         return (

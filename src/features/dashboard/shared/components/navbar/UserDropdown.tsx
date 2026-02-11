@@ -8,7 +8,7 @@ import { useMutationHandler } from "@/shared/api";
 import { useNavigate } from "react-router";
 
 export default function UserDropdown() {
-    const { t } = useTranslation();
+    const { t } = useTranslation("shared");
     const { user } = authStore();
     const [isOpen, setIsOpen] = useState(false);
     const { execute } = useMutationHandler();
@@ -111,7 +111,7 @@ export default function UserDropdown() {
                                     fill=""
                                 />
                             </svg>
-                            {t("navbar:navbar.editProfile")}
+                            {t("userDropdown.editProfile")}
                         </DropdownItem>
                     </li>
                     {/* {user?.role?.name === "admin" && (
@@ -140,7 +140,7 @@ export default function UserDropdown() {
                                         fill=""
                                     />
                                 </svg>
-                                {t("navbar:navbar.accountSettings")}
+                                {t("userDropdown.accountSettings")}
                             </DropdownItem>
                         </li>
                     )} */}
@@ -168,7 +168,7 @@ export default function UserDropdown() {
                                     fill=""
                                 />
                             </svg>
-                            {t("navbar:navbar.support")}
+                            {t("userDropdown.support")}
                         </DropdownItem>
                     </li> */}
                 </ul>
@@ -192,7 +192,7 @@ export default function UserDropdown() {
                             fill=""
                         />
                     </svg>
-                    {t("navbar:navbar.signOut")}
+                    {t("userDropdown.signOut")}
                 </button>
             </Dropdown>
         </div>

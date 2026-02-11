@@ -14,7 +14,7 @@ export const overviewRoutes: RouteConfig[] = [
             })),
         meta: {
             title: "Overview",
-            titleKey: "ticketsManagement:overview.pageTitle",
+            titleKey: "adminTicketsManagement:overview.pageTitle",
             requiresAuth: true,
         },
     },

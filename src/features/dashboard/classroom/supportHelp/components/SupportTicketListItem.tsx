@@ -4,6 +4,7 @@
  * Displays a single support ticket item in the list.
  */
 
+import { useTranslation } from "react-i18next";
 import type { SupportTicketListItem as SupportTicketListItemType } from "../types";
 import { SupportTicketStatusBadge } from "./SupportTicketStatusBadge";
 import { formatDistanceToNow } from "date-fns";
@@ -19,6 +20,7 @@ export function SupportTicketListItem({
     isSelected,
     onClick,
 }: SupportTicketListItemProps) {
+    const { t } = useTranslation("supportHelp");
     const timeAgo = formatDistanceToNow(new Date(ticket.createdAt), {
         addSuffix: false,
     });
@@ -39,7 +41,7 @@ export function SupportTicketListItem({
                         #{ticket.ticketNumber}
                     </span>
                     <span className="text-[10px] text-gray-400">
-                        {timeAgo} ago
+                        {t("common.timeAgo", "{{time}} ago", { time: timeAgo })}
                     </span>
                 </div>
 

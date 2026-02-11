@@ -19,6 +19,7 @@
         "6": "السبت"
     },
     "onlineSession": "جلسة أونلاين",
+    "offlineSession": "جلسة حضورية",
     "offlineCenter": "حضوري (المركز)",
     "cancelled": "ملغي"
 }

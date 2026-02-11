@@ -152,7 +152,7 @@ export const CurrentSessionDetails: React.FC<CurrentSessionDetailsProps> = ({
     loading = false,
     className = "",
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation("groupsManagement");
 
     // Format date for display
     const formatDate = (dateString: string) => {

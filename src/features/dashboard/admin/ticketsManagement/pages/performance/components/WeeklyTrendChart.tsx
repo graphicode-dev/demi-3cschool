@@ -14,7 +14,7 @@ interface WeeklyTrendChartProps {
 }
 
 export function WeeklyTrendChart({ data, isLoading }: WeeklyTrendChartProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
     const isAnimated = useChartAnimation(isLoading, { dependencies: [data] });
 
     if (isLoading) {

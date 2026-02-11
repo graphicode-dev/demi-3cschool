@@ -34,7 +34,7 @@ export function AgentPerformanceTable({
     data,
     isLoading,
 }: AgentPerformanceTableProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
 
     const ratingLabels: Record<RatingLevel, string> = useMemo(
         () => ({

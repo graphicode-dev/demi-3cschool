@@ -1,17 +1,64 @@
 {
     "learning": {
         "title": "التعلم",
-        "standard": {
-            "title": "التعلم الأساسي",
+        "firstTerm": {
+            "title": "الفصل الأول",
             "courses": "الدورات",
             "levels": "المستويات",
             "lessons": "الدروس"
         },
-        "professional": {
-            "title": "التعلم المهني",
+        "secondTerm": {
+            "title": "الفصل الثاني",
             "courses": "الدورات",
             "levels": "المستويات",
             "lessons": "الدروس"
+        },
+        "summerCamp": {
+            "title": "المعسكر الصيفي",
+            "courses": "الدورات",
+            "levels": "المستويات",
+            "lessons": "الدروس"
+        }
+    },
+    "grades": {
+        "navTitle": "الصفوف",
+        "title": "الصفوف",
+        "subtitle": "اختر صفاً لعرض محتوى التعلم",
+        "cardDescription": "استكشف محتوى التعلم لطلاب {{gradeName}}",
+        "totalLessons": "إجمالي الدروس",
+        "items": {
+            "grade4": {
+                "title": "الصف 4",
+                "description": "استكشف محتوى التعلم لطلاب الصف 4"
+            },
+            "grade5": {
+                "title": "الصف 5",
+                "description": "استكشف محتوى التعلم لطلاب الصف 5"
+            },
+            "grade6": {
+                "title": "الصف 6",
+                "description": "استكشف محتوى التعلم لطلاب الصف 6"
+            }
+        }
+    },
+    "terms": {
+        "title": "اختر الفصل",
+        "subtitle": "اختر فصلاً لعرض الدروس",
+        "overview": "نظرة عامة على الفصل",
+        "lessons": "دروس",
+        "items": {
+            "firstTerm": {
+                "title": "الفصل الأول",
+                "description": "عرض دروس ومحتوى الفصل الأول"
+            },
+            "secondTerm": {
+                "title": "الفصل الثاني",
+                "description": "عرض دروس ومحتوى الفصل الثاني"
+            },
+            "summerCamp": {
+                "title": "المعسكر الصيفي",
+                "description": "عرض دروس ومحتوى المعسكر الصيفي"
+            }
         }
     },
     "courses": {
@@ -75,8 +122,8 @@
             "updateError": "فشل في تحديث الدورة",
             "deleteSuccess": "تم حذف الدورة بنجاح",
             "deleteError": "فشل في حذف الدورة",
-            "deleteConfirm": "هل أنت متأكد من حذف هذه الدورة لا يمكن التراجع عن هذا الإجراء.",
-            "deleteConfirmNamed": "هل أنت متأكد من حذف \"{{name}}\" لا يمكن التراجع عن هذا الإجراء.",
+            "deleteConfirm": "هل أنت متأكد من حذف هذه الدورة؟ لا يمكن التراجع عن هذا الإجراء.",
+            "deleteConfirmNamed": "هل أنت متأكد من حذف \"{{name}}\"؟ لا يمكن التراجع عن هذا الإجراء.",
             "failedToLoad": "فشل في تحميل الدورات",
             "errorHelp": "يرجى التحقق من اتصالك والمحاولة مرة أخرى.",
             "notAvailable": "غير متوفر",
@@ -90,6 +137,13 @@
         }
     },
     "lessons": {
+        "title": "الدروس",
+        "subtitle": "إدارة الدروس لهذا الصف والفصل",
+        "searchPlaceholder": "البحث في الدروس...",
+        "showing": "عرض",
+        "of": "من",
+        "lessonsLabel": "دروس",
+        "lessonsCount": "{{count}} دروس",
         "addItem": "إضافة عنصر",
         "itemSingular": "عنصر",
         "itemPlural": "عناصر",
@@ -248,16 +302,429 @@
         },
         "empty": {
             "title": "لم يتم تحديد محتوى",
-            "description": "اختر عنصر محتوى من القائمة أو أضف محتوى جديد للبدء"
+            "description": "اختر عنصر محتوى من القائمة أو أضف محتوى جديد للبدء",
+            "message": "أنشئ درسك الأول للبدء",
+            "searchMessage": "لا توجد دروس تطابق معايير البحث"
+        },
+        "actions": {
+            "add": "إضافة درس",
+            "edit": "تعديل الدرس",
+            "delete": "حذف الدرس",
+            "view": "عرض الدرس"
+        },
+        "deleteDialog": {
+            "title": "حذف الدرس",
+            "message": "هل أنت متأكد من حذف هذا الدرس؟ لا يمكن التراجع عن هذا الإجراء."
+        },
+        "toast": {
+            "deleteSuccess": "تم حذف الدرس بنجاح"
+        },
+        "delete": {
+            "title": "حذف الدرس",
+            "message": "هل أنت متأكد من حذف هذا الدرس؟ لا يمكن التراجع عن هذا الإجراء.",
+            "success": "تم حذف الدرس بنجاح"
+        },
+        "messages": {
+            "createSuccess": "تم إنشاء الدرس بنجاح",
+            "updateSuccess": "تم تحديث الدرس بنجاح"
+        },
+        "overview": {
+            "title": "نظرة عامة على الدرس",
+            "description": "وصف الدرس"
+        },
+        "filter": {
+            "chooseLevel": "اختر المستوى",
+            "selectAll": "اختر الكل"
+        },
+        "content": {
+            "subtitle": "إدارة الفيديوهات والاختبارات والواجبات والمواد",
+            "addItem": "إضافة عنصر",
+            "itemSingular": "عنصر",
+            "itemPlural": "عناصر",
+            "tabs": {
+                "videos": "الفيديوهات",
+                "quizzes": "الاختبارات",
+                "assignments": "الواجبات",
+                "materials": "المواد"
+            },
+            "empty": {
+                "title": "لم يتم تحديد محتوى",
+                "description": "اختر عنصر محتوى من القائمة أو أضف محتوى جديد للبدء"
+            },
+            "fields": {
+                "title": "العنوان",
+                "titlePlaceholder": "أدخل العنوان...",
+                "description": "الوصف",
+                "descriptionPlaceholder": "قدم وصفاً موجزاً...",
+                "duration": "المدة (بالدقائق)",
+                "provider": "مزود الفيديو",
+                "videoIdAr": "معرف الفيديو (عربي)",
+                "videoIdEn": "معرف الفيديو (إنجليزي)",
+                "active": "نشط",
+                "videoPreview": "معاينة الفيديو",
+                "arabicVideo": "الفيديو العربي",
+                "englishVideo": "الفيديو الإنجليزي",
+                "noVideoUploaded": "لم يتم رفع فيديو",
+                "addVideoUrl": "أضف رابط فيديو للمعاينة"
+            },
+            "videos": {
+                "listTitle": "قائمة الفيديوهات",
+                "editor": {
+                    "title": "محرر الفيديو",
+                    "subtitle": "تكوين تفاصيل المحتوى والإعدادات"
+                },
+                "toast": {
+                    "createSuccessMessage": "تم إنشاء الفيديو بنجاح",
+                    "updateSuccessMessage": "تم تحديث الفيديو بنجاح",
+                    "deleteSuccessMessage": "تم حذف الفيديو بنجاح"
+                },
+                "deleteDialog": {
+                    "title": "حذف الفيديو",
+                    "message": "هل أنت متأكد من حذف هذا الفيديو؟ لا يمكن التراجع عن هذا الإجراء."
+                }
+            },
+            "quizzes": {
+                "listTitle": "قائمة الاختبارات",
+                "editor": {
+                    "title": "محرر الاختبار",
+                    "subtitle": "تكوين تفاصيل المحتوى والإعدادات"
+                },
+                "titlePlaceholder": "أدخل عنوان الاختبار...",
+                "instructions": "الوصف / التعليمات",
+                "instructionsPlaceholder": "قدم تعليمات الاختبار...",
+                "timeLimit": "الحد الزمني (بالدقائق)",
+                "passingScore": "درجة النجاح (%)",
+                "attemptsAllowed": "المحاولات المسموحة",
+                "questions": "أسئلة الاختبار",
+                "addQuestion": "إضافة سؤال",
+                "newQuestion": "سؤال جديد",
+                "questionText": "نص السؤال",
+                "questionPlaceholder": "أدخل السؤال...",
+                "questionType": "النوع",
+                "points": "النقاط",
+                "explanation": "الشرح",
+                "explanationPlaceholder": "الشرح المعروض بعد الإجابة...",
+                "noQuestions": "لا توجد أسئلة بعد. انقر على 'إضافة سؤال' لإنشاء واحد.",
+                "questionTypes": {
+                    "singleChoice": "اختيار واحد",
+                    "multipleChoice": "اختيار متعدد",
+                    "trueFalse": "صح/خطأ",
+                    "shortAnswer": "إجابة قصيرة"
+                },
+                "options": "الخيارات",
+                "addOption": "إضافة خيار",
+                "optionPlaceholder": "أدخل نص الخيار...",
+                "markCorrectHint": "حدد المربع إذا كانت هذه إجابة صحيحة",
+                "emptyOption": "(فارغ)",
+                "noOptions": "لم تتم إضافة خيارات بعد",
+                "optionCreated": "تم إنشاء الخيار بنجاح",
+                "optionUpdated": "تم تحديث الخيار بنجاح",
+                "optionDeleted": "تم حذف الخيار بنجاح",
+                "deleteOptionTitle": "حذف الخيار",
+                "deleteOptionDescription": "هل أنت متأكد من حذف هذا الخيار؟ لا يمكن التراجع عن هذا الإجراء.",
+                "toast": {
+                    "createSuccessMessage": "تم إنشاء الاختبار بنجاح",
+                    "updateSuccessMessage": "تم تحديث الاختبار بنجاح",
+                    "deleteSuccessMessage": "تم حذف الاختبار بنجاح",
+                    "questionAddedMessage": "تمت إضافة سؤال جديد",
+                    "questionUpdatedMessage": "تم تحديث السؤال",
+                    "questionDeletedMessage": "تم حذف السؤال"
+                },
+                "deleteDialog": {
+                    "title": "حذف الاختبار",
+                    "message": "هل أنت متأكد من حذف هذا الاختبار؟ لا يمكن التراجع عن هذا الإجراء."
+                },
+                "deleteQuestionDialog": {
+                    "title": "حذف السؤال",
+                    "message": "هل أنت متأكد من حذف هذا السؤال؟ سيتم حذف جميع الخيارات أيضاً."
+                }
+            },
+            "assignments": {
+                "listTitle": "قائمة الواجبات",
+                "editor": {
+                    "title": "محرر الواجب",
+                    "subtitle": "تكوين تفاصيل المحتوى والإعدادات"
+                },
+                "titlePlaceholder": "أدخل عنوان الواجب...",
+                "filePreview": "معاينة الملف",
+                "changeFile": "تغيير الملف",
+                "removeFile": "إزالة الملف",
+                "previewFile": "معاينة الملف",
+                "uploadFile": "انقر لرفع ملف",
+                "downloadLink": "رابط التحميل",
+                "downloadFile": "تحميل الملف",
+                "toast": {
+                    "createSuccessMessage": "تم إنشاء الواجب بنجاح",
+                    "updateSuccessMessage": "تم تحديث الواجب بنجاح",
+                    "deleteSuccessMessage": "تم حذف الواجب بنجاح"
+                },
+                "deleteDialog": {
+                    "title": "حذف الواجب",
+                    "message": "هل أنت متأكد من حذف هذا الواجب؟ لا يمكن التراجع عن هذا الإجراء."
+                }
+            },
+            "materials": {
+                "listTitle": "قائمة المواد",
+                "editor": {
+                    "title": "محرر المادة",
+                    "subtitle": "تكوين تفاصيل المحتوى والإعدادات"
+                },
+                "titlePlaceholder": "أدخل عنوان المادة...",
+                "filePreview": "معاينة الملف",
+                "changeFile": "تغيير الملف",
+                "removeFile": "إزالة الملف",
+                "uploadFile": "انقر لرفع ملف",
+                "downloadLink": "رابط التحميل",
+                "downloadFile": "تحميل الملف",
+                "toast": {
+                    "createSuccessMessage": "تم إنشاء المادة بنجاح",
+                    "updateSuccessMessage": "تم تحديث المادة بنجاح",
+                    "deleteSuccessMessage": "تم حذف المادة بنجاح"
+                },
+                "deleteDialog": {
+                    "title": "حذف المادة",
+                    "message": "هل أنت متأكد من حذف هذه المادة؟ لا يمكن التراجع عن هذا الإجراء."
+                }
+            }
+        },
+        "videoQuiz": {
+            "quizzesList": "اختبارات الفيديو",
+            "addQuiz": "إضافة اختبار",
+            "newQuiz": "اختبار جديد",
+            "quizTitle": "اختبار",
+            "timeLimit": "الحد الزمني (دقيقة)",
+            "passingScore": "درجة النجاح (%)",
+            "maxAttempts": "الحد الأقصى للمحاولات",
+            "noQuizzes": "لا توجد اختبارات بعد. انقر على 'إضافة اختبار' لإنشاء واحد.",
+            "questions": "الأسئلة",
+            "addQuestion": "إضافة سؤال",
+            "newQuestion": "سؤال جديد",
+            "questionText": "نص السؤال",
+            "questionPlaceholder": "أدخل السؤال...",
+            "questionType": "النوع",
+            "points": "النقاط",
+            "noQuestions": "لا توجد أسئلة بعد. انقر على 'إضافة سؤال' لإنشاء واحد.",
+            "options": "الخيارات",
+            "addOption": "إضافة خيار",
+            "optionPlaceholder": "أدخل نص الخيار...",
+            "markCorrectHint": "حدد المربع إذا كانت هذه إجابة صحيحة",
+            "emptyOption": "(فارغ)",
+            "noOptions": "لا توجد خيارات بعد. انقر على 'إضافة خيار' لإنشاء واحد.",
+            "messages": {
+                "createSuccess": "تم إنشاء الاختبار بنجاح",
+                "updateSuccess": "تم تحديث الاختبار بنجاح",
+                "deleteSuccess": "تم حذف الاختبار بنجاح",
+                "questionAdded": "تمت إضافة السؤال بنجاح",
+                "questionUpdated": "تم تحديث السؤال بنجاح",
+                "questionDeleted": "تم حذف السؤال بنجاح",
+                "optionAdded": "تمت إضافة الخيار بنجاح",
+                "optionUpdated": "تم تحديث الخيار بنجاح",
+                "optionDeleted": "تم حذف الخيار بنجاح"
+            },
+            "deleteDialog": {
+                "title": "حذف اختبار الفيديو",
+                "message": "هل أنت متأكد من حذف اختبار الفيديو هذا؟ لا يمكن التراجع عن هذا الإجراء."
+            },
+            "deleteQuestionDialog": {
+                "title": "حذف السؤال",
+                "message": "هل أنت متأكد من حذف هذا السؤال؟ سيتم حذف جميع الخيارات أيضاً."
+            },
+            "deleteOptionDialog": {
+                "title": "حذف الخيار",
+                "message": "هل أنت متأكد من حذف هذا الخيار؟"
+            }
+        },
+        "form": {
+            "create": {
+                "title": "إنشاء درس جديد",
+                "subtitle": "إضافة درس جديد"
+            },
+            "edit": {
+                "title": "تعديل الدرس",
+                "subtitle": "تحديث تفاصيل الدرس"
+            },
+            "view": {
+                "title": "تفاصيل الدرس"
+            },
+            "fields": {
+                "title": {
+                    "label": "عنوان الدرس",
+                    "placeholder": "أدخل عنوان الدرس"
+                },
+                "description": {
+                    "label": "الوصف",
+                    "placeholder": "أدخل وصف الدرس"
+                },
+                "level": {
+                    "label": "المستوى",
+                    "placeholder": "اختر مستوى"
+                },
+                "status": {
+                    "label": "الحالة"
+                },
+                "active": {
+                    "label": "نشط"
+                }
+            }
         },
         "quiz": {
-            "title": "اختبار الدرس"
+            "title": "اختبار الدرس",
+            "lessonQuizInfo": "اختبار الدرس",
+            "lessonQuizInfoDescription": "تساعد هذه الاختبارات الطلاب على تعزيز فهمهم لمحتوى الدرس.",
+            "lessonQuizzes": "اختبارات الدرس",
+            "quizzesCount": "{{count}} اختبارات",
+            "addLessonQuiz": "إضافة اختبار درس",
+            "noQuizzes": "لا توجد اختبارات بعد",
+            "addFirstQuiz": "انقر على 'إضافة اختبار درس' لإنشاء أول اختبار",
+            "editQuiz": "تعديل الاختبار",
+            "editQuestion": "تعديل السؤال",
+            "quizPurpose": "الغرض من الاختبار",
+            "quizPurposeDescription": "تم تصميم اختبارات الدروس لاختبار فهم الطلاب لمحتوى الدرس المحدد وتقديم ملاحظات فورية.",
+            "messages": {
+                "createSuccess": "تم إنشاء الاختبار بنجاح",
+                "updateSuccess": "تم تحديث الاختبار بنجاح",
+                "deleteSuccess": "تم حذف الاختبار بنجاح",
+                "questionCreateSuccess": "تم إنشاء السؤال بنجاح",
+                "questionUpdateSuccess": "تم تحديث السؤال بنجاح",
+                "questionDeleteSuccess": "تم حذف السؤال بنجاح"
+            },
+            "deleteDialog": {
+                "title": "حذف الاختبار",
+                "message": "هل أنت متأكد من حذف هذا الاختبار؟ سيتم حذف جميع الأسئلة والخيارات نهائياً. لا يمكن التراجع عن هذا الإجراء."
+            },
+            "deleteQuestionDialog": {
+                "title": "حذف السؤال",
+                "message": "هل أنت متأكد من حذف هذا السؤال؟ سيتم حذف جميع الخيارات نهائياً. لا يمكن التراجع عن هذا الإجراء."
+            }
         }
     },
     "levels": {
         "title": "المستويات",
+        "subtitle": "اختر مستوى لعرض الدروس لـ {{gradeName}}",
+        "overview": "نظرة عامة على المستويات",
+        "viewLessons": "عرض الدروس",
+        "capacity": "السعة: {{count}}",
+        "updated": "تم التحديث: {{date}}",
+        "quizzes": "الاختبارات",
+        "goToQuizzes": "الذهاب للاختبارات",
+        "list": {
+            "subtitle": "إدارة المستويات ضمن الدورات"
+        },
+        "filter": {
+            "chooseCourse": "اختر الدورة",
+            "selectAll": "اختر الكل"
+        },
+        "empty": {
+            "title": "لا توجد مستويات",
+            "description": "ابدأ بإنشاء أول مستوى"
+        },
+        "actions": {
+            "add": "إضافة مستوى"
+        },
+        "delete": {
+            "title": "حذف المستوى",
+            "message": "هل أنت متأكد من حذف هذا المستوى؟ لا يمكن التراجع عن هذا الإجراء.",
+            "success": "تم حذف المستوى بنجاح"
+        },
+        "messages": {
+            "createSuccess": "تم إنشاء المستوى بنجاح",
+            "updateSuccess": "تم تحديث المستوى بنجاح"
+        },
+        "form": {
+            "create": {
+                "title": "إنشاء مستوى جديد",
+                "subtitle": "إضافة مستوى جديد"
+            },
+            "edit": {
+                "title": "تعديل المستوى",
+                "subtitle": "تحديث تفاصيل المستوى"
+            },
+            "fields": {
+                "course": {
+                    "label": "الدورة",
+                    "placeholder": "اختر دورة"
+                },
+                "title": {
+                    "label": "عنوان المستوى",
+                    "placeholder": "أدخل عنوان المستوى"
+                },
+                "description": {
+                    "label": "الوصف",
+                    "placeholder": "أدخل وصف المستوى"
+                },
+                "status": {
+                    "label": "الحالة"
+                },
+                "active": {
+                    "label": "نشط"
+                }
+            }
+        },
+        "levelQuiz": "اختبار المستوى",
+        "levelQuizzes": "اختبارات المستوى",
+        "examsCount": "{{count}} اختبارات",
+        "addLevelQuiz": "إضافة اختبار مستوى",
+        "progressionGate": "بوابة التقدم",
+        "progressionGateDescription": "يجب على الطلاب اجتياز هذا الاختبار لفتح المستوى التالي. يعمل هذا الاختبار كنقطة تفتيش لضمان إتقان جميع المفاهيم.",
+        "lockBehavior": "سلوك القفل",
+        "lockBehaviorDescription": "عندما يكمل الطلاب هذا الاختبار بدرجة نجاح (75% أو أعلى)، سيتم فتح المستوى التالي تلقائياً لهم.",
         "quiz": {
-            "title": "اختبار المستوى"
+            "title": "اختبار المستوى",
+            "quizTitle": "اختبار #{{id}}",
+            "min": "دقيقة",
+            "attempts": "محاولات",
+            "questions": "أسئلة",
+            "questionsTitle": "الأسئلة",
+            "addQuestion": "إضافة سؤال",
+            "noQuestions": "لا توجد أسئلة بعد",
+            "addFirstQuestion": "انقر على 'إضافة سؤال' لإنشاء أول سؤال",
+            "shuffleEnabled": "الخلط مفعل",
+            "resultsVisible": "النتائج مرئية",
+            "noQuizzes": "لا توجد اختبارات بعد",
+            "addFirstQuiz": "انقر على 'إضافة اختبار مستوى' لإنشاء أول اختبار",
+            "editQuiz": "تعديل الاختبار",
+            "editQuestion": "تعديل السؤال",
+            "createNew": "إنشاء اختبار جديد",
+            "timeLimit": "الحد الزمني (بالدقائق)",
+            "passingScore": "درجة النجاح (%)",
+            "maxAttempts": "الحد الأقصى للمحاولات",
+            "shuffleQuestions": "خلط الأسئلة",
+            "showAnswers": "إظهار الإجابات",
+            "pts": "نقاط",
+            "options": "الخيارات",
+            "explanation": "الشرح",
+            "newQuestion": "سؤال جديد",
+            "questionText": "السؤال",
+            "questionPlaceholder": "أدخل سؤالك",
+            "questionType": "النوع",
+            "points": "النقاط",
+            "order": "الترتيب",
+            "addOption": "إضافة خيار",
+            "optionPlaceholder": "نص الخيار",
+            "explanationPlaceholder": "اشرح الإجابة الصحيحة",
+            "saveQuestion": "حفظ السؤال",
+            "questionTypes": {
+                "singleChoice": "اختيار واحد",
+                "multipleChoice": "اختيار متعدد",
+                "trueFalse": "صح/خطأ",
+                "shortAnswer": "إجابة قصيرة"
+            },
+            "messages": {
+                "createSuccess": "تم إنشاء الاختبار بنجاح",
+                "updateSuccess": "تم تحديث الاختبار بنجاح",
+                "deleteSuccess": "تم حذف الاختبار بنجاح",
+                "questionCreateSuccess": "تم إنشاء السؤال بنجاح",
+                "questionUpdateSuccess": "تم تحديث السؤال بنجاح",
+                "questionDeleteSuccess": "تم حذف السؤال بنجاح"
+            },
+            "deleteDialog": {
+                "title": "حذف الاختبار",
+                "message": "هل أنت متأكد من حذف هذا الاختبار؟ سيتم حذف جميع الأسئلة والخيارات نهائياً. لا يمكن التراجع عن هذا الإجراء."
+            },
+            "deleteQuestionDialog": {
+                "title": "حذف السؤال",
+                "message": "هل أنت متأكد من حذف هذا السؤال؟ سيتم حذف جميع الخيارات نهائياً. لا يمكن التراجع عن هذا الإجراء."
+            }
         }
     },
     "sitemap": {

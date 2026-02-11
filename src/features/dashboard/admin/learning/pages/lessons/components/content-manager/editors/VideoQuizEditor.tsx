@@ -192,7 +192,7 @@ export default function VideoQuizEditor({
                 }),
             {
                 successMessage: t(
-                    "lessons:videoQuiz.messages.createSuccess",
+                    "learning:lessons.videoQuiz.messages.createSuccess",
                     "Quiz created successfully"
                 ),
                 onSuccess: () => {
@@ -224,7 +224,7 @@ export default function VideoQuizEditor({
                 }),
             {
                 successMessage: t(
-                    "lessons:videoQuiz.messages.updateSuccess",
+                    "learning:lessons.videoQuiz.messages.updateSuccess",
                     "Quiz updated successfully"
                 ),
                 onSuccess: () => setEditingQuizId(null),
@@ -236,7 +236,7 @@ export default function VideoQuizEditor({
         if (!deleteQuizId) return;
         execute(() => deleteQuizAsync(deleteQuizId), {
             successMessage: t(
-                "lessons:videoQuiz.messages.deleteSuccess",
+                "learning:lessons.videoQuiz.messages.deleteSuccess",
                 "Quiz deleted successfully"
             ),
             onSuccess: () => setDeleteQuizId(null),
@@ -271,7 +271,7 @@ export default function VideoQuizEditor({
                 }),
             {
                 successMessage: t(
-                    "lessons:videoQuiz.messages.questionAdded",
+                    "learning:lessons.videoQuiz.messages.questionAdded",
                     "Question added successfully"
                 ),
                 onSuccess: () => {
@@ -296,7 +296,7 @@ export default function VideoQuizEditor({
                 }),
             {
                 successMessage: t(
-                    "lessons:videoQuiz.messages.questionUpdated",
+                    "learning:lessons.videoQuiz.messages.questionUpdated",
                     "Question updated successfully"
                 ),
                 onSuccess: () => setEditingQuestionId(null),
@@ -308,7 +308,7 @@ export default function VideoQuizEditor({
         if (!deleteQuestionId) return;
         execute(() => deleteQuestionAsync(deleteQuestionId), {
             successMessage: t(
-                "lessons:videoQuiz.messages.questionDeleted",
+                "learning:lessons.videoQuiz.messages.questionDeleted",
                 "Question deleted successfully"
             ),
             onSuccess: () => setDeleteQuestionId(null),
@@ -338,7 +338,7 @@ export default function VideoQuizEditor({
                 }),
             {
                 successMessage: t(
-                    "lessons:videoQuiz.messages.optionAdded",
+                    "learning:lessons.videoQuiz.messages.optionAdded",
                     "Option added successfully"
                 ),
                 onSuccess: () => {
@@ -358,7 +358,7 @@ export default function VideoQuizEditor({
                 }),
             {
                 successMessage: t(
-                    "lessons:videoQuiz.messages.optionUpdated",
+                    "learning:lessons.videoQuiz.messages.optionUpdated",
                     "Option updated successfully"
                 ),
                 onSuccess: () => setEditingOptionId(null),
@@ -370,7 +370,7 @@ export default function VideoQuizEditor({
         if (!deleteOptionId) return;
         execute(() => deleteOptionAsync(deleteOptionId), {
             successMessage: t(
-                "lessons:videoQuiz.messages.optionDeleted",
+                "learning:lessons.videoQuiz.messages.optionDeleted",
                 "Option deleted successfully"
             ),
             onSuccess: () => setDeleteOptionId(null),
@@ -389,22 +389,22 @@ export default function VideoQuizEditor({
         switch (type) {
             case "single_choice":
                 return t(
-                    "lessons:content.quizzes.questionTypes.singleChoice",
+                    "learning:lessons.content.quizzes.questionTypes.singleChoice",
                     "Single Choice"
                 );
             case "multiple_choice":
                 return t(
-                    "lessons:content.quizzes.questionTypes.multipleChoice",
+                    "learning:lessons.content.quizzes.questionTypes.multipleChoice",
                     "Multiple Choice"
                 );
             case "true_false":
                 return t(
-                    "lessons:content.quizzes.questionTypes.trueFalse",
+                    "learning:lessons.content.quizzes.questionTypes.trueFalse",
                     "True/False"
                 );
             case "short_answer":
                 return t(
-                    "lessons:content.quizzes.questionTypes.shortAnswer",
+                    "learning:lessons.content.quizzes.questionTypes.shortAnswer",
                     "Short Answer"
                 );
             default:
@@ -422,14 +422,17 @@ export default function VideoQuizEditor({
                 {/* Header */}
                 <div className="flex items-center justify-between">
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                        {t("lessons:videoQuiz.quizzesList", "Video Quizzes")}
+                        {t(
+                            "learning:lessons.videoQuiz.quizzesList",
+                            "Video Quizzes"
+                        )}
                     </h3>
                     <button
                         onClick={() => setShowNewQuizForm(true)}
                         className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-brand-500 rounded-lg hover:bg-brand-600 transition-colors"
                     >
                         <Plus className="w-4 h-4" />
-                        {t("lessons:videoQuiz.addQuiz", "Add Quiz")}
+                        {t("learning:lessons.videoQuiz.addQuiz", "Add Quiz")}
                     </button>
                 </div>
 
@@ -437,13 +440,16 @@ export default function VideoQuizEditor({
                 {showNewQuizForm && (
                     <div className="p-4 bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/30 rounded-xl">
                         <h5 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">
-                            {t("lessons:videoQuiz.newQuiz", "New Quiz")}
+                            {t(
+                                "learning:lessons.videoQuiz.newQuiz",
+                                "New Quiz"
+                            )}
                         </h5>
                         <div className="grid grid-cols-2 gap-3">
                             <div>
                                 <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                                     {t(
-                                        "lessons:videoQuiz.timeLimit",
+                                        "learning:lessons.videoQuiz.timeLimit",
                                         "Time Limit (min)"
                                     )}
                                 </label>
@@ -462,7 +468,7 @@ export default function VideoQuizEditor({
                             <div>
                                 <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                                     {t(
-                                        "lessons:videoQuiz.passingScore",
+                                        "learning:lessons.videoQuiz.passingScore",
                                         "Passing Score (%)"
                                     )}
                                 </label>
@@ -483,7 +489,7 @@ export default function VideoQuizEditor({
                             <div>
                                 <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                                     {t(
-                                        "lessons:videoQuiz.maxAttempts",
+                                        "learning:lessons.videoQuiz.maxAttempts",
                                         "Max Attempts"
                                     )}
                                 </label>
@@ -532,7 +538,7 @@ export default function VideoQuizEditor({
                 {!isLoadingQuizzes && quizzes.length === 0 ? (
                     <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-8">
                         {t(
-                            "lessons:videoQuiz.noQuizzes",
+                            "learning:lessons.videoQuiz.noQuizzes",
                             "No quizzes yet. Click 'Add Quiz' to create one."
                         )}
                     </p>
@@ -549,7 +555,7 @@ export default function VideoQuizEditor({
                                             <div>
                                                 <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                                                     {t(
-                                                        "lessons:videoQuiz.timeLimit",
+                                                        "learning:lessons.videoQuiz.timeLimit",
                                                         "Time Limit"
                                                     )}
                                                 </label>
@@ -572,7 +578,7 @@ export default function VideoQuizEditor({
                                             <div>
                                                 <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                                                     {t(
-                                                        "lessons:videoQuiz.passingScore",
+                                                        "learning:lessons.videoQuiz.passingScore",
                                                         "Passing %"
                                                     )}
                                                 </label>
@@ -597,7 +603,7 @@ export default function VideoQuizEditor({
                                             <div>
                                                 <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                                                     {t(
-                                                        "lessons:videoQuiz.maxAttempts",
+                                                        "learning:lessons.videoQuiz.maxAttempts",
                                                         "Attempts"
                                                     )}
                                                 </label>
@@ -652,24 +658,24 @@ export default function VideoQuizEditor({
                                         <div>
                                             <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                                                 {t(
-                                                    "lessons:videoQuiz.quizTitle",
+                                                    "learning:lessons.videoQuiz.quizTitle",
                                                     "Quiz"
                                                 )}{" "}
                                                 #{quiz.id}
                                             </p>
                                             <p className="text-xs text-gray-500 dark:text-gray-400">
                                                 {t(
-                                                    "lessons:videoQuiz.timeLimit",
+                                                    "learning:lessons.videoQuiz.timeLimit",
                                                     "Time"
                                                 )}
                                                 : {quiz.timeLimit}min •{" "}
                                                 {t(
-                                                    "lessons:videoQuiz.passingScore",
+                                                    "learning:lessons.videoQuiz.passingScore",
                                                     "Pass"
                                                 )}
                                                 : {quiz.passingScore}% •{" "}
                                                 {t(
-                                                    "lessons:videoQuiz.maxAttempts",
+                                                    "learning:lessons.videoQuiz.maxAttempts",
                                                     "Attempts"
                                                 )}
                                                 : {quiz.maxAttempts}
@@ -764,11 +770,14 @@ export default function VideoQuizEditor({
                     </button>
                     <div className="flex-1">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                            {t("lessons:videoQuiz.questions", "Questions")}
+                            {t(
+                                "learning:lessons.videoQuiz.questions",
+                                "Questions"
+                            )}
                         </h3>
                         <p className="text-xs text-gray-500 dark:text-gray-400">
-                            {t("lessons:videoQuiz.quizTitle", "Quiz")} #
-                            {selectedQuiz?.id}
+                            {t("learning:lessons.videoQuiz.quizTitle", "Quiz")}{" "}
+                            #{selectedQuiz?.id}
                         </p>
                     </div>
                     <button
@@ -776,7 +785,10 @@ export default function VideoQuizEditor({
                         className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-brand-500 rounded-lg hover:bg-brand-600 transition-colors"
                     >
                         <Plus className="w-4 h-4" />
-                        {t("lessons:videoQuiz.addQuestion", "Add Question")}
+                        {t(
+                            "learning:lessons.videoQuiz.addQuestion",
+                            "Add Question"
+                        )}
                     </button>
                 </div>
 
@@ -784,13 +796,16 @@ export default function VideoQuizEditor({
                 {showNewQuestionForm && (
                     <div className="p-4 bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/30 rounded-xl">
                         <h5 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">
-                            {t("lessons:videoQuiz.newQuestion", "New Question")}
+                            {t(
+                                "learning:lessons.videoQuiz.newQuestion",
+                                "New Question"
+                            )}
                         </h5>
                         <div className="space-y-3">
                             <div>
                                 <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                                     {t(
-                                        "lessons:videoQuiz.questionText",
+                                        "learning:lessons.videoQuiz.questionText",
                                         "Question Text"
                                     )}
                                 </label>
@@ -805,7 +820,7 @@ export default function VideoQuizEditor({
                                     }
                                     className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                                     placeholder={t(
-                                        "lessons:videoQuiz.questionPlaceholder",
+                                        "learning:lessons.videoQuiz.questionPlaceholder",
                                         "Enter question..."
                                     )}
                                 />
@@ -814,7 +829,7 @@ export default function VideoQuizEditor({
                                 <div className="flex-1">
                                     <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                                         {t(
-                                            "lessons:videoQuiz.questionType",
+                                            "learning:lessons.videoQuiz.questionType",
                                             "Type"
                                         )}
                                     </label>
@@ -831,25 +846,25 @@ export default function VideoQuizEditor({
                                     >
                                         <option value="single_choice">
                                             {t(
-                                                "lessons:content.quizzes.questionTypes.singleChoice",
+                                                "learning:lessons.content.quizzes.questionTypes.singleChoice",
                                                 "Single Choice"
                                             )}
                                         </option>
                                         <option value="multiple_choice">
                                             {t(
-                                                "lessons:content.quizzes.questionTypes.multipleChoice",
+                                                "learning:lessons.content.quizzes.questionTypes.multipleChoice",
                                                 "Multiple Choice"
                                             )}
                                         </option>
                                         <option value="true_false">
                                             {t(
-                                                "lessons:content.quizzes.questionTypes.trueFalse",
+                                                "learning:lessons.content.quizzes.questionTypes.trueFalse",
                                                 "True/False"
                                             )}
                                         </option>
                                         <option value="short_answer">
                                             {t(
-                                                "lessons:content.quizzes.questionTypes.shortAnswer",
+                                                "learning:lessons.content.quizzes.questionTypes.shortAnswer",
                                                 "Short Answer"
                                             )}
                                         </option>
@@ -858,7 +873,7 @@ export default function VideoQuizEditor({
                                 <div className="w-24">
                                     <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                                         {t(
-                                            "lessons:videoQuiz.points",
+                                            "learning:lessons.videoQuiz.points",
                                             "Points"
                                         )}
                                     </label>
@@ -913,7 +928,7 @@ export default function VideoQuizEditor({
                 {!isLoadingQuestions && questions.length === 0 ? (
                     <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-8">
                         {t(
-                            "lessons:videoQuiz.noQuestions",
+                            "learning:lessons.videoQuiz.noQuestions",
                             "No questions yet. Click 'Add Question' to create one."
                         )}
                     </p>
@@ -1030,7 +1045,7 @@ export default function VideoQuizEditor({
                                                 <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                                                     {question.question ||
                                                         t(
-                                                            "lessons:videoQuiz.newQuestion",
+                                                            "learning:lessons.videoQuiz.newQuestion",
                                                             "New Question"
                                                         )}
                                                 </p>
@@ -1040,7 +1055,7 @@ export default function VideoQuizEditor({
                                                     )}{" "}
                                                     • {question.points}{" "}
                                                     {t(
-                                                        "lessons:videoQuiz.points",
+                                                        "learning:lessons.videoQuiz.points",
                                                         "points"
                                                     )}
                                                 </p>
@@ -1125,7 +1140,7 @@ export default function VideoQuizEditor({
                     </button>
                     <div className="flex-1">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                            {t("lessons:videoQuiz.options", "Options")}
+                            {t("learning:lessons.videoQuiz.options", "Options")}
                         </h3>
                         <p className="text-xs text-gray-500 dark:text-gray-400 truncate max-w-md">
                             {selectedQuestion?.question}
@@ -1136,7 +1151,10 @@ export default function VideoQuizEditor({
                         className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-brand-500 rounded-lg hover:bg-brand-600 transition-colors"
                     >
                         <Plus className="w-4 h-4" />
-                        {t("lessons:videoQuiz.addOption", "Add Option")}
+                        {t(
+                            "learning:lessons.videoQuiz.addOption",
+                            "Add Option"
+                        )}
                     </button>
                 </div>
 
@@ -1166,7 +1184,7 @@ export default function VideoQuizEditor({
                                 }
                                 className="flex-1 px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                                 placeholder={t(
-                                    "lessons:videoQuiz.optionPlaceholder",
+                                    "learning:lessons.videoQuiz.optionPlaceholder",
                                     "Enter option text..."
                                 )}
                             />
@@ -1193,7 +1211,7 @@ export default function VideoQuizEditor({
                         </div>
                         <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 ml-7">
                             {t(
-                                "lessons:videoQuiz.markCorrectHint",
+                                "learning:lessons.videoQuiz.markCorrectHint",
                                 "Check the box if this is a correct answer"
                             )}
                         </p>
@@ -1211,7 +1229,7 @@ export default function VideoQuizEditor({
                 {!isLoadingOptions && options.length === 0 ? (
                     <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-8">
                         {t(
-                            "lessons:videoQuiz.noOptions",
+                            "learning:lessons.videoQuiz.noOptions",
                             "No options yet. Click 'Add Option' to create one."
                         )}
                     </p>
@@ -1291,7 +1309,7 @@ export default function VideoQuizEditor({
                                         <span className="flex-1 text-sm text-gray-900 dark:text-gray-100">
                                             {option.optionText ||
                                                 t(
-                                                    "lessons:videoQuiz.emptyOption",
+                                                    "learning:lessons.videoQuiz.emptyOption",
                                                     "(empty)"
                                                 )}
                                         </span>
@@ -1364,11 +1382,11 @@ export default function VideoQuizEditor({
                 onClose={() => setDeleteQuizId(null)}
                 variant="danger"
                 title={t(
-                    "lessons:videoQuiz.deleteDialog.title",
+                    "learning:lessons.videoQuiz.deleteDialog.title",
                     "Delete Video Quiz"
                 )}
                 message={t(
-                    "lessons:videoQuiz.deleteDialog.message",
+                    "learning:lessons.videoQuiz.deleteDialog.message",
                     "Are you sure you want to delete this video quiz? This action cannot be undone."
                 )}
                 confirmText={t("common.delete", "Delete")}
@@ -1383,11 +1401,11 @@ export default function VideoQuizEditor({
                 onClose={() => setDeleteQuestionId(null)}
                 variant="danger"
                 title={t(
-                    "lessons:videoQuiz.deleteQuestionDialog.title",
+                    "learning:lessons.videoQuiz.deleteQuestionDialog.title",
                     "Delete Question"
                 )}
                 message={t(
-                    "lessons:videoQuiz.deleteQuestionDialog.message",
+                    "learning:lessons.videoQuiz.deleteQuestionDialog.message",
                     "Are you sure you want to delete this question? All options will also be deleted."
                 )}
                 confirmText={t("common.delete", "Delete")}
@@ -1402,11 +1420,11 @@ export default function VideoQuizEditor({
                 onClose={() => setDeleteOptionId(null)}
                 variant="danger"
                 title={t(
-                    "lessons:videoQuiz.deleteOptionDialog.title",
+                    "learning:lessons.videoQuiz.deleteOptionDialog.title",
                     "Delete Option"
                 )}
                 message={t(
-                    "lessons:videoQuiz.deleteOptionDialog.message",
+                    "learning:lessons.videoQuiz.deleteOptionDialog.message",
                     "Are you sure you want to delete this option?"
                 )}
                 confirmText={t("common.delete", "Delete")}

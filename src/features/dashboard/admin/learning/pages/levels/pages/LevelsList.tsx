@@ -85,16 +85,16 @@ export default function LearningLevelsList() {
 
     const handleDelete = async (level: Level) => {
         const confirmed = await confirm({
-            title: t("levels:levels.delete.title", "Delete Level"),
+            title: t("learning:levels.delete.title", "Delete Level"),
             message: t(
-                "levels:levels.delete.message",
+                "learning:levels.delete.message",
                 `Are you sure you want to delete "${level.title}"? This action cannot be undone.`
             ),
             variant: "danger",
             confirmText: t("common.delete", "Delete"),
             cancelText: t("common.cancel", "Cancel"),
             successMessage: t(
-                "levels:levels.delete.success",
+                "learning:levels.delete.success",
                 "Level deleted successfully"
             ),
         });
@@ -134,7 +134,7 @@ export default function LearningLevelsList() {
                     `${curriculumType === "first_term" ? "First Term" : curriculumType === "second_term" ? "Second Term" : "Summer Camp"} Learning - Levels`
                 ),
                 subtitle: t(
-                    "levels:levels.list.subtitle",
+                    "learning:levels.list.subtitle",
                     "Manage levels within courses"
                 ),
                 actions: (
@@ -155,16 +155,16 @@ export default function LearningLevelsList() {
                                 d="M12 4v16m8-8H4"
                             />
                         </svg>
-                        {t("levels:levels.actions.add", "Add Levels")}
+                        {t("learning:levels.actions.add", "Add Levels")}
                     </Link>
                 ),
             }}
         >
             {levelsData?.items?.length === 0 ? (
                 <EmptyState
-                    title={t("levels:levels.empty.title", "No levels found")}
+                    title={t("learning:levels.empty.title", "No levels found")}
                     message={t(
-                        "levels:levels.empty.description",
+                        "learning:levels.empty.description",
                         "Get started by creating your first level"
                     )}
                 />

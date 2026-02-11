@@ -110,7 +110,11 @@ export default function RegularGroupViewPage() {
                                 <div className="flex items-center gap-2">
                                     <Users className="w-5 h-5" />
                                     <span className="text-base">
-                                        Max {groupData?.maxCapacity} Students
+                                        {t(
+                                            "groups.view.maxStudents",
+                                            "Max {{count}} Students",
+                                            { count: groupData?.maxCapacity }
+                                        )}
                                     </span>
                                 </div>
                                 {groupData?.schedules?.[0] && (
@@ -151,8 +155,14 @@ export default function RegularGroupViewPage() {
                                             className={`text-base ${groupData.isActive ? "text-green-400" : "text-red-400"}`}
                                         >
                                             {groupData.isActive
-                                                ? "Active"
-                                                : "Inactive"}
+                                                ? t(
+                                                      "groups.view.active",
+                                                      "Active"
+                                                  )
+                                                : t(
+                                                      "groups.view.inactive",
+                                                      "Inactive"
+                                                  )}
                                         </span>
                                     </div>
                                 )}
@@ -164,11 +174,11 @@ export default function RegularGroupViewPage() {
                                 className="bg-linear-to-r from-brand-500 to-brand-400 text-white px-4 py-2 rounded-xl flex items-center gap-2 shadow-lg hover:shadow-xl transition-shadow"
                             >
                                 <Edit className="w-4 h-4" />
-                                Edit Group
+                                {t("groups.view.editGroup", "Edit Group")}
                             </button>
                             <button className="bg-white text-gray-700 px-4 py-2 rounded-xl flex items-center gap-2 border border-gray-200 hover:bg-gray-50 transition-colors">
                                 <Trash2 className="w-4 h-4" />
-                                Delete Group
+                                {t("groups.view.deleteGroup", "Delete Group")}
                             </button>
                         </div>
                     </div>
@@ -180,7 +190,7 @@ export default function RegularGroupViewPage() {
                 {/* Group Information */}
                 <div>
                     <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-6">
-                        Group Information
+                        {t("groups.view.groupInformation", "Group Information")}
                     </h3>
                     <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 mb-6">
                         <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
@@ -196,7 +206,7 @@ export default function RegularGroupViewPage() {
                                 </div>
                                 <div className="min-w-0">
                                     <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">
-                                        Grade
+                                        {t("groups.view.grade", "Grade")}
                                     </p>
                                     <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">
                                         {groupData?.grade?.name || "-"}
@@ -216,7 +226,7 @@ export default function RegularGroupViewPage() {
                                 </div>
                                 <div className="min-w-0">
                                     <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">
-                                        Level
+                                        {t("groups.view.level", "Level")}
                                     </p>
                                     <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">
                                         {groupData?.level?.title || "-"}
@@ -236,7 +246,7 @@ export default function RegularGroupViewPage() {
                                 </div>
                                 <div className="min-w-0">
                                     <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">
-                                        Program
+                                        {t("groups.view.program", "Program")}
                                     </p>
                                     <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">
                                         {groupData?.programsCurriculum
@@ -257,7 +267,7 @@ export default function RegularGroupViewPage() {
                                 </div>
                                 <div className="min-w-0">
                                     <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">
-                                        Capacity
+                                        {t("groups.view.capacity", "Capacity")}
                                     </p>
                                     <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1">
                                         {groupData?.maxCapacity || "-"}
@@ -277,7 +287,10 @@ export default function RegularGroupViewPage() {
                                 </div>
                                 <div className="min-w-0">
                                     <p className="text-xs text-gray-500 dark:text-gray-400 font-medium uppercase tracking-wide">
-                                        Location Type
+                                        {t(
+                                            "groups.view.locationType",
+                                            "Location Type"
+                                        )}
                                     </p>
                                     <p className="text-sm font-semibold text-gray-900 dark:text-white mt-1 capitalize">
                                         {groupData?.locationType || "-"}
@@ -291,39 +304,63 @@ export default function RegularGroupViewPage() {
                 {/* Learning Progress Section */}
                 <div className="mb-6">
                     <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
-                        Learning Progress
+                        {t("groups.view.learningProgress", "Learning Progress")}
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <LearningCard
                             icon={CheckSquare2}
-                            title="Quizzes"
-                            description="Test your knowledge with online quizzes"
-                            linkText="View Quizzes"
+                            title={t("groups.view.quizzes", "Quizzes")}
+                            description={t(
+                                "groups.view.quizzesDesc",
+                                "Test your knowledge with online quizzes"
+                            )}
+                            linkText={t(
+                                "groups.view.viewQuizzes",
+                                "View Quizzes"
+                            )}
                             to={lessonPath("quizzes")}
                             linkColor="text-brand-600"
                         />
                         <LearningCard
                             icon={FileText}
-                            title="Assignments"
-                            description="Complete assignments set by group"
-                            linkText="View Assignments"
+                            title={t("groups.view.assignments", "Assignments")}
+                            description={t(
+                                "groups.view.assignmentsDesc",
+                                "Complete assignments set by group"
+                            )}
+                            linkText={t(
+                                "groups.view.viewAssignments",
+                                "View Assignments"
+                            )}
                             to={lessonPath("assignments")}
                             linkColor="text-brand-600"
                         />
                         <LearningCard
                             icon={BookOpen}
-                            title="Materials"
-                            description="Access learning materials & resources"
-                            linkText="View Materials"
+                            title={t("groups.view.materials", "Materials")}
+                            description={t(
+                                "groups.view.materialsDesc",
+                                "Access learning materials & resources"
+                            )}
+                            linkText={t(
+                                "groups.view.viewMaterials",
+                                "View Materials"
+                            )}
                             to={lessonPath("materials")}
                             linkColor="text-brand-600"
                         />
 
                         <LearningCard
                             icon={Calendar}
-                            title="Sessions"
-                            description="Manage scheduled sessions for this group"
-                            linkText="Manage Sessions"
+                            title={t("groups.view.sessions", "Sessions")}
+                            description={t(
+                                "groups.view.sessionsDesc",
+                                "Manage scheduled sessions for this group"
+                            )}
+                            linkText={t(
+                                "groups.view.manageSessions",
+                                "Manage Sessions"
+                            )}
                             linkColor="text-brand-600"
                             to={paths.dashboard.groupsManagement.regularSessions(
                                 gradeId,
@@ -333,9 +370,15 @@ export default function RegularGroupViewPage() {
                         />
                         <LearningCard
                             icon={Users}
-                            title="Attendances"
-                            description="Manage attendance for the group"
-                            linkText="Manage Attendances"
+                            title={t("groups.view.attendances", "Attendances")}
+                            description={t(
+                                "groups.view.attendancesDesc",
+                                "Manage attendance for the group"
+                            )}
+                            linkText={t(
+                                "groups.view.manageAttendances",
+                                "Manage Attendances"
+                            )}
                             linkColor="text-brand-600"
                             to={paths.dashboard.groupsManagement.regularAttendance(
                                 gradeId,
@@ -345,9 +388,18 @@ export default function RegularGroupViewPage() {
                         />
                         <LearningCard
                             icon={Lock}
-                            title="Final Level Quiz"
-                            description="Unlock the next level"
-                            linkText="View Final Quiz"
+                            title={t(
+                                "groups.view.finalLevelQuiz",
+                                "Final Level Quiz"
+                            )}
+                            description={t(
+                                "groups.view.finalLevelQuizDesc",
+                                "Unlock the next level"
+                            )}
+                            linkText={t(
+                                "groups.view.viewFinalQuiz",
+                                "View Final Quiz"
+                            )}
                             linkColor="text-brand-600"
                             to={groupsPaths.regularFinalQuiz(
                                 gradeId,
@@ -358,9 +410,15 @@ export default function RegularGroupViewPage() {
 
                         <LearningCard
                             icon={Video}
-                            title="Videos"
-                            description="Watch learning resources"
-                            linkText="View Videos"
+                            title={t("groups.view.videos", "Videos")}
+                            description={t(
+                                "groups.view.videosDesc",
+                                "Watch learning resources"
+                            )}
+                            linkText={t(
+                                "groups.view.viewVideos",
+                                "View Videos"
+                            )}
                             to={lessonPath("videos")}
                             linkColor="text-brand-600"
                         />
@@ -373,7 +431,11 @@ export default function RegularGroupViewPage() {
                     <div className="lg:col-span-2 overflow-hidden">
                         <div className="flex items-center justify-between py-6 flex-wrap gap-4">
                             <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">
-                                Enrolled Students ({students.length})
+                                {t(
+                                    "groups.view.enrolledStudents",
+                                    "Enrolled Students"
+                                )}{" "}
+                                ({students.length})
                             </h3>
                             <Link
                                 to={paths.dashboard.groupsManagement.regularAssign(
@@ -384,7 +446,10 @@ export default function RegularGroupViewPage() {
                                 className="inline-flex items-center gap-2 px-4 py-2 bg-brand-500 text-white text-sm font-semibold rounded-lg hover:bg-brand-600 transition-colors"
                             >
                                 <UserPlus size={16} />
-                                Assign Student
+                                {t(
+                                    "groups.view.assignStudent",
+                                    "Assign Student"
+                                )}
                             </Link>
                         </div>
 
@@ -405,7 +470,7 @@ export default function RegularGroupViewPage() {
                     {/* Trainer/Instructor Card */}
                     <div className="pt-6 space-y-6">
                         <h3 className="text-2xl font-semibold text-gray-900 dark:text-white">
-                            Trainer
+                            {t("groups.view.trainer", "Trainer")}
                         </h3>
 
                         <div className="bg-brand-50 dark:bg-brand-900/20 rounded-lg border border-brand-200 dark:border-brand-800 p-6 flex flex-col items-center text-center">
@@ -422,7 +487,7 @@ export default function RegularGroupViewPage() {
                                         {groupData.primaryTeacher.name}
                                     </h4>
                                     <p className="text-base text-gray-600 dark:text-gray-400 mb-6">
-                                        Trainer
+                                        {t("groups.view.trainer", "Trainer")}
                                     </p>
                                 </>
                             ) : (
@@ -431,10 +496,16 @@ export default function RegularGroupViewPage() {
                                         ?
                                     </div>
                                     <h4 className="text-lg font-semibold text-gray-500 dark:text-gray-400 mb-1">
-                                        No Trainer Assigned
+                                        {t(
+                                            "groups.view.noTrainerAssigned",
+                                            "No Trainer Assigned"
+                                        )}
                                     </h4>
                                     <p className="text-base text-gray-400 dark:text-gray-500 mb-6">
-                                        Assign a trainer to this group
+                                        {t(
+                                            "groups.view.assignTrainerPrompt",
+                                            "Assign a trainer to this group"
+                                        )}
                                     </p>
                                 </>
                             )}
@@ -447,8 +518,14 @@ export default function RegularGroupViewPage() {
                                 className="px-4 py-2 bg-brand-500 text-white text-sm font-semibold rounded-lg hover:bg-brand-600 transition-colors"
                             >
                                 {groupData?.primaryTeacher?.name
-                                    ? "Manage Trainer"
-                                    : "Assign Trainer"}
+                                    ? t(
+                                          "groups.view.manageTrainer",
+                                          "Manage Trainer"
+                                      )
+                                    : t(
+                                          "groups.view.assignTrainer",
+                                          "Assign Trainer"
+                                      )}
                             </Link>
                         </div>
                     </div>

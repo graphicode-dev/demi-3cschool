@@ -56,7 +56,7 @@ function TabLoader() {
 }
 
 function ProfilePage() {
-    const { t } = useTranslation();
+    const { t } = useTranslation("profile");
     const { user } = authStore();
     const isAdmin = user?.role?.name === "admin";
     const [searchParams, setSearchParams] = useSearchParams();
@@ -71,49 +71,49 @@ function ProfilePage() {
     }[] = [
         {
             key: "personal",
-            labelKey: "account:profile.tabs.personal",
+            labelKey: "profile.tabs.personal",
             fallback: "Personal Details",
             icon: <User className="w-4 h-4" />,
             show: true,
         },
         {
             key: "academic",
-            labelKey: "account:profile.tabs.academic",
+            labelKey: "profile.tabs.academic",
             fallback: "Academic Details",
             icon: <GraduationCap className="w-4 h-4" />,
             show: true,
         },
         {
             key: "groups",
-            labelKey: "account:profile.tabs.groups",
+            labelKey: "profile.tabs.groups",
             fallback: "Group History",
             icon: <History className="w-4 h-4" />,
             show: true,
         },
         {
             key: "attendance",
-            labelKey: "account:profile.tabs.attendance",
+            labelKey: "profile.tabs.attendance",
             fallback: "Attendance",
             icon: <ClipboardCheck className="w-4 h-4" />,
             show: true,
         },
         {
             key: "assignments",
-            labelKey: "account:profile.tabs.assignments",
+            labelKey: "profile.tabs.assignments",
             fallback: "Assignments",
             icon: <BookOpen className="w-4 h-4" />,
             show: true,
         },
         {
             key: "invoices",
-            labelKey: "account:profile.tabs.invoices",
+            labelKey: "profile.tabs.invoices",
             fallback: "Invoices",
             icon: <Receipt className="w-4 h-4" />,
             show: isAdmin,
         },
         {
             key: "installments",
-            labelKey: "account:profile.tabs.installments",
+            labelKey: "profile.tabs.installments",
             fallback: "Installments",
             icon: <CreditCard className="w-4 h-4" />,
             show: isAdmin,
@@ -161,14 +161,13 @@ function ProfilePage() {
                                 }`}
                             >
                                 {t(
-                                    `account:profile.status.${profile.status}`,
+                                    `profile.status.${profile.status}`,
                                     profile.status
                                 )}
                             </span>
                         </div>
                         <p className="text-gray-500 dark:text-gray-400">
-                            {profile.age}{" "}
-                            {t("account:profile.yearsOld", "years old")} •{" "}
+                            {profile.age} {t("profile.yearsOld", "years old")} •{" "}
                             {profile.learningType}
                         </p>
                     </div>
@@ -178,23 +177,17 @@ function ProfilePage() {
                 <div className="flex items-center gap-3">
                     <button className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                         <Edit className="w-4 h-4" />
-                        {t("account:profile.editProfile", "Edit Profile")}
+                        {t("profile.editProfile", "Edit Profile")}
                     </button>
                     {isAdmin && (
                         <>
                             <button className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                                 <Users className="w-4 h-4" />
-                                {t(
-                                    "account:profile.assignToGroup",
-                                    "Assign to group"
-                                )}
+                                {t("profile.assignToGroup", "Assign to group")}
                             </button>
                             <button className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-brand-500 hover:bg-brand-600 rounded-lg transition-colors">
                                 <FileText className="w-4 h-4" />
-                                {t(
-                                    "account:profile.createInvoice",
-                                    "Create Invoice"
-                                )}
+                                {t("profile.createInvoice", "Create Invoice")}
                             </button>
                         </>
                     )}

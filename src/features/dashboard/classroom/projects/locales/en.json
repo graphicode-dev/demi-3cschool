@@ -1,4 +1,5 @@
 {
+    "loading": "Loading...",
     "title": "Projects",
     "description": "Choose your lesson and manage your homework.",
     "chooseLesson": "Choose Lesson",
@@ -12,13 +13,15 @@
     "status": {
         "new": "New",
         "underReview": "Under Review",
-        "reviewed": "Reviewed"
+        "reviewed": "Reviewed",
+        "completed": "Completed"
     },
     "homeworkFile": {
         "title": "Homework File",
         "description": "Review the homework below before starting your work.",
         "download": "Download",
-        "previewPlaceholder": "File preview will appear here"
+        "previewPlaceholder": "File preview will appear here",
+        "assignment": "Assignment"
     },
     "result": {
         "title": "Homework Result",
@@ -40,6 +43,10 @@
         "uploadLabel": "Upload Files",
         "dropzone": "Drop your file here or click to browse",
         "supportedFormats": "Supported: PDF, JPG, PNG",
-        "button": "Submit Homework"
+        "button": "Submit Homework",
+        "preview": "Preview",
+        "remove": "Remove",
+        "submitting": "Submitting...",
+        "noPreview": "Preview not available for this file type"
     }
 }

@@ -26,51 +26,48 @@ function DetailField({ label, value }: { label: string; value: string }) {
 export default function PersonalDetailsTab({
     profile,
 }: PersonalDetailsTabProps) {
-    const { t } = useTranslation();
+    const { t } = useTranslation("profile");
 
     return (
         <div className="rounded-b-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
             {/* Header */}
             <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                    {t("account:profile.personal.title", "Personal Details")}
+                    {t("profile.personal.title", "Personal Details")}
                 </h2>
                 <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                     <Edit className="w-4 h-4" />
-                    {t("account:profile.personal.editDetails", "Edit Details")}
+                    {t("profile.personal.editDetails", "Edit Details")}
                 </button>
             </div>
 
             {/* Fields Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <DetailField
-                    label={t("account:profile.personal.fullName", "Full Name")}
+                    label={t("profile.personal.fullName", "Full Name")}
                     value={profile.fullName}
                 />
                 <DetailField
-                    label={t(
-                        "account:profile.personal.dateOfBirth",
-                        "Date of Birth"
-                    )}
+                    label={t("profile.personal.dateOfBirth", "Date of Birth")}
                     value={profile.dateOfBirth}
                 />
                 <DetailField
-                    label={t("account:profile.personal.age", "Age")}
-                    value={`${profile.age} ${t("account:profile.yearsOld", "years old")}`}
+                    label={t("profile.personal.age", "Age")}
+                    value={`${profile.age} ${t("profile.yearsOld", "years old")}`}
                 />
                 <DetailField
                     label={t(
-                        "account:profile.personal.parentName",
+                        "profile.personal.parentName",
                         "Parent/Guardian Name"
                     )}
                     value={profile.parentName}
                 />
                 <DetailField
-                    label={t("account:profile.personal.phone", "Phone")}
+                    label={t("profile.personal.phone", "Phone")}
                     value={profile.phone}
                 />
                 <DetailField
-                    label={t("account:profile.personal.email", "Email Address")}
+                    label={t("profile.personal.email", "Email Address")}
                     value={profile.email}
                 />
             </div>
@@ -79,7 +76,7 @@ export default function PersonalDetailsTab({
             <div className="mt-6">
                 <DetailField
                     label={t(
-                        "account:profile.personal.registrationDate",
+                        "profile.personal.registrationDate",
                         "Registration Date"
                     )}
                     value={profile.registrationDate}

@@ -12,7 +12,7 @@ export const performanceRoutes: RouteConfig[] = [
             })),
         meta: {
             title: "Performance",
-            titleKey: "ticketsManagement:performance.pageTitle",
+            titleKey: "adminTicketsManagement:performance.pageTitle",
             requiresAuth: true,
         },
     },

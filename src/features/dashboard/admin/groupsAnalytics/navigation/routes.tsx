@@ -18,7 +18,7 @@ export const groupsAnalyticsRoutes: RouteConfig[] = [
         lazy: () =>
             import("@/features/dashboard/admin/groupsAnalytics/pages/GroupsAnalytics"),
         // permissions: [group.viewAny],
-        meta: { titleKey: "groupsAnalytics:groups.title" },
-        handle: { crumb: "groupsAnalytics:groups.title" },
+        meta: { titleKey: "groupsAnalytics:groupsAnalytics.title" },
+        handle: { crumb: "groupsAnalytics:groupsAnalytics.title" },
     },
 ];

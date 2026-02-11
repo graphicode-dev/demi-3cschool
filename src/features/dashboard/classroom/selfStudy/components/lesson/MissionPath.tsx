@@ -103,7 +103,7 @@ export function MissionPath({
                                             ${isCompleted || isLocked ? "text-gray-400/50" : "text-gray-500"}
                                         `}
                                     >
-                                        {video.duration} min
+                                        {video.duration} {t("common.min")}
                                     </span>
                                 </div>
                             </div>

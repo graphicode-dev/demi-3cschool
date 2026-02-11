@@ -140,7 +140,7 @@ const FileTreeItem = memo(function FileTreeItem({
                         {node.isOpen ? (
                             <ChevronDown className="size-3.5" />
                         ) : (
-                            <ChevronRight className="size-3.5" />
+                            <ChevronRight className="size-3.5 rtl:rotate-180" />
                         )}
                     </span>
                 )}

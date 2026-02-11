@@ -17,7 +17,7 @@ export function TicketsPerAgentChart({
     data,
     isLoading,
 }: TicketsPerAgentChartProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
     const isAnimated = useChartAnimation(isLoading, { dependencies: [data] });
 
     if (isLoading) {

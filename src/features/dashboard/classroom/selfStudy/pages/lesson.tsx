@@ -134,7 +134,7 @@ function LessonPage() {
     if (isLoadingLesson || isLoadingVideos) return <LoadingState />;
 
     if (!lessonData || !lesson)
-        return <ErrorState message="Lesson not found" />;
+        return <ErrorState message={t("lesson.notFound")} />;
 
     return (
         <PageWrapper
@@ -279,7 +279,8 @@ function LessonPage() {
                                         {selectedVideo.title}
                                     </p>
                                     <p className="text-xs text-gray-500">
-                                        {selectedVideo.duration} min
+                                        {selectedVideo.duration}{" "}
+                                        {t("common.min")}
                                     </p>
                                 </div>
                             </div>

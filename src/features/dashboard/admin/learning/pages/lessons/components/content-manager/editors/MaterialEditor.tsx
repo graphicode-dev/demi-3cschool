@@ -132,7 +132,7 @@ export default function MaterialEditor({
                 () => updateMutateAsync({ id: material.id, data: payload }),
                 {
                     successMessage: t(
-                        "lessons:content.materials.toast.updateSuccessMessage",
+                        "learning:lessons.content.materials.toast.updateSuccessMessage",
                         "Material has been updated successfully"
                     ),
                     onSuccess: () => {
@@ -145,7 +145,7 @@ export default function MaterialEditor({
         } else {
             execute(() => createMutateAsync(payload), {
                 successMessage: t(
-                    "lessons:content.materials.toast.createSuccessMessage",
+                    "learning:lessons.content.materials.toast.createSuccessMessage",
                     "Material has been created successfully"
                 ),
                 onSuccess: () => {
@@ -162,7 +162,7 @@ export default function MaterialEditor({
 
         execute(() => deleteMutateAsync(material.id), {
             successMessage: t(
-                "lessons:content.materials.toast.deleteSuccessMessage",
+                "learning:lessons.content.materials.toast.deleteSuccessMessage",
                 "Material has been deleted successfully"
             ),
             onSuccess: () => {
@@ -190,13 +190,13 @@ export default function MaterialEditor({
                 <div>
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                         {t(
-                            "lessons:content.materials.editor.title",
+                            "learning:lessons.content.materials.editor.title",
                             "Material Editor"
                         )}
                     </h3>
                     <p className="text-sm text-gray-500 dark:text-gray-400">
                         {t(
-                            "lessons:content.materials.editor.subtitle",
+                            "learning:lessons.content.materials.editor.subtitle",
                             "Configure content details and settings"
                         )}
                     </p>
@@ -214,14 +214,14 @@ export default function MaterialEditor({
                 {/* Title */}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        {t("lessons:content.fields.title", "Title")} *
+                        {t("learning:lessons.content.fields.title", "Title")} *
                     </label>
                     <input
                         type="text"
                         value={formData.title}
                         onChange={(e) => handleChange("title", e.target.value)}
                         placeholder={t(
-                            "lessons:content.materials.titlePlaceholder",
+                            "learning:lessons.content.materials.titlePlaceholder",
                             "Enter material title..."
                         )}
                         className={`w-full px-4 py-2.5 rounded-xl border bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none ${fieldErrors.title ? "border-red-500" : "border-gray-200 dark:border-gray-600"}`}
@@ -237,7 +237,7 @@ export default function MaterialEditor({
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         {t(
-                            "lessons:content.materials.filePreview",
+                            "learning:lessons.content.materials.filePreview",
                             "File Preview"
                         )}
                     </label>
@@ -271,7 +271,7 @@ export default function MaterialEditor({
                                         className="mt-3 text-xs text-brand-500 hover:text-brand-600"
                                     >
                                         {t(
-                                            "lessons:content.materials.changeFile",
+                                            "learning:lessons.content.materials.changeFile",
                                             "Change file"
                                         )}
                                     </button>
@@ -282,7 +282,7 @@ export default function MaterialEditor({
                                         className="mt-3 text-xs text-red-500 hover:text-red-600"
                                     >
                                         {t(
-                                            "lessons:content.materials.removeFile",
+                                            "learning:lessons.content.materials.removeFile",
                                             "Remove file"
                                         )}
                                     </button>
@@ -297,7 +297,7 @@ export default function MaterialEditor({
                             <Upload className="w-8 h-8 text-gray-400 mb-2" />
                             <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
                                 {t(
-                                    "lessons:content.materials.uploadFile",
+                                    "learning:lessons.content.materials.uploadFile",
                                     "Click to upload file"
                                 )}
                             </p>
@@ -313,7 +313,7 @@ export default function MaterialEditor({
                     <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             {t(
-                                "lessons:content.materials.downloadLink",
+                                "learning:lessons.content.materials.downloadLink",
                                 "Download Link"
                             )}
                         </label>
@@ -325,7 +325,7 @@ export default function MaterialEditor({
                         >
                             <ExternalLink className="w-4 h-4" />
                             {t(
-                                "lessons:content.materials.downloadFile",
+                                "learning:lessons.content.materials.downloadFile",
                                 "Download File"
                             )}
                         </a>
@@ -347,7 +347,7 @@ export default function MaterialEditor({
                         htmlFor="isPublished"
                         className="text-sm font-medium text-gray-700 dark:text-gray-300"
                     >
-                        {t("lessons:content.fields.active", "Active")}
+                        {t("learning:lessons.content.fields.active", "Active")}
                     </label>
                 </div>
             </div>
@@ -397,11 +397,11 @@ export default function MaterialEditor({
                 onClose={() => setShowDeleteDialog(false)}
                 variant="danger"
                 title={t(
-                    "lessons:content.materials.deleteDialog.title",
+                    "learning:lessons.content.materials.deleteDialog.title",
                     "Delete Material"
                 )}
                 message={t(
-                    "lessons:content.materials.deleteDialog.message",
+                    "learning:lessons.content.materials.deleteDialog.message",
                     "Are you sure you want to delete this material? This action cannot be undone."
                 )}
                 confirmText={t("common.delete", "Delete")}

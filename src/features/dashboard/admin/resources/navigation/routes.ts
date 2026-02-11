@@ -6,63 +6,63 @@ export const resourcesRoutes: RouteConfig[] = [
         path: "resources",
         lazy: () =>
             import("@/features/dashboard/admin/resources/pages/ResourcesManagement"),
-        meta: { titleKey: "resources:title" },
-        handle: { crumb: "resources:title" },
+        meta: { titleKey: "adminResources:title" },
+        handle: { crumb: "adminResources:title" },
     },
     // Folder SiteMap (placeholder for /resources/folder)
     {
         path: "resources/folder",
         lazy: () =>
             import("@/features/dashboard/admin/resources/pages/site_map/FolderSiteMap"),
-        meta: { titleKey: "resources:sitemap.folder.title" },
-        handle: { crumb: "resources:breadcrumb.folder" },
+        meta: { titleKey: "adminResources:sitemap.folder.title" },
+        handle: { crumb: "adminResources:breadcrumb.folder" },
     },
     // Create Folder
     {
         path: "resources/folder/create",
         lazy: () =>
             import("@/features/dashboard/admin/resources/pages/CreateFolder"),
-        meta: { titleKey: "resources:folder.create" },
-        handle: { crumb: "resources:folder.create" },
+        meta: { titleKey: "adminResources:folder.create" },
+        handle: { crumb: "adminResources:folder.create" },
     },
     // Folder Details (Resources List)
     {
         path: "resources/folder/:folderId",
         lazy: () =>
             import("@/features/dashboard/admin/resources/pages/FolderDetails"),
-        meta: { titleKey: "resources:title" },
-        handle: { crumb: "resources:folder.title" },
+        meta: { titleKey: "adminResources:title" },
+        handle: { crumb: "adminResources:folder.title" },
     },
     // Edit Folder
     {
         path: "resources/folder/:folderId/edit",
         lazy: () =>
             import("@/features/dashboard/admin/resources/pages/EditFolder"),
-        meta: { titleKey: "resources:folder.edit" },
-        handle: { crumb: "resources:folder.edit" },
+        meta: { titleKey: "adminResources:folder.edit" },
+        handle: { crumb: "adminResources:folder.edit" },
     },
     // Resource SiteMap (placeholder for /resources/folder/:folderId/resource)
     {
         path: "resources/folder/:folderId/resource",
         lazy: () =>
             import("@/features/dashboard/admin/resources/pages/site_map/ResourceSiteMap"),
-        meta: { titleKey: "resources:sitemap.resource.title" },
-        handle: { crumb: "resources:breadcrumb.resource" },
+        meta: { titleKey: "adminResources:sitemap.resource.title" },
+        handle: { crumb: "adminResources:breadcrumb.resource" },
     },
     // Add Resource
     {
         path: "resources/folder/:folderId/resource/create",
         lazy: () =>
             import("@/features/dashboard/admin/resources/pages/AddResource"),
-        meta: { titleKey: "resources:resource.add" },
-        handle: { crumb: "resources:resource.add" },
+        meta: { titleKey: "adminResources:resource.add" },
+        handle: { crumb: "adminResources:resource.add" },
     },
     // Edit Resource
     {
         path: "resources/folder/:folderId/resource/:resourceId/edit",
         lazy: () =>
             import("@/features/dashboard/admin/resources/pages/EditResource"),
-        meta: { titleKey: "resources:resource.edit" },
-        handle: { crumb: "resources:resource.edit" },
+        meta: { titleKey: "adminResources:resource.edit" },
+        handle: { crumb: "adminResources:resource.edit" },
     },
 ];

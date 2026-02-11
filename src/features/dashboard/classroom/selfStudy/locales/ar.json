@@ -63,17 +63,21 @@
             }
         },
         "quiz": {
+            "title": "اختبار",
             "completed": "مكتمل",
             "new": "جديد",
             "questionsLabel": "أسئلة",
             "score": "الدرجة",
             "viewResult": "عرض النتيجة",
-            "startQuiz": "ابدأ الاختبار"
+            "startQuiz": "ابدأ الاختبار",
+            "minutes": "دقائق",
+            "passingScore": "درجة النجاح"
         },
         "assignments": {
             "submitted": "تم التسليم",
             "view": "عرض",
-            "submit": "تسليم"
+            "submit": "تسليم",
+            "completed": "مكتمل"
         },
         "editor": {
             "comingSoon": "محرر الكود قريباً..."
@@ -99,7 +103,12 @@
         "understood": "مفهوم",
         "noAssignments": "لا توجد واجبات متاحة لهذا الدرس.",
         "noLessonQuiz": "لا يوجد اختبار متاح للدرس.",
-        "noMaterials": "لا توجد مواد متاحة لهذا الدرس."
+        "noMaterials": "لا توجد مواد متاحة لهذا الدرس.",
+        "notFound": "الدرس غير موجود"
+    },
+    "common": {
+        "min": "د",
+        "mins": "دقائق"
     },
     "codeEditor": {
         "tryItYourself": "جرّب بنفسك!",

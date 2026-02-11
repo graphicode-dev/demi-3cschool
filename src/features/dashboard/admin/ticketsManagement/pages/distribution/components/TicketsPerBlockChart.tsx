@@ -17,7 +17,7 @@ export function TicketsPerBlockChart({
     data,
     isLoading,
 }: TicketsPerBlockChartProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
     const isAnimated = useChartAnimation(isLoading, { dependencies: [data] });
 
     if (isLoading) {

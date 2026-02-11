@@ -94,7 +94,7 @@ export default function LearningLessonsEdit() {
                 }),
             {
                 successMessage: t(
-                    "lessons:lessons.messages.updateSuccess",
+                    "learning:lessons.messages.updateSuccess",
                     "Lesson updated successfully"
                 ),
                 onSuccess: () => navigate(paths.lessons.list()),
@@ -125,7 +125,7 @@ export default function LearningLessonsEdit() {
     return (
         <PageWrapper
             pageHeaderProps={{
-                title: t("lessons:lessons.form.edit.title", "Edit Lesson"),
+                title: t("learning:lessons.form.edit.title", "Edit Lesson"),
                 subtitle: lesson?.title,
                 backButton: true,
             }}
@@ -144,7 +144,7 @@ export default function LearningLessonsEdit() {
                     type={{
                         type: "dropdown",
                         placeholder: t(
-                            "lessons:lessons.form.fields.level.placeholder",
+                            "learning:lessons.form.fields.level.placeholder",
                             "Select a level"
                         ),
                         options: levels.map((level: Level) => ({
@@ -154,7 +154,7 @@ export default function LearningLessonsEdit() {
                     }}
                     label={{
                         text: t(
-                            "lessons:lessons.form.fields.level.label",
+                            "learning:lessons.form.fields.level.label",
                             "Level"
                         ),
                         required: true,
@@ -168,13 +168,13 @@ export default function LearningLessonsEdit() {
                     type={{
                         type: "text",
                         placeholder: t(
-                            "lessons:lessons.form.fields.title.placeholder",
+                            "learning:lessons.form.fields.title.placeholder",
                             "Enter lesson title"
                         ),
                     }}
                     label={{
                         text: t(
-                            "lessons:lessons.form.fields.title.label",
+                            "learning:lessons.form.fields.title.label",
                             "Lesson Title"
                         ),
                         required: true,
@@ -188,13 +188,13 @@ export default function LearningLessonsEdit() {
                     type={{
                         type: "checkbox",
                         label: t(
-                            "lessons:lessons.form.fields.active.label",
+                            "learning:lessons.form.fields.active.label",
                             "Active"
                         ),
                     }}
                     label={{
                         text: t(
-                            "lessons:lessons.form.fields.status.label",
+                            "learning:lessons.form.fields.status.label",
                             "Status"
                         ),
                     }}
@@ -207,14 +207,14 @@ export default function LearningLessonsEdit() {
                     type={{
                         type: "textarea",
                         placeholder: t(
-                            "lessons:lessons.form.fields.description.placeholder",
+                            "learning:lessons.form.fields.description.placeholder",
                             "Enter lesson description"
                         ),
                         rows: 4,
                     }}
                     label={{
                         text: t(
-                            "lessons:lessons.form.fields.description.label",
+                            "learning:lessons.form.fields.description.label",
                             "Description"
                         ),
                         required: true,

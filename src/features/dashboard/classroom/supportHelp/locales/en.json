@@ -8,9 +8,11 @@
         "view": "View",
         "search": "Search...",
         "filter": "Filter",
-        "noData": "No data available"
+        "noData": "No data available",
+        "timeAgo": "{{time}} ago"
     },
     "supportHelp": {
+        "breadcrumb": "Support & Help",
         "pageTitle": "Support & Help",
         "pageSubtitle": "Need help? Ask our support team.",
         "searchPlaceholder": "Search your problem...",

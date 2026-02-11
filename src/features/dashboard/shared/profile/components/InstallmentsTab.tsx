@@ -13,7 +13,7 @@ interface InstallmentsTabProps {
 export default function InstallmentsTab({
     installments,
 }: InstallmentsTabProps) {
-    const { t } = useTranslation();
+    const { t } = useTranslation("profile");
 
     const getStatusBadge = (status: InstallmentRecord["status"]) => {
         const styles = {
@@ -36,7 +36,7 @@ export default function InstallmentsTab({
     return (
         <div className="rounded-b-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
-                {t("account:profile.installments.title", "Installments")}
+                {t("profile.installments.title", "Installments")}
             </h2>
 
             <div className="overflow-x-auto">
@@ -48,33 +48,24 @@ export default function InstallmentsTab({
                             </th>
                             <th className="text-start py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">
                                 {t(
-                                    "account:profile.installments.invoiceId",
+                                    "profile.installments.invoiceId",
                                     "Invoice ID"
                                 )}
                             </th>
                             <th className="text-start py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">
-                                {t(
-                                    "account:profile.installments.amount",
-                                    "Amount"
-                                )}
+                                {t("profile.installments.amount", "Amount")}
+                            </th>
+                            <th className="text-start py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">
+                                {t("profile.installments.dueDate", "Due Date")}
                             </th>
                             <th className="text-start py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">
                                 {t(
-                                    "account:profile.installments.dueDate",
-                                    "Due Date"
-                                )}
-                            </th>
-                            <th className="text-start py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">
-                                {t(
-                                    "account:profile.installments.paymentDate",
+                                    "profile.installments.paymentDate",
                                     "Payment Date"
                                 )}
                             </th>
                             <th className="text-start py-3 px-4 text-sm font-medium text-gray-500 dark:text-gray-400">
-                                {t(
-                                    "account:profile.installments.status",
-                                    "Status"
-                                )}
+                                {t("profile.installments.status", "Status")}
                             </th>
                         </tr>
                     </thead>
@@ -130,7 +121,7 @@ export default function InstallmentsTab({
                                         className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${getStatusBadge(installment.status)}`}
                                     >
                                         {t(
-                                            `account:profile.installments.${installment.status}`,
+                                            `profile.installments.${installment.status}`,
                                             installment.status
                                         )}
                                     </span>

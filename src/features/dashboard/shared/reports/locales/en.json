@@ -1,0 +1,99 @@
+{
+    "reports": {
+        "title": "Student Reports",
+        "subtitle": "Review and manage student reports before sending to parents",
+        "listTitle": "Reports",
+        "table": {
+            "id": "ID",
+            "student": "Student",
+            "level": "Level",
+            "track": "Track",
+            "reportType": "Report Type",
+            "status": "Status",
+            "instructor": "Instructor",
+            "updated": "Updated",
+            "action": "Action"
+        },
+        "actions": {
+            "view": "View"
+        },
+        "stats": {
+            "totalReports": "Total Reports",
+            "draft": "Draft",
+            "ready": "Ready",
+            "sent": "Sent"
+        },
+        "status": {
+            "draft": "Draft",
+            "ready": "Ready",
+            "sent": "Sent"
+        },
+        "reportType": {
+            "mid_report": "Mid Report",
+            "final_report": "Final Report"
+        },
+        "performance": {
+            "excellent": "Excellent",
+            "very_good": "Very Good",
+            "good": "Good",
+            "fair": "Fair",
+            "needs_improvement": "Needs Improvement"
+        },
+        "errors": {
+            "loadFailed": "Failed to load reports"
+        },
+        "view": {
+            "title": "Review Student Report",
+            "subtitle": "Review and confirm report details before sending to parent",
+            "pdfTitle": "Student Report",
+            "mockFeedback": "Ahmed has shown consistent improvement in his coding skills throughout the first half of the course. He actively participates in class discussions and demonstrates strong problem-solving abilities. His project work has been of high quality, showing attention to detail and creativity.",
+            "actions": {
+                "saveAsDraft": "Save as Draft",
+                "markAsReady": "Mark as Ready",
+                "downloadPDF": "Download PDF Preview",
+                "sendReport": "Send Report"
+            },
+            "studentInfo": {
+                "title": "Student Information",
+                "studentName": "Student Name",
+                "studentId": "Student ID"
+            },
+            "academicDetails": {
+                "title": "Academic Details",
+                "levelName": "Level Name",
+                "trackName": "Track Name",
+                "groupName": "Group Name",
+                "instructorName": "Instructor Name"
+            },
+            "reportDetails": {
+                "title": "Report Details",
+                "reportType": "Report Type",
+                "sessionsRange": "Sessions Range",
+                "status": "Status"
+            },
+            "feedback": {
+                "title": "Feedback",
+                "placeholder": "Enter feedback for the student...",
+                "characters": "Characters"
+            },
+            "performance": {
+                "title": "Performance Evaluation",
+                "doingTasks": "Doing Tasks",
+                "attendanceOnTime": "Attendance on Time",
+                "interactionDuringSession": "Interaction During the Session",
+                "behaviorDuringSession": "Behavior During Session",
+                "searchingCooperation": "Searching & Cooperation",
+                "teamwork": "Teamwork"
+            },
+            "sendDialog": {
+                "title": "Send Report to Parent",
+                "message": "You Are About To Send The Report For",
+                "to": "To",
+                "warning": "Once Sent, The Report Will Become Read-Only And Cannot Be Edited.",
+                "confirm": "Are You Sure You Want To Proceed?",
+                "sendButton": "Send Report",
+                "cancelButton": "Cancel"
+            }
+        }
+    }
+}

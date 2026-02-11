@@ -46,60 +46,45 @@ function DetailCard({
 export default function AcademicDetailsTab({
     academicDetails,
 }: AcademicDetailsTabProps) {
-    const { t } = useTranslation();
+    const { t } = useTranslation("profile");
 
     return (
         <div className="rounded-b-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
             {/* Header */}
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
-                {t(
-                    "account:profile.academic.title",
-                    "Current Academic Details"
-                )}
+                {t("profile.academic.title", "Current Academic Details")}
             </h2>
 
             {/* Details Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <DetailCard
                     icon={<GraduationCap className="w-5 h-5 text-brand-500" />}
-                    label={t(
-                        "account:profile.academic.programType",
-                        "Program Type"
-                    )}
+                    label={t("profile.academic.programType", "Program Type")}
                     value={academicDetails.programType}
                 />
                 <DetailCard
                     icon={<GraduationCap className="w-5 h-5 text-brand-500" />}
-                    label={t("account:profile.academic.course", "Course")}
+                    label={t("profile.academic.course", "Course")}
                     value={academicDetails.course}
                 />
                 <DetailCard
                     icon={<Users className="w-5 h-5 text-brand-500" />}
-                    label={t(
-                        "account:profile.academic.groupType",
-                        "Group Type"
-                    )}
+                    label={t("profile.academic.groupType", "Group Type")}
                     value={academicDetails.groupType}
                 />
                 <DetailCard
                     icon={<Users className="w-5 h-5 text-brand-500" />}
-                    label={t(
-                        "account:profile.academic.groupName",
-                        "Group Name"
-                    )}
+                    label={t("profile.academic.groupName", "Group Name")}
                     value={academicDetails.groupName}
                 />
                 <DetailCard
                     icon={<User className="w-5 h-5 text-brand-500" />}
-                    label={t(
-                        "account:profile.academic.instructor",
-                        "Instructor"
-                    )}
+                    label={t("profile.academic.instructor", "Instructor")}
                     value={academicDetails.instructor}
                 />
                 <DetailCard
                     icon={<Calendar className="w-5 h-5 text-brand-500" />}
-                    label={t("account:profile.academic.schedule", "Schedule")}
+                    label={t("profile.academic.schedule", "Schedule")}
                     value={academicDetails.schedule}
                 />
             </div>

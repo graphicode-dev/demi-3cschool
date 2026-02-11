@@ -13,13 +13,13 @@ interface GroupHistoryTabProps {
 export default function GroupHistoryTab({
     groupHistory,
 }: GroupHistoryTabProps) {
-    const { t } = useTranslation();
+    const { t } = useTranslation("profile");
 
     return (
         <div className="rounded-b-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
             {/* Header */}
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">
-                {t("account:profile.groups.title", "Group History")}
+                {t("profile.groups.title", "Group History")}
             </h2>
 
             {/* Timeline */}
@@ -62,7 +62,11 @@ export default function GroupHistoryTab({
                                             {item.period}
                                         </p>
                                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                                            Instructor: {item.instructor}
+                                            {t(
+                                                "profile.groups.instructor",
+                                                "Instructor"
+                                            )}
+                                            : {item.instructor}
                                         </p>
                                     </div>
                                     <span
@@ -73,7 +77,7 @@ export default function GroupHistoryTab({
                                         }`}
                                     >
                                         {t(
-                                            `account:profile.groups.${item.status}`,
+                                            `profile.groups.${item.status}`,
                                             item.status
                                         )}
                                     </span>

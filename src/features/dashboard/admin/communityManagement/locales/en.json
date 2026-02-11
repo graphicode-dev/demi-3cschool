@@ -73,5 +73,31 @@
     },
     "deleteConfirmMessage": "Are you sure you want to delete this post? This action cannot be undone.",
     "dismissConfirmMessage": "Are you sure you want to dismiss this report?",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "postCard": {
+        "pinnedPost": "Pinned Post",
+        "teacher": "Teacher",
+        "student": "Student",
+        "isFeeling": "is feeling",
+        "lvl": "Lvl",
+        "edit": "Edit",
+        "copyLink": "Copy Link",
+        "report": "Report",
+        "delete": "Delete",
+        "saveChanges": "Save Changes",
+        "like": "Like",
+        "comment": "Comment",
+        "forward": "Forward",
+        "discussionThread": "Discussion Thread",
+        "beFirstToComment": "Be the first to comment on this post",
+        "addComment": "Add a comment...",
+        "bestSolution": "Best Solution",
+        "helpful": "Helpful",
+        "reply": "Reply",
+        "replyTo": "Reply to {{name}}...",
+        "linkCopied": "Link copied to clipboard!",
+        "reportReason": "Reason for reporting this post?",
+        "reportSubmitted": "Report submitted to community managers.",
+        "noComments": "No comments yet"
+    }
 }

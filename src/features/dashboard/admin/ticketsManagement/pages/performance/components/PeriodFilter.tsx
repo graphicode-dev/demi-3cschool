@@ -13,7 +13,7 @@ interface PeriodFilterProps {
 }
 
 export function PeriodFilter({ value, onChange }: PeriodFilterProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
 
     return (
         <div className="flex items-center bg-gray-100 dark:bg-gray-700 rounded-lg p-1">

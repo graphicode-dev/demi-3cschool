@@ -5,5 +5,92 @@
         "certificates": "Certificates",
         "reports": "Reports"
     },
-    "title": "Shared"
+    "title": "Shared",
+    "certificates": {
+        "title": "Certificates",
+        "subtitle": "Student certificates generated after successfully passing the final quiz",
+        "listTitle": "Issued Certificates",
+        "listSubtitle": "Certificates generated after students successfully pass the final quiz",
+        "table": {
+            "id": "ID",
+            "student": "Student",
+            "program": "Program",
+            "levelName": "Level Name",
+            "finalQuizStatus": "Final Quiz Status",
+            "certificateDate": "Certificate Date",
+            "action": "Action"
+        },
+        "status": {
+            "passed": "Passed",
+            "failed": "Failed",
+            "pending": "Pending"
+        },
+        "actions": {
+            "viewStudent": "View Student",
+            "download": "Download Certificate",
+            "send": "Send Certificate"
+        },
+        "filters": {
+            "title": "Filters",
+            "searchPlaceholder": "Search by student name or student id"
+        },
+        "messages": {
+            "downloadSuccess": "Certificate downloaded successfully",
+            "sendSuccess": "Certificate sent to {{studentName}} successfully"
+        },
+        "errors": {
+            "loadFailed": "Failed to load certificates"
+        }
+    },
+    "breadcrumb": {
+        "dashboard": "Dashboard",
+        "classroom": "Classroom",
+        "admin": "Admin"
+    },
+    "userDropdown": {
+        "editProfile": "Edit Profile",
+        "accountSettings": "Account Settings",
+        "support": "Support",
+        "signOut": "Sign Out"
+    },
+    "notifications": {
+        "title": "Notifications",
+        "viewAll": "View All Notifications",
+        "requestsPermission": "requests permission to change",
+        "project": "Project",
+        "minAgo": "{{count}} min ago",
+        "hrAgo": "{{count}} hr ago",
+        "noNotifications": "No new notifications"
+    },
+    "sessionBanner": {
+        "loadingTitle": "Loading session...",
+        "errorTitle": "Error loading session",
+        "emptyTitle": "No upcoming session",
+        "loadingSubtitle": "Please wait...",
+        "errorSubtitle": "Please try again",
+        "emptySubtitle": "Check your schedule",
+        "fallbackDayTime": "--",
+        "liveNow": "Live Now",
+        "upcoming": "Upcoming",
+        "startsIn": "Starts In",
+        "endsIn": "Ends In",
+        "online": "Online",
+        "offline": "At Center",
+        "timeRange": "Time",
+        "sessionId": "Session ID",
+        "state": "State",
+        "status": "Status",
+        "reason": "Reason",
+        "openLocation": "Open Location",
+        "lateBy": "Late by",
+        "join": "Join Now",
+        "details": "Details",
+        "currentTerm": "Current Term",
+        "time": {
+            "d": "Days",
+            "h": "Hours",
+            "m": "Minutes",
+            "s": "Seconds"
+        }
+    }
 }

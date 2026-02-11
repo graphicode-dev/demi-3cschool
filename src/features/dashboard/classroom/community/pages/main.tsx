@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { PageWrapper } from "@/design-system";
 import { CommunityView } from "../components";
 import { useMutationHandler } from "@/shared/api";
@@ -31,6 +32,7 @@ import {
 import type { CommunityTab } from "../types";
 
 export function CommunityPage() {
+    const { t } = useTranslation("community");
     const { execute } = useMutationHandler();
     const [activeTab, setActiveTab] = useState<CommunityTab>("feed");
 
@@ -128,7 +130,7 @@ export function CommunityPage() {
 
     const handleDeletePost = (postId: string) => {
         execute(() => deletePost(Number(postId)), {
-            successMessage: "Post deleted successfully",
+            successMessage: t("toasts.postDeleted"),
         });
     };
 
@@ -140,7 +142,7 @@ export function CommunityPage() {
                     data: { content: newContent },
                 }),
             {
-                successMessage: "Post updated successfully",
+                successMessage: t("toasts.postUpdated"),
             }
         );
     };
@@ -188,7 +190,7 @@ export function CommunityPage() {
         };
 
         execute(() => createPost(payload), {
-            successMessage: "Post created successfully",
+            successMessage: t("toasts.postCreated"),
         });
     };
 
@@ -214,7 +216,7 @@ export function CommunityPage() {
                     postId: Number(postId),
                     data: { reason },
                 }),
-            { successMessage: "Post reported successfully" }
+            { successMessage: t("toasts.postReported") }
         );
     };
 
@@ -232,7 +234,11 @@ export function CommunityPage() {
                         parent_id: parentId ? Number(parentId) : null,
                     },
                 }),
-            { successMessage: parentId ? "Reply added" : "Comment added" }
+            {
+                successMessage: parentId
+                    ? t("toasts.replyAdded")
+                    : t("toasts.commentAdded"),
+            }
         );
     };
 

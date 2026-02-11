@@ -14,7 +14,7 @@ export const supportBlockRoutes: RouteConfig[] = [
             })),
         meta: {
             title: "Support Block",
-            titleKey: "ticketsManagement:supportBlock.pageTitle",
+            titleKey: "adminTicketsManagement:supportBlock.pageTitle",
             requiresAuth: true,
         },
     },
@@ -27,7 +27,7 @@ export const supportBlockRoutes: RouteConfig[] = [
             })),
         meta: {
             title: "Add Block",
-            titleKey: "ticketsManagement:supportBlock.addBlock.pageTitle",
+            titleKey: "adminTicketsManagement:supportBlock.addBlock.pageTitle",
             requiresAuth: true,
         },
     },
@@ -39,7 +39,7 @@ export const supportBlockRoutes: RouteConfig[] = [
             })),
         meta: {
             title: "Edit Block",
-            titleKey: "ticketsManagement:supportBlock.editBlock.pageTitle",
+            titleKey: "adminTicketsManagement:supportBlock.editBlock.pageTitle",
             requiresAuth: true,
         },
     },
@@ -52,7 +52,7 @@ export const supportBlockRoutes: RouteConfig[] = [
             })),
         meta: {
             title: "Manage Team",
-            titleKey: "ticketsManagement:manageTeam.pageTitle",
+            titleKey: "adminTicketsManagement:manageTeam.pageTitle",
             requiresAuth: true,
         },
     },
@@ -65,7 +65,7 @@ export const supportBlockRoutes: RouteConfig[] = [
             })),
         meta: {
             title: "Add Lead",
-            titleKey: "ticketsManagement:manageTeam.addLead.pageTitle",
+            titleKey: "adminTicketsManagement:manageTeam.addLead.pageTitle",
             requiresAuth: true,
         },
     },
@@ -77,7 +77,7 @@ export const supportBlockRoutes: RouteConfig[] = [
             })),
         meta: {
             title: "Edit Lead",
-            titleKey: "ticketsManagement:manageTeam.editLead.pageTitle",
+            titleKey: "adminTicketsManagement:manageTeam.editLead.pageTitle",
             requiresAuth: true,
         },
     },
@@ -89,7 +89,7 @@ export const supportBlockRoutes: RouteConfig[] = [
             })),
         meta: {
             title: "Change Block",
-            titleKey: "ticketsManagement:manageTeam.changeBlock.pageTitle",
+            titleKey: "adminTicketsManagement:manageTeam.changeBlock.pageTitle",
             requiresAuth: true,
         },
     },
@@ -101,7 +101,7 @@ export const supportBlockRoutes: RouteConfig[] = [
             })),
         meta: {
             title: "Convert Lead to Agent",
-            titleKey: "ticketsManagement:manageTeam.convertLead.pageTitle",
+            titleKey: "adminTicketsManagement:manageTeam.convertLead.pageTitle",
             requiresAuth: true,
         },
     },
@@ -114,7 +114,7 @@ export const supportBlockRoutes: RouteConfig[] = [
             })),
         meta: {
             title: "Add Agent",
-            titleKey: "ticketsManagement:manageTeam.addAgent.pageTitle",
+            titleKey: "adminTicketsManagement:manageTeam.addAgent.pageTitle",
             requiresAuth: true,
         },
     },
@@ -126,7 +126,7 @@ export const supportBlockRoutes: RouteConfig[] = [
             })),
         meta: {
             title: "Edit Agent",
-            titleKey: "ticketsManagement:manageTeam.editAgent.pageTitle",
+            titleKey: "adminTicketsManagement:manageTeam.editAgent.pageTitle",
             requiresAuth: true,
         },
     },
@@ -138,7 +138,8 @@ export const supportBlockRoutes: RouteConfig[] = [
             })),
         meta: {
             title: "Promote Agent to Lead",
-            titleKey: "ticketsManagement:manageTeam.promoteAgent.pageTitle",
+            titleKey:
+                "adminTicketsManagement:manageTeam.promoteAgent.pageTitle",
             requiresAuth: true,
         },
     },

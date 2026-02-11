@@ -35,7 +35,7 @@ const statusStyles: Record<StatusType, { text: string; bg: string }> = {
 };
 
 export function SystemHealthCard({ data, isLoading }: SystemHealthCardProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
 
     if (isLoading) {
         return (

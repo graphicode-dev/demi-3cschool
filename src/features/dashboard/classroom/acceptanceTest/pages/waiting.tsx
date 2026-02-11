@@ -54,19 +54,19 @@ function AcceptanceExamWaitingPage() {
                                 <div className="flex items-center gap-3 text-sm">
                                     <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400 shrink-0" />
                                     <span className="text-gray-700 dark:text-gray-300">
-                                        Exam submitted successfully
+                                        {t("waiting.examSubmitted")}
                                     </span>
                                 </div>
                                 <div className="flex items-center gap-3 text-sm">
                                     <div className="h-4 w-4 rounded-full border-2 border-yellow-500 border-t-transparent animate-spin shrink-0"></div>
                                     <span className="text-gray-700 dark:text-gray-300">
-                                        Reviewing answers
+                                        {t("waiting.reviewingAnswers")}
                                     </span>
                                 </div>
                                 <div className="flex items-center gap-3 text-sm opacity-50">
                                     <FileSearch className="h-4 w-4 text-gray-400 shrink-0" />
                                     <span className="text-gray-500 dark:text-gray-400">
-                                        Generating results
+                                        {t("waiting.generatingResults")}
                                     </span>
                                 </div>
                             </div>

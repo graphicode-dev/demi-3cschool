@@ -43,30 +43,6 @@ const MOCK_REPORTS: Report[] = [
     },
 ];
 
-const getStatusLabel = (status: ReportStatus) => {
-    switch (status) {
-        case "draft":
-            return "Draft";
-        case "ready":
-            return "Ready";
-        case "sent":
-            return "Sent";
-        default:
-            return status;
-    }
-};
-
-const getReportTypeLabel = (type: string) => {
-    switch (type) {
-        case "mid_report":
-            return "Mid Report";
-        case "final_report":
-            return "Final Report";
-        default:
-            return type;
-    }
-};
-
 const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("en-US", {
@@ -76,26 +52,34 @@ const formatDate = (dateString: string) => {
     });
 };
 
-const transformReportToTableData = (report: Report): TableData => ({
-    id: report.id,
-    avatar: "",
-    columns: {
-        id: report.id,
-        student: report.studentName,
-        level: report.level.title,
-        track: report.track.title,
-        reportType: getReportTypeLabel(report.reportType),
-        status: getStatusLabel(report.status),
-        statusRaw: report.status,
-        instructor: report.instructor.name,
-        updated: formatDate(report.updatedAt),
-    },
-});
-
 function ReportsPage() {
     const { t } = useTranslation("account");
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
+
+    const getStatusLabel = (status: ReportStatus) => {
+        return t(`reports.status.${status}`, status);
+    };
+
+    const getReportTypeLabel = (type: string) => {
+        return t(`reports.reportType.${type}`, type);
+    };
+
+    const transformReportToTableData = (report: Report): TableData => ({
+        id: report.id,
+        avatar: "",
+        columns: {
+            id: report.id,
+            student: report.studentName,
+            level: report.level.title,
+            track: report.track.title,
+            reportType: getReportTypeLabel(report.reportType),
+            status: getStatusLabel(report.status),
+            statusRaw: report.status,
+            instructor: report.instructor.name,
+            updated: formatDate(report.updatedAt),
+        },
+    });
 
     const { data, isLoading, isError } = useReportsList({
         page: currentPage,
@@ -120,7 +104,7 @@ function ReportsPage() {
 
     const tableData: TableData[] = useMemo(
         () => reports.map(transformReportToTableData),
-        [reports]
+        [reports, transformReportToTableData]
     );
 
     const handlePageChange = useCallback((page: number) => {

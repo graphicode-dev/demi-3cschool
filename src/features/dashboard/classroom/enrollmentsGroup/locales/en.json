@@ -78,6 +78,8 @@
         "titleOnline": "Confirm your group",
         "titleOffline": "Confirm your offline session",
         "subtitle": "You Are About To Join The {{day}} Group.",
+        "subtitleOnline": "You Are About To Join The {{day}} Group.",
+        "subtitleOffline": "You Are About To Join The {{day}} Offline Session.",
         "warningOnline": "Please make sure this time works for you.",
         "warningOffline": "Please arrive 10 minutes early at the center. Bring your laptop and charger!",
         "cantChange": "You can't change your group after joining.",

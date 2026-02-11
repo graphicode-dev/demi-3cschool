@@ -27,7 +27,7 @@ const typeStyles: Record<RequesterType, { bg: string; text: string }> = {
 };
 
 export function RequesterTypeBadge({ type }: RequesterTypeBadgeProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
 
     const typeLabels: Record<RequesterType, string> = {
         student: t("tickets.requesterType.student", "Student"),

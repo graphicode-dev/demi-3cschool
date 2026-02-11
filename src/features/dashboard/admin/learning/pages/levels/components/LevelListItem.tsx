@@ -163,7 +163,7 @@ export function LevelListItem({
                                 <span className="flex items-center gap-1">
                                     <UsersIcon />
                                     {t(
-                                        "levels:levels.capacity",
+                                        "learning:levels.capacity",
                                         "Capacity: {{count}}",
                                         { count: capacity }
                                     )}
@@ -179,7 +179,7 @@ export function LevelListItem({
                                 <span className="flex items-center gap-1">
                                     <CalendarIcon />
                                     {t(
-                                        "levels:levels.updated",
+                                        "learning:levels.updated",
                                         "Updated: {{date}}",
                                         { date: formatDate(updatedAt) }
                                     )}
@@ -198,11 +198,11 @@ export function LevelListItem({
                                 }}
                                 className="h-8 w-8 flex items-center justify-center text-gray-500 hover:text-brand-500 transition-colors"
                                 aria-label={t(
-                                    "levels:levels.quizzes",
+                                    "learning:levels.quizzes",
                                     "Quizzes"
                                 )}
                                 title={t(
-                                    "levels:levels.goToQuizzes",
+                                    "learning:levels.goToQuizzes",
                                     "Go to Quizzes"
                                 )}
                             >

@@ -39,7 +39,7 @@ const statusStyles: Record<
 export function BlockWorkloadOverviewCard({
     block,
 }: BlockWorkloadOverviewCardProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
     const style = statusStyles[block.status];
 
     return (

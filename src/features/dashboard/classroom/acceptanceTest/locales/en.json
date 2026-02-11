@@ -42,6 +42,7 @@
         "questionsLabel": "questions",
         "noQuestionsWarning": "No questions",
         "cannotStartNoQuestions": "This exam has no questions and cannot be started.",
+        "passingScoreLabel": "{{score}}% pass",
         "timeUp": "Time's Up!",
         "timeUpMessage": "Your exam time has ended. Please submit your answers now.",
         "examDetails": "Exam Details"
@@ -50,7 +51,10 @@
         "title": "Awaiting Results",
         "description": "Your acceptance exam has been submitted successfully. Our team is reviewing your answers.",
         "processing": "Processing your results...",
-        "checkBack": "Please check back later or wait for an email notification with your results."
+        "checkBack": "Please check back later or wait for an email notification with your results.",
+        "examSubmitted": "Exam submitted successfully",
+        "reviewingAnswers": "Reviewing answers",
+        "generatingResults": "Generating results"
     },
     "rejected": {
         "title": "Application Not Accepted",

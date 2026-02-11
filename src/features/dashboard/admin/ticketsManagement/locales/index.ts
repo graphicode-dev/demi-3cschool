@@ -8,8 +8,8 @@ import en from "./en.json";
 import ar from "./ar.json";
 
 export const ticketsManagementLocales = {
-    en,
-    ar,
+    en: { ticketsManagement: en },
+    ar: { ticketsManagement: ar },
 };
 
 export default ticketsManagementLocales;

@@ -21,7 +21,7 @@ import type { PeriodFilter as PeriodFilterType } from "../types";
 import { PageWrapper } from "@/design-system";
 
 export function PerformancePage() {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
     const [period, setPeriod] = useState<PeriodFilterType>("weekly");
     const { data, isLoading } = usePerformanceData(period);
 

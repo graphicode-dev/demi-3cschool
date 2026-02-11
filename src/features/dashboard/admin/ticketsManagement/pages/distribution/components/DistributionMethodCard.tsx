@@ -18,7 +18,7 @@ export function DistributionMethodCard({
     onToggle,
     isLoading,
 }: DistributionMethodCardProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
 
     if (isLoading) {
         return (

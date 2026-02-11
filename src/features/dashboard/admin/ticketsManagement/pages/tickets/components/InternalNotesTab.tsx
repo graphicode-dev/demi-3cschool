@@ -21,7 +21,7 @@ export function InternalNotesTab({
     onAddNote,
     isLoading,
 }: InternalNotesTabProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
     const [newNote, setNewNote] = useState("");
 
     const handleAddNote = () => {

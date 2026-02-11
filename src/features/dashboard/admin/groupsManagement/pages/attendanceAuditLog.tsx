@@ -143,7 +143,7 @@ const mockAuditData = [
 ];
 
 export const AttendanceAuditLogPage = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation("groupsManagement");
     const navigate = useNavigate();
 
     // Convert audit data to table format

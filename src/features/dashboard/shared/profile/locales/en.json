@@ -1,0 +1,98 @@
+{
+    "profile": {
+        "yearsOld": "years old",
+        "editProfile": "Edit Profile",
+        "assignToGroup": "Assign to group",
+        "createInvoice": "Create Invoice",
+        "status": {
+            "active": "Active",
+            "inactive": "Inactive"
+        },
+        "tabs": {
+            "personal": "Personal Details",
+            "academic": "Academic Details",
+            "groups": "Group History",
+            "attendance": "Attendance",
+            "assignments": "Assignments",
+            "invoices": "Invoices",
+            "installments": "Installments"
+        },
+        "personal": {
+            "title": "Personal Details",
+            "editDetails": "Edit Details",
+            "fullName": "Full Name",
+            "dateOfBirth": "Date of Birth",
+            "age": "Age",
+            "parentName": "Parent/Guardian Name",
+            "phone": "Phone",
+            "email": "Email Address",
+            "registrationDate": "Registration Date"
+        },
+        "academic": {
+            "title": "Current Academic Details",
+            "programType": "Program Type",
+            "course": "Course",
+            "groupType": "Group Type",
+            "groupName": "Group Name",
+            "instructor": "Instructor",
+            "schedule": "Schedule"
+        },
+        "groups": {
+            "title": "Group History",
+            "instructor": "Instructor",
+            "current": "Current",
+            "completed": "Completed"
+        },
+        "attendance": {
+            "title": "Attendance",
+            "present": "Present",
+            "absent": "Absent",
+            "late": "Late",
+            "attendanceRate": "Attendance Rate",
+            "history": "Attendance History",
+            "date": "Date",
+            "lesson": "Lesson",
+            "instructor": "Instructor",
+            "status": "Status"
+        },
+        "assignments": {
+            "title": "Assignments",
+            "assignmentTitle": "Assignment Title",
+            "course": "Course",
+            "lesson": "Lesson",
+            "dueDate": "Due Date",
+            "submissionDate": "Submission Date",
+            "status": "Status",
+            "submitted": "Submitted",
+            "missing": "Missing",
+            "late": "Late"
+        },
+        "invoices": {
+            "title": "Invoices",
+            "invoiceId": "Invoice ID",
+            "programType": "Program Type",
+            "courseLevel": "Course & Level",
+            "totalAmount": "Total Amount",
+            "paidAmount": "Paid Amount",
+            "remaining": "Remaining",
+            "status": "Status",
+            "createdAt": "Created",
+            "action": "Action",
+            "pay": "Pay",
+            "paid": "Paid",
+            "partial": "Partial",
+            "unpaid": "Unpaid"
+        },
+        "installments": {
+            "title": "Installments",
+            "invoiceId": "Invoice ID",
+            "amount": "Amount",
+            "dueDate": "Due Date",
+            "paymentDate": "Payment Date",
+            "status": "Status",
+            "paid": "Paid",
+            "pending": "Pending",
+            "overdue": "Overdue"
+        }
+    }
+}

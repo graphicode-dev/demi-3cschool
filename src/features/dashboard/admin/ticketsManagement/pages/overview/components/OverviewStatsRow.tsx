@@ -17,7 +17,7 @@ interface OverviewStatsRowProps {
 }
 
 export function OverviewStatsRow({ stats, isLoading }: OverviewStatsRowProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
 
     if (isLoading) {
         return (

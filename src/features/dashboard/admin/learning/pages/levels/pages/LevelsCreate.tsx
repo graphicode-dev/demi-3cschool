@@ -73,7 +73,7 @@ export default function LearningLevelsCreate() {
                 }),
             {
                 successMessage: t(
-                    "levels:levels.messages.createSuccess",
+                    "learning:levels.messages.createSuccess",
                     "Level created successfully"
                 ),
                 onSuccess: () => navigate(paths.levels.list()),
@@ -88,9 +88,12 @@ export default function LearningLevelsCreate() {
     return (
         <PageWrapper
             pageHeaderProps={{
-                title: t("levels:levels.form.create.title", "Create New Level"),
+                title: t(
+                    "learning:levels.form.create.title",
+                    "Create New Level"
+                ),
                 subtitle: t(
-                    "levels:levels.form.create.subtitle",
+                    "learning:levels.form.create.subtitle",
                     `Add a new level to ${curriculumType === "first_term" ? "First Term" : curriculumType === "second_term" ? "Second Term" : "Summer Camp"} Learning`
                 ),
                 backButton: true,
@@ -110,7 +113,7 @@ export default function LearningLevelsCreate() {
                     type={{
                         type: "dropdown",
                         placeholder: t(
-                            "levels:levels.form.fields.course.placeholder",
+                            "learning:levels.form.fields.course.placeholder",
                             "Select a course"
                         ),
                         options: courses.map((course) => ({
@@ -120,7 +123,7 @@ export default function LearningLevelsCreate() {
                     }}
                     label={{
                         text: t(
-                            "levels:levels.form.fields.course.label",
+                            "learning:levels.form.fields.course.label",
                             "Course"
                         ),
                         required: true,
@@ -134,13 +137,13 @@ export default function LearningLevelsCreate() {
                     type={{
                         type: "text",
                         placeholder: t(
-                            "levels:levels.form.fields.title.placeholder",
+                            "learning:levels.form.fields.title.placeholder",
                             "Enter level title"
                         ),
                     }}
                     label={{
                         text: t(
-                            "levels:levels.form.fields.title.label",
+                            "learning:levels.form.fields.title.label",
                             "Level Title"
                         ),
                         required: true,
@@ -154,13 +157,13 @@ export default function LearningLevelsCreate() {
                     type={{
                         type: "checkbox",
                         label: t(
-                            "levels:levels.form.fields.active.label",
+                            "learning:levels.form.fields.active.label",
                             "Active"
                         ),
                     }}
                     label={{
                         text: t(
-                            "levels:levels.form.fields.status.label",
+                            "learning:levels.form.fields.status.label",
                             "Status"
                         ),
                     }}
@@ -173,14 +176,14 @@ export default function LearningLevelsCreate() {
                     type={{
                         type: "textarea",
                         placeholder: t(
-                            "levels:levels.form.fields.description.placeholder",
+                            "learning:levels.form.fields.description.placeholder",
                             "Enter level description"
                         ),
                         rows: 4,
                     }}
                     label={{
                         text: t(
-                            "levels:levels.form.fields.description.label",
+                            "learning:levels.form.fields.description.label",
                             "Description"
                         ),
                         required: true,

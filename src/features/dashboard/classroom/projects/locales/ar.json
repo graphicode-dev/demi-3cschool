@@ -1,4 +1,5 @@
 {
+    "loading": "جاري التحميل...",
     "title": "المشاريع",
     "description": "اختر درسك وأدر واجباتك المنزلية.",
     "chooseLesson": "اختر الدرس",
@@ -12,13 +13,15 @@
     "status": {
         "new": "جديد",
         "underReview": "قيد المراجعة",
-        "reviewed": "تمت المراجعة"
+        "reviewed": "تمت المراجعة",
+        "completed": "مكتمل"
     },
     "homeworkFile": {
         "title": "ملف الواجب",
         "description": "راجع الواجب أدناه قبل البدء في عملك.",
         "download": "تحميل",
-        "previewPlaceholder": "ستظهر معاينة الملف هنا"
+        "previewPlaceholder": "ستظهر معاينة الملف هنا",
+        "assignment": "الواجب"
     },
     "result": {
         "title": "نتيجة الواجب",
@@ -40,6 +43,10 @@
         "uploadLabel": "رفع الملفات",
         "dropzone": "اسحب ملفك هنا أو انقر للتصفح",
         "supportedFormats": "المدعوم: PDF, JPG, PNG",
-        "button": "تسليم الواجب"
+        "button": "تسليم الواجب",
+        "preview": "معاينة",
+        "remove": "إزالة",
+        "submitting": "جاري التسليم...",
+        "noPreview": "المعاينة غير متاحة لهذا النوع من الملفات"
     }
 }

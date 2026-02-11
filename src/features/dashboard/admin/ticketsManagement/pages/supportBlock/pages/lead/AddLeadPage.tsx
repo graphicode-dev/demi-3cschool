@@ -19,7 +19,7 @@ interface UserOption {
 }
 
 export function AddLeadPage() {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
     const navigate = useNavigate();
     const { addToast } = useToast();
     const { blockId } = useParams<{ blockId: string }>();

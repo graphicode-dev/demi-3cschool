@@ -45,7 +45,7 @@ interface TimeLeft {
 type SessionKind = "online" | "offline";
 
 const NavbarSessionCountdown = () => {
-    const { t, i18n } = useTranslation("dashboard");
+    const { t, i18n } = useTranslation("shared");
     const isRTL = i18n.language === "ar";
     const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
     const [countdownMode, setCountdownMode] = useState<
@@ -113,7 +113,7 @@ const NavbarSessionCountdown = () => {
             },
             term: {
                 id: 1,
-                name: "Current Term",
+                name: t("sessionBanner.currentTerm", "Current Term"),
             },
             sessionDate: sessionEvent.sessionDate,
             startTime: sessionEvent.startTime,
@@ -142,7 +142,7 @@ const NavbarSessionCountdown = () => {
             createdAt: currentSession.createdAt,
             updatedAt: currentSession.updatedAt,
         };
-    }, [sessionEvent, currentSession]);
+    }, [sessionEvent, currentSession, t]);
 
     const sessionTiming = useMemo(() => {
         if (!sessionEvent) return null;

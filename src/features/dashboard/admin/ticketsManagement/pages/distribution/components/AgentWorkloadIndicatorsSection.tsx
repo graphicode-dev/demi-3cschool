@@ -18,7 +18,7 @@ export function AgentWorkloadIndicatorsSection({
     agents,
     isLoading,
 }: AgentWorkloadIndicatorsSectionProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
 
     if (isLoading) {
         return (

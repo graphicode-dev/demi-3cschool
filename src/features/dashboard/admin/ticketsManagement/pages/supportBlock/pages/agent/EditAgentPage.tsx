@@ -14,7 +14,7 @@ import { useSupportBlocks, useUpdateSupportBlock } from "../../api";
 import type { AgentStatus, SupportBlockMember } from "../../types";
 
 export function EditAgentPage() {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
     const navigate = useNavigate();
     const { blockId, id } = useParams<{ blockId: string; id: string }>();
     const { addToast } = useToast();
@@ -34,14 +34,15 @@ export function EditAgentPage() {
     // Get leads for the selected block (leads are members with isLead=true)
     const availableLeads = useMemo(() => {
         if (!selectedBlockId) {
-            return blocks.flatMap((block) =>
-                block.members.filter((member) => member.isLead)
+            return blocks.flatMap(
+                (block) =>
+                    block.members?.filter((member) => member.isLead) ?? []
             );
         }
         const selectedBlock = blocks.find(
             (block) => String(block.id) === selectedBlockId
         );
-        return selectedBlock?.members.filter((member) => member.isLead) ?? [];
+        return selectedBlock?.members?.filter((member) => member.isLead) ?? [];
     }, [selectedBlockId, blocks]);
 
     const currentPlacement = useMemo(() => {

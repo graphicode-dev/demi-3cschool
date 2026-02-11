@@ -30,7 +30,7 @@ const GroupBadge: React.FC<{ group: string }> = ({ group }) => {
 export const InstructorSessionsTable: React.FC<
     InstructorSessionsTableProps
 > = ({ sessions, loading = false, className = "", onChangeTeacher }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation("groupsManagement");
 
     // Convert session data to table format
     const tableData: TableData[] = sessions.map((session) => ({

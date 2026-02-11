@@ -44,7 +44,7 @@ export function ConversationTab({
     onSendMessage,
     isLoading,
 }: ConversationTabProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
     const [newMessage, setNewMessage] = useState("");
     const currentUser = authStore((state) => state.user);
     const currentUserId = currentUser?.id ? Number(currentUser.id) : null;

@@ -12,7 +12,7 @@ import { PageWrapper, useToast } from "@/design-system";
 import { supportBlock } from "../../navigation/paths";
 import { useSupportBlocks, useUpdateSupportBlock } from "../../api";
 export function ChangeBlockPage() {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
     const navigate = useNavigate();
     const { blockId, id } = useParams<{ blockId: string; id: string }>();
     const { addToast } = useToast();

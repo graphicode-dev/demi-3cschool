@@ -76,15 +76,19 @@ export function QuizCard({
                         </div>
                         <div>
                             <h3 className="font-medium text-gray-900 dark:text-white">
-                                {t("levels:quiz.quizTitle", "Quiz #{{id}}", {
-                                    id: quiz.id,
-                                })}
+                                {t(
+                                    "groupsManagement:quiz.quizTitle",
+                                    "Quiz #{{id}}",
+                                    {
+                                        id: quiz.id,
+                                    }
+                                )}
                             </h3>
                             <div className="flex items-center gap-4 mt-1 text-sm text-gray-500 dark:text-gray-400">
                                 <span className="flex items-center gap-1">
                                     <Clock className="w-4 h-4" />
                                     {quiz.timeLimit}{" "}
-                                    {t("levels:quiz.min", "min")}
+                                    {t("groupsManagement:quiz.min", "min")}
                                 </span>
                                 <span className="flex items-center gap-1">
                                     <Target className="w-4 h-4" />
@@ -93,11 +97,17 @@ export function QuizCard({
                                 <span className="flex items-center gap-1">
                                     <RefreshCw className="w-4 h-4" />
                                     {quiz.maxAttempts}{" "}
-                                    {t("levels:quiz.attempts", "attempts")}
+                                    {t(
+                                        "groupsManagement:quiz.attempts",
+                                        "attempts"
+                                    )}
                                 </span>
                                 <span>
                                     {quiz.questions.length}{" "}
-                                    {t("levels:quiz.questions", "questions")}
+                                    {t(
+                                        "groupsManagement:quiz.questions",
+                                        "questions"
+                                    )}
                                 </span>
                             </div>
                         </div>
@@ -107,7 +117,7 @@ export function QuizCard({
                             <span
                                 className="p-1.5 text-gray-400"
                                 title={t(
-                                    "levels:quiz.shuffleEnabled",
+                                    "groupsManagement:quiz.shuffleEnabled",
                                     "Shuffle enabled"
                                 )}
                             >
@@ -118,7 +128,7 @@ export function QuizCard({
                             <span
                                 className="p-1.5 text-gray-400"
                                 title={t(
-                                    "levels:quiz.resultsVisible",
+                                    "groupsManagement:quiz.resultsVisible",
                                     "Results visible"
                                 )}
                             >
@@ -161,7 +171,10 @@ export function QuizCard({
                 <div className="border-t border-gray-200 dark:border-gray-700 p-5 bg-gray-50 dark:bg-gray-850">
                     <div className="flex items-center justify-between mb-4">
                         <h4 className="font-medium text-gray-900 dark:text-white">
-                            {t("levels:quiz.questionsTitle", "Questions")}
+                            {t(
+                                "groupsManagement:quiz.questionsTitle",
+                                "Questions"
+                            )}
                         </h4>
                         <button
                             type="button"
@@ -169,7 +182,10 @@ export function QuizCard({
                             className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-900/20 rounded-lg hover:bg-brand-100 dark:hover:bg-brand-900/30 transition-colors"
                         >
                             <Plus className="w-4 h-4" />
-                            {t("levels:quiz.addQuestion", "Add Question")}
+                            {t(
+                                "groupsManagement:quiz.addQuestion",
+                                "Add Question"
+                            )}
                         </button>
                     </div>
 
@@ -190,13 +206,13 @@ export function QuizCard({
                             <ClipboardList className="w-12 h-12 mx-auto mb-3 opacity-50" />
                             <p>
                                 {t(
-                                    "levels:quiz.noQuestions",
+                                    "groupsManagement:quiz.noQuestions",
                                     "No questions yet"
                                 )}
                             </p>
                             <p className="text-sm mt-1">
                                 {t(
-                                    "levels:quiz.addFirstQuestion",
+                                    "groupsManagement:quiz.addFirstQuestion",
                                     "Click 'Add Question' to create your first question"
                                 )}
                             </p>

@@ -19,7 +19,7 @@ import { useDistributionData } from "../api";
 import { PageWrapper } from "@/design-system";
 
 export function DistributionPage() {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
     const { data, isLoading } = useDistributionData();
 
     const handleToggleMethod = (isActive: boolean) => {

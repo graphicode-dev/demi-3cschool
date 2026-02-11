@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 import { Ticket } from "lucide-react";
 
 export function TicketEmptyState() {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
 
     return (
         <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">

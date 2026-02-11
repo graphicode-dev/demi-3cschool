@@ -56,6 +56,7 @@
     },
     "channel": {
         "follow": "Follow",
+        "unfollow": "Unfollow",
         "following": "Following",
         "followers": "followers",
         "subscribers": "subscribers",
@@ -80,6 +81,14 @@
         "joinMentorSquad": "Join the Mentor Squad",
         "mentorDescription": "Help others solve coding challenges and earn exclusive rewards.",
         "applyToHelp": "Apply to Help"
+    },
+    "toasts": {
+        "postDeleted": "Post deleted successfully",
+        "postUpdated": "Post updated successfully",
+        "postCreated": "Post created successfully",
+        "postReported": "Post reported successfully",
+        "replyAdded": "Reply added",
+        "commentAdded": "Comment added"
     },
     "empty": {
         "noUpdates": "No updates yet",

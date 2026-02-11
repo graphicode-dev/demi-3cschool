@@ -22,7 +22,7 @@ interface QuickNavigationProps {
 }
 
 export function QuickNavigation({ isLoading }: QuickNavigationProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
     const navigate = useNavigate();
 
     const navItems: QuickNavItem[] = [

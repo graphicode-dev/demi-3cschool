@@ -227,7 +227,7 @@ export default function QuizEditor({
                 }),
             {
                 successMessage: t(
-                    "lessons:content.quizzes.toast.questionAddedMessage",
+                    "learning:lessons.content.quizzes.toast.questionAddedMessage",
                     "New question has been added"
                 ),
                 onSuccess: () => handleCancelAddQuestion(),
@@ -250,7 +250,7 @@ export default function QuizEditor({
 
         execute(() => deleteQuestionAsync(deleteQuestionId), {
             successMessage: t(
-                "lessons:content.quizzes.toast.questionDeletedMessage",
+                "learning:lessons.content.quizzes.toast.questionDeletedMessage",
                 "Question has been deleted"
             ),
             onSuccess: () => {
@@ -291,7 +291,7 @@ export default function QuizEditor({
                 }),
             {
                 successMessage: t(
-                    "lessons:content.quizzes.toast.questionUpdatedMessage",
+                    "learning:lessons.content.quizzes.toast.questionUpdatedMessage",
                     "Question has been updated"
                 ),
                 onSuccess: () => cancelEditQuestion(),
@@ -334,7 +334,7 @@ export default function QuizEditor({
                 () => updateQuizAsync({ id: String(quiz.id), data: payload }),
                 {
                     successMessage: t(
-                        "lessons:content.quizzes.toast.updateSuccessMessage",
+                        "learning:lessons.content.quizzes.toast.updateSuccessMessage",
                         "Quiz has been updated successfully"
                     ),
                     onSuccess: () => {
@@ -347,7 +347,7 @@ export default function QuizEditor({
         } else {
             execute(() => createQuizAsync(payload), {
                 successMessage: t(
-                    "lessons:content.quizzes.toast.createSuccessMessage",
+                    "learning:lessons.content.quizzes.toast.createSuccessMessage",
                     "Quiz has been created successfully"
                 ),
                 onSuccess: () => {
@@ -364,7 +364,7 @@ export default function QuizEditor({
 
         execute(() => deleteQuizAsync(String(quiz.id)), {
             successMessage: t(
-                "lessons:content.quizzes.toast.deleteSuccessMessage",
+                "learning:lessons.content.quizzes.toast.deleteSuccessMessage",
                 "Quiz has been deleted successfully"
             ),
             onSuccess: () => {
@@ -378,17 +378,17 @@ export default function QuizEditor({
         switch (type) {
             case "single_choice":
                 return t(
-                    "lessons:content.quizzes.questionTypes.singleChoice",
+                    "learning:lessons.content.quizzes.questionTypes.singleChoice",
                     "Single Choice"
                 );
             case "multiple_choice":
                 return t(
-                    "lessons:content.quizzes.questionTypes.multipleChoice",
+                    "learning:lessons.content.quizzes.questionTypes.multipleChoice",
                     "Multiple Choice"
                 );
             case "true_false":
                 return t(
-                    "lessons:content.quizzes.questionTypes.trueFalse",
+                    "learning:lessons.content.quizzes.questionTypes.trueFalse",
                     "True/False"
                 );
             default:
@@ -403,13 +403,13 @@ export default function QuizEditor({
                 <div>
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                         {t(
-                            "lessons:content.quizzes.editor.title",
+                            "learning:lessons.content.quizzes.editor.title",
                             "Quiz Editor"
                         )}
                     </h3>
                     <p className="text-sm text-gray-500 dark:text-gray-400">
                         {t(
-                            "lessons:content.quizzes.editor.subtitle",
+                            "learning:lessons.content.quizzes.editor.subtitle",
                             "Configure content details and settings"
                         )}
                     </p>
@@ -427,14 +427,14 @@ export default function QuizEditor({
                 {/* Title */}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        {t("lessons:content.fields.title", "Title")} *
+                        {t("learning:lessons.content.fields.title", "Title")} *
                     </label>
                     <input
                         type="text"
                         value={formData.title}
                         onChange={(e) => handleChange("title", e.target.value)}
                         placeholder={t(
-                            "lessons:content.quizzes.titlePlaceholder",
+                            "learning:lessons.content.quizzes.titlePlaceholder",
                             "Enter quiz title..."
                         )}
                         className={`w-full px-4 py-2.5 rounded-xl border bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none ${fieldErrors.title ? "border-red-500" : "border-gray-200 dark:border-gray-600"}`}
@@ -450,7 +450,7 @@ export default function QuizEditor({
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         {t(
-                            "lessons:content.quizzes.instructions",
+                            "learning:lessons.content.quizzes.instructions",
                             "Description / Instructions"
                         )}
                     </label>
@@ -460,7 +460,7 @@ export default function QuizEditor({
                             handleChange("description", e.target.value)
                         }
                         placeholder={t(
-                            "lessons:content.quizzes.instructionsPlaceholder",
+                            "learning:lessons.content.quizzes.instructionsPlaceholder",
                             "Provide quiz instructions..."
                         )}
                         rows={3}
@@ -473,7 +473,7 @@ export default function QuizEditor({
                     <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             {t(
-                                "lessons:content.quizzes.timeLimit",
+                                "learning:lessons.content.quizzes.timeLimit",
                                 "Time Limit (minutes)"
                             )}
                         </label>
@@ -490,7 +490,7 @@ export default function QuizEditor({
                     <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             {t(
-                                "lessons:content.quizzes.passingScore",
+                                "learning:lessons.content.quizzes.passingScore",
                                 "Passing Score (%)"
                             )}
                         </label>
@@ -507,7 +507,7 @@ export default function QuizEditor({
                     <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             {t(
-                                "lessons:content.quizzes.attemptsAllowed",
+                                "learning:lessons.content.quizzes.attemptsAllowed",
                                 "Attempts Allowed"
                             )}
                         </label>
@@ -529,7 +529,7 @@ export default function QuizEditor({
                 <div className="flex items-center justify-between mb-4">
                     <h4 className="text-base font-semibold text-gray-900 dark:text-gray-100">
                         {t(
-                            "lessons:content.quizzes.questions",
+                            "learning:lessons.content.quizzes.questions",
                             "Quiz Questions"
                         )}{" "}
                         ({questions.length})
@@ -540,7 +540,7 @@ export default function QuizEditor({
                     >
                         <Plus className="w-4 h-4" />
                         {t(
-                            "lessons:content.quizzes.addQuestion",
+                            "learning:lessons.content.quizzes.addQuestion",
                             "Add Question"
                         )}
                     </button>
@@ -551,7 +551,7 @@ export default function QuizEditor({
                     <div className="mb-4 p-4 bg-blue-50 dark:bg-blue-500/10 border border-blue-200 dark:border-blue-500/30 rounded-xl">
                         <h5 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">
                             {t(
-                                "lessons:content.quizzes.newQuestion",
+                                "learning:lessons.content.quizzes.newQuestion",
                                 "New Question"
                             )}
                         </h5>
@@ -559,7 +559,7 @@ export default function QuizEditor({
                             <div>
                                 <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                                     {t(
-                                        "lessons:content.quizzes.questionText",
+                                        "learning:lessons.content.quizzes.questionText",
                                         "Question Text"
                                     )}
                                 </label>
@@ -574,7 +574,7 @@ export default function QuizEditor({
                                     }
                                     className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                                     placeholder={t(
-                                        "lessons:content.quizzes.questionPlaceholder",
+                                        "learning:lessons.content.quizzes.questionPlaceholder",
                                         "Enter question..."
                                     )}
                                     autoFocus
@@ -584,7 +584,7 @@ export default function QuizEditor({
                                 <div className="flex-1">
                                     <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                                         {t(
-                                            "lessons:content.quizzes.questionType",
+                                            "learning:lessons.content.quizzes.questionType",
                                             "Type"
                                         )}
                                     </label>
@@ -601,19 +601,19 @@ export default function QuizEditor({
                                     >
                                         <option value="single_choice">
                                             {t(
-                                                "lessons:content.quizzes.questionTypes.singleChoice",
+                                                "learning:lessons.content.quizzes.questionTypes.singleChoice",
                                                 "Single Choice"
                                             )}
                                         </option>
                                         <option value="multiple_choice">
                                             {t(
-                                                "lessons:content.quizzes.questionTypes.multipleChoice",
+                                                "learning:lessons.content.quizzes.questionTypes.multipleChoice",
                                                 "Multiple Choice"
                                             )}
                                         </option>
                                         <option value="true_false">
                                             {t(
-                                                "lessons:content.quizzes.questionTypes.trueFalse",
+                                                "learning:lessons.content.quizzes.questionTypes.trueFalse",
                                                 "True/False"
                                             )}
                                         </option>
@@ -622,7 +622,7 @@ export default function QuizEditor({
                                 <div className="w-24">
                                     <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                                         {t(
-                                            "lessons:content.quizzes.points",
+                                            "learning:lessons.content.quizzes.points",
                                             "Points"
                                         )}
                                     </label>
@@ -642,7 +642,7 @@ export default function QuizEditor({
                             <div>
                                 <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                                     {t(
-                                        "lessons:content.quizzes.explanation",
+                                        "learning:lessons.content.quizzes.explanation",
                                         "Explanation"
                                     )}
                                 </label>
@@ -657,7 +657,7 @@ export default function QuizEditor({
                                     }
                                     className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                                     placeholder={t(
-                                        "lessons:content.quizzes.explanationPlaceholder",
+                                        "learning:lessons.content.quizzes.explanationPlaceholder",
                                         "Explanation shown after answering..."
                                     )}
                                 />
@@ -683,7 +683,7 @@ export default function QuizEditor({
                                         <Plus className="w-4 h-4" />
                                     )}
                                     {t(
-                                        "lessons:content.quizzes.addQuestion",
+                                        "learning:lessons.content.quizzes.addQuestion",
                                         "Add Question"
                                     )}
                                 </button>
@@ -701,7 +701,7 @@ export default function QuizEditor({
                     ) : questions.length === 0 ? (
                         <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-8">
                             {t(
-                                "lessons:content.quizzes.noQuestions",
+                                "learning:lessons.content.quizzes.noQuestions",
                                 "No questions yet. Click 'Add Question' to create one."
                             )}
                         </p>
@@ -727,7 +727,7 @@ export default function QuizEditor({
                                             <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
                                                 {question.question ||
                                                     t(
-                                                        "lessons:content.quizzes.newQuestion",
+                                                        "learning:lessons.content.quizzes.newQuestion",
                                                         "New Question"
                                                     )}
                                             </p>
@@ -737,7 +737,7 @@ export default function QuizEditor({
                                                 )}{" "}
                                                 • {question.points}{" "}
                                                 {t(
-                                                    "lessons:content.quizzes.points",
+                                                    "learning:lessons.content.quizzes.points",
                                                     "points"
                                                 )}
                                             </p>
@@ -782,7 +782,7 @@ export default function QuizEditor({
                                                 <div>
                                                     <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                                                         {t(
-                                                            "lessons:content.quizzes.questionText",
+                                                            "learning:lessons.content.quizzes.questionText",
                                                             "Question Text"
                                                         )}
                                                     </label>
@@ -803,7 +803,7 @@ export default function QuizEditor({
                                                         }
                                                         className="w-full px-3 py-2 text-sm rounded-lg border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
                                                         placeholder={t(
-                                                            "lessons:content.quizzes.questionPlaceholder",
+                                                            "learning:lessons.content.quizzes.questionPlaceholder",
                                                             "Enter question..."
                                                         )}
                                                     />
@@ -812,7 +812,7 @@ export default function QuizEditor({
                                                     <div className="flex-1">
                                                         <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                                                             {t(
-                                                                "lessons:content.quizzes.questionType",
+                                                                "learning:lessons.content.quizzes.questionType",
                                                                 "Type"
                                                             )}
                                                         </label>
@@ -834,19 +834,19 @@ export default function QuizEditor({
                                                         >
                                                             <option value="single_choice">
                                                                 {t(
-                                                                    "lessons:content.quizzes.questionTypes.singleChoice",
+                                                                    "learning:lessons.content.quizzes.questionTypes.singleChoice",
                                                                     "Single Choice"
                                                                 )}
                                                             </option>
                                                             <option value="multiple_choice">
                                                                 {t(
-                                                                    "lessons:content.quizzes.questionTypes.multipleChoice",
+                                                                    "learning:lessons.content.quizzes.questionTypes.multipleChoice",
                                                                     "Multiple Choice"
                                                                 )}
                                                             </option>
                                                             <option value="true_false">
                                                                 {t(
-                                                                    "lessons:content.quizzes.questionTypes.trueFalse",
+                                                                    "learning:lessons.content.quizzes.questionTypes.trueFalse",
                                                                     "True/False"
                                                                 )}
                                                             </option>
@@ -855,7 +855,7 @@ export default function QuizEditor({
                                                     <div className="w-24">
                                                         <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1">
                                                             {t(
-                                                                "lessons:content.quizzes.points",
+                                                                "learning:lessons.content.quizzes.points",
                                                                 "Points"
                                                             )}
                                                         </label>
@@ -967,11 +967,11 @@ export default function QuizEditor({
                 onClose={() => setShowDeleteDialog(false)}
                 variant="danger"
                 title={t(
-                    "lessons:content.quizzes.deleteDialog.title",
+                    "learning:lessons.content.quizzes.deleteDialog.title",
                     "Delete Quiz"
                 )}
                 message={t(
-                    "lessons:content.quizzes.deleteDialog.message",
+                    "learning:lessons.content.quizzes.deleteDialog.message",
                     "Are you sure you want to delete this quiz? This action cannot be undone."
                 )}
                 confirmText={t("common.delete", "Delete")}
@@ -989,11 +989,11 @@ export default function QuizEditor({
                 }}
                 variant="danger"
                 title={t(
-                    "lessons:content.quizzes.deleteQuestionDialog.title",
+                    "learning:lessons.content.quizzes.deleteQuestionDialog.title",
                     "Delete Question"
                 )}
                 message={t(
-                    "lessons:content.quizzes.deleteQuestionDialog.message",
+                    "learning:lessons.content.quizzes.deleteQuestionDialog.message",
                     "Are you sure you want to delete this question? All options will also be deleted."
                 )}
                 confirmText={t("common.delete", "Delete")}

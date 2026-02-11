@@ -3,7 +3,7 @@ import type { NavItem } from "@/navigation/nav.types";
 
 export const resourcesNavItem: NavItem = {
     key: "resources",
-    labelKey: "adminResources:resources",
+    labelKey: "adminResources:title",
     label: "Resources",
     href: "/admin/resources",
     icon: FolderOpen,

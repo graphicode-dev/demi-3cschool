@@ -10,7 +10,7 @@ import { supportHelp } from "./paths";
 
 export const supportHelpNavItem: NavItem = {
     key: "support-help",
-    labelKey: "supportHelp:supportHelp.pageTitle",
+    labelKey: "supportHelp:supportHelp.breadcrumb",
     label: "Support & Help",
     href: supportHelp.root(),
     icon: HelpCircle,

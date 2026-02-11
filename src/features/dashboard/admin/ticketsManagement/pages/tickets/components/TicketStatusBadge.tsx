@@ -35,7 +35,7 @@ export function TicketStatusBadge({
     status,
     size = "sm",
 }: TicketStatusBadgeProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
 
     const statusLabels: Record<TicketStatus, string> = {
         open: t("tickets.status.open", "Open"),

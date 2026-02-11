@@ -87,7 +87,7 @@ export function PerformanceStatsRow({
     stats,
     isLoading,
 }: PerformanceStatsRowProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
 
     if (isLoading) {
         return (

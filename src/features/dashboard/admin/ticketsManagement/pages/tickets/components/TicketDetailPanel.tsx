@@ -39,7 +39,7 @@ export function TicketDetailPanel({
     onUpdateTicket,
     isLoading,
 }: TicketDetailPanelProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
     const [activeTab, setActiveTab] = useState<TabId>("conversation");
 
     // Fetch messages and notes from API

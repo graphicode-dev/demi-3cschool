@@ -22,7 +22,7 @@ export function TicketListItem({
     isSelected,
     onClick,
 }: TicketListItemProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
 
     const getInitials = (name: string) => {
         return name

@@ -8,9 +8,11 @@
         "view": "عرض",
         "search": "بحث...",
         "filter": "تصفية",
-        "noData": "لا توجد بيانات"
+        "noData": "لا توجد بيانات",
+        "timeAgo": "منذ {{time}}"
     },
     "supportHelp": {
+        "breadcrumb": "الدعم والمساعدة",
         "pageTitle": "الدعم والمساعدة",
         "pageSubtitle": "هل تحتاج مساعدة؟ اسأل فريق الدعم لدينا.",
         "searchPlaceholder": "ابحث عن مشكلتك...",

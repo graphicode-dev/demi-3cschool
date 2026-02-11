@@ -19,8 +19,8 @@ export function ResourceSiteMap() {
     const routes: SiteMapRoute[] = [
         {
             path: "/admin/resources",
-            labelKey: "resources:sitemap.routes.resourcesList",
-            descriptionKey: "resources:sitemap.routes.resourcesListDesc",
+            labelKey: "adminResources:sitemap.routes.resourcesList",
+            descriptionKey: "adminResources:sitemap.routes.resourcesListDesc",
             icon: FolderOpen,
         },
     ];
@@ -29,14 +29,15 @@ export function ResourceSiteMap() {
         routes.push(
             {
                 path: `/admin/resources/folder/${folderId}`,
-                labelKey: "resources:sitemap.routes.folderDetails",
-                descriptionKey: "resources:sitemap.routes.folderDetailsDesc",
+                labelKey: "adminResources:sitemap.routes.folderDetails",
+                descriptionKey:
+                    "adminResources:sitemap.routes.folderDetailsDesc",
                 icon: FolderOpen,
             },
             {
                 path: `/admin/resources/folder/${folderId}/resource/create`,
-                labelKey: "resources:sitemap.routes.addResource",
-                descriptionKey: "resources:sitemap.routes.addResourceDesc",
+                labelKey: "adminResources:sitemap.routes.addResource",
+                descriptionKey: "adminResources:sitemap.routes.addResourceDesc",
                 icon: FilePlus,
             }
         );
@@ -45,8 +46,8 @@ export function ResourceSiteMap() {
     if (folderId && resourceId) {
         routes.push({
             path: `/admin/resources/folder/${folderId}/resource/${resourceId}/edit`,
-            labelKey: "resources:sitemap.routes.editResource",
-            descriptionKey: "resources:sitemap.routes.editResourceDesc",
+            labelKey: "adminResources:sitemap.routes.editResource",
+            descriptionKey: "adminResources:sitemap.routes.editResourceDesc",
             icon: Pencil,
         });
     }
@@ -54,8 +55,8 @@ export function ResourceSiteMap() {
     return (
         <FeatureSiteMap
             featureKey="resources"
-            titleKey="resources:sitemap.resource.title"
-            descriptionKey="resources:sitemap.resource.description"
+            titleKey="adminResources:sitemap.resource.title"
+            descriptionKey="adminResources:sitemap.resource.description"
             routes={routes}
             homePath={
                 folderId

@@ -38,7 +38,7 @@ import type { SupportAgent } from "../types";
 import type { TableColumn, TableData } from "@/shared/types";
 
 export function ManageTeamPage() {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
     const navigate = useNavigate();
     const { addToast } = useToast();
     const { blockId } = useParams<{ blockId: string }>();

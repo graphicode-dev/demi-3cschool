@@ -33,7 +33,7 @@ export function DetailsTab({
     agents,
     onUpdateTicket,
 }: DetailsTabProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
 
     const getInitials = (name: string) => {
         return name

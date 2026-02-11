@@ -18,7 +18,7 @@ import { useOverviewData } from "../api";
 import { PageWrapper } from "@/design-system";
 
 export function OverviewPage() {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
     const { data, isLoading } = useOverviewData();
 
     return (

@@ -131,7 +131,7 @@ export default function VideoEditor({
         if (isEditing && video) {
             execute(() => updateMutateAsync({ id: video.id, data: payload }), {
                 successMessage: t(
-                    "lessons:content.videos.toast.updateSuccessMessage",
+                    "learning:lessons.content.videos.toast.updateSuccessMessage",
                     "Video has been updated successfully"
                 ),
                 onSuccess: () => {
@@ -143,7 +143,7 @@ export default function VideoEditor({
         } else {
             execute(() => createMutateAsync(payload), {
                 successMessage: t(
-                    "lessons:content.videos.toast.createSuccessMessage",
+                    "learning:lessons.content.videos.toast.createSuccessMessage",
                     "Video has been created successfully"
                 ),
                 onSuccess: () => {
@@ -160,7 +160,7 @@ export default function VideoEditor({
 
         execute(() => deleteMutateAsync(video.id), {
             successMessage: t(
-                "lessons:content.videos.toast.deleteSuccessMessage",
+                "learning:lessons.content.videos.toast.deleteSuccessMessage",
                 "Video has been deleted successfully"
             ),
             onSuccess: () => {
@@ -185,13 +185,13 @@ export default function VideoEditor({
                 <div>
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                         {t(
-                            "lessons:content.videos.editor.title",
+                            "learning:lessons.content.videos.editor.title",
                             "Video Editor"
                         )}
                     </h3>
                     <p className="text-sm text-gray-500 dark:text-gray-400">
                         {t(
-                            "lessons:content.videos.editor.subtitle",
+                            "learning:lessons.content.videos.editor.subtitle",
                             "Configure content details and settings"
                         )}
                     </p>
@@ -209,14 +209,14 @@ export default function VideoEditor({
                 {/* Title */}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        {t("lessons:content.fields.title", "Title")} *
+                        {t("learning:lessons.content.fields.title", "Title")} *
                     </label>
                     <input
                         type="text"
                         value={formData.title}
                         onChange={(e) => handleChange("title", e.target.value)}
                         placeholder={t(
-                            "lessons:content.fields.titlePlaceholder",
+                            "learning:lessons.content.fields.titlePlaceholder",
                             "Enter video title..."
                         )}
                         className={`w-full px-4 py-2.5 rounded-xl border bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none ${fieldErrors.title ? "border-red-500" : "border-gray-200 dark:border-gray-600"}`}
@@ -231,7 +231,10 @@ export default function VideoEditor({
                 {/* Description */}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        {t("lessons:content.fields.description", "Description")}
+                        {t(
+                            "learning:lessons.content.fields.description",
+                            "Description"
+                        )}
                     </label>
                     <textarea
                         value={formData.description}
@@ -239,7 +242,7 @@ export default function VideoEditor({
                             handleChange("description", e.target.value)
                         }
                         placeholder={t(
-                            "lessons:content.fields.descriptionPlaceholder",
+                            "learning:lessons.content.fields.descriptionPlaceholder",
                             "Provide a brief description..."
                         )}
                         rows={3}
@@ -257,7 +260,7 @@ export default function VideoEditor({
                     <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             {t(
-                                "lessons:content.fields.duration",
+                                "learning:lessons.content.fields.duration",
                                 "Duration (minutes)"
                             )}
                         </label>
@@ -274,7 +277,7 @@ export default function VideoEditor({
                     <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                             {t(
-                                "lessons:content.fields.provider",
+                                "learning:lessons.content.fields.provider",
                                 "Video Provider"
                             )}
                         </label>
@@ -296,7 +299,7 @@ export default function VideoEditor({
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         {t(
-                            "lessons:content.fields.videoIdAr",
+                            "learning:lessons.content.fields.videoIdAr",
                             "Video ID (Arabic)"
                         )}
                     </label>
@@ -320,7 +323,7 @@ export default function VideoEditor({
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         {t(
-                            "lessons:content.fields.videoIdEn",
+                            "learning:lessons.content.fields.videoIdEn",
                             "Video ID (English)"
                         )}
                     </label>
@@ -355,7 +358,7 @@ export default function VideoEditor({
                         htmlFor="isActive"
                         className="text-sm font-medium text-gray-700 dark:text-gray-300"
                     >
-                        {t("lessons:content.fields.active", "Active")}
+                        {t("learning:lessons.content.fields.active", "Active")}
                     </label>
                 </div>
 
@@ -364,7 +367,7 @@ export default function VideoEditor({
                     <div className="flex items-center justify-between mb-2">
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                             {t(
-                                "lessons:content.fields.videoPreview",
+                                "learning:lessons.content.fields.videoPreview",
                                 "Video Preview"
                             )}
                         </label>
@@ -378,7 +381,7 @@ export default function VideoEditor({
                                 }`}
                             >
                                 {t(
-                                    "lessons:content.fields.arabicVideo",
+                                    "learning:lessons.content.fields.arabicVideo",
                                     "Arabic Video"
                                 )}
                             </button>
@@ -391,7 +394,7 @@ export default function VideoEditor({
                                 }`}
                             >
                                 {t(
-                                    "lessons:content.fields.englishVideo",
+                                    "learning:lessons.content.fields.englishVideo",
                                     "English Video"
                                 )}
                             </button>
@@ -411,13 +414,13 @@ export default function VideoEditor({
                             </div>
                             <p className="text-sm text-gray-400">
                                 {t(
-                                    "lessons:content.fields.noVideoUploaded",
+                                    "learning:lessons.content.fields.noVideoUploaded",
                                     "No video uploaded"
                                 )}
                             </p>
                             <p className="text-xs text-gray-500 mt-1">
                                 {t(
-                                    "lessons:content.fields.addVideoUrl",
+                                    "learning:lessons.content.fields.addVideoUrl",
                                     "Add a video URL to preview"
                                 )}
                             </p>
@@ -471,11 +474,11 @@ export default function VideoEditor({
                 onClose={() => setShowDeleteDialog(false)}
                 variant="danger"
                 title={t(
-                    "lessons:content.videos.deleteDialog.title",
+                    "learning:lessons.content.videos.deleteDialog.title",
                     "Delete Video"
                 )}
                 message={t(
-                    "lessons:content.videos.deleteDialog.message",
+                    "learning:lessons.content.videos.deleteDialog.message",
                     "Are you sure you want to delete this video? This action cannot be undone."
                 )}
                 confirmText={t("common.delete", "Delete")}

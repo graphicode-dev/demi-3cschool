@@ -13,7 +13,7 @@ interface HighWorkloadAlertProps {
 }
 
 export function HighWorkloadAlert({ isVisible }: HighWorkloadAlertProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
 
     if (!isVisible) return null;
 

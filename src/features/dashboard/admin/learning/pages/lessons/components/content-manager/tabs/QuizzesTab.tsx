@@ -81,7 +81,10 @@ export default function QuizzesTab({ lessonId }: QuizzesTabProps) {
         <div className="flex flex-col md:flex-row gap-6">
             {/* Quiz List */}
             <ContentList
-                title={t("lessons:content.quizzes.listTitle", "Quiz List")}
+                title={t(
+                    "learning:lessons.content.quizzes.listTitle",
+                    "Quiz List"
+                )}
                 count={quizzesData?.items?.length || 0}
                 itemIds={quizzes.map((q) => String(q.id))}
                 onReorder={handleReorder}

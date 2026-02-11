@@ -12,7 +12,7 @@ import { supportBlock } from "../../navigation/paths";
 import { useCreateSupportBlock } from "../../api";
 
 export function AddBlockPage() {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
     const navigate = useNavigate();
     const { addToast } = useToast();
 

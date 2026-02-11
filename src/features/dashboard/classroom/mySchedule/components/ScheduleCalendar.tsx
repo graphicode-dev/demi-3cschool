@@ -295,6 +295,7 @@ interface SessionCardProps {
 }
 
 function SessionCard({ session, style, index }: SessionCardProps) {
+    const { t } = useTranslation("mySchedule");
     const isOnline = session.type === "online";
     const colorClass = isOnline ? "text-success-500" : "text-brand-500";
     const bgClass = isOnline ? "bg-success-50" : "bg-brand-50";
@@ -318,7 +319,7 @@ function SessionCard({ session, style, index }: SessionCardProps) {
                         <Building2 className="size-4" />
                     )}
                     <span className="text-xs font-bold">
-                        {isOnline ? "Online Session" : "Offline Session"}
+                        {isOnline ? t("onlineSession") : t("offlineSession")}
                     </span>
                 </div>
 

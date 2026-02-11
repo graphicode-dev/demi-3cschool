@@ -22,12 +22,15 @@ export default function EmptyState({ title, description }: EmptyStateProps) {
             </div>
             <h3 className="text-base font-medium text-gray-900 dark:text-gray-100 mb-1">
                 {title ||
-                    t("lessons:content.empty.title", "No Content Selected")}
+                    t(
+                        "learning:lessons.content.empty.title",
+                        "No Content Selected"
+                    )}
             </h3>
             <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xs">
                 {description ||
                     t(
-                        "lessons:content.empty.description",
+                        "learning:lessons.content.empty.description",
                         "Select a content item from the list or add new content to get started"
                     )}
             </p>

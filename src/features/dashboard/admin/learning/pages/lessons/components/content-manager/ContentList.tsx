@@ -96,8 +96,8 @@ export default function ContentList({
                 <h3 className="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-4">
                     {title} ({count}{" "}
                     {count === 1
-                        ? t("lessons:content.itemSingular", "item")
-                        : t("lessons:content.itemPlural", "items")}
+                        ? t("learning:lessons.content.itemSingular", "item")
+                        : t("learning:lessons.content.itemPlural", "items")}
                     )
                 </h3>
 
@@ -169,7 +169,7 @@ export default function ContentList({
                         className="w-full mt-4 flex items-center justify-center gap-2 py-2.5 border border-dashed border-gray-300 dark:border-gray-600 rounded-xl text-sm text-gray-500 dark:text-gray-400 hover:border-brand-500 hover:text-brand-500 transition-colors"
                     >
                         <Plus className="w-4 h-4" />
-                        {t("lessons:content.addItem", "Add Item")}
+                        {t("learning:lessons.content.addItem", "Add Item")}
                     </button>
                 )}
             </div>

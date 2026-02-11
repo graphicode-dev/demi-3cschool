@@ -43,19 +43,25 @@ export default function LearningLessonsDetail() {
             pageHeaderProps={{
                 title: lesson?.title,
                 subtitle: t(
-                    "lessons:content.subtitle",
+                    "learning:lessons.content.subtitle",
                     "Manage videos, quizzes, assignments, and materials"
                 ),
             }}
         >
             <ViewCard
-                headerTitle="Lesson Overview"
+                headerTitle={t(
+                    "learning:lessons.overview.title",
+                    "Lesson Overview"
+                )}
                 data={{
                     rows: [
                         {
                             fields: [
                                 {
-                                    label: "Lesson Description",
+                                    label: t(
+                                        "learning:lessons.overview.description",
+                                        "Lesson Description"
+                                    ),
                                     value: lesson?.description,
                                     colSpan: 3,
                                 },

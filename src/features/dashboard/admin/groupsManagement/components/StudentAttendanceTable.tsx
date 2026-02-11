@@ -86,7 +86,7 @@ export const StudentAttendanceTable: React.FC<StudentAttendanceTableProps> = ({
     onStatusUpdate,
     className = "",
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation("groupsManagement");
 
     // State for confirmation dialog
     const [confirmDialog, setConfirmDialog] = useState<{

@@ -63,17 +63,21 @@
             }
         },
         "quiz": {
+            "title": "Quiz",
             "completed": "Completed",
             "new": "New",
             "questionsLabel": "Questions",
             "score": "Score",
             "viewResult": "View Result",
-            "startQuiz": "Start Quiz"
+            "startQuiz": "Start Quiz",
+            "minutes": "minutes",
+            "passingScore": "Passing Score"
         },
         "assignments": {
             "submitted": "Submitted",
             "view": "View",
-            "submit": "Submit"
+            "submit": "Submit",
+            "completed": "Completed"
         },
         "editor": {
             "comingSoon": "Code editor coming soon..."
@@ -99,7 +103,12 @@
         "understood": "Understood",
         "noAssignments": "No assignments available for this lesson.",
         "noLessonQuiz": "No lesson quiz available.",
-        "noMaterials": "No materials available for this lesson."
+        "noMaterials": "No materials available for this lesson.",
+        "notFound": "Lesson not found"
+    },
+    "common": {
+        "min": "min",
+        "mins": "mins"
     },
     "codeEditor": {
         "tryItYourself": "Try it yourself!",

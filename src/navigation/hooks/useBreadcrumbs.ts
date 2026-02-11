@@ -24,13 +24,30 @@ import {
     createElement,
     ReactNode,
 } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useMatches } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { navRegistry } from "../navRegistry";
 import type { NavItem } from "../nav.types";
 import { CLASSROOM_PATH } from "@/features/dashboard/classroom/navigation/constant";
 import { ADMIN_PATH } from "@/features/dashboard/admin/navigation/constant";
 import { overviewPaths } from "@/features/dashboard/admin/overview/navigation";
+
+// Static mapping of URL segments to translation keys for breadcrumbs
+const SEGMENT_TRANSLATION_MAP: Record<string, string> = {
+    // Learning feature
+    grades: "learning:grades.title",
+    levels: "learning:levels.title",
+    lessons: "learning:lessons.title",
+    view: "learning:sitemap.lesson.viewTitle",
+    edit: "learning:sitemap.lesson.editTitle",
+    create: "learning:lessons.form.create.title",
+    quiz: "learning:lessons.quiz.title",
+    // Groups Management
+    groups: "groupsManagement:groups.title",
+    group: "groupsManagement:groups.regularListBreadcrumb",
+    // Groups Analytics
+    "groups-analytics": "groupsAnalytics:groupsAnalytics.title",
+};
 
 // ============================================================================
 // Dynamic Breadcrumb Context
@@ -104,19 +121,19 @@ interface UseBreadcrumbsOptions {
 const DEFAULT_DASHBOARD = {
     path: overviewPaths.list(),
     label: "Dashboard",
-    labelKey: "overview:overview.breadcrumb",
+    labelKey: "shared:breadcrumb.dashboard",
 };
 
 const CLASSROOM_ROOT = {
     path: CLASSROOM_PATH,
     label: "Classroom",
-    labelKey: "sidebar:sidebar.sections.classroom",
+    labelKey: "shared:breadcrumb.classroom",
 };
 
 const ADMIN_ROOT = {
     path: ADMIN_PATH,
     label: "Admin",
-    labelKey: "sidebar:sidebar.sections.admin",
+    labelKey: "shared:breadcrumb.admin",
 };
 
 /**
@@ -205,6 +222,27 @@ export const useBreadcrumbs = (
     const { pathname } = useLocation();
     const { t } = useTranslation();
     const dynamicLabel = useDynamicBreadcrumbLabel();
+    const matches = useMatches();
+
+    // Build a map of path to crumb translation key from route handles
+    // Maps both full pathname and last segment to crumb key
+    const routeCrumbMap = useMemo(() => {
+        const map = new Map<string, string>();
+        for (const match of matches) {
+            const handle = match.handle as { crumb?: string } | undefined;
+            if (handle?.crumb) {
+                // Map by full pathname
+                map.set(match.pathname, handle.crumb);
+                // Also map by last non-dynamic segment for fallback matching
+                const segments = match.pathname.split("/").filter(Boolean);
+                const lastSegment = segments[segments.length - 1];
+                if (lastSegment && !isDynamicSegment(lastSegment)) {
+                    map.set(`segment:${lastSegment}`, handle.crumb);
+                }
+            }
+        }
+        return map;
+    }, [matches]);
 
     const breadcrumbs = useMemo(() => {
         const crumbs: BreadcrumbItem[] = [];
@@ -291,7 +329,17 @@ export const useBreadcrumbs = (
                     breadcrumbPath = navItem.href;
                 }
             } else {
-                label = toTitleCase(segment);
+                // Try to get crumb from route handle, then static map, then fallback to title case
+                const routeCrumb =
+                    routeCrumbMap.get(currentPath) ||
+                    routeCrumbMap.get(`segment:${segment}`) ||
+                    SEGMENT_TRANSLATION_MAP[segment];
+                if (routeCrumb) {
+                    label = t(routeCrumb, toTitleCase(segment));
+                    labelKey = routeCrumb;
+                } else {
+                    label = toTitleCase(segment);
+                }
             }
 
             // Skip if we already have this label (avoid duplicates)
@@ -340,7 +388,14 @@ export const useBreadcrumbs = (
         }
 
         return crumbs;
-    }, [pathname, includeDashboard, dashboardConfig, t, dynamicLabel]);
+    }, [
+        pathname,
+        includeDashboard,
+        dashboardConfig,
+        t,
+        dynamicLabel,
+        routeCrumbMap,
+    ]);
 
     return breadcrumbs;
 };

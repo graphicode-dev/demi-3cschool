@@ -26,22 +26,22 @@ interface LessonContentManagerProps {
 const tabs: { key: ContentTabType; labelKey: string; fallback: string }[] = [
     {
         key: "videos",
-        labelKey: "lessons:content.tabs.videos",
+        labelKey: "learning:lessons.content.tabs.videos",
         fallback: "Videos",
     },
     {
         key: "quizzes",
-        labelKey: "lessons:content.tabs.quizzes",
+        labelKey: "learning:lessons.content.tabs.quizzes",
         fallback: "Quizzes",
     },
     {
         key: "assignments",
-        labelKey: "lessons:content.tabs.assignments",
+        labelKey: "learning:lessons.content.tabs.assignments",
         fallback: "Assignments",
     },
     {
         key: "materials",
-        labelKey: "lessons:content.tabs.materials",
+        labelKey: "learning:lessons.content.tabs.materials",
         fallback: "Materials",
     },
 ];

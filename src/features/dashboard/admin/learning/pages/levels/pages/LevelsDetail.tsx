@@ -113,7 +113,7 @@ function transformQuizToUI(
 }
 
 export default function LearningLevelsDetail() {
-    const { t } = useTranslation();
+    const { t } = useTranslation("learning");
     const { id, levelId } = useParams<{ id?: string; levelId?: string }>();
     const resolvedId = id || levelId;
 
@@ -275,7 +275,7 @@ export default function LearningLevelsDetail() {
                 }),
             {
                 successMessage: t(
-                    "levels:quiz.messages.createSuccess",
+                    "levels.quiz.messages.createSuccess",
                     "Quiz created successfully"
                 ),
                 onSuccess: () => {
@@ -295,7 +295,7 @@ export default function LearningLevelsDetail() {
         if (!deleteQuizDialog.quizId) return;
         await execute(() => deleteQuizAsync(deleteQuizDialog.quizId!), {
             successMessage: t(
-                "levels:quiz.messages.deleteSuccess",
+                "levels.quiz.messages.deleteSuccess",
                 "Quiz deleted successfully"
             ),
             onSuccess: () => refetchQuizzes(),
@@ -332,7 +332,7 @@ export default function LearningLevelsDetail() {
                 }),
             {
                 successMessage: t(
-                    "levels:quiz.messages.updateSuccess",
+                    "levels.quiz.messages.updateSuccess",
                     "Quiz updated successfully"
                 ),
                 onSuccess: () => {
@@ -389,7 +389,7 @@ export default function LearningLevelsDetail() {
                 }),
             {
                 successMessage: t(
-                    "levels:quiz.messages.questionUpdateSuccess",
+                    "levels.quiz.messages.questionUpdateSuccess",
                     "Question updated successfully"
                 ),
                 onSuccess: () => {
@@ -440,7 +440,7 @@ export default function LearningLevelsDetail() {
             },
             {
                 successMessage: t(
-                    "levels:quiz.messages.questionCreateSuccess",
+                    "levels.quiz.messages.questionCreateSuccess",
                     "Question created successfully"
                 ),
                 onSuccess: () => {
@@ -463,7 +463,7 @@ export default function LearningLevelsDetail() {
             () => deleteQuestionAsync(deleteQuestionDialog.questionId!),
             {
                 successMessage: t(
-                    "levels:quiz.messages.questionDeleteSuccess",
+                    "levels.quiz.messages.questionDeleteSuccess",
                     "Question deleted successfully"
                 ),
                 onSuccess: () => {
@@ -501,7 +501,7 @@ export default function LearningLevelsDetail() {
     return (
         <PageWrapper
             pageHeaderProps={{
-                title: `${level?.title || "Level"} - ${t("levels:levels.levelQuiz", "Level Quiz")}`,
+                title: `${level?.title || "Level"} - ${t("levels.levelQuiz", "Level Quiz")}`,
                 backButton: true,
             }}
         >
@@ -511,14 +511,11 @@ export default function LearningLevelsDetail() {
                     <AlertTriangle className="w-5 h-5 text-red-500 mt-0.5 shrink-0" />
                     <div>
                         <h3 className="text-sm font-medium text-red-800 dark:text-red-200">
-                            {t(
-                                "levels:levels.progressionGate",
-                                "Progression Gate"
-                            )}
+                            {t("levels.progressionGate", "Progression Gate")}
                         </h3>
                         <p className="text-sm text-red-700 dark:text-red-300 mt-1">
                             {t(
-                                "levels:levels.progressionGateDescription",
+                                "levels.progressionGateDescription",
                                 "Students must pass this quiz to unlock the next level. This quiz serves as a checkpoint to ensure mastery of all concepts."
                             )}
                         </p>
@@ -531,10 +528,10 @@ export default function LearningLevelsDetail() {
                 <div className="flex items-center justify-between">
                     <div>
                         <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                            {t("levels:levels.levelQuizzes", "Level Quizzes")}
+                            {t("levels.levelQuizzes", "Level Quizzes")}
                         </h2>
                         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                            {t("levels:levels.examsCount", "{{count}} Exams", {
+                            {t("levels.examsCount", "{{count}} Exams", {
                                 count: transformedQuizzes.length,
                             })}
                         </p>
@@ -546,7 +543,7 @@ export default function LearningLevelsDetail() {
                         className="inline-flex items-center gap-2 px-4 py-2.5 bg-brand-500 text-white text-sm font-medium rounded-lg hover:bg-brand-600 transition-colors disabled:opacity-50"
                     >
                         <Plus className="w-4 h-4" />
-                        {t("levels:levels.addLevelQuiz", "Add Level Quiz")}
+                        {t("levels.addLevelQuiz", "Add Level Quiz")}
                     </button>
                 </div>
 
@@ -569,11 +566,11 @@ export default function LearningLevelsDetail() {
                     {transformedQuizzes.length === 0 ? (
                         <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
                             <p className="text-gray-500 dark:text-gray-400">
-                                {t("levels:quiz.noQuizzes", "No quizzes yet")}
+                                {t("levels.quiz.noQuizzes", "No quizzes yet")}
                             </p>
                             <p className="text-sm text-gray-400 dark:text-gray-500 mt-1">
                                 {t(
-                                    "levels:quiz.addFirstQuiz",
+                                    "levels.quiz.addFirstQuiz",
                                     "Click 'Add Level Quiz' to create your first quiz"
                                 )}
                             </p>
@@ -619,10 +616,10 @@ export default function LearningLevelsDetail() {
             <div className="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg p-4">
                 <p className="text-sm text-orange-800 dark:text-orange-200">
                     <span className="font-medium">
-                        {t("levels:levels.lockBehavior", "Lock Behavior")}:
+                        {t("levels.lockBehavior", "Lock Behavior")}:
                     </span>{" "}
                     {t(
-                        "levels:levels.lockBehaviorDescription",
+                        "levels.lockBehaviorDescription",
                         "When students complete this quiz with a passing score (75% or higher), the next level will automatically unlock for them."
                     )}
                 </p>
@@ -633,7 +630,7 @@ export default function LearningLevelsDetail() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
                     <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-lg mx-4">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                            {t("levels:quiz.editQuiz", "Edit Quiz")}
+                            {t("levels.quiz.editQuiz", "Edit Quiz")}
                         </h3>
                         <QuizForm
                             quiz={editQuizData}
@@ -653,9 +650,9 @@ export default function LearningLevelsDetail() {
                     setDeleteQuizDialog({ isOpen: false, quizId: null })
                 }
                 variant="danger"
-                title={t("levels:quiz.deleteDialog.title", "Delete Quiz")}
+                title={t("levels.quiz.deleteDialog.title", "Delete Quiz")}
                 message={t(
-                    "levels:quiz.deleteDialog.message",
+                    "levels.quiz.deleteDialog.message",
                     "Are you sure you want to delete this quiz? All questions and options will be permanently removed. This action cannot be undone."
                 )}
                 confirmText={t("common.delete", "Delete")}
@@ -676,11 +673,11 @@ export default function LearningLevelsDetail() {
                 }
                 variant="danger"
                 title={t(
-                    "levels:quiz.deleteQuestionDialog.title",
+                    "levels.quiz.deleteQuestionDialog.title",
                     "Delete Question"
                 )}
                 message={t(
-                    "levels:quiz.deleteQuestionDialog.message",
+                    "levels.quiz.deleteQuestionDialog.message",
                     "Are you sure you want to delete this question? All options will be permanently removed. This action cannot be undone."
                 )}
                 confirmText={t("common.delete", "Delete")}
@@ -694,7 +691,7 @@ export default function LearningLevelsDetail() {
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
                     <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                            {t("levels:quiz.editQuestion", "Edit Question")}
+                            {t("levels.quiz.editQuestion", "Edit Question")}
                         </h3>
                         <QuestionForm
                             question={editQuestionData}

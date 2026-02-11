@@ -16,7 +16,7 @@ export function PeriodSummaryCard({
     summary,
     isLoading,
 }: PeriodSummaryCardProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
 
     if (isLoading) {
         return (

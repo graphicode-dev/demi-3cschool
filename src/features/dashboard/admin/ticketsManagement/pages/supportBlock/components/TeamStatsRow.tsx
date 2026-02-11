@@ -44,7 +44,7 @@ function StatItem({ icon, value, label }: StatItemProps) {
 }
 
 export function TeamStatsRow({ stats, isLoading }: TeamStatsRowProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
 
     if (isLoading) {
         return (

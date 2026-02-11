@@ -49,9 +49,9 @@ export default function LearningLessonsList() {
 
     const handleDelete = async (lesson: Lesson) => {
         const confirmed = await confirm({
-            title: t("lessons:lessons.delete.title", "Delete Lesson"),
+            title: t("learning:lessons.delete.title", "Delete Lesson"),
             message: t(
-                "lessons:lessons.delete.message",
+                "learning:lessons.delete.message",
                 `Are you sure you want to delete "${lesson.title}"? This action cannot be undone.`
             ),
             variant: "danger",
@@ -62,7 +62,7 @@ export default function LearningLessonsList() {
         if (confirmed) {
             execute(() => deleteLesson(lesson.id), {
                 successMessage: t(
-                    "lessons:lessons.delete.success",
+                    "learning:lessons.delete.success",
                     "Lesson deleted successfully"
                 ),
             });
@@ -123,7 +123,7 @@ export default function LearningLessonsList() {
                                 d="M12 4v16m8-8H4"
                             />
                         </svg>
-                        {t("lessons:lessons.actions.add", "Add Lesson")}
+                        {t("learning:lessons.actions.add", "Add Lesson")}
                     </Link>
                 ),
             }}
@@ -137,9 +137,12 @@ export default function LearningLessonsList() {
 
             {lessons.length === 0 ? (
                 <EmptyState
-                    title={t("lessons:lessons.empty.title", "No lessons found")}
+                    title={t(
+                        "learning:lessons.empty.title",
+                        "No lessons found"
+                    )}
                     message={t(
-                        "lessons:lessons.empty.description",
+                        "learning:lessons.empty.description",
                         "Get started by creating your first lesson"
                     )}
                 />
@@ -151,7 +154,7 @@ export default function LearningLessonsList() {
                         </h2>
                         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                             {t(
-                                "lessons:lessons.lessonsCount",
+                                "learning:lessons.lessonsCount",
                                 "{{count}} Lessons",
                                 { count: lessons.length }
                             )}

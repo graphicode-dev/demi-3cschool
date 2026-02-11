@@ -134,7 +134,10 @@ export default function VideosTab({ lessonId, levelId }: VideosTabProps) {
         <div className="flex flex-col md:flex-row gap-6">
             {/* Video List */}
             <ContentList
-                title={t("lessons:content.videos.listTitle", "Video List")}
+                title={t(
+                    "learning:lessons.content.videos.listTitle",
+                    "Video List"
+                )}
                 count={videosData?.items?.length || 0}
                 itemIds={videos.map((v) => v.id)}
                 onReorder={handleReorder}

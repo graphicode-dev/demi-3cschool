@@ -18,7 +18,7 @@ export function TopPerformersCard({
     performers,
     isLoading,
 }: TopPerformersCardProps) {
-    const { t } = useTranslation("ticketsManagement");
+    const { t } = useTranslation("adminTicketsManagement");
 
     if (isLoading) {
         return (

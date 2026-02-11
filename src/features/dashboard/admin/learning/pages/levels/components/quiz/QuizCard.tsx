@@ -58,7 +58,7 @@ export function QuizCard({
     isPending = false,
     isQuestionPending = false,
 }: QuizCardProps) {
-    const { t } = useTranslation();
+    const { t } = useTranslation("learning");
 
     return (
         <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
@@ -74,7 +74,7 @@ export function QuizCard({
                         </div>
                         <div>
                             <h3 className="font-medium text-gray-900 dark:text-white">
-                                {t("levels:quiz.quizTitle", "Quiz #{{id}}", {
+                                {t("levels.quiz.quizTitle", "Quiz #{{id}}", {
                                     id: quiz.id,
                                 })}
                             </h3>
@@ -82,7 +82,7 @@ export function QuizCard({
                                 <span className="flex items-center gap-1">
                                     <Clock className="w-4 h-4" />
                                     {quiz.timeLimit}{" "}
-                                    {t("levels:quiz.min", "min")}
+                                    {t("levels.quiz.min", "min")}
                                 </span>
                                 <span className="flex items-center gap-1">
                                     <Target className="w-4 h-4" />
@@ -91,11 +91,11 @@ export function QuizCard({
                                 <span className="flex items-center gap-1">
                                     <RefreshCw className="w-4 h-4" />
                                     {quiz.maxAttempts}{" "}
-                                    {t("levels:quiz.attempts", "attempts")}
+                                    {t("levels.quiz.attempts", "attempts")}
                                 </span>
                                 <span>
                                     {quiz.questions.length}{" "}
-                                    {t("levels:quiz.questions", "questions")}
+                                    {t("levels.quiz.questions", "questions")}
                                 </span>
                             </div>
                         </div>
@@ -105,7 +105,7 @@ export function QuizCard({
                             <span
                                 className="p-1.5 text-gray-400"
                                 title={t(
-                                    "levels:quiz.shuffleEnabled",
+                                    "levels.quiz.shuffleEnabled",
                                     "Shuffle enabled"
                                 )}
                             >
@@ -116,7 +116,7 @@ export function QuizCard({
                             <span
                                 className="p-1.5 text-gray-400"
                                 title={t(
-                                    "levels:quiz.resultsVisible",
+                                    "levels.quiz.resultsVisible",
                                     "Results visible"
                                 )}
                             >
@@ -159,7 +159,7 @@ export function QuizCard({
                 <div className="border-t border-gray-200 dark:border-gray-700 p-5 bg-gray-50 dark:bg-gray-850">
                     <div className="flex items-center justify-between mb-4">
                         <h4 className="font-medium text-gray-900 dark:text-white">
-                            {t("levels:quiz.questionsTitle", "Questions")}
+                            {t("levels.quiz.questionsTitle", "Questions")}
                         </h4>
                         <button
                             type="button"
@@ -167,7 +167,7 @@ export function QuizCard({
                             className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-brand-600 dark:text-brand-400 bg-brand-50 dark:bg-brand-900/20 rounded-lg hover:bg-brand-100 dark:hover:bg-brand-900/30 transition-colors"
                         >
                             <Plus className="w-4 h-4" />
-                            {t("levels:quiz.addQuestion", "Add Question")}
+                            {t("levels.quiz.addQuestion", "Add Question")}
                         </button>
                     </div>
 
@@ -188,13 +188,13 @@ export function QuizCard({
                             <ClipboardList className="w-12 h-12 mx-auto mb-3 opacity-50" />
                             <p>
                                 {t(
-                                    "levels:quiz.noQuestions",
+                                    "levels.quiz.noQuestions",
                                     "No questions yet"
                                 )}
                             </p>
                             <p className="text-sm mt-1">
                                 {t(
-                                    "levels:quiz.addFirstQuestion",
+                                    "levels.quiz.addFirstQuestion",
                                     "Click 'Add Question' to create your first question"
                                 )}
                             </p>

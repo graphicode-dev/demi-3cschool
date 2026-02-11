@@ -17,6 +17,7 @@ import {
 import { mockSupportTickets, mockSupportTicketDetail } from "../mockData";
 import type { SupportTicketFilter } from "../types";
 import { supportHelp } from "../navigation";
+import { PageWrapper } from "@/design-system";
 
 export function SupportHelpPage() {
     const { t } = useTranslation("supportHelp");
@@ -65,21 +66,17 @@ export function SupportHelpPage() {
     };
 
     return (
-        <div className="flex flex-col h-full">
+        <PageWrapper
+            pageHeaderProps={{
+                title: t("supportHelp.pageTitle", "Support & Help"),
+                subtitle: t(
+                    "supportHelp.pageSubtitle",
+                    "Need help? Ask our support team."
+                ),
+            }}
+        >
             {/* Header Section */}
             <div className="p-4 pb-0">
-                <div className="mb-4">
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
-                        {t("supportHelp.pageTitle", "Support & Help")}
-                    </h1>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                        {t(
-                            "supportHelp.pageSubtitle",
-                            "Need help? Ask our support team."
-                        )}
-                    </p>
-                </div>
-
                 {/* Search Input */}
                 <div className="mb-4">
                     <div className="relative">
@@ -139,7 +136,7 @@ export function SupportHelpPage() {
                     )}
                 </div>
             </div>
-        </div>
+        </PageWrapper>
     );
 }
 

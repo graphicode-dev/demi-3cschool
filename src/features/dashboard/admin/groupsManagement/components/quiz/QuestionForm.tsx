@@ -93,12 +93,12 @@ export function QuestionForm({
     return (
         <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4 mb-4">
             <h5 className="font-medium text-gray-900 dark:text-white mb-3">
-                {t("levels:quiz.newQuestion", "New Question")}
+                {t("groupsManagement:quiz.newQuestion", "New Question")}
             </h5>
             <div className="space-y-4">
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        {t("levels:quiz.questionText", "Question")}
+                        {t("groupsManagement:quiz.questionText", "Question")}
                     </label>
                     <textarea
                         value={question.question}
@@ -108,7 +108,7 @@ export function QuestionForm({
                         className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-transparent resize-none"
                         rows={2}
                         placeholder={t(
-                            "levels:quiz.questionPlaceholder",
+                            "groupsManagement:quiz.questionPlaceholder",
                             "Enter your question"
                         )}
                     />
@@ -116,7 +116,7 @@ export function QuestionForm({
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            {t("levels:quiz.questionType", "Type")}
+                            {t("groupsManagement:quiz.questionType", "Type")}
                         </label>
                         <select
                             value={question.type}
@@ -130,25 +130,25 @@ export function QuestionForm({
                         >
                             <option value="single_choice">
                                 {t(
-                                    "levels:quiz.questionTypes.singleChoice",
+                                    "groupsManagement:quiz.questionTypes.singleChoice",
                                     "Single Choice"
                                 )}
                             </option>
                             <option value="multiple_choice">
                                 {t(
-                                    "levels:quiz.questionTypes.multipleChoice",
+                                    "groupsManagement:quiz.questionTypes.multipleChoice",
                                     "Multiple Choice"
                                 )}
                             </option>
                             <option value="true_false">
                                 {t(
-                                    "levels:quiz.questionTypes.trueFalse",
+                                    "groupsManagement:quiz.questionTypes.trueFalse",
                                     "True/False"
                                 )}
                             </option>
                             <option value="short_answer">
                                 {t(
-                                    "levels:quiz.questionTypes.shortAnswer",
+                                    "groupsManagement:quiz.questionTypes.shortAnswer",
                                     "Short Answer"
                                 )}
                             </option>
@@ -156,7 +156,7 @@ export function QuestionForm({
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            {t("levels:quiz.points", "Points")}
+                            {t("groupsManagement:quiz.points", "Points")}
                         </label>
                         <input
                             type="number"
@@ -173,7 +173,7 @@ export function QuestionForm({
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                            {t("levels:quiz.order", "Order")}
+                            {t("groupsManagement:quiz.order", "Order")}
                         </label>
                         <input
                             type="number"
@@ -195,7 +195,7 @@ export function QuestionForm({
                     <div>
                         <div className="flex items-center justify-between mb-2">
                             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                                {t("levels:quiz.options", "Options")}
+                                {t("groupsManagement:quiz.options", "Options")}
                             </label>
                             {question.type !== "true_false" && (
                                 <button
@@ -203,7 +203,11 @@ export function QuestionForm({
                                     onClick={handleAddOption}
                                     className="text-sm text-brand-500 hover:text-brand-600"
                                 >
-                                    + {t("levels:quiz.addOption", "Add Option")}
+                                    +{" "}
+                                    {t(
+                                        "groupsManagement:quiz.addOption",
+                                        "Add Option"
+                                    )}
                                 </button>
                             )}
                         </div>
@@ -245,7 +249,7 @@ export function QuestionForm({
                                         }
                                         className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-transparent disabled:bg-gray-100 dark:disabled:bg-gray-800"
                                         placeholder={t(
-                                            "levels:quiz.optionPlaceholder",
+                                            "groupsManagement:quiz.optionPlaceholder",
                                             "Option text"
                                         )}
                                     />
@@ -270,7 +274,7 @@ export function QuestionForm({
                 {/* Explanation */}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        {t("levels:quiz.explanation", "Explanation")}
+                        {t("groupsManagement:quiz.explanation", "Explanation")}
                     </label>
                     <textarea
                         value={question.explanation}
@@ -283,7 +287,7 @@ export function QuestionForm({
                         className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-transparent resize-none"
                         rows={2}
                         placeholder={t(
-                            "levels:quiz.explanationPlaceholder",
+                            "groupsManagement:quiz.explanationPlaceholder",
                             "Explain the correct answer"
                         )}
                     />
@@ -308,7 +312,10 @@ export function QuestionForm({
                 >
                     {isPending
                         ? t("common.saving", "Saving...")
-                        : t("levels:quiz.saveQuestion", "Save Question")}
+                        : t(
+                              "groupsManagement:quiz.saveQuestion",
+                              "Save Question"
+                          )}
                 </button>
             </div>
         </div>

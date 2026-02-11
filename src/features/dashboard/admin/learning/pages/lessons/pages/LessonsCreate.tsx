@@ -61,7 +61,7 @@ export default function LearningLessonsCreate() {
                 }),
             {
                 successMessage: t(
-                    "lessons:lessons.messages.createSuccess",
+                    "learning:lessons.messages.createSuccess",
                     "Lesson created successfully"
                 ),
                 onSuccess: () => navigate(`${basePath}/lessons`),
@@ -77,11 +77,11 @@ export default function LearningLessonsCreate() {
         <PageWrapper
             pageHeaderProps={{
                 title: t(
-                    "lessons:lessons.form.create.title",
+                    "learning:lessons.form.create.title",
                     "Create New Lesson"
                 ),
                 subtitle: t(
-                    "lessons:lessons.form.create.subtitle",
+                    "learning:lessons.form.create.subtitle",
                     "Add a new lesson"
                 ),
                 backButton: true,
@@ -101,13 +101,13 @@ export default function LearningLessonsCreate() {
                     type={{
                         type: "text",
                         placeholder: t(
-                            "lessons:lessons.form.fields.title.placeholder",
+                            "learning:lessons.form.fields.title.placeholder",
                             "Enter lesson title"
                         ),
                     }}
                     label={{
                         text: t(
-                            "lessons:lessons.form.fields.title.label",
+                            "learning:lessons.form.fields.title.label",
                             "Lesson Title"
                         ),
                         required: true,
@@ -121,13 +121,13 @@ export default function LearningLessonsCreate() {
                     type={{
                         type: "checkbox",
                         label: t(
-                            "lessons:lessons.form.fields.active.label",
+                            "learning:lessons.form.fields.active.label",
                             "Active"
                         ),
                     }}
                     label={{
                         text: t(
-                            "lessons:lessons.form.fields.status.label",
+                            "learning:lessons.form.fields.status.label",
                             "Status"
                         ),
                     }}
@@ -139,14 +139,14 @@ export default function LearningLessonsCreate() {
                     type={{
                         type: "textarea",
                         placeholder: t(
-                            "lessons:lessons.form.fields.description.placeholder",
+                            "learning:lessons.form.fields.description.placeholder",
                             "Enter lesson description"
                         ),
                         rows: 4,
                     }}
                     label={{
                         text: t(
-                            "lessons:lessons.form.fields.description.label",
+                            "learning:lessons.form.fields.description.label",
                             "Description"
                         ),
                         required: true,
