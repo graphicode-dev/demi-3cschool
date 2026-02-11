@@ -7,7 +7,7 @@
 import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
 import { attendanceKeys } from "./attendance.keys";
 import { attendanceApi } from "./attendance.api";
-import { StudentAttendanceRecord, TeacherAttendance } from "../../types";
+import { StudentAttendanceResponse, TeacherAttendance } from "../../types";
 
 // ============================================================================
 // Teacher Attendance Queries
@@ -38,7 +38,7 @@ export function useTeacherAttendanceQuery(
  */
 export function useStudentAttendanceQuery(
     sessionId: string | number,
-    options?: Partial<UseQueryOptions<StudentAttendanceRecord[], Error>>
+    options?: Partial<UseQueryOptions<StudentAttendanceResponse, Error>>
 ) {
     return useQuery({
         queryKey: attendanceKeys.studentAttendanceBySession(sessionId),

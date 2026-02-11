@@ -15,20 +15,26 @@ function formatTime(time: string): string {
     return `${hours}:${minutes}`;
 }
 
-// Format date to display
-function formatDate(dateStr: string): string {
+// Format date to display - returns key or formatted date
+function formatDateKey(dateStr: string): {
+    isToday: boolean;
+    formatted: string;
+} {
     const date = new Date(dateStr);
     const today = new Date();
 
     if (date.toDateString() === today.toDateString()) {
-        return "Today";
+        return { isToday: true, formatted: "" };
     }
 
-    return date.toLocaleDateString("en-US", {
-        weekday: "long",
-        month: "short",
-        day: "numeric",
-    });
+    return {
+        isToday: false,
+        formatted: date.toLocaleDateString("en-US", {
+            weekday: "long",
+            month: "short",
+            day: "numeric",
+        }),
+    };
 }
 
 export function SessionInfoModal({
@@ -59,7 +65,7 @@ export function SessionInfoModal({
                                 {session.course.title}
                             </span>
                             <span className="bg-brand-50 dark:bg-brand-500/10 text-brand-500 text-xs font-medium px-2 py-0.5 rounded border border-brand-200 dark:border-brand-500/30">
-                                Term {session.term.id}
+                                {t("common.term")} {session.term.id}
                             </span>
                             <span className="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs font-medium px-2 py-0.5 rounded">
                                 {t("status.upcoming")}
@@ -90,7 +96,14 @@ export function SessionInfoModal({
                                         {t("modal.date")}
                                     </span>
                                     <span className="text-sm font-medium text-white">
-                                        {formatDate(session.sessionDate)}
+                                        {(() => {
+                                            const dateInfo = formatDateKey(
+                                                session.sessionDate
+                                            );
+                                            return dateInfo.isToday
+                                                ? t("common.today")
+                                                : dateInfo.formatted;
+                                        })()}
                                     </span>
                                 </div>
                             </div>
@@ -114,7 +127,8 @@ export function SessionInfoModal({
                                         {t("modal.duration")}
                                     </span>
                                     <span className="text-sm font-medium text-white">
-                                        {session.duration || 60} min
+                                        {session.duration || 60}{" "}
+                                        {t("common.min")}
                                     </span>
                                 </div>
                             </div>

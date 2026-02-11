@@ -15,7 +15,7 @@ import {
 } from "@/features/dashboard/admin/groupsManagement/api";
 import type {
     AttendanceStatus,
-    StudentAttendanceRecord,
+    StudentAttendanceListItem,
 } from "@/features/dashboard/admin/groupsManagement/types";
 
 interface AttendanceModalProps {
@@ -67,27 +67,29 @@ export function AttendanceModal({
     const [openDropdownId, setOpenDropdownId] = useState<number | null>(null);
 
     // Fetch student attendance data from API
-    const { data: students = [], isLoading } = useStudentAttendanceQuery(
+    const { data: attendanceData, isLoading } = useStudentAttendanceQuery(
         sessionId,
         { enabled: isOpen && !!sessionId }
     );
 
+    // Extract students from the new response structure
+    const students = attendanceData?.items || [];
+
     // Mutation for updating student attendance
     const updateStudentAttendance = useUpdateStudentAttendanceMutation();
 
-    // Calculate counts - must be before early return
+    // Calculate counts from summary - must be before early return
     const counts = useMemo(() => {
-        const result = { present: 0, absent: 0, late: 0 };
-        students.forEach((s) => {
-            if (s.status in result) {
-                result[s.status as keyof typeof result]++;
-            }
-        });
-        return result;
-    }, [students]);
+        const summary = attendanceData?.summary;
+        return {
+            present: summary?.present || 0,
+            absent: summary?.absent || 0,
+            late: summary?.late || 0,
+        };
+    }, [attendanceData]);
 
     const handleStatusChange = async (
-        student: StudentAttendanceRecord,
+        student: StudentAttendanceListItem,
         newStatus: AttendanceStatus
     ) => {
         await updateStudentAttendance.mutateAsync({
@@ -95,9 +97,9 @@ export function AttendanceModal({
             data: {
                 attendances: [
                     {
-                        student_id: student.student.id,
+                        student_id: student.studentId,
                         status: newStatus,
-                        note: student.note,
+                        note: student.note ?? undefined,
                     },
                 ],
             },
@@ -167,13 +169,14 @@ export function AttendanceModal({
                         ) : (
                             students.map((student) => {
                                 const config =
-                                    statusConfig[student.status] ||
-                                    statusConfig.present;
+                                    statusConfig[
+                                        student.status as AttendanceStatus
+                                    ] || statusConfig.present;
                                 const StatusIcon = config.icon;
 
                                 return (
                                     <div
-                                        key={student.id}
+                                        key={student.studentId}
                                         className="flex items-center justify-between p-3 rounded-xl bg-gray-50 dark:bg-gray-800"
                                     >
                                         <div className="flex items-center gap-3">
@@ -181,7 +184,7 @@ export function AttendanceModal({
                                                 <User className="size-5 text-gray-400" />
                                             </div>
                                             <span className="font-medium text-gray-900 dark:text-white">
-                                                {student.student.name}
+                                                {student.name}
                                             </span>
                                         </div>
                                         {/* Status Dropdown */}
@@ -190,9 +193,9 @@ export function AttendanceModal({
                                                 onClick={() =>
                                                     setOpenDropdownId(
                                                         openDropdownId ===
-                                                            student.id
+                                                            student.studentId
                                                             ? null
-                                                            : student.id
+                                                            : student.studentId
                                                     )
                                                 }
                                                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full ${config.bgColor} hover:opacity-80 transition-opacity cursor-pointer`}
@@ -210,7 +213,7 @@ export function AttendanceModal({
                                                 <ChevronDown
                                                     className={`size-3 ${config.textColor} transition-transform ${
                                                         openDropdownId ===
-                                                        student.id
+                                                        student.studentId
                                                             ? "rotate-180"
                                                             : ""
                                                     }`}
@@ -218,7 +221,8 @@ export function AttendanceModal({
                                             </button>
 
                                             {/* Dropdown Menu */}
-                                            {openDropdownId === student.id && (
+                                            {openDropdownId ===
+                                                student.studentId && (
                                                 <div className="absolute end-0 top-full mt-1 z-10 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 min-w-[140px]">
                                                     {ATTENDANCE_STATUSES.map(
                                                         (status) => {

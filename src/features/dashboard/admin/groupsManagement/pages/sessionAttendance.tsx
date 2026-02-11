@@ -17,6 +17,7 @@ import {
     useTeacherAttendanceQuery,
     useUpdateStudentAttendanceMutation,
     useUpdateTeacherAttendanceMutation,
+    useGroup,
 } from "../api";
 
 // Status badge component
@@ -89,6 +90,12 @@ export const SessionAttendancePage = () => {
         note: string;
     } | null>(null);
 
+    // Fetch group data to get primary teacher
+    const { data: groupData, isLoading: isLoadingGroup } = useGroup(
+        groupId || "",
+        { enabled: !!groupId }
+    );
+
     // Fetch student attendance data
     const { data: studentAttendanceData, isLoading: isLoadingStudents } =
         useStudentAttendanceQuery(sessionId || "", {
@@ -109,31 +116,35 @@ export const SessionAttendancePage = () => {
 
     // Get session info from teacher attendance
     const sessionInfo = useMemo(() => {
-        const firstTeacher = teacherAttendanceData?.[0];
-        const session = firstTeacher?.groupSession;
-
         return {
             sessionName: "Control Flow: If Statements",
             group: "Python Beginners",
-            date: session?.sessionDate || "-",
-            startTime: session?.startTime || "-",
-            endTime: session?.endTime || "-",
+            date: studentAttendanceData?.session.sessionDate || "-",
+            startTime: studentAttendanceData?.session.startTime || "-",
+            endTime: studentAttendanceData?.session.endTime || "-",
             status: "completed",
         };
-    }, [teacherAttendanceData]);
+    }, [studentAttendanceData]);
 
-    // Get instructor info
+    // Get instructor info - use teacher attendance data if exists, otherwise use group's primary teacher
     const instructorInfo = useMemo(() => {
         const firstTeacher = teacherAttendanceData?.[0];
+        const primaryTeacher = groupData?.primaryTeacher;
+
         return {
-            id: firstTeacher?.teacher.id || 0,
-            name: firstTeacher?.teacher.name || "Sarah Johnson",
+            id:
+                firstTeacher?.teacher.id ??
+                (primaryTeacher?.id ? Number(primaryTeacher.id) : undefined),
+            name:
+                firstTeacher?.teacher.name ||
+                primaryTeacher?.name ||
+                "No Teacher Assigned",
             role: "Primary Instructor",
             status: firstTeacher?.status || "present",
             minutesTaught: firstTeacher?.minutesTaught || 0,
             note: firstTeacher?.note || "",
         };
-    }, [teacherAttendanceData]);
+    }, [teacherAttendanceData, groupData]);
 
     // Teacher attendance status options
     const teacherStatusOptions: AttendanceStatus[] = [
@@ -151,21 +162,39 @@ export const SessionAttendancePage = () => {
 
     // Handle teacher status update with note
     const handleTeacherStatusUpdate = async () => {
-        if (!sessionId || !instructorInfo.id || !selectedTeacherStatus) return;
-
-        await updateTeacherAttendance.mutateAsync({
+        console.log("handleTeacherStatusUpdate called", {
             sessionId,
-            data: {
-                teacher_id: instructorInfo.id,
-                status: selectedTeacherStatus,
-                minutes_taught: instructorInfo.minutesTaught,
-                note: teacherNote,
-            },
+            instructorId: instructorInfo.id,
+            selectedTeacherStatus,
+            teacherNote,
         });
-        setShowTeacherStatusDropdown(false);
-        setSelectedTeacherStatus(null);
-        setTeacherNote("");
-        setHasChanges(true);
+
+        if (!sessionId || instructorInfo.id == null || !selectedTeacherStatus) {
+            console.log("Early return - missing data:", {
+                hasSessionId: !!sessionId,
+                hasInstructorId: instructorInfo.id != null,
+                hasSelectedStatus: !!selectedTeacherStatus,
+            });
+            return;
+        }
+
+        try {
+            await updateTeacherAttendance.mutateAsync({
+                sessionId,
+                data: {
+                    teacher_id: instructorInfo.id,
+                    status: selectedTeacherStatus,
+                    minutes_taught: instructorInfo.minutesTaught,
+                    note: teacherNote,
+                },
+            });
+            setShowTeacherStatusDropdown(false);
+            setSelectedTeacherStatus(null);
+            setTeacherNote("");
+            setHasChanges(true);
+        } catch (error) {
+            console.error("Error updating teacher attendance:", error);
+        }
     };
 
     // Cancel teacher status change
@@ -175,13 +204,12 @@ export const SessionAttendancePage = () => {
         setShowTeacherStatusDropdown(false);
     };
 
-    // Calculate attendance stats
+    // Calculate attendance stats from new response structure
     const attendanceStats = useMemo(() => {
-        const total = studentAttendanceData?.length || 0;
-        const present =
-            studentAttendanceData?.filter((s) => s.status === "present")
-                .length || 0;
-        const absent = total - present;
+        const summary = studentAttendanceData?.summary;
+        const total = summary?.total || 0;
+        const present = summary?.present || 0;
+        const absent = summary?.absent || 0;
         return { present, absent, total };
     }, [studentAttendanceData]);
 
@@ -190,8 +218,8 @@ export const SessionAttendancePage = () => {
         studentId: string,
         newStatus: AttendanceStatus
     ) => {
-        const student = studentAttendanceData?.find(
-            (s) => String(s.id) === studentId
+        const student = studentAttendanceData?.items?.find(
+            (s) => String(s.studentId) === studentId
         );
         if (!student) return;
 
@@ -202,42 +230,17 @@ export const SessionAttendancePage = () => {
         });
     };
 
-    // Confirm student status update with note
-    const handleConfirmStudentStatus = async () => {
-        if (!sessionId || !studentNoteModal) return;
-
-        const student = studentAttendanceData?.find(
-            (s) => String(s.id) === studentNoteModal.studentId
-        );
-        if (!student) return;
-
-        await updateStudentAttendance.mutateAsync({
-            sessionId,
-            data: {
-                attendances: [
-                    {
-                        student_id: student.student.id,
-                        status: studentNoteModal.status,
-                        note: studentNoteModal.note,
-                    },
-                ],
-            },
-        });
-        setStudentNoteModal(null);
-        setHasChanges(true);
-    };
-
     // Mark all present/absent
     const handleMarkAll = async (status: AttendanceStatus) => {
-        if (!sessionId || !studentAttendanceData) return;
+        if (!sessionId || !studentAttendanceData?.items) return;
 
         await updateStudentAttendance.mutateAsync({
             sessionId,
             data: {
-                attendances: studentAttendanceData.map((s) => ({
-                    student_id: s.student.id,
+                attendances: studentAttendanceData.items.map((s) => ({
+                    student_id: s.studentId,
                     status,
-                    note: s.note,
+                    note: s.note ?? undefined,
                 })),
             },
         });
@@ -246,15 +249,15 @@ export const SessionAttendancePage = () => {
 
     // Convert student data to table format
     const tableData: TableData[] = useMemo(() => {
-        if (!studentAttendanceData) return [];
+        if (!studentAttendanceData?.items) return [];
 
-        return studentAttendanceData.map((record, index) => ({
-            id: String(record.id),
+        return studentAttendanceData.items.map((record, index) => ({
+            id: String(record.studentId),
             columns: {
                 index: index + 1,
-                studentName: record.student.name,
+                studentName: record.name,
                 status: record.status,
-                studentId: record.student.id,
+                studentId: record.studentId,
             },
         }));
     }, [studentAttendanceData]);
@@ -331,7 +334,7 @@ export const SessionAttendancePage = () => {
         },
     ];
 
-    const isLoading = isLoadingStudents || isLoadingTeachers;
+    const isLoading = isLoadingStudents || isLoadingTeachers || isLoadingGroup;
 
     return (
         <PageWrapper
@@ -347,12 +350,13 @@ export const SessionAttendancePage = () => {
                 backButton: true,
                 actions: (
                     <button
+                        disabled
                         onClick={() =>
                             navigate(
                                 `/admin/groups/grades/${gradeId}/levels/${levelId}/group/${groupId}/attendance/audit-log`
                             )
                         }
-                        className="flex items-center gap-2 px-4 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                        className="disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 px-4 py-2.5 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                     >
                         <History className="w-5 h-5" />
                         {t("attendance.auditLog", "Audit Log")}
@@ -702,12 +706,6 @@ export const SessionAttendancePage = () => {
                                 className="flex-1 px-4 py-2 text-sm text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
                             >
                                 {t("common.cancel", "Cancel")}
-                            </button>
-                            <button
-                                onClick={handleConfirmStudentStatus}
-                                className="flex-1 px-4 py-2 text-sm text-white bg-brand-500 rounded-lg hover:bg-brand-600"
-                            >
-                                {t("common.save", "Save")}
                             </button>
                         </div>
                     </div>

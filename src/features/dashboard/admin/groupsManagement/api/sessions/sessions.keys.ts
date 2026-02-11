@@ -49,7 +49,7 @@ export const sessionKeys = {
     /**
      * Key for specific list with all filter parameters
      */
-    list: (params: SessionsListParams) =>
+    list: ( params: SessionsListParams) =>
         [
             ...sessionKeys.lists(),
             {

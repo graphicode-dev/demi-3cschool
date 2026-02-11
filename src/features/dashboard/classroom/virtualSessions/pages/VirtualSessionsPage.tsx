@@ -149,7 +149,7 @@ function VirtualSessionsPage() {
 
             {isError && (
                 <div className="text-center py-10 text-red-500">
-                    {t("errors.loadFailed", "Failed to load sessions")}
+                    {t("errors.loadFailed")}
                 </div>
             )}
 
@@ -158,7 +158,7 @@ function VirtualSessionsPage() {
                 !isError &&
                 sessions.length === 0 && (
                     <div className="text-center py-10 text-gray-500">
-                        {t("empty", "No sessions available")}
+                        {t("empty")}
                     </div>
                 )}
 

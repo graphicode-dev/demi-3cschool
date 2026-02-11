@@ -17,13 +17,12 @@ import { acceptanceTestRoutes } from "../acceptanceTest/navigation";
 import { projectsRoutes } from "../projects/navigation";
 import { finalExamsRoutes } from "../finalExams/navigation";
 import { myScheduleRoutes } from "../mySchedule/navigation";
-import { supportHelpRoutes } from "../ticketsManagement/pages/supportHelp/navigation";
+import { supportHelpRoutes } from "../supportHelp/navigation";
 import { resourcesRoutes } from "../resources/navigation";
 import { enrollmentsGroupRoutes } from "../enrollmentsGroup/navigation";
 import { communityRoutes } from "../community/navigation";
 import { classroomPaths } from "./paths";
 import { CLASSROOM_PATH } from "./constant";
-import { ticketsManagementRoutes } from "../ticketsManagement/navigation/routes";
 
 /**
  * Classroom Route Module
@@ -62,8 +61,6 @@ export const classroomRouteModule: FeatureRouteModule = {
             ...resourcesRoutes,
             // Enrollments Group feature
             ...enrollmentsGroupRoutes,
-            // Tickets Management feature
-            ...ticketsManagementRoutes,
             // Community feature
             ...communityRoutes,
         ],

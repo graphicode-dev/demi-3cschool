@@ -15,6 +15,12 @@
         "upcoming": "UPCOMING",
         "completed": "COMPLETED"
     },
+    "common": {
+        "today": "Today",
+        "yesterday": "Yesterday",
+        "min": "min",
+        "term": "Term"
+    },
     "sections": {
         "currentLive": "Current live Sessions",
         "upcoming": "Upcoming Sessions",
@@ -77,6 +83,10 @@
         "goToLessonVideos": "Go To The Lesson Videos In",
         "selfStudyContent": "Self Study Content"
     },
+    "errors": {
+        "loadFailed": "Failed to load sessions"
+    },
+    "empty": "No sessions available",
     "sitemap": {
         "recording": {
             "title": "Recording Navigation",

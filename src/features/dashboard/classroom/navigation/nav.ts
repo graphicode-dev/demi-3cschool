@@ -14,7 +14,7 @@ import { acceptanceTestNavItem } from "../acceptanceTest/navigation";
 import { projectsNavItem } from "../projects/navigation";
 import { finalExamsNavItem } from "../finalExams/navigation";
 import { myScheduleNavItem } from "../mySchedule/navigation";
-import { supportHelpNavItem } from "../ticketsManagement/pages/supportHelp/navigation";
+import { supportHelpNavItem } from "../supportHelp/navigation";
 import { resourcesNavItem } from "../resources/navigation";
 import { enrollmentsGroupNavItem } from "../enrollmentsGroup/navigation";
 import { communityNavItem } from "../community/navigation";

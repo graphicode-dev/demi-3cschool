@@ -89,8 +89,11 @@ function SessionsPage() {
         isLoading: sessionsLoading,
         refetch: refetchSessions,
     } = useSessionsListQuery(
-        { group_id: groupId ? parseInt(groupId, 10) : undefined },
-        { enabled: !!groupId }
+        parseInt(groupId!, 10),
+        {},
+        {
+            enabled: !!groupId,
+        }
     );
 
     const { data: lessonsData, isLoading: lessonsLoading } = useLessonsByLevel(

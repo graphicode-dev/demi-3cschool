@@ -102,3 +102,56 @@ export interface StudentAttendanceItem {
 export interface StudentAttendancePayload {
     attendances: StudentAttendanceItem[];
 }
+
+// ============================================================================
+// Student Attendance Response Types (New API Structure)
+// ============================================================================
+
+export type StudentAttendanceStatus =
+    | "present"
+    | "absent"
+    | "late"
+    | "excused"
+    | "pending";
+
+export interface StudentAttendanceSessionInfo {
+    id: number;
+    sessionDate: string;
+    startTime: string;
+    endTime: string;
+}
+
+export interface StudentAttendanceGroupInfo {
+    id: number;
+    name: string;
+}
+
+export interface StudentAttendanceSummary {
+    total: number;
+    present: number;
+    absent: number;
+    late: number;
+    excused: number;
+    pending: number;
+}
+
+export interface StudentAttendanceListItem {
+    attendanceId: number | null;
+    studentId: number;
+    name: string;
+    email: string;
+    status: StudentAttendanceStatus;
+    note: string | null;
+    recordedAt: string | null;
+}
+
+export interface StudentAttendanceResponse {
+    session: StudentAttendanceSessionInfo;
+    group: StudentAttendanceGroupInfo;
+    summary: StudentAttendanceSummary;
+    perPage: number;
+    currentPage: number;
+    lastPage: number;
+    nextPageUrl: string | null;
+    items: StudentAttendanceListItem[];
+}

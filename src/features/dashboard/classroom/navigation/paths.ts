@@ -7,7 +7,7 @@
 import { registerFeaturePaths } from "@/router/paths.registry";
 import { CLASSROOM_PATH } from "./constant";
 import { acceptanceTestPaths } from "../acceptanceTest/navigation";
-import { ticketsPaths } from "../ticketsManagement/navigation";
+import { supportHelpPaths } from "../supportHelp/navigation";
 import { communityPaths } from "../community";
 import { enrollmentsGroupPaths } from "../enrollmentsGroup/navigation/paths";
 import { finalExamsPaths } from "../finalExams";
@@ -27,7 +27,7 @@ export const classroomPaths = {
     communityPaths,
     enrollmentsGroupPaths,
     acceptanceTestPaths,
-    ticketsPaths,
+    supportHelpPaths,
     finalExamsPaths,
     mySchedulePaths,
     physicalSessionsPaths,

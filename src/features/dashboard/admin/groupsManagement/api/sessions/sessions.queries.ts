@@ -45,12 +45,13 @@ export const useSessionsMetadataQuery = () => {
  * Hook for fetching sessions list with filtering and pagination
  */
 export const useSessionsListQuery = (
+    groupId: number,
     params: SessionsListParams,
     options?: { enabled?: boolean }
 ) => {
     return useQuery({
         queryKey: sessionKeys.list(params),
-        queryFn: ({ signal }) => sessionsApi.getList(params, signal),
+        queryFn: ({ signal }) => sessionsApi.getList(groupId, params, signal),
         staleTime: 5 * 60 * 1000, // 5 minutes
         enabled: options?.enabled ?? true,
         retry: (failureCount, error) => {
@@ -98,7 +99,7 @@ export const useSessionsByGroupQuery = (
 
     return useQuery({
         queryKey: sessionKeys.byGroup(groupId),
-        queryFn: ({ signal }) => sessionsApi.getList(params, signal),
+        queryFn: ({ signal }) => sessionsApi.getList(groupId, params, signal),
         enabled: !!groupId,
         staleTime: 5 * 60 * 1000,
     });
@@ -108,6 +109,7 @@ export const useSessionsByGroupQuery = (
  * Hook for fetching sessions by lesson ID
  */
 export const useSessionsByLessonQuery = (
+    groupId: number,
     lessonId: number,
     additionalParams?: Omit<SessionsListParams, "course_id" | "level_id">
 ) => {
@@ -119,7 +121,7 @@ export const useSessionsByLessonQuery = (
 
     return useQuery({
         queryKey: sessionKeys.byLesson(lessonId),
-        queryFn: ({ signal }) => sessionsApi.getList(params, signal),
+        queryFn: ({ signal }) => sessionsApi.getList(groupId, params, signal),
         enabled: !!lessonId,
         staleTime: 5 * 60 * 1000,
     });
@@ -133,8 +135,11 @@ export const useSessionsByLessonQuery = (
  * Hook for fetching both sessions list and metadata
  * Useful for pages that need both for filtering and display
  */
-export const useSessionsWithDataQuery = (params: SessionsListParams) => {
-    const sessionsQuery = useSessionsListQuery(params);
+export const useSessionsWithDataQuery = (
+    groupId: number,
+    params: SessionsListParams
+) => {
+    const sessionsQuery = useSessionsListQuery(groupId, params);
     const metadataQuery = useSessionsMetadataQuery();
 
     return {

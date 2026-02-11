@@ -21,7 +21,6 @@ import {
     useTeacherAttendanceQuery,
     useSessionsListQuery,
 } from "../api";
-import { Users, CheckCircle, Clock, TrendingUp } from "lucide-react";
 
 // Helper to format date for display
 const formatDateForDisplay = (dateString: string): string => {
@@ -105,7 +104,8 @@ export const AttendancePage = () => {
     // Fetch sessions for this group
     const { data: sessionsData, isLoading: isLoadingSessions } =
         useSessionsListQuery(
-            { group_id: groupId ? parseInt(groupId, 10) : undefined },
+            parseInt(groupId!, 10),
+            {},
             { enabled: !!groupId }
         );
 
@@ -143,11 +143,10 @@ export const AttendancePage = () => {
             }).length || 0;
         const pendingSessions = totalSessions - completedSessions;
 
-        // Calculate attendance rate from student data
-        const totalStudents = studentAttendanceData?.length || 0;
-        const presentCount =
-            studentAttendanceData?.filter((s) => s.status === "present")
-                .length || 0;
+        // Calculate attendance rate from student data (using new response structure)
+        const summary = studentAttendanceData?.summary;
+        const totalStudents = summary?.total || 0;
+        const presentCount = summary?.present || 0;
         const attendanceRate =
             totalStudents > 0 ? (presentCount / totalStudents) * 100 : 0;
 
@@ -162,8 +161,11 @@ export const AttendancePage = () => {
     // Build current session details from teacher attendance data
     const displaySession: CurrentSession = useMemo(() => {
         const firstTeacher = teacherAttendanceData?.[0];
-        const session = firstTeacher?.groupSession || currentSession;
-        const totalStudents = studentAttendanceData?.length || 0;
+        const session =
+            studentAttendanceData?.session ||
+            firstTeacher?.groupSession ||
+            currentSession;
+        const totalStudents = studentAttendanceData?.summary?.total || 0;
 
         return {
             date: session?.sessionDate || "-",
@@ -331,15 +333,17 @@ export const AttendancePage = () => {
                             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500" />
                         </div>
                     ) : tableData.length > 0 ? (
-                        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-                            <DynamicTable
-                                data={tableData}
-                                columns={columns}
-                                hideToolbar
-                                noPadding
-                                disableRowClick
-                            />
-                        </div>
+                        <DynamicTable
+                            data={tableData}
+                            columns={columns}
+                            hideToolbar
+                            hideHeader
+                            hideActionButtons
+                            hidePagination
+                            noPadding
+                            hideBorder
+                            disableRowClick
+                        />
                     ) : (
                         <EmptyState
                             title={t(

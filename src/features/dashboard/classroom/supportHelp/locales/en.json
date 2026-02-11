@@ -1,0 +1,76 @@
+{
+    "common": {
+        "loading": "Loading...",
+        "cancel": "Cancel",
+        "save": "Save",
+        "delete": "Delete",
+        "edit": "Edit",
+        "view": "View",
+        "search": "Search...",
+        "filter": "Filter",
+        "noData": "No data available"
+    },
+    "supportHelp": {
+        "pageTitle": "Support & Help",
+        "pageSubtitle": "Need help? Ask our support team.",
+        "searchPlaceholder": "Search your problem...",
+        "status": {
+            "open": "Open",
+            "inProgress": "In Progress",
+            "resolved": "Resolved",
+            "closed": "Closed"
+        },
+        "filters": {
+            "allTickets": "All Tickets",
+            "resolved": "Resolved",
+            "inProgress": "In Progress",
+            "closed": "Closed"
+        },
+        "tickets": {
+            "title": "Tickets",
+            "empty": "No tickets found"
+        },
+        "emptyState": {
+            "title": "Select a ticket",
+            "description": "Choose a ticket from the list to view details"
+        },
+        "tabs": {
+            "conversation": "Conversation",
+            "details": "Details"
+        },
+        "conversation": {
+            "placeholder": "Type your message...",
+            "supportTeam": "Support Team"
+        },
+        "details": {
+            "ticketInfo": "Ticket Info",
+            "status": "Status",
+            "createdOn": "Created On",
+            "category": "Category"
+        },
+        "progress": {
+            "inProgress": "In Progress",
+            "inProgressDesc": "We are working on it",
+            "resolved": "Resolved",
+            "resolvedDesc": "Your problem is fixed",
+            "closed": "Closed",
+            "closedDesc": "The ticket is finished"
+        },
+        "createTicket": {
+            "button": "New Ticket",
+            "pageTitle": "Need Help?",
+            "pageSubtitle": "Tell us what problem you have, and we will fix it.",
+            "whatProblem": "What is the problem?",
+            "subjectPlaceholder": "Example: My lesson is not opening",
+            "tellMore": "Tell us more",
+            "descriptionPlaceholder": "Type here...",
+            "descriptionHint": "You can write what happened or what you need help with.",
+            "picture": "Picture (Optional)",
+            "clickToAdd": "Click to add a picture",
+            "pictureHint": "You can add a picture if it helps us understand.",
+            "infoBanner": "Don't worry! Your ticket will be reviewed by our support team soon.",
+            "submit": "Send My Problem",
+            "cancel": "Cancel and go back"
+        }
+    }
+}

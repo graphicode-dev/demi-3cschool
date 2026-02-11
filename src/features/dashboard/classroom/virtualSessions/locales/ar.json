@@ -15,6 +15,12 @@
         "upcoming": "قادم",
         "completed": "مكتمل"
     },
+    "common": {
+        "today": "اليوم",
+        "yesterday": "أمس",
+        "min": "دقيقة",
+        "term": "الفصل"
+    },
     "sections": {
         "currentLive": "الجلسات المباشرة الحالية",
         "upcoming": "الجلسات القادمة",
@@ -77,6 +83,10 @@
         "goToLessonVideos": "اذهب إلى فيديوهات الدروس في",
         "selfStudyContent": "محتوى الدراسة الذاتية"
     },
+    "errors": {
+        "loadFailed": "فشل في تحميل الجلسات"
+    },
+    "empty": "لا توجد جلسات متاحة",
     "sitemap": {
         "recording": {
             "title": "التنقل في التسجيل",

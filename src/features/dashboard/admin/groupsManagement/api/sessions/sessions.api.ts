@@ -56,13 +56,17 @@ export const sessionsApi = {
      * Get list of sessions with filtering and pagination
      */
     getList: async (
-        params: SessionsListParams,
+        groupId: number,
+        params?: SessionsListParams,
         signal?: AbortSignal
     ): Promise<GroupSession[]> => {
-        const response = await api.get<ListResponse<GroupSession>>(BASE_URL, {
-            params: params as Record<string, unknown>,
-            signal,
-        });
+        const response = await api.get<ListResponse<GroupSession>>(
+            `/groups/${groupId}/sessions`,
+            {
+                params: params as Record<string, unknown>,
+                signal,
+            }
+        );
 
         if (response.error) {
             throw response.error;

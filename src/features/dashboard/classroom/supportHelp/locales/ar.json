@@ -1,0 +1,76 @@
+{
+    "common": {
+        "loading": "جاري التحميل...",
+        "cancel": "إلغاء",
+        "save": "حفظ",
+        "delete": "حذف",
+        "edit": "تعديل",
+        "view": "عرض",
+        "search": "بحث...",
+        "filter": "تصفية",
+        "noData": "لا توجد بيانات"
+    },
+    "supportHelp": {
+        "pageTitle": "الدعم والمساعدة",
+        "pageSubtitle": "هل تحتاج مساعدة؟ اسأل فريق الدعم لدينا.",
+        "searchPlaceholder": "ابحث عن مشكلتك...",
+        "status": {
+            "open": "مفتوحة",
+            "inProgress": "قيد التنفيذ",
+            "resolved": "تم الحل",
+            "closed": "مغلقة"
+        },
+        "filters": {
+            "allTickets": "جميع التذاكر",
+            "resolved": "تم الحل",
+            "inProgress": "قيد التنفيذ",
+            "closed": "مغلقة"
+        },
+        "tickets": {
+            "title": "التذاكر",
+            "empty": "لا توجد تذاكر"
+        },
+        "emptyState": {
+            "title": "اختر تذكرة",
+            "description": "اختر تذكرة من القائمة لعرض التفاصيل"
+        },
+        "tabs": {
+            "conversation": "المحادثة",
+            "details": "التفاصيل"
+        },
+        "conversation": {
+            "placeholder": "اكتب رسالتك...",
+            "supportTeam": "فريق الدعم"
+        },
+        "details": {
+            "ticketInfo": "معلومات التذكرة",
+            "status": "الحالة",
+            "createdOn": "تاريخ الإنشاء",
+            "category": "الفئة"
+        },
+        "progress": {
+            "inProgress": "قيد التنفيذ",
+            "inProgressDesc": "نحن نعمل على حلها",
+            "resolved": "تم الحل",
+            "resolvedDesc": "تم حل مشكلتك",
+            "closed": "مغلقة",
+            "closedDesc": "تم إنهاء التذكرة"
+        },
+        "createTicket": {
+            "button": "تذكرة جديدة",
+            "pageTitle": "هل تحتاج مساعدة؟",
+            "pageSubtitle": "أخبرنا بمشكلتك وسنقوم بحلها.",
+            "whatProblem": "ما هي المشكلة؟",
+            "subjectPlaceholder": "مثال: الدرس لا يفتح",
+            "tellMore": "أخبرنا المزيد",
+            "descriptionPlaceholder": "اكتب هنا...",
+            "descriptionHint": "يمكنك كتابة ما حدث أو ما تحتاج المساعدة فيه.",
+            "picture": "صورة (اختياري)",
+            "clickToAdd": "انقر لإضافة صورة",
+            "pictureHint": "يمكنك إضافة صورة إذا كانت تساعدنا على الفهم.",
+            "infoBanner": "لا تقلق! سيتم مراجعة تذكرتك من قبل فريق الدعم قريباً.",
+            "submit": "إرسال مشكلتي",
+            "cancel": "إلغاء والعودة"
+        }
+    }
+}

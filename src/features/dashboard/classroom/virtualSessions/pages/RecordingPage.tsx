@@ -16,22 +16,28 @@ import { useDynamicBreadcrumb } from "@/navigation";
 import { BunnyStreamPlayer } from "@/features/dashboard/shared/components/BunnyStreamPlayer";
 import { useVideo } from "@/features/dashboard/shared";
 
-// Format date
-function formatDate(dateStr: string): string {
+// Format date - returns key or formatted date
+function formatDateKey(dateStr: string): {
+    isYesterday: boolean;
+    formatted: string;
+} {
     const date = new Date(dateStr);
     const today = new Date();
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
 
     if (date.toDateString() === yesterday.toDateString()) {
-        return "Yesterday";
+        return { isYesterday: true, formatted: "" };
     }
 
-    return date.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-    });
+    return {
+        isYesterday: false,
+        formatted: date.toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+        }),
+    };
 }
 
 function RecordingPage() {
@@ -146,12 +152,23 @@ function RecordingPage() {
                             </span> */}
                             <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-xs">
                                 <Clock className="size-3.5" />
-                                <span>{lessonVideo?.duration || 60} min</span>
+                                <span>
+                                    {lessonVideo?.duration || 60}{" "}
+                                    {t("common.min")}
+                                </span>
                             </div>
                             <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-xs">
                                 <Calendar className="size-3.5" />
                                 <span>
-                                    {formatDate(lessonVideo?.createdAt!)}
+                                    {lessonVideo?.createdAt &&
+                                        (() => {
+                                            const dateInfo = formatDateKey(
+                                                lessonVideo.createdAt
+                                            );
+                                            return dateInfo.isYesterday
+                                                ? t("common.yesterday")
+                                                : dateInfo.formatted;
+                                        })()}
                                 </span>
                             </div>
                         </div>

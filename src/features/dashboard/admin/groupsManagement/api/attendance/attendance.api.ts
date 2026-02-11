@@ -9,6 +9,7 @@ import { api } from "@/shared/api/client";
 import {
     StudentAttendancePayload,
     StudentAttendanceRecord,
+    StudentAttendanceResponse,
     TeacherAttendance,
     TeacherAttendancePayload,
 } from "../../types";
@@ -80,8 +81,8 @@ export const attendanceApi = {
     getStudentAttendance: async (
         sessionId: string | number,
         signal?: AbortSignal
-    ): Promise<StudentAttendanceRecord[]> => {
-        const response = await api.get<ApiResponse<StudentAttendanceRecord[]>>(
+    ): Promise<StudentAttendanceResponse> => {
+        const response = await api.get<ApiResponse<StudentAttendanceResponse>>(
             `${BASE_URL}/${sessionId}/student-attendance`,
             { signal }
         );

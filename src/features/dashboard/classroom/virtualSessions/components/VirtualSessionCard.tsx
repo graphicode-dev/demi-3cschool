@@ -35,23 +35,29 @@ function formatTime(time: string): string {
 }
 
 // Format date from "YYYY-MM-DD" to relative or formatted date
-function formatDate(dateStr: string): string {
+function formatDateKey(dateStr: string): {
+    key: "today" | "yesterday" | null;
+    formatted: string;
+} {
     const date = new Date(dateStr);
     const today = new Date();
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
 
     if (date.toDateString() === today.toDateString()) {
-        return "Today";
+        return { key: "today", formatted: "" };
     }
     if (date.toDateString() === yesterday.toDateString()) {
-        return "Yesterday";
+        return { key: "yesterday", formatted: "" };
     }
 
-    return date.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-    });
+    return {
+        key: null,
+        formatted: date.toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+        }),
+    };
 }
 
 const attendanceStatusConfig: Record<
@@ -193,7 +199,7 @@ export function VirtualSessionCard({
                         {session.course.title}
                     </span>
                     <span className="bg-brand-50 dark:bg-brand-500/10 text-brand-500 text-xs font-medium px-2 py-0.5 rounded border border-brand-200 dark:border-brand-500/30">
-                        Term {session.term.id}
+                        {t("common.term")} {session.term.id}
                     </span>
                 </div>
                 {getStatusBadge()}
@@ -230,13 +236,20 @@ export function VirtualSessionCard({
                     <span>
                         {isLive
                             ? t("session.liveNow")
-                            : formatDate(session.sessionDate)}
+                            : (() => {
+                                  const dateInfo = formatDateKey(
+                                      session.sessionDate
+                                  );
+                                  return dateInfo.key
+                                      ? t(`common.${dateInfo.key}`)
+                                      : dateInfo.formatted;
+                              })()}
                     </span>
                 </div>
             </div>
 
             {/* Student Attendance Status Badge */}
-            {isStudent && (
+            {isStudent && isCompleted && (
                 <div
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg ${attendanceConfig.bgColor}`}
                 >
@@ -255,7 +268,7 @@ export function VirtualSessionCard({
             {getActionButton()}
 
             {/* Teacher Actions - Attendance & Reviews */}
-            {isStudent && (
+            {isTeacher && isCompleted && (
                 <div className="flex gap-2">
                     <button
                         onClick={() => setShowAttendanceModal(true)}
@@ -279,7 +292,7 @@ export function VirtualSessionCard({
             )}
 
             {/* Student Review Button */}
-            {isStudent && (
+            {isStudent && isCompleted && (
                 <button
                     onClick={() => setShowRatingModal(true)}
                     className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg border-2 border-brand-500 text-brand-500 hover:bg-brand-50 dark:hover:bg-brand-500/10 transition-colors"
