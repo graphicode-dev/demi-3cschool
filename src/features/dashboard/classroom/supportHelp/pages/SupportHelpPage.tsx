@@ -14,7 +14,11 @@ import {
     SupportTicketEmptyState,
     SupportTicketDetailPanel,
 } from "../components";
-import { mockSupportTickets, mockSupportTicketDetail } from "../mockData";
+import {
+    useSupportTicketsList,
+    useSupportTicket,
+    useSendSupportMessage,
+} from "../api";
 import type { SupportTicketFilter } from "../types";
 import { supportHelp } from "../navigation";
 import { PageWrapper } from "@/design-system";
@@ -29,21 +33,25 @@ export function SupportHelpPage() {
         null
     );
 
-    // Filter tickets based on search and filter
-    const filteredTickets = useMemo(() => {
-        let tickets = [...mockSupportTickets];
+    // Fetch tickets list from API
+    const { data: ticketsData, isLoading: isLoadingTickets } =
+        useSupportTicketsList(activeFilter);
 
-        // Apply status filter
-        if (activeFilter !== "all") {
-            tickets = tickets.filter(
-                (ticket) => ticket.status === activeFilter
-            );
-        }
+    // Fetch selected ticket detail
+    const { data: selectedTicket, isLoading: isLoadingTicket } =
+        useSupportTicket(selectedTicketId);
+
+    // Send message mutation
+    const sendMessageMutation = useSendSupportMessage();
+
+    // Filter tickets based on search (API already filters by status)
+    const filteredTickets = useMemo(() => {
+        const tickets = ticketsData?.items ?? [];
 
         // Apply search filter
         if (searchQuery.trim()) {
             const query = searchQuery.toLowerCase();
-            tickets = tickets.filter(
+            return tickets.filter(
                 (ticket) =>
                     ticket.subject.toLowerCase().includes(query) ||
                     ticket.ticketNumber.toLowerCase().includes(query)
@@ -51,14 +59,14 @@ export function SupportHelpPage() {
         }
 
         return tickets;
-    }, [activeFilter, searchQuery]);
-
-    // Get selected ticket detail (mock)
-    const selectedTicket = selectedTicketId ? mockSupportTicketDetail : null;
+    }, [ticketsData?.items, searchQuery]);
 
     const handleSendMessage = (content: string) => {
-        console.log("Send message:", content);
-        // TODO: Implement API call
+        if (!selectedTicketId) return;
+        sendMessageMutation.mutate({
+            ticketId: selectedTicketId,
+            content,
+        });
     };
 
     const handleCreateTicket = () => {
@@ -116,10 +124,10 @@ export function SupportHelpPage() {
                 <div className="w-full md:w-[320px] flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
                     <SupportTicketsList
                         tickets={filteredTickets}
-                        total={filteredTickets.length}
+                        total={ticketsData?.total ?? filteredTickets.length}
                         selectedTicketId={selectedTicketId}
                         onSelectTicket={setSelectedTicketId}
-                        isLoading={false}
+                        isLoading={isLoadingTickets}
                     />
                 </div>
 
@@ -129,7 +137,7 @@ export function SupportHelpPage() {
                         <SupportTicketDetailPanel
                             ticket={selectedTicket}
                             onSendMessage={handleSendMessage}
-                            isLoading={false}
+                            isLoading={isLoadingTicket}
                         />
                     ) : (
                         <SupportTicketEmptyState />

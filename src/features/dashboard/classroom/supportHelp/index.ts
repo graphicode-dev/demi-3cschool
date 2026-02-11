@@ -4,6 +4,7 @@
  * Public exports for the support help feature.
  */
 
+export * from "./api";
 export * from "./navigation";
 export { supportHelpNavItem } from "./navigation/nav";
 export * from "./pages";

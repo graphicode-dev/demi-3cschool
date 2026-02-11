@@ -57,7 +57,7 @@ export function SupportConversationTab({
                     return (
                         <div
                             key={message.id}
-                            className={`flex flex-col gap-2 ${isStudent ? "items-end" : "items-start"}`}
+                            className={`flex flex-col gap-2 ${isStudent ? "items-start" : "items-end"}`}
                         >
                             {/* Sender info for support team */}
                             {!isStudent && (

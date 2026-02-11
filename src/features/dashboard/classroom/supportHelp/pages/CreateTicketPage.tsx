@@ -16,6 +16,7 @@ import {
     CloudUpload,
 } from "lucide-react";
 import { ProgressStepper } from "../components";
+import { useCreateSupportTicket } from "../api";
 import { supportHelp } from "../navigation";
 
 export function CreateTicketPage() {
@@ -24,21 +25,29 @@ export function CreateTicketPage() {
     const [subject, setSubject] = useState("");
     const [description, setDescription] = useState("");
     const [attachment, setAttachment] = useState<File | null>(null);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const createTicketMutation = useCreateSupportTicket();
 
     const handleSubmit = async () => {
         if (!subject.trim()) return;
 
-        setIsSubmitting(true);
-        try {
-            // TODO: Implement API call
-            console.log("Submit ticket:", { subject, description, attachment });
-            navigate(supportHelp.root());
-        } catch (error) {
-            console.error("Failed to create ticket:", error);
-        } finally {
-            setIsSubmitting(false);
-        }
+        createTicketMutation.mutate(
+            {
+                subject,
+                description,
+                attachmentUrl: attachment
+                    ? URL.createObjectURL(attachment)
+                    : undefined,
+            },
+            {
+                onSuccess: () => {
+                    navigate(supportHelp.root());
+                },
+                onError: (error) => {
+                    console.error("Failed to create ticket:", error);
+                },
+            }
+        );
     };
 
     const handleCancel = () => {
@@ -191,7 +200,9 @@ export function CreateTicketPage() {
                     {/* Submit Button */}
                     <button
                         onClick={handleSubmit}
-                        disabled={!subject.trim() || isSubmitting}
+                        disabled={
+                            !subject.trim() || createTicketMutation.isPending
+                        }
                         className="w-full flex items-center justify-center gap-2 px-4 py-2.5 bg-brand-500 text-white rounded-full font-semibold text-sm shadow-md hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                         {t(
