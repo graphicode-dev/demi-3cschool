@@ -1,9 +1,10 @@
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Sparkles, Monitor } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { useMyCurrentSession } from "@/features/dashboard/classroom/mySchedule/api";
 import type { MyCurrentSession } from "@/features/dashboard/classroom/mySchedule/types";
+import { SessionInfoModal } from "@/features/dashboard/classroom/virtualSessions/components/SessionInfoModal";
+import type { VirtualSession } from "@/features/dashboard/classroom/virtualSessions/types";
 
 interface SessionEvent {
     id: number;
@@ -45,12 +46,12 @@ type SessionKind = "online" | "offline";
 
 const NavbarSessionCountdown = () => {
     const { t, i18n } = useTranslation("dashboard");
-    const navigate = useNavigate();
     const isRTL = i18n.language === "ar";
     const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
     const [countdownMode, setCountdownMode] = useState<
         "upcoming" | "current" | "ended"
     >("ended");
+    const [showInfoModal, setShowInfoModal] = useState(false);
 
     const { data: currentSession, isLoading, isError } = useMyCurrentSession();
 
@@ -94,6 +95,54 @@ const NavbarSessionCountdown = () => {
             linkMeeing: s.hasMeeting ? (s.bbbMeetingId ?? null) : null,
         };
     }, [currentSession]);
+
+    // Transform session data for SessionInfoModal
+    const virtualSession = useMemo((): VirtualSession | null => {
+        if (!sessionEvent || !currentSession) return null;
+
+        return {
+            id: sessionEvent.id,
+            group: {
+                id: sessionEvent.group.id,
+                name: sessionEvent.group.name,
+                locationType: sessionEvent.group.locationType,
+            },
+            course: {
+                id: 0,
+                title: currentSession.group?.name ?? "",
+            },
+            term: {
+                id: 1,
+                name: "Current Term",
+            },
+            sessionDate: sessionEvent.sessionDate,
+            startTime: sessionEvent.startTime,
+            endTime: sessionEvent.endTime,
+            topic: sessionEvent.topic || sessionEvent.lesson.title,
+            lesson: sessionEvent.lesson,
+            description: "",
+            isCancelled: sessionEvent.isCancelled,
+            cancellationReason: sessionEvent.cancellationReason,
+            meetingProvider: sessionEvent.meetingProvider ?? "bbb",
+            meetingId: sessionEvent.meetingId ?? "",
+            linkMeeting: sessionEvent.linkMeeing ?? "",
+            contentProgress: {
+                total: {
+                    totalContents: 0,
+                    completedContents: 0,
+                    totalProgressPercentage: 0,
+                },
+                items: [],
+            },
+            instructor: {
+                id: currentSession.teacher?.id ?? 0,
+                name: currentSession.teacher?.name ?? "",
+                course: currentSession.group?.name ?? "",
+            },
+            createdAt: currentSession.createdAt,
+            updatedAt: currentSession.updatedAt,
+        };
+    }, [sessionEvent, currentSession]);
 
     const sessionTiming = useMemo(() => {
         if (!sessionEvent) return null;
@@ -478,12 +527,7 @@ const NavbarSessionCountdown = () => {
                         </button>
                     ) : (
                         <button
-                            onClick={() =>
-                                sessionEvent &&
-                                navigate(
-                                    `/dashboard/virtual-sessions/${sessionEvent.id}`
-                                )
-                            }
+                            onClick={() => setShowInfoModal(true)}
                             disabled={!sessionEvent}
                             className="px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-widest bg-white/20 text-white hover:bg-white/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
@@ -503,6 +547,15 @@ const NavbarSessionCountdown = () => {
             animation: gradient-slow 10s ease infinite;
           }
         `}</style>
+
+            {/* Session Info Modal */}
+            {virtualSession && (
+                <SessionInfoModal
+                    session={virtualSession}
+                    isOpen={showInfoModal}
+                    onClose={() => setShowInfoModal(false)}
+                />
+            )}
         </div>
     );
 };
