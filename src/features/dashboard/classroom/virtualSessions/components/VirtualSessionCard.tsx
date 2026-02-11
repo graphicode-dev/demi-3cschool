@@ -16,7 +16,6 @@ import { AttendanceModal } from "./AttendanceModal";
 import { ReviewsModal } from "./ReviewsModal";
 import { SessionRatingModal } from "./SessionRatingModal";
 import {
-    MOCK_STUDENTS_ATTENDANCE,
     MOCK_STUDENT_REVIEWS,
     MOCK_CURRENT_STUDENT_ATTENDANCE,
     type AttendanceStatus,
@@ -256,7 +255,7 @@ export function VirtualSessionCard({
             {getActionButton()}
 
             {/* Teacher Actions - Attendance & Reviews */}
-            {isTeacher && isCompleted && (
+            {isStudent && (
                 <div className="flex gap-2">
                     <button
                         onClick={() => setShowAttendanceModal(true)}
@@ -296,16 +295,8 @@ export function VirtualSessionCard({
             <AttendanceModal
                 isOpen={showAttendanceModal}
                 onClose={() => setShowAttendanceModal(false)}
-                students={MOCK_STUDENTS_ATTENDANCE}
+                sessionId={session.id}
                 sessionTopic={session.topic}
-                onUpdateAttendance={(studentId, status) => {
-                    // TODO: Implement API call when ready
-                    console.log("Attendance updated:", {
-                        sessionId: session.id,
-                        studentId,
-                        status,
-                    });
-                }}
             />
 
             <ReviewsModal

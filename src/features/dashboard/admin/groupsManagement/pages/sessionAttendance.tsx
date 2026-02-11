@@ -8,7 +8,7 @@
 import React, { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { History, Check, X } from "lucide-react";
+import { History, Check, X, ChevronDown } from "lucide-react";
 import { PageWrapper, DynamicTable } from "@/design-system";
 import type { TableColumn, TableData } from "@/shared/types/table.types";
 import type { AttendanceStatus } from "../types/attendance.types";
@@ -16,6 +16,7 @@ import {
     useStudentAttendanceQuery,
     useTeacherAttendanceQuery,
     useUpdateStudentAttendanceMutation,
+    useUpdateTeacherAttendanceMutation,
 } from "../api";
 
 // Status badge component
@@ -77,6 +78,16 @@ export const SessionAttendancePage = () => {
     }>();
 
     const [hasChanges, setHasChanges] = useState(false);
+    const [showTeacherStatusDropdown, setShowTeacherStatusDropdown] =
+        useState(false);
+    const [teacherNote, setTeacherNote] = useState("");
+    const [selectedTeacherStatus, setSelectedTeacherStatus] =
+        useState<AttendanceStatus | null>(null);
+    const [studentNoteModal, setStudentNoteModal] = useState<{
+        studentId: string;
+        status: AttendanceStatus;
+        note: string;
+    } | null>(null);
 
     // Fetch student attendance data
     const { data: studentAttendanceData, isLoading: isLoadingStudents } =
@@ -92,6 +103,9 @@ export const SessionAttendancePage = () => {
 
     // Mutation for updating student attendance
     const updateStudentAttendance = useUpdateStudentAttendanceMutation();
+
+    // Mutation for updating teacher attendance
+    const updateTeacherAttendance = useUpdateTeacherAttendanceMutation();
 
     // Get session info from teacher attendance
     const sessionInfo = useMemo(() => {
@@ -112,11 +126,54 @@ export const SessionAttendancePage = () => {
     const instructorInfo = useMemo(() => {
         const firstTeacher = teacherAttendanceData?.[0];
         return {
+            id: firstTeacher?.teacher.id || 0,
             name: firstTeacher?.teacher.name || "Sarah Johnson",
             role: "Primary Instructor",
             status: firstTeacher?.status || "present",
+            minutesTaught: firstTeacher?.minutesTaught || 0,
+            note: firstTeacher?.note || "",
         };
     }, [teacherAttendanceData]);
+
+    // Teacher attendance status options
+    const teacherStatusOptions: AttendanceStatus[] = [
+        "present",
+        "absent",
+        "late",
+        "cancelled",
+    ];
+
+    // Handle teacher status selection (shows note input)
+    const handleTeacherStatusSelect = (status: AttendanceStatus) => {
+        setSelectedTeacherStatus(status);
+        setTeacherNote(instructorInfo.note);
+    };
+
+    // Handle teacher status update with note
+    const handleTeacherStatusUpdate = async () => {
+        if (!sessionId || !instructorInfo.id || !selectedTeacherStatus) return;
+
+        await updateTeacherAttendance.mutateAsync({
+            sessionId,
+            data: {
+                teacher_id: instructorInfo.id,
+                status: selectedTeacherStatus,
+                minutes_taught: instructorInfo.minutesTaught,
+                note: teacherNote,
+            },
+        });
+        setShowTeacherStatusDropdown(false);
+        setSelectedTeacherStatus(null);
+        setTeacherNote("");
+        setHasChanges(true);
+    };
+
+    // Cancel teacher status change
+    const handleCancelTeacherStatus = () => {
+        setSelectedTeacherStatus(null);
+        setTeacherNote("");
+        setShowTeacherStatusDropdown(false);
+    };
 
     // Calculate attendance stats
     const attendanceStats = useMemo(() => {
@@ -128,15 +185,29 @@ export const SessionAttendancePage = () => {
         return { present, absent, total };
     }, [studentAttendanceData]);
 
-    // Handle status update
-    const handleStatusUpdate = async (
+    // Handle status update - open note modal
+    const handleStatusUpdate = (
         studentId: string,
         newStatus: AttendanceStatus
     ) => {
-        if (!sessionId) return;
-
         const student = studentAttendanceData?.find(
             (s) => String(s.id) === studentId
+        );
+        if (!student) return;
+
+        setStudentNoteModal({
+            studentId,
+            status: newStatus,
+            note: student.note || "",
+        });
+    };
+
+    // Confirm student status update with note
+    const handleConfirmStudentStatus = async () => {
+        if (!sessionId || !studentNoteModal) return;
+
+        const student = studentAttendanceData?.find(
+            (s) => String(s.id) === studentNoteModal.studentId
         );
         if (!student) return;
 
@@ -146,12 +217,13 @@ export const SessionAttendancePage = () => {
                 attendances: [
                     {
                         student_id: student.student.id,
-                        status: newStatus,
-                        note: student.note,
+                        status: studentNoteModal.status,
+                        note: studentNoteModal.note,
                     },
                 ],
             },
         });
+        setStudentNoteModal(null);
         setHasChanges(true);
     };
 
@@ -348,9 +420,123 @@ export const SessionAttendancePage = () => {
                                 "Instructor Attendance"
                             )}
                         </h3>
-                        <button className="text-sm text-brand-500 hover:text-brand-600">
-                            {t("attendance.changeStatus", "Change status")}
-                        </button>
+                        <div className="relative">
+                            <button
+                                onClick={() =>
+                                    setShowTeacherStatusDropdown(
+                                        !showTeacherStatusDropdown
+                                    )
+                                }
+                                className="flex items-center gap-1 text-sm text-brand-500 hover:text-brand-600"
+                            >
+                                {t("attendance.changeStatus", "Change status")}
+                                <ChevronDown className="w-4 h-4" />
+                            </button>
+                            {showTeacherStatusDropdown && (
+                                <div className="absolute right-0 top-full mt-1 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-3 z-10">
+                                    {!selectedTeacherStatus ? (
+                                        <div className="space-y-1">
+                                            {teacherStatusOptions.map(
+                                                (status) => (
+                                                    <button
+                                                        key={status}
+                                                        onClick={() =>
+                                                            handleTeacherStatusSelect(
+                                                                status
+                                                            )
+                                                        }
+                                                        className={`w-full px-3 py-2 text-left text-sm rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 capitalize ${
+                                                            instructorInfo.status ===
+                                                            status
+                                                                ? "text-brand-500 font-medium bg-brand-50 dark:bg-brand-900/20"
+                                                                : "text-gray-700 dark:text-gray-300"
+                                                        }`}
+                                                    >
+                                                        {t(
+                                                            `attendance.status.${status}`,
+                                                            status
+                                                        )}
+                                                    </button>
+                                                )
+                                            )}
+                                        </div>
+                                    ) : (
+                                        <div className="space-y-3">
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-sm font-medium text-gray-900 dark:text-white capitalize">
+                                                    {t(
+                                                        `attendance.status.${selectedTeacherStatus}`,
+                                                        selectedTeacherStatus
+                                                    )}
+                                                </span>
+                                                <button
+                                                    onClick={() =>
+                                                        setSelectedTeacherStatus(
+                                                            null
+                                                        )
+                                                    }
+                                                    className="text-xs text-gray-500 hover:text-gray-700"
+                                                >
+                                                    {t(
+                                                        "common.change",
+                                                        "Change"
+                                                    )}
+                                                </button>
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1">
+                                                    {t(
+                                                        "attendance.note",
+                                                        "Note"
+                                                    )}{" "}
+                                                    (
+                                                    {t(
+                                                        "common.optional",
+                                                        "optional"
+                                                    )}
+                                                    )
+                                                </label>
+                                                <textarea
+                                                    value={teacherNote}
+                                                    onChange={(e) =>
+                                                        setTeacherNote(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    placeholder={t(
+                                                        "attendance.addNote",
+                                                        "Add a note..."
+                                                    )}
+                                                    className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                                                    rows={2}
+                                                />
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <button
+                                                    onClick={
+                                                        handleCancelTeacherStatus
+                                                    }
+                                                    className="flex-1 px-3 py-1.5 text-sm text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
+                                                >
+                                                    {t(
+                                                        "common.cancel",
+                                                        "Cancel"
+                                                    )}
+                                                </button>
+                                                <button
+                                                    onClick={
+                                                        handleTeacherStatusUpdate
+                                                    }
+                                                    className="flex-1 px-3 py-1.5 text-sm text-white bg-brand-500 rounded-lg hover:bg-brand-600"
+                                                >
+                                                    {t("common.save", "Save")}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
                     </div>
                     <div className="flex items-center gap-4 mb-4">
                         <div className="w-10 h-10 rounded-full bg-brand-100 dark:bg-brand-900/20 flex items-center justify-center text-brand-600 dark:text-brand-400 font-semibold">
@@ -462,6 +648,71 @@ export const SessionAttendancePage = () => {
                     </button>
                 </div>
             </div>
+
+            {/* Student Note Modal */}
+            {studentNoteModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center">
+                    <div
+                        className="absolute inset-0 bg-black/50"
+                        onClick={() => setStudentNoteModal(null)}
+                    />
+                    <div className="relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl w-full max-w-md mx-4 p-6">
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                            {t(
+                                "attendance.updateStatus",
+                                "Update Attendance Status"
+                            )}
+                        </h3>
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                    {t("attendance.status", "Status")}
+                                </label>
+                                <div className="flex items-center gap-2">
+                                    <StatusBadge
+                                        status={studentNoteModal.status}
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                    {t("attendance.note", "Note")} (
+                                    {t("common.optional", "optional")})
+                                </label>
+                                <textarea
+                                    value={studentNoteModal.note}
+                                    onChange={(e) =>
+                                        setStudentNoteModal({
+                                            ...studentNoteModal,
+                                            note: e.target.value,
+                                        })
+                                    }
+                                    placeholder={t(
+                                        "attendance.addNote",
+                                        "Add a note..."
+                                    )}
+                                    className="w-full px-3 py-2 text-sm border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500"
+                                    rows={3}
+                                />
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-3 mt-6">
+                            <button
+                                onClick={() => setStudentNoteModal(null)}
+                                className="flex-1 px-4 py-2 text-sm text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700"
+                            >
+                                {t("common.cancel", "Cancel")}
+                            </button>
+                            <button
+                                onClick={handleConfirmStudentStatus}
+                                className="flex-1 px-4 py-2 text-sm text-white bg-brand-500 rounded-lg hover:bg-brand-600"
+                            >
+                                {t("common.save", "Save")}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </PageWrapper>
     );
 };

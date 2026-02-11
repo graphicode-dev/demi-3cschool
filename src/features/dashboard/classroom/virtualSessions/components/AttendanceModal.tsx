@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import {
     X,
@@ -9,17 +9,20 @@ import {
     User,
     ChevronDown,
 } from "lucide-react";
+import {
+    useStudentAttendanceQuery,
+    useUpdateStudentAttendanceMutation,
+} from "@/features/dashboard/admin/groupsManagement/api";
 import type {
-    StudentAttendance,
     AttendanceStatus,
-} from "../mocks/sessionMockData";
+    StudentAttendanceRecord,
+} from "@/features/dashboard/admin/groupsManagement/types";
 
 interface AttendanceModalProps {
     isOpen: boolean;
     onClose: () => void;
-    students: StudentAttendance[];
+    sessionId: number | string;
     sessionTopic: string;
-    onUpdateAttendance?: (studentId: number, status: AttendanceStatus) => void;
 }
 
 const statusConfig: Record<
@@ -44,55 +47,65 @@ const statusConfig: Record<
         textColor: "text-warning-600 dark:text-warning-400",
         label: "late",
     },
-    excused: {
+    cancelled: {
         icon: AlertCircle,
         bgColor: "bg-gray-100 dark:bg-gray-700",
         textColor: "text-gray-600 dark:text-gray-400",
-        label: "excused",
+        label: "cancelled",
     },
 };
 
-const ATTENDANCE_STATUSES: AttendanceStatus[] = [
-    "present",
-    "absent",
-    "late",
-    "excused",
-];
+const ATTENDANCE_STATUSES: AttendanceStatus[] = ["present", "absent", "late"];
 
 export function AttendanceModal({
     isOpen,
     onClose,
-    students: initialStudents,
+    sessionId,
     sessionTopic,
-    onUpdateAttendance,
 }: AttendanceModalProps) {
     const { t } = useTranslation("virtualSessions");
-    const [students, setStudents] =
-        useState<StudentAttendance[]>(initialStudents);
     const [openDropdownId, setOpenDropdownId] = useState<number | null>(null);
 
-    if (!isOpen) return null;
+    // Fetch student attendance data from API
+    const { data: students = [], isLoading } = useStudentAttendanceQuery(
+        sessionId,
+        { enabled: isOpen && !!sessionId }
+    );
 
-    const handleStatusChange = (
-        studentId: number,
+    // Mutation for updating student attendance
+    const updateStudentAttendance = useUpdateStudentAttendanceMutation();
+
+    // Calculate counts - must be before early return
+    const counts = useMemo(() => {
+        const result = { present: 0, absent: 0, late: 0 };
+        students.forEach((s) => {
+            if (s.status in result) {
+                result[s.status as keyof typeof result]++;
+            }
+        });
+        return result;
+    }, [students]);
+
+    const handleStatusChange = async (
+        student: StudentAttendanceRecord,
         newStatus: AttendanceStatus
     ) => {
-        setStudents((prev) =>
-            prev.map((s) =>
-                s.id === studentId ? { ...s, status: newStatus } : s
-            )
-        );
-        onUpdateAttendance?.(studentId, newStatus);
+        await updateStudentAttendance.mutateAsync({
+            sessionId,
+            data: {
+                attendances: [
+                    {
+                        student_id: student.student.id,
+                        status: newStatus,
+                        note: student.note,
+                    },
+                ],
+            },
+        });
         setOpenDropdownId(null);
     };
 
-    const getStatusCounts = () => {
-        const counts = { present: 0, absent: 0, late: 0, excused: 0 };
-        students.forEach((s) => counts[s.status]++);
-        return counts;
-    };
-
-    const counts = getStatusCounts();
+    if (!isOpen) return null;
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
@@ -142,132 +155,126 @@ export function AttendanceModal({
                             {counts.absent}
                         </span>
                     </div>
-                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-700">
-                        <AlertCircle className="size-4 text-gray-600 dark:text-gray-400" />
-                        <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                            {counts.excused}
-                        </span>
-                    </div>
                 </div>
 
                 {/* Student List */}
                 <div className="flex-1 overflow-y-auto p-4">
                     <div className="flex flex-col gap-3">
-                        {students.map((student) => {
-                            const config = statusConfig[student.status];
-                            const StatusIcon = config.icon;
+                        {isLoading ? (
+                            <div className="flex justify-center py-8">
+                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500" />
+                            </div>
+                        ) : (
+                            students.map((student) => {
+                                const config =
+                                    statusConfig[student.status] ||
+                                    statusConfig.present;
+                                const StatusIcon = config.icon;
 
-                            return (
-                                <div
-                                    key={student.id}
-                                    className="flex items-center justify-between p-3 rounded-xl bg-gray-50 dark:bg-gray-800"
-                                >
-                                    <div className="flex items-center gap-3">
-                                        <div className="size-10 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
-                                            {student.avatar ? (
-                                                <img
-                                                    src={student.avatar}
-                                                    alt={student.name}
-                                                    className="size-10 rounded-full object-cover"
-                                                />
-                                            ) : (
+                                return (
+                                    <div
+                                        key={student.id}
+                                        className="flex items-center justify-between p-3 rounded-xl bg-gray-50 dark:bg-gray-800"
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <div className="size-10 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
                                                 <User className="size-5 text-gray-400" />
+                                            </div>
+                                            <span className="font-medium text-gray-900 dark:text-white">
+                                                {student.student.name}
+                                            </span>
+                                        </div>
+                                        {/* Status Dropdown */}
+                                        <div className="relative">
+                                            <button
+                                                onClick={() =>
+                                                    setOpenDropdownId(
+                                                        openDropdownId ===
+                                                            student.id
+                                                            ? null
+                                                            : student.id
+                                                    )
+                                                }
+                                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full ${config.bgColor} hover:opacity-80 transition-opacity cursor-pointer`}
+                                            >
+                                                <StatusIcon
+                                                    className={`size-4 ${config.textColor}`}
+                                                />
+                                                <span
+                                                    className={`text-xs font-medium ${config.textColor}`}
+                                                >
+                                                    {t(
+                                                        `attendance.status.${config.label}`
+                                                    )}
+                                                </span>
+                                                <ChevronDown
+                                                    className={`size-3 ${config.textColor} transition-transform ${
+                                                        openDropdownId ===
+                                                        student.id
+                                                            ? "rotate-180"
+                                                            : ""
+                                                    }`}
+                                                />
+                                            </button>
+
+                                            {/* Dropdown Menu */}
+                                            {openDropdownId === student.id && (
+                                                <div className="absolute end-0 top-full mt-1 z-10 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 min-w-[140px]">
+                                                    {ATTENDANCE_STATUSES.map(
+                                                        (status) => {
+                                                            const statusCfg =
+                                                                statusConfig[
+                                                                    status
+                                                                ];
+                                                            const StatusOptionIcon =
+                                                                statusCfg.icon;
+                                                            const isSelected =
+                                                                student.status ===
+                                                                status;
+
+                                                            return (
+                                                                <button
+                                                                    key={status}
+                                                                    onClick={() =>
+                                                                        handleStatusChange(
+                                                                            student,
+                                                                            status
+                                                                        )
+                                                                    }
+                                                                    className={`w-full flex items-center gap-2 px-3 py-2 text-start hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
+                                                                        isSelected
+                                                                            ? "bg-gray-50 dark:bg-gray-700/50"
+                                                                            : ""
+                                                                    }`}
+                                                                >
+                                                                    <StatusOptionIcon
+                                                                        className={`size-4 ${statusCfg.textColor}`}
+                                                                    />
+                                                                    <span
+                                                                        className={`text-sm ${
+                                                                            isSelected
+                                                                                ? "font-medium"
+                                                                                : ""
+                                                                        } text-gray-700 dark:text-gray-300`}
+                                                                    >
+                                                                        {t(
+                                                                            `attendance.status.${statusCfg.label}`
+                                                                        )}
+                                                                    </span>
+                                                                    {isSelected && (
+                                                                        <Check className="size-4 text-brand-500 ms-auto" />
+                                                                    )}
+                                                                </button>
+                                                            );
+                                                        }
+                                                    )}
+                                                </div>
                                             )}
                                         </div>
-                                        <span className="font-medium text-gray-900 dark:text-white">
-                                            {student.name}
-                                        </span>
                                     </div>
-                                    {/* Status Dropdown */}
-                                    <div className="relative">
-                                        <button
-                                            onClick={() =>
-                                                setOpenDropdownId(
-                                                    openDropdownId ===
-                                                        student.id
-                                                        ? null
-                                                        : student.id
-                                                )
-                                            }
-                                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full ${config.bgColor} hover:opacity-80 transition-opacity cursor-pointer`}
-                                        >
-                                            <StatusIcon
-                                                className={`size-4 ${config.textColor}`}
-                                            />
-                                            <span
-                                                className={`text-xs font-medium ${config.textColor}`}
-                                            >
-                                                {t(
-                                                    `attendance.status.${config.label}`
-                                                )}
-                                            </span>
-                                            <ChevronDown
-                                                className={`size-3 ${config.textColor} transition-transform ${
-                                                    openDropdownId ===
-                                                    student.id
-                                                        ? "rotate-180"
-                                                        : ""
-                                                }`}
-                                            />
-                                        </button>
-
-                                        {/* Dropdown Menu */}
-                                        {openDropdownId === student.id && (
-                                            <div className="absolute end-0 top-full mt-1 z-10 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 min-w-[140px]">
-                                                {ATTENDANCE_STATUSES.map(
-                                                    (status) => {
-                                                        const statusCfg =
-                                                            statusConfig[
-                                                                status
-                                                            ];
-                                                        const StatusOptionIcon =
-                                                            statusCfg.icon;
-                                                        const isSelected =
-                                                            student.status ===
-                                                            status;
-
-                                                        return (
-                                                            <button
-                                                                key={status}
-                                                                onClick={() =>
-                                                                    handleStatusChange(
-                                                                        student.id,
-                                                                        status
-                                                                    )
-                                                                }
-                                                                className={`w-full flex items-center gap-2 px-3 py-2 text-start hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
-                                                                    isSelected
-                                                                        ? "bg-gray-50 dark:bg-gray-700/50"
-                                                                        : ""
-                                                                }`}
-                                                            >
-                                                                <StatusOptionIcon
-                                                                    className={`size-4 ${statusCfg.textColor}`}
-                                                                />
-                                                                <span
-                                                                    className={`text-sm ${
-                                                                        isSelected
-                                                                            ? "font-medium"
-                                                                            : ""
-                                                                    } text-gray-700 dark:text-gray-300`}
-                                                                >
-                                                                    {t(
-                                                                        `attendance.status.${statusCfg.label}`
-                                                                    )}
-                                                                </span>
-                                                                {isSelected && (
-                                                                    <Check className="size-4 text-brand-500 ms-auto" />
-                                                                )}
-                                                            </button>
-                                                        );
-                                                    }
-                                                )}
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            );
-                        })}
+                                );
+                            })
+                        )}
                     </div>
                 </div>
 

@@ -116,3 +116,84 @@ export interface VirtualSessionsData {
     sessions: VirtualSession[];
     currentTermId: number;
 }
+
+// ============================================================================
+// Attendance Summary Types
+// ============================================================================
+
+export type AttendanceStatus = "present" | "absent" | "late" | "excused";
+export type TeacherAttendanceStatus =
+    | "present"
+    | "absent"
+    | "late"
+    | "cancelled";
+
+/**
+ * Student attendance summary from API
+ */
+export interface StudentAttendanceSummary {
+    totalSessions: number;
+    presentCount: number;
+    absentCount: number;
+    lateCount: number;
+    excusedCount: number;
+    attendanceRate: number;
+}
+
+export interface StudentAttendanceGroupSession {
+    id: number;
+    sessionDate: string;
+    group: {
+        id: number;
+        name: string;
+    };
+}
+
+export interface StudentAttendanceRecord {
+    id: number;
+    status: AttendanceStatus;
+    note: string;
+    groupSession: StudentAttendanceGroupSession;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface StudentAttendanceSummaryData {
+    student: {
+        id: number;
+        name: string;
+    };
+    summary: StudentAttendanceSummary;
+    attendances: StudentAttendanceRecord[];
+}
+
+/**
+ * Teacher attendance summary from API
+ */
+export interface TeacherAttendanceSummary {
+    totalSessions: number;
+    presentCount: number;
+    absentCount: number;
+    lateCount: number;
+    cancelledCount: number;
+    totalMinutesTaught: number;
+}
+
+export interface TeacherAttendanceRecord {
+    id: number;
+    status: TeacherAttendanceStatus;
+    note: string;
+    minutesTaught: number;
+    groupSession: StudentAttendanceGroupSession;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface TeacherAttendanceSummaryData {
+    teacher: {
+        id: number;
+        name: string;
+    };
+    summary: TeacherAttendanceSummary;
+    attendances: TeacherAttendanceRecord[];
+}
