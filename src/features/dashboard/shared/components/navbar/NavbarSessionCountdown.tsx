@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ExternalLink, Sparkles, Monitor } from "lucide-react";
+import { Sparkles, Monitor } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { useMyCurrentSession } from "@/features/dashboard/classroom/mySchedule/api";
 import type { MyCurrentSession } from "@/features/dashboard/classroom/mySchedule/types";
 
@@ -44,22 +45,14 @@ type SessionKind = "online" | "offline";
 
 const NavbarSessionCountdown = () => {
     const { t, i18n } = useTranslation("dashboard");
+    const navigate = useNavigate();
     const isRTL = i18n.language === "ar";
     const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
-    const [fallbackSeconds, setFallbackSeconds] = useState(0);
-    const [showDetails, setShowDetails] = useState(false);
     const [countdownMode, setCountdownMode] = useState<
         "upcoming" | "current" | "ended"
     >("ended");
 
     const { data: currentSession, isLoading, isError } = useMyCurrentSession();
-
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setFallbackSeconds((prev) => (prev > 0 ? prev - 1 : 0));
-        }, 1000);
-        return () => clearInterval(timer);
-    }, []);
 
     const sessionEvent = useMemo(():
         | (SessionEvent & { kind: SessionKind })
@@ -193,28 +186,68 @@ const NavbarSessionCountdown = () => {
               ? t("sessionBanner.errorSubtitle")
               : t("sessionBanner.emptySubtitle"));
 
-    const displayTotalSeconds = useMemo(() => {
-        if (timeLeft?.total != null) {
-            return Math.max(0, Math.floor(timeLeft.total / 1000));
-        }
-        if (countdownMode !== "ended") {
-            return 0;
-        }
-        return fallbackSeconds;
-    }, [timeLeft?.total, countdownMode, fallbackSeconds]);
+    // Calculate total minutes for display logic
+    const displayTime = useMemo(() => {
+        if (!timeLeft)
+            return {
+                value1: "00",
+                value2: "00",
+                label1: "h",
+                label2: "m",
+                showDays: false,
+            };
 
-    const formatTime = (totalSeconds: number) => {
-        const hrs = Math.floor(totalSeconds / 3600);
-        const mins = Math.floor((totalSeconds % 3600) / 60);
-        const secs = totalSeconds % 60;
+        // More than 24 hours: show days and hours
+        if (timeLeft.days > 0) {
+            return {
+                value1: timeLeft.days.toString().padStart(2, "0"),
+                value2: timeLeft.hours.toString().padStart(2, "0"),
+                label1: "d",
+                label2: "h",
+                showDays: true,
+            };
+        }
+
+        // Less than 24 hours: show hours and minutes
         return {
-            hrs: hrs.toString().padStart(2, "0"),
-            mins: mins.toString().padStart(2, "0"),
-            secs: secs.toString().padStart(2, "0"),
+            value1: timeLeft.hours.toString().padStart(2, "0"),
+            value2: timeLeft.minutes.toString().padStart(2, "0"),
+            label1: "h",
+            label2: "m",
+            showDays: false,
         };
-    };
+    }, [timeLeft]);
 
-    const time = formatTime(displayTotalSeconds);
+    // Gradient color stages based on time remaining
+    const gradientClass = useMemo(() => {
+        if (countdownMode === "current") {
+            // Session is live - red/orange gradient
+            return "from-[#EF4444] via-[#F97316] to-[#EF4444]";
+        }
+
+        if (!timeLeft) return "from-[#00ADEF] via-[#FFB800] to-[#00ADEF]";
+
+        const totalMinutes = Math.floor(timeLeft.total / (1000 * 60));
+
+        // Less than 30 minutes - urgent red/orange
+        if (totalMinutes <= 30) {
+            return "from-[#F97316] via-[#EF4444] to-[#F97316]";
+        }
+        // Less than 1 hour - warning orange/yellow
+        if (totalMinutes <= 60) {
+            return "from-[#F59E0B] via-[#F97316] to-[#F59E0B]";
+        }
+        // Less than 3 hours - yellow/green
+        if (totalMinutes <= 180) {
+            return "from-[#FFB800] via-[#84CC16] to-[#FFB800]";
+        }
+        // Less than 24 hours - green/blue
+        if (totalMinutes <= 1440) {
+            return "from-[#22C55E] via-[#00ADEF] to-[#22C55E]";
+        }
+        // More than 24 hours - calm blue
+        return "from-[#00ADEF] via-[#6366F1] to-[#00ADEF]";
+    }, [timeLeft, countdownMode]);
 
     const lateSeconds = useMemo(() => {
         if (!sessionTiming) return null;
@@ -288,11 +321,7 @@ const NavbarSessionCountdown = () => {
     return (
         <div className="relative w-full group overflow-hidden rounded-full animate-in slide-in-from-top duration-700 shadow-xl shadow-blue-500/10">
             <div
-                className={`absolute inset-0 bg-size-[300%_300%] animate-gradient-slow bg-linear-to-r opacity-95 ${
-                    isCurrent
-                        ? "from-[#EF4444] via-[#F97316] to-[#EF4444]"
-                        : "from-[#00ADEF] via-[#FFB800] to-[#00ADEF]"
-                }`}
+                className={`absolute inset-0 bg-size-[300%_300%] animate-gradient-slow bg-linear-to-r opacity-95 ${gradientClass}`}
             />
 
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -403,14 +432,17 @@ const NavbarSessionCountdown = () => {
                             )}
                         </div>
                         {[
-                            { val: time.hrs, label: t("sessionBanner.time.h") },
                             {
-                                val: time.mins,
-                                label: t("sessionBanner.time.m"),
+                                val: displayTime.value1,
+                                label: t(
+                                    `sessionBanner.time.${displayTime.label1}`
+                                ),
                             },
                             {
-                                val: time.secs,
-                                label: t("sessionBanner.time.s"),
+                                val: displayTime.value2,
+                                label: t(
+                                    `sessionBanner.time.${displayTime.label2}`
+                                ),
                             },
                         ].map((unit, idx) => (
                             <Fragment key={idx}>
@@ -424,7 +456,7 @@ const NavbarSessionCountdown = () => {
                                         {unit.label}
                                     </span>
                                 </div>
-                                {idx < 2 && (
+                                {idx < 1 && (
                                     <span className="text-white/50 font-black text-xl mb-3">
                                         :
                                     </span>
@@ -446,62 +478,20 @@ const NavbarSessionCountdown = () => {
                         </button>
                     ) : (
                         <button
-                            onClick={() => setShowDetails((v) => !v)}
+                            onClick={() =>
+                                sessionEvent &&
+                                navigate(
+                                    `/dashboard/virtual-sessions/${sessionEvent.id}`
+                                )
+                            }
                             disabled={!sessionEvent}
                             className="px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-widest bg-white/20 text-white hover:bg-white/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            {showDetails
-                                ? t("sessionBanner.hideDetails")
-                                : t("sessionBanner.details")}
+                            {t("sessionBanner.details")}
                         </button>
                     )}
                 </div>
             </div>
-
-            {showDetails && !!sessionEvent && (
-                <div className="max-w-7xl mx-auto px-10 pb-3 relative z-10">
-                    <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl px-4 py-3 text-white/90">
-                        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-[10px] font-black uppercase tracking-widest">
-                            <span>
-                                {t("sessionBanner.sessionId")}: #
-                                {sessionEvent.id}
-                            </span>
-                            {!!sessionEvent.sessionState && (
-                                <span>
-                                    {t("sessionBanner.state")}:{" "}
-                                    {sessionEvent.sessionState}
-                                </span>
-                            )}
-                            {!!sessionEvent.status && (
-                                <span>
-                                    {t("sessionBanner.status")}:{" "}
-                                    {sessionEvent.status}
-                                </span>
-                            )}
-                        </div>
-
-                        {!!sessionEvent.cancellationReason && (
-                            <p className="mt-2 text-[11px] font-semibold">
-                                {t("sessionBanner.reason")}:{" "}
-                                {sessionEvent.cancellationReason}
-                            </p>
-                        )}
-
-                        {sessionEvent.group.locationType === "offline" &&
-                            !!sessionEvent.group.location && (
-                                <a
-                                    href={sessionEvent.group.location}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="mt-2 inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-widest underline underline-offset-2"
-                                >
-                                    {t("sessionBanner.openLocation")}
-                                    <ExternalLink size={12} />
-                                </a>
-                            )}
-                    </div>
-                </div>
-            )}
 
             <style>{`
           @keyframes gradient-slow {
