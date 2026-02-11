@@ -11,6 +11,13 @@ export interface SessionInstructor {
     course: string;
 }
 
+export interface ZoomMeeting {
+    id: number;
+    meetingId: string;
+    meetingUrl: string;
+    password: string;
+}
+
 export interface OnlineSession {
     id: number;
     sessionDate: string;
@@ -33,6 +40,7 @@ export interface OnlineSession {
     teacher: {
         id: number;
         name: string;
+        teacherNote?: string | null;
     } | null;
     bbbMeetingId: string | null;
     bbbIsRunning: boolean;
@@ -40,6 +48,9 @@ export interface OnlineSession {
     bbbStartedAt: string | null;
     bbbEndedAt: string | null;
     hasMeeting: boolean;
+    // Zoom meeting fields
+    zoomMeeting: ZoomMeeting | null;
+    hasZoomMeeting: boolean;
     createdAt: string;
     updatedAt: string;
 }
@@ -107,6 +118,9 @@ export interface VirtualSession {
     timezone?: string;
     createdAt: string;
     updatedAt: string;
+    // Zoom meeting fields
+    zoomMeeting?: ZoomMeeting | null;
+    hasZoomMeeting?: boolean;
     // Computed for UI
     status?: VirtualSessionStatus;
 }
@@ -115,6 +129,22 @@ export interface VirtualSessionsData {
     terms: Term[];
     sessions: VirtualSession[];
     currentTermId: number;
+}
+
+// ============================================================================
+// Zoom Meeting Types
+// ============================================================================
+
+export interface CreateZoomMeetingResponse {
+    session: OnlineSession;
+    zoom: {
+        id: number;
+        meetingId: string;
+        joinUrl: string;
+        startUrl: string;
+        password: string;
+    };
+    alreadyExisted: boolean;
 }
 
 // ============================================================================

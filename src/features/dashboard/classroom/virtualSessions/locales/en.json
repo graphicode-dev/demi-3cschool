@@ -29,6 +29,8 @@
     "session": {
         "liveNow": "Live Now",
         "joinSession": "Join Session",
+        "join": "Join",
+        "startMeeting": "Start Meeting",
         "sessionInfo": "Session Info",
         "viewRecording": "View Recording",
         "viewAllHistory": "View All History",

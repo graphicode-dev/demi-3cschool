@@ -29,6 +29,8 @@
     "session": {
         "liveNow": "مباشر الآن",
         "joinSession": "انضم للجلسة",
+        "join": "انضمام",
+        "startMeeting": "بدء الاجتماع",
         "sessionInfo": "معلومات الجلسة",
         "viewRecording": "مشاهدة التسجيل",
         "viewAllHistory": "عرض كل السجل",

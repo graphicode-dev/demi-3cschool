@@ -1,6 +1,6 @@
 import { api } from "@/shared/api/client";
 import { ApiResponse } from "@/shared/api";
-import type { OnlineSession } from "../types";
+import type { OnlineSession, CreateZoomMeetingResponse } from "../types";
 
 // ============================================
 // Virtual Sessions API
@@ -26,5 +26,26 @@ export const virtualSessionsApi = {
         return response.data?.data ?? [];
     },
 
-};
+    /**
+     * Create or get Zoom meeting for a group session
+     * POST /group-sessions/:id/zoom
+     * If meeting already exists, returns existing meeting data
+     */
+    createZoomMeeting: async (
+        sessionId: number | string
+    ): Promise<CreateZoomMeetingResponse> => {
+        const response = await api.post<ApiResponse<CreateZoomMeetingResponse>>(
+            `/group-sessions/${sessionId}/zoom`
+        );
 
+        if (response.error) {
+            throw response.error;
+        }
+
+        if (!response.data?.data) {
+            throw new Error("Failed to create Zoom meeting");
+        }
+
+        return response.data.data;
+    },
+};

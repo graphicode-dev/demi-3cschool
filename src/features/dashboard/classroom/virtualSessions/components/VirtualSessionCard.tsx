@@ -9,9 +9,11 @@ import {
     Check,
     XCircle,
     AlertCircle,
+    Loader2,
 } from "lucide-react";
 import type { VirtualSession } from "../types";
 import { usePermissions } from "@/auth";
+import { useCreateZoomMeeting } from "../api";
 import { AttendanceModal } from "./AttendanceModal";
 import { ReviewsModal } from "./ReviewsModal";
 import { SessionRatingModal } from "./SessionRatingModal";
@@ -23,7 +25,8 @@ import {
 
 interface VirtualSessionCardProps {
     session: VirtualSession;
-    onJoinSession?: (session: VirtualSession) => void;
+    programId?: number | string;
+    onJoinSession?: (session: VirtualSession, meetingUrl?: string) => void;
     onViewInfo?: (session: VirtualSession) => void;
     onViewRecording?: (session: VirtualSession) => void;
 }
@@ -92,6 +95,7 @@ const attendanceStatusConfig: Record<
 
 export function VirtualSessionCard({
     session,
+    programId,
     onJoinSession,
     onViewInfo,
     onViewRecording,
@@ -106,9 +110,13 @@ export function VirtualSessionCard({
     const [showReviewsModal, setShowReviewsModal] = useState(false);
     const [showRatingModal, setShowRatingModal] = useState(false);
 
+    const createZoomMeetingMutation = useCreateZoomMeeting();
+
     const isLive = session.status === "current";
     const isUpcoming = session.status === "upcoming";
     const isCompleted = session.status === "completed";
+    const hasZoomMeeting = session.hasZoomMeeting ?? false;
+    const zoomMeetingUrl = session.zoomMeeting?.meetingUrl;
 
     const studentAttendanceStatus = MOCK_CURRENT_STUDENT_ATTENDANCE;
     const attendanceConfig = attendanceStatusConfig[studentAttendanceStatus];
@@ -156,14 +164,74 @@ export function VirtualSessionCard({
         return null;
     };
 
+    const handleTeacherJoinOrStart = async () => {
+        if (hasZoomMeeting && zoomMeetingUrl) {
+            // Meeting already exists, just join
+            window.open(zoomMeetingUrl, "_blank");
+            onJoinSession?.(session, zoomMeetingUrl);
+        } else {
+            // Create meeting first, then open the start URL
+            try {
+                const result = await createZoomMeetingMutation.mutateAsync({
+                    sessionId: session.id,
+                    programId,
+                });
+                // For teacher, use startUrl to start the meeting
+                const meetingUrl = result.zoom.startUrl;
+                window.open(meetingUrl, "_blank");
+                onJoinSession?.(session, meetingUrl);
+            } catch (error) {
+                console.error("Failed to create Zoom meeting:", error);
+            }
+        }
+    };
+
+    const handleStudentJoin = () => {
+        if (zoomMeetingUrl) {
+            window.open(zoomMeetingUrl, "_blank");
+            onJoinSession?.(session, zoomMeetingUrl);
+        }
+    };
+
     const getActionButton = () => {
         if (isLive) {
+            // Teacher: "Start Meeting" if no zoom meeting, "Join" if already created
+            if (isTeacher) {
+                const isCreating = createZoomMeetingMutation.isPending;
+                return (
+                    <button
+                        onClick={handleTeacherJoinOrStart}
+                        disabled={isCreating}
+                        className="w-full bg-brand-500 hover:bg-brand-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    >
+                        {isCreating && (
+                            <Loader2 className="size-4 animate-spin" />
+                        )}
+                        {hasZoomMeeting
+                            ? t("session.join")
+                            : t("session.startMeeting")}
+                    </button>
+                );
+            }
+            // Student: "Join" button (only if meeting exists)
+            if (isStudent) {
+                return (
+                    <button
+                        onClick={handleStudentJoin}
+                        disabled={!hasZoomMeeting}
+                        className="w-full bg-brand-500 hover:bg-brand-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        {t("session.join")}
+                    </button>
+                );
+            }
+            // Default fallback
             return (
                 <button
                     onClick={() => onJoinSession?.(session)}
                     className="w-full bg-brand-500 hover:bg-brand-600 text-white font-semibold py-2.5 px-4 rounded-lg transition-colors"
                 >
-                    {t("session.joinSession")}
+                    {t("session.join")}
                 </button>
             );
         }

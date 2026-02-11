@@ -73,9 +73,12 @@ function VirtualSessionsPage() {
             description: session.group.name,
             isCancelled: Boolean(session.reason),
             cancellationReason: session.reason,
-            meetingProvider: "bbb",
-            meetingId: session.bbbMeetingId ?? "",
-            linkMeeting: session.hasMeeting ? (session.bbbMeetingId ?? "") : "",
+            meetingProvider: "zoom",
+            meetingId:
+                session.zoomMeeting?.meetingId ?? session.bbbMeetingId ?? "",
+            linkMeeting:
+                session.zoomMeeting?.meetingUrl ??
+                (session.hasMeeting ? (session.bbbMeetingId ?? "") : ""),
             recordingUrl: undefined,
             contentProgress: {
                 total: {
@@ -94,6 +97,9 @@ function VirtualSessionsPage() {
             timezone: undefined,
             createdAt: session.createdAt,
             updatedAt: session.updatedAt,
+            // Zoom meeting fields
+            hasZoomMeeting: session.hasZoomMeeting,
+            zoomMeeting: session.zoomMeeting,
             status: mapStatus(session.sessionState),
         }));
     }, [onlineSessions, selectedTermId, curriculums]);
@@ -173,6 +179,7 @@ function VirtualSessionsPage() {
                             <VirtualSessionCard
                                 key={session.id}
                                 session={session}
+                                programId={selectedTermId}
                                 onJoinSession={handleJoinSession}
                             />
                         ))}
