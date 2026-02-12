@@ -6,6 +6,21 @@
         "privateListBreadcrumb": "Private Groups",
         "sessionsListBreadcrumb": "Sessions Groups",
         "subtitle": "Manage Enrollments and schedules",
+        "grades": {
+            "title": "Grades",
+            "subtitle": "Select a grade to manage its groups",
+            "cardDescription": "Manage groups for {{gradeName}} students"
+        },
+        "levels": {
+            "title": "Levels",
+            "subtitle": "Select a level to manage groups for {{gradeName}}",
+            "viewGroups": "View Groups",
+            "overview": "Levels Overview",
+            "empty": {
+                "title": "No levels found",
+                "description": "No levels have been created for this grade yet"
+            }
+        },
         "actions": {
             "createNew": "Create New Group"
         },
@@ -257,6 +272,67 @@
     "common": {
         "back": "Back",
         "next": "Next"
+    },
+    "sessions": {
+        "assignLessonToSession": "Assign Lesson to Session",
+        "selectCurriculumLesson": "Select a lesson from the curriculum to be taught in this session.",
+        "selectCurriculumLessonTitle": "Select Curriculum Lesson",
+        "alreadyAssignedTo": "This lesson is already assigned to session {{session}}.",
+        "assignNotice": "Once assigned, this lesson will appear in the sessions schedule.",
+        "assignLessonBtn": "Assign Lesson",
+        "assigned": "Assigned",
+        "notAssigned": "Not Assigned",
+        "rescheduleSession": "Reschedule Session",
+        "rescheduleDescription": "Change the date or time for this session.",
+        "lessonContentFixed": "Lesson content is fixed and shared across all groups.",
+        "sessionSchedule": "Session Schedule",
+        "date": "Date",
+        "startTime": "Start Time",
+        "endTime": "End Time",
+        "reasonPlaceholder": "Please explain the reason for changing the session schedule.",
+        "reasonForRescheduling": "Reason for Rescheduling",
+        "reasonNote": "This reason will be saved in the system log for administrative review. (10 characters minimum)",
+        "auditNotice": "All schedule changes are logged for transparency and auditing.",
+        "saveChanges": "Save Changes",
+        "scheduleSession": "Schedule Session",
+        "scheduleDescription": "Set the date and time for this session.",
+        "lessonSelected": "Lesson Selected for This Session",
+        "locationType": "Location Type",
+        "locationOffline": "Offline",
+        "locationOnline": "Online",
+        "offlineLocationPlaceholder": "Enter session location (e.g., Room 101, Building A)",
+        "offlineLocation": "Location Address",
+        "scheduleNotice": "The session will be created with the selected lesson and schedule.",
+        "lessonAssigned": "Lesson Assigned",
+        "noLessonAssigned": "No lesson assigned yet",
+        "noLessonYet": "No lesson assigned yet",
+        "actionRequired": "Action Required",
+        "reschedule": "Reschedule",
+        "delete": "Delete",
+        "assignLesson": "Assign Lesson",
+        "recreateMeeting": "Recreate Meeting",
+        "title": "Sessions",
+        "subtitle": "Assign curriculum lessons to group sessions and manage session timing.",
+        "addSession": "Add Session",
+        "noSessions": "No sessions scheduled yet",
+        "noSessionsHint": "Sessions will appear here once the group schedule is set up.",
+        "deleteDialog": {
+            "title": "Delete Session",
+            "message": "Are you sure you want to delete this session? This action cannot be undone."
+        },
+        "assignSuccess": "Lesson assigned successfully",
+        "rescheduleSuccess": "Session rescheduled successfully",
+        "deleteSuccess": "Session deleted successfully",
+        "recreateMeetingSuccess": "Zoom meeting recreated successfully",
+        "availableLessons": "Available Lessons",
+        "lessonsDescription": "These lessons are predefined and shared across all groups.",
+        "searchLessons": "Search Lessons",
+        "validation": {
+            "date": "Date is required",
+            "startTime": "Start time is required",
+            "endTime": "End time is required",
+            "reason": "Reason must be at least 10 characters"
+        }
     },
     "sitemap": {
         "grade": {

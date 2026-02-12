@@ -153,6 +153,29 @@ export const sessionsApi = {
             throw response.error;
         }
     },
+
+    /**
+     * Recreate Zoom meeting for a session
+     * POST /group-sessions/:id/zoom/recreate
+     * Used by admin to force recreate an invalid meeting
+     */
+    recreateZoomMeeting: async (
+        sessionId: number | string
+    ): Promise<GroupSession> => {
+        const response = await api.post<ApiResponse<GroupSession>>(
+            `${BASE_URL}/${sessionId}/zoom/recreate`
+        );
+
+        if (response.error) {
+            throw response.error;
+        }
+
+        if (!response.data?.data) {
+            throw new Error("Failed to recreate Zoom meeting");
+        }
+
+        return response.data.data;
+    },
 };
 
 export default sessionsApi;

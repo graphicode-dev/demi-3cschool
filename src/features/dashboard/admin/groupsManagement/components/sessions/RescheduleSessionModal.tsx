@@ -11,15 +11,6 @@ import { z } from "zod";
 import { X, Info } from "lucide-react";
 import { Form } from "@/design-system";
 
-const rescheduleSessionSchema = z.object({
-    date: z.string().min(1, "Date is required"),
-    startTime: z.string().min(1, "Start time is required"),
-    endTime: z.string().min(1, "End time is required"),
-    reason: z.string().min(10, "Reason must be at least 10 characters"),
-});
-
-type RescheduleSessionFormData = z.infer<typeof rescheduleSessionSchema>;
-
 interface RescheduleSessionModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -50,10 +41,19 @@ export function RescheduleSessionModal({
 }: RescheduleSessionModalProps) {
     const { t } = useTranslation("groupsManagement");
 
+    const rescheduleSessionSchema = z.object({
+        date: z.string().min(1, t("sessions.validation.date")),
+        startTime: z.string().min(1, t("sessions.validation.startTime")),
+        endTime: z.string().min(1, t("sessions.validation.endTime")),
+        reason: z.string().min(10, t("sessions.validation.reason")),
+    });
+
+    type RescheduleSessionFormData = z.infer<typeof rescheduleSessionSchema>;
+
     const {
         control,
         handleSubmit,
-        formState: { isValid },
+        formState: { isValid, errors },
     } = useForm<RescheduleSessionFormData>({
         resolver: zodResolver(rescheduleSessionSchema),
         defaultValues: {
@@ -139,6 +139,10 @@ export function RescheduleSessionModal({
                                         text: t("sessions.date", "Date"),
                                         required: true,
                                     }}
+                                    validation={{
+                                        error: errors.date?.message,
+                                        showError: true,
+                                    }}
                                     style={{ size: "md" }}
                                 />
                                 <Form.Input
@@ -151,6 +155,10 @@ export function RescheduleSessionModal({
                                         ),
                                         required: true,
                                     }}
+                                    validation={{
+                                        error: errors.startTime?.message,
+                                        showError: true,
+                                    }}
                                     style={{ size: "md" }}
                                 />
                                 <Form.Input
@@ -159,6 +167,10 @@ export function RescheduleSessionModal({
                                     label={{
                                         text: t("sessions.endTime", "End Time"),
                                         required: true,
+                                    }}
+                                    validation={{
+                                        error: errors.endTime?.message,
+                                        showError: true,
                                     }}
                                     style={{ size: "md" }}
                                 />
@@ -183,6 +195,10 @@ export function RescheduleSessionModal({
                                         "Reason for Rescheduling"
                                     ),
                                     required: true,
+                                }}
+                                validation={{
+                                    error: errors.reason?.message,
+                                    showError: true,
                                 }}
                                 style={{ size: "md" }}
                             />

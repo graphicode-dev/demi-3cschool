@@ -272,7 +272,7 @@ export function useGroupRecommendations(
  */
 export function useGroupsByLevel(
     params: GroupsByLevelParams,
-    options?: Partial<UseQueryOptions<Group[] | PaginatedData<Group>, Error>>
+    options?: Partial<UseQueryOptions<PaginatedData<Group>, Error>>
 ) {
     return useQuery({
         queryKey: groupKeys.byLevel(params),

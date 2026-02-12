@@ -324,7 +324,30 @@
         "actionRequired": "إجراء مطلوب",
         "reschedule": "إعادة الجدولة",
         "delete": "حذف",
-        "assignLesson": "تعيين درس"
+        "assignLesson": "تعيين درس",
+        "recreateMeeting": "إعادة إنشاء الاجتماع",
+        "title": "الجلسات",
+        "subtitle": "تعيين دروس المنهج لجلسات المجموعة وإدارة توقيت الجلسات.",
+        "addSession": "إضافة جلسة",
+        "noSessions": "لا توجد جلسات مجدولة بعد",
+        "noSessionsHint": "ستظهر الجلسات هنا بمجرد إعداد جدول المجموعة.",
+        "deleteDialog": {
+            "title": "حذف الجلسة",
+            "message": "هل أنت متأكد من أنك تريد حذف هذه الجلسة؟ لا يمكن التراجع عن هذا الإجراء."
+        },
+        "assignSuccess": "تم تعيين الدرس بنجاح",
+        "rescheduleSuccess": "تم إعادة جدولة الجلسة بنجاح",
+        "deleteSuccess": "تم حذف الجلسة بنجاح",
+        "recreateMeetingSuccess": "تم إعادة إنشاء اجتماع Zoom بنجاح",
+        "availableLessons": "الدروس المتاحة",
+        "lessonsDescription": "هذه الدروس معرفة مسبقة وشتركة بين جميع المجموعات.",
+        "searchLessons": "بحث الدروس",
+        "validation": {
+            "date": "التاريخ مطلوب",
+            "startTime": "وقت البدء مطلوب",
+            "endTime": "وقت الانتهاء مطلوب",
+            "reason": "يجب أن يكون السبب 10 أحرف على الأقل"
+        }
     },
     "sitemap": {
         "grade": {

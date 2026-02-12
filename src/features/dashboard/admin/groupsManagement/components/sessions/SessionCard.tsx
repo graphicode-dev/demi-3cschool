@@ -6,7 +6,7 @@
  */
 
 import { useTranslation } from "react-i18next";
-import { Calendar, Clock, Trash2, AlertCircle } from "lucide-react";
+import { Calendar, Clock, Trash2, AlertCircle, Video } from "lucide-react";
 import { format, parseISO } from "date-fns";
 
 export type SessionStatus = "assigned" | "not_assigned" | "action_required";
@@ -18,9 +18,12 @@ interface SessionCardProps {
     startTime: string;
     endTime: string;
     status: SessionStatus;
+    locationType?: "online" | "offline";
+    isRecreatingMeeting?: boolean;
     onReschedule?: () => void;
     onDelete?: () => void;
     onAssignLesson?: () => void;
+    onRecreateMeeting?: () => void;
 }
 
 export function SessionCard({
@@ -30,9 +33,12 @@ export function SessionCard({
     startTime,
     endTime,
     status,
+    locationType,
+    isRecreatingMeeting,
     onReschedule,
     onDelete,
     onAssignLesson,
+    onRecreateMeeting,
 }: SessionCardProps) {
     const { t } = useTranslation("groupsManagement");
 
@@ -143,6 +149,22 @@ export function SessionCard({
                 <div className="flex items-center gap-2 shrink-0">
                     {status === "assigned" ? (
                         <>
+                            {/* Recreate Meeting button - only for online sessions */}
+                            {locationType === "online" && (
+                                <button
+                                    onClick={onRecreateMeeting}
+                                    disabled={isRecreatingMeeting}
+                                    className="p-2 text-gray-400 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-900/20 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                    title={t(
+                                        "sessions.recreateMeeting",
+                                        "Recreate Meeting"
+                                    )}
+                                >
+                                    <Video
+                                        className={`w-5 h-5 ${isRecreatingMeeting ? "animate-pulse" : ""}`}
+                                    />
+                                </button>
+                            )}
                             <button
                                 onClick={onReschedule}
                                 className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors"

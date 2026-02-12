@@ -1,6 +1,11 @@
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+    Link,
+    useNavigate,
+    useParams,
+    useSearchParams,
+} from "react-router-dom";
 import {
     PageWrapper,
     DynamicTable,
@@ -10,7 +15,6 @@ import type { TableColumn, TableData } from "@/shared/types";
 import { StatCard } from "../components";
 import { GroupCard } from "../components/GroupCard";
 import { useGroupsByLevel, type Group } from "../api";
-import { PaginatedData } from "@/shared/api";
 
 const TotalGroupsIcon = () => (
     <svg
@@ -107,31 +111,35 @@ function RegularGroupsPage() {
         gradeId: string;
         levelId: string;
     }>();
-    const [currentPage, setCurrentPage] = useState(1);
+    const [searchParams] = useSearchParams();
+
+    const currentPage = Number(searchParams.get("page")) || 1;
+
     const { searchQuery, setSearchQuery, debouncedSearchQuery } =
         useServerTableSearch({
             delayMs: 400,
-            onDebouncedChange: () => setCurrentPage(1),
         });
 
     // Build base path from URL params
     const basePath = `/admin/groups/grades/${gradeId}/levels/${levelId}`;
 
-    // Fetch groups by level ID
+    // Fetch data from API with PAGE PARAMETER
     const { data, isLoading, isError } = useGroupsByLevel({
         levelId: levelId || "",
-        page: currentPage,
+        page: currentPage, // Pass page to API
         search: debouncedSearchQuery || undefined,
     });
 
-    // Check if data is paginated or array
-    const isPaginated = data && "items" in data;
-    const groups = isPaginated
-        ? (data as PaginatedData<Group>).items
-        : Array.isArray(data)
-          ? data
-          : [];
-    const paginationInfo = isPaginated ? (data as PaginatedData<Group>) : null;
+    // Extract data and pagination info from API response
+    // API response structure: { success, message, data: { perPage, currentPage, lastPage, nextPageUrl, items } }
+    const groups = data?.items || [];
+    const perPage = data?.perPage || 25;
+    const lastPage = data?.lastPage || 1;
+
+    // Calculate total items: lastPage * perPage
+    // (assumes last page might have fewer items)
+    const totalCount =
+        lastPage > 1 ? (lastPage - 1) * perPage + groups.length : groups.length;
 
     // Transform groups to table data
     const tableData: TableData[] = useMemo(
@@ -176,15 +184,11 @@ function RegularGroupsPage() {
     const stats = useMemo(() => {
         const activeCount = groups.filter((g) => g.isActive).length;
         return {
-            total: groups.length,
+            total: totalCount,
             active: activeCount,
             inactive: groups.length - activeCount,
         };
-    }, [groups]);
-
-    const handlePageChange = useCallback((page: number) => {
-        setCurrentPage(page);
-    }, []);
+    }, [groups, totalCount]);
 
     const handleRowClick = useCallback(
         (rowId: string) => {
@@ -309,32 +313,22 @@ function RegularGroupsPage() {
             <DynamicTable
                 initialView="cards"
                 title={t("groups.table.title", "Class Name")}
+                originalData={data}
                 data={tableData}
                 columns={columns}
-                itemsPerPage={paginationInfo?.perPage ?? 10}
                 hideHeader={true}
                 onRowClick={handleRowClick}
-                currentPage={paginationInfo?.currentPage}
-                lastPage={paginationInfo?.lastPage}
-                totalCount={groups.length}
-                onPageChange={paginationInfo ? handlePageChange : undefined}
                 renderCard={renderGroupCard}
                 searchQuery={searchQuery}
                 onSearchChange={setSearchQuery}
-                enableClientSearch={false}
+                // State
+                isLoading={isLoading}
+                isError={isError}
+                errorMessage={t(
+                    "groups.errors.loadFailed",
+                    "Failed to load groups"
+                )}
             />
-
-            {isLoading && (
-                <div className="flex justify-center py-8">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500" />
-                </div>
-            )}
-
-            {isError && (
-                <div className="text-center py-8 text-red-500">
-                    {t("groups.errors.loadFailed", "Failed to load groups")}
-                </div>
-            )}
         </PageWrapper>
     );
 }

@@ -7,7 +7,7 @@
 
 import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import {
     Plus,
     Search,
@@ -25,6 +25,7 @@ import {
     ConfirmDialog,
     LoadingState,
     ErrorState,
+    useServerTableSearch,
 } from "@/design-system";
 import Pagination from "@/design-system/components/table/Pagination";
 import { supportBlock } from "../navigation/paths";
@@ -42,9 +43,14 @@ export function ManageTeamPage() {
     const navigate = useNavigate();
     const { addToast } = useToast();
     const { blockId } = useParams<{ blockId: string }>();
+    const [searchParams, setSearchParams] = useSearchParams();
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const [searchQuery, setSearchQuery] = useState("");
+    const currentPage = Number(searchParams.get("page")) || 1;
+
+    const { searchQuery, setSearchQuery, debouncedSearchQuery } =
+        useServerTableSearch({
+            delayMs: 400,
+        });
     const [selectedAgent, setSelectedAgent] = useState<SupportAgent | null>(
         null
     );
@@ -63,7 +69,10 @@ export function ManageTeamPage() {
         isLoading: agentsLoading,
         error: agentsError,
         refetch,
-    } = useSupportAgentsByBlock(blockId, currentPage);
+    } = useSupportAgentsByBlock(blockId, {
+        page: currentPage,
+        search: debouncedSearchQuery || undefined,
+    });
 
     const deleteAgentMutation = useDeleteSupportAgent();
     const deleteBlockMutation = useDeleteSupportBlock();
@@ -93,7 +102,7 @@ export function ManageTeamPage() {
     );
 
     const handlePageChange = (page: number) => {
-        setCurrentPage(page);
+        setSearchParams({ page: String(page) });
     };
 
     const handleAddLead = () => {

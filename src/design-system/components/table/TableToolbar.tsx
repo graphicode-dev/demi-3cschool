@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import type { ViewMode, TableColumn, TableMetadata } from "@/shared/types";
 import { TableFilter, type GroupableColumn } from "./TableFilter";
 import { PDFIcon, VerticalFilter, XFile, CheckBox } from "@/design-system";
-import { usePagination } from "@/shared/hooks";
 import Pagination from "./Pagination";
 
 interface TableToolbarProps {
@@ -11,11 +10,13 @@ interface TableToolbarProps {
     currentView: ViewMode;
     onViewChange: (view: ViewMode) => void;
     onSearch: (query: string) => void;
-    searchQuery?: string; // Current search query from parent
+    searchQuery?: string;
     columns: TableColumn[];
     currentPage: number;
     totalPages: number;
     onPageChange: (page: number) => void;
+    goToNextPage: () => void;
+    goToPreviousPage: () => void;
     itemsPerPage: number;
     onItemsPerPageChange: (count: number) => void;
     onColumnVisibilityChange?: (visibleColumns: string[]) => void;
@@ -25,7 +26,6 @@ interface TableToolbarProps {
     selectedGroups?: string[];
     onGroupSelect?: (groupId: string) => void;
     groupableColumns?: GroupableColumn[];
-    // Metadata-based filtering
     metadata?: TableMetadata;
     onAdvancedFilterClick?: () => void;
     hidePagination?: boolean;
@@ -42,6 +42,8 @@ export const TableToolbar = ({
     currentPage,
     totalPages,
     onPageChange,
+    goToNextPage,
+    goToPreviousPage,
     itemsPerPage,
     onItemsPerPageChange,
     onColumnVisibilityChange,
@@ -66,14 +68,12 @@ export const TableToolbar = ({
     );
     const columnMenuRef = useRef<HTMLDivElement>(null);
 
-    // Update local state when prop changes
     useEffect(() => {
         if (visibleColumns.length > 0) {
             setLocalVisibleColumns(visibleColumns);
         }
     }, [visibleColumns]);
 
-    // Sync search value with parent search query
     useEffect(() => {
         if (searchQuery !== undefined) {
             setSearchValue(searchQuery);
@@ -81,7 +81,6 @@ export const TableToolbar = ({
     }, [searchQuery]);
 
     useEffect(() => {
-        // Close the menu when clicking outside
         const handleClickOutside = (event: MouseEvent) => {
             if (
                 columnMenuRef.current &&
@@ -105,7 +104,6 @@ export const TableToolbar = ({
         let updatedVisibleColumns: string[];
 
         if (localVisibleColumns.includes(columnId)) {
-            // Don't allow removing the last visible column
             if (localVisibleColumns.length === 1) {
                 return;
             }
@@ -118,24 +116,11 @@ export const TableToolbar = ({
 
         setLocalVisibleColumns(updatedVisibleColumns);
 
-        // Notify parent component about column visibility changes
         if (onColumnVisibilityChange) {
             onColumnVisibilityChange(updatedVisibleColumns);
         }
     };
 
-    // Use the usePagination hook to handle pagination logic
-    // This ensures proper synchronization with URL state
-    const { goToNextPage, goToPreviousPage, setPage } = usePagination(
-        currentPage,
-        (page: number) => {
-            // Call the onPageChange prop to update the parent component's state
-            onPageChange(page);
-        },
-        totalPages
-    );
-
-    // Get column header by id
     const getColumnHeader = (columnId: string) => {
         const column = columns.find((col) => col.id === columnId);
         return column ? column.header : columnId;
@@ -144,11 +129,8 @@ export const TableToolbar = ({
     return (
         <div className="flex flex-1 flex-col flex-wrap gap-4 mb-8">
             <div className="flex flex-row flex-wrap justify-between items-center gap-4">
-                {/* Search & Filter */}
                 <div className="flex items-center flex-wrap gap-2">
-                    {/* Search */}
                     <div className="relative">
-                        {/* Search Icon */}
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <svg
                                 className="h-5 w-5 text-gray-400"
@@ -165,7 +147,6 @@ export const TableToolbar = ({
                             </svg>
                         </div>
 
-                        {/* Search Input with Selected Filters */}
                         <div className="flex items-center flex-wrap gap-2 py-2.5 px-10 rounded-lg border border-gray-200 dark:border-gray-700 w-64 md:w-full bg-white dark:bg-gray-800">
                             <input
                                 type="text"
@@ -181,7 +162,6 @@ export const TableToolbar = ({
                                 className="flex-1 min-w-[100px] focus:outline-none bg-transparent text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500"
                             />
 
-                            {/* Clear Search Button */}
                             {searchValue && (
                                 <button
                                     type="button"
@@ -215,7 +195,6 @@ export const TableToolbar = ({
                                 </button>
                             )}
 
-                            {/* Selected Filters Tags */}
                             {selectedFilters.map((filterId) => (
                                 <div
                                     key={filterId}
@@ -263,7 +242,6 @@ export const TableToolbar = ({
                         groupableColumns={groupableColumns}
                     />
 
-                    {/* Advanced Filter Button (if metadata is provided) */}
                     {metadata && onAdvancedFilterClick && (
                         <button
                             type="button"
@@ -295,16 +273,14 @@ export const TableToolbar = ({
                     )}
                 </div>
 
-                {/* Pagination & Action Buttons */}
                 <div className="flex items-center justify-center flex-wrap gap-5">
-                    {/* Pagination */}
                     {!hidePagination && (
                         <Pagination
                             currentPage={currentPage}
                             totalPages={totalPages}
                             goToNextPage={goToNextPage}
                             goToPreviousPage={goToPreviousPage}
-                            setPage={setPage}
+                            setPage={onPageChange}
                             itemsPerPage={itemsPerPage}
                             totalItems={totalItems}
                         />
@@ -312,11 +288,9 @@ export const TableToolbar = ({
 
                     {!hideActionButtons && (
                         <div className="flex items-center justify-center flex-wrap gap-2">
-                            {/* View Mode */}
                             <button
                                 type="button"
                                 onClick={() => {
-                                    // Cycle through view modes: grid -> cards -> group -> grid
                                     const nextView =
                                         currentView === "grid"
                                             ? "cards"
@@ -376,7 +350,6 @@ export const TableToolbar = ({
                                 )}
                             </button>
 
-                            {/* PDF */}
                             <button
                                 type="button"
                                 onClick={() => {}}
@@ -386,7 +359,6 @@ export const TableToolbar = ({
                                 <span className="sr-only">PDF</span>
                             </button>
 
-                            {/* Excel File */}
                             <button
                                 type="button"
                                 onClick={() => {}}
@@ -396,7 +368,6 @@ export const TableToolbar = ({
                                 <span className="sr-only">X File</span>
                             </button>
 
-                            {/* Vertical Filter */}
                             <div className="relative">
                                 <button
                                     type="button"
@@ -413,7 +384,6 @@ export const TableToolbar = ({
                                     </span>
                                 </button>
 
-                                {/* Column Visibility Menu */}
                                 {showColumnMenu && (
                                     <div
                                         ref={columnMenuRef}

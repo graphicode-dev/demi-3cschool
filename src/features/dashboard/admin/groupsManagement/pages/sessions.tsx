@@ -32,6 +32,7 @@ import {
     useRescheduleSessionMutation,
     useCreateSessionMutation,
     useDeleteSession,
+    useRecreateZoomMeeting,
 } from "../api/sessions/sessions.mutations";
 import { useMutationHandler } from "@/shared/api";
 
@@ -108,6 +109,8 @@ function SessionsPage() {
         useCreateSessionMutation();
     const { mutateAsync: deleteSessionAsync, isPending: isDeleting } =
         useDeleteSession();
+    const { mutateAsync: recreateZoomMeeting, isPending: isRecreatingMeeting } =
+        useRecreateZoomMeeting();
 
     // Process sessions data
     const sessions: SessionWithStatus[] = useMemo(() => {
@@ -233,6 +236,17 @@ function SessionsPage() {
             }
         );
         setDeleteSessionDialog({ isOpen: false, sessionId: null });
+    };
+
+    // Handle recreate Zoom meeting for a session
+    const handleRecreateMeeting = async (sessionId: number) => {
+        execute(() => recreateZoomMeeting(sessionId), {
+            successMessage: t(
+                "sessions.recreateMeetingSuccess",
+                "Zoom meeting recreated successfully"
+            ),
+            onSuccess: () => refetchSessions(),
+        });
     };
 
     // Handle Add Session button click - opens lesson selection modal
@@ -442,6 +456,10 @@ function SessionsPage() {
                                         startTime={session.startTime}
                                         endTime={session.endTime}
                                         status={session.status}
+                                        locationType={session.locationType}
+                                        isRecreatingMeeting={
+                                            isRecreatingMeeting
+                                        }
                                         onReschedule={() =>
                                             handleReschedule(session)
                                         }
@@ -450,6 +468,9 @@ function SessionsPage() {
                                         }
                                         onAssignLesson={() =>
                                             handleAssignLesson(session)
+                                        }
+                                        onRecreateMeeting={() =>
+                                            handleRecreateMeeting(session.id)
                                         }
                                     />
                                 ))

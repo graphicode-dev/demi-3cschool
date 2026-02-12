@@ -14,6 +14,11 @@ import type {
     ReassignAgentPayload,
     ApiResponse,
 } from "../types";
+import {
+    ListQueryParams,
+    PaginatedData,
+    PaginatedResponse,
+} from "@/shared/api";
 
 const BASE_URL = "/support-agents";
 
@@ -26,23 +31,27 @@ export const supportAgentApi = {
      */
     getByBlockId: async (
         blockId: number | string,
-        page: number = 1,
+        params: ListQueryParams,
         signal?: AbortSignal
-    ): Promise<SupportAgentsListResponse> => {
-        const response = await api.get<ApiResponse<SupportAgentsListResponse>>(
-            `${BASE_URL}/block/${blockId}?page=${page}`,
-            { signal }
+    ): Promise<PaginatedData<SupportAgent>> => {
+        const { page, search } = params;
+
+        const response = await api.get<PaginatedResponse<SupportAgent>>(
+            `${BASE_URL}/block/${blockId}`,
+            {
+                params: {
+                    ...(page ? { page } : {}),
+                    ...(search ? { search } : {}),
+                },
+                signal,
+            }
         );
 
         if (response.error) {
             throw response.error;
         }
 
-        if (!response.data?.data) {
-            throw new Error("No data returned from server");
-        }
-
-        return response.data.data;
+        return response.data!.data;
     },
 
     /**

@@ -219,8 +219,8 @@ export const groupsRoutes: RouteConfig[] = [
         lazy: () =>
             import("@/features/dashboard/admin/groupsManagement/pages/sessions"),
         // permissions: [groupSession.viewAny],
-        meta: { titleKey: "groupsManagement:groups.sessions.title" },
-        handle: { crumb: "groupsManagement:groups.sessions.title" },
+        meta: { titleKey: "groupsManagement:sessions.title" },
+        handle: { crumb: "groupsManagement:sessions.title" },
     },
     // Group Final Level Quiz
     {

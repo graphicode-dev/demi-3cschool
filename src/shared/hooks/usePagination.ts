@@ -1,76 +1,53 @@
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import {
-    useEffect,
-    type Dispatch,
-    type SetStateAction,
-    useCallback,
-} from "react";
+import { useSearchParams } from "react-router-dom";
+import { useCallback } from "react";
 
-type PageSetter = Dispatch<SetStateAction<number>> | ((page: number) => void);
-
-export const usePagination = (
-    currentPage: number = 1,
-    setCurrentPage: PageSetter,
-    totalPages: number = 1
+/**
+ * Ultra-simple usePagination hook
+ *
+ * The parent manages the currentPage state
+ * This hook provides URL update functions
+ *
+ * Usage in DynamicTable:
+ * const currentPage = Number(searchParams.get("page")) || 1;
+ * const { updatePageInURL, goToNextPage, goToPreviousPage, setPageInURL } = useSimplePagination(currentPage, lastPage);
+ */
+export const useSimplePagination = (
+    currentPage: number,
+    totalPages: number
 ) => {
-    const navigate = useNavigate();
-    const location = useLocation();
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
 
-    // Sync currentPage with URL when URL changes (only one direction)
-    useEffect(() => {
-        const pageFromURL = Number(searchParams.get("page")) || 1;
-
-        // Only update state if URL page is different from current page
-        if (pageFromURL !== currentPage) {
-            setCurrentPage(pageFromURL);
-        }
-    }, [searchParams, setCurrentPage]); // Remove currentPage from deps to prevent circular updates
-
-    // Update URL when page changes programmatically
-    const updateURL = useCallback(
+    const updatePageInURL = useCallback(
         (page: number) => {
-            const newParams = new URLSearchParams(searchParams.toString());
-            newParams.set("page", page.toString());
-
-            navigate(`${location.pathname}?${newParams.toString()}`, {
-                replace: true,
-            });
+            setSearchParams({ page: page.toString() });
         },
-        [navigate, location.pathname, searchParams]
+        [setSearchParams]
     );
 
     const goToNextPage = useCallback(() => {
         if (currentPage < totalPages) {
-            const nextPage = currentPage + 1;
-            setCurrentPage(nextPage);
-            updateURL(nextPage);
+            updatePageInURL(currentPage + 1);
         }
-    }, [currentPage, totalPages, setCurrentPage, updateURL]);
+    }, [currentPage, totalPages, updatePageInURL]);
 
     const goToPreviousPage = useCallback(() => {
         if (currentPage > 1) {
-            const prevPage = currentPage - 1;
-            setCurrentPage(prevPage);
-            updateURL(prevPage);
+            updatePageInURL(currentPage - 1);
         }
-    }, [currentPage, setCurrentPage, updateURL]);
+    }, [currentPage, updatePageInURL]);
 
-    const setPage = useCallback(
+    const setPageInURL = useCallback(
         (page: number) => {
             if (page > 0 && page <= totalPages && page !== currentPage) {
-                setCurrentPage(page);
-                updateURL(page);
+                updatePageInURL(page);
             }
         },
-        [totalPages, setCurrentPage, currentPage, updateURL]
+        [totalPages, currentPage, updatePageInURL]
     );
 
     return {
-        currentPage,
-        totalPages,
         goToNextPage,
         goToPreviousPage,
-        setPage,
+        setPageInURL,
     };
 };

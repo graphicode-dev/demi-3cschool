@@ -153,18 +153,19 @@ export const groupsApi = {
     getByLevel: async (
         params: GroupsByLevelParams,
         signal?: AbortSignal
-    ): Promise<Group[] | PaginatedData<Group>> => {
+    ): Promise<PaginatedData<Group>> => {
         const { levelId, page, search } = params;
 
-        const response = await api.get<
-            ListResponse<Group> | PaginatedResponse<Group>
-        >(`${BASE_URL}/level/${levelId}`, {
-            params: {
-                ...(page ? { page } : {}),
-                ...(search ? { search } : {}),
-            },
-            signal,
-        });
+        const response = await api.get<PaginatedResponse<Group>>(
+            `${BASE_URL}/level/${levelId}`,
+            {
+                params: {
+                    ...(page ? { page } : {}),
+                    ...(search ? { search } : {}),
+                },
+                signal,
+            }
+        );
 
         if (response.error) {
             throw response.error;

@@ -99,7 +99,10 @@ export default function GroupsGradesList() {
                         title={grade.name}
                         description={t(
                             "groupsManagement:groups.grades.cardDescription",
-                            `Manage groups for ${grade.name} students`
+                            {
+                                gradeName: grade.name,
+                                defaultValue: `Manage groups for ${grade.name} students`,
+                            }
                         )}
                         href={`/admin/groups/grades/${grade.id}/levels`}
                         icon={<GradeIcon gradeCode={grade.code} />}

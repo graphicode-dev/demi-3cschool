@@ -8,7 +8,12 @@
 
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import { PageWrapper, LoadingState, ErrorState, EmptyState } from "@/design-system";
+import {
+    PageWrapper,
+    LoadingState,
+    ErrorState,
+    EmptyState,
+} from "@/design-system";
 import { useLevelsByGrade } from "@/features/dashboard/admin/learning/pages/levels";
 import {
     NavigationCard,
@@ -133,10 +138,10 @@ export default function GroupsLevelsList() {
         <PageWrapper
             pageHeaderProps={{
                 title: t("groupsManagement:groups.levels.title", "Levels"),
-                subtitle: t(
-                    "groupsManagement:groups.levels.subtitle",
-                    `Select a level to manage groups for ${gradeName}`
-                ),
+                subtitle: t("groupsManagement:groups.levels.subtitle", {
+                    gradeName,
+                    defaultValue: `Select a level to manage groups for ${gradeName}`,
+                }),
                 backButton: true,
             }}
         >

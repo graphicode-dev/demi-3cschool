@@ -146,6 +146,44 @@ export function useDeleteSession() {
 }
 
 // ============================================================================
+// Recreate Zoom Meeting Mutation
+// ============================================================================
+
+/**
+ * Hook for recreating Zoom meeting for a session
+ * Used by admin to force recreate an invalid meeting
+ */
+export const useRecreateZoomMeeting = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation<GroupSession, ApiError, number | string>({
+        mutationFn: (sessionId) => sessionsApi.recreateZoomMeeting(sessionId),
+        onSuccess: (updatedSession) => {
+            // Invalidate session lists to refresh data
+            queryClient.invalidateQueries({ queryKey: sessionKeys.lists() });
+
+            // Update specific session detail if cached
+            if (updatedSession.id) {
+                queryClient.setQueryData(
+                    sessionKeys.detail(updatedSession.id),
+                    updatedSession
+                );
+            }
+
+            // Invalidate group sessions
+            if (updatedSession.group?.id) {
+                queryClient.invalidateQueries({
+                    queryKey: sessionKeys.byGroup(updatedSession.group.id),
+                });
+            }
+        },
+        onError: (error) => {
+            console.error("Failed to recreate Zoom meeting:", error);
+        },
+    });
+};
+
+// ============================================================================
 // Combined Mutations
 // ============================================================================
 

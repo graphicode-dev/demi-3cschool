@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { certificatesApi } from "./certificates.api";
 import { certificatesKeys } from "./certificates.keys";
 import type { Certificate, CertificatesListParams } from "../types";
+import { ListQueryParams } from "@/shared/api";
 
 const MOCK_CERTIFICATES: Certificate[] = [
     {
@@ -42,7 +43,7 @@ export const getMockCertificates = (): Promise<Certificate[]> => {
     });
 };
 
-export const useCertificatesList = (params: CertificatesListParams = {}) => {
+export const useCertificatesList = (params: ListQueryParams = {}) => {
     return useQuery({
         queryKey: certificatesKeys.list(params),
         // queryFn: () => certificatesApi.getList(params),

@@ -1,8 +1,13 @@
 import { useState, useMemo, useCallback } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Filter, User, Download, Send } from "lucide-react";
-import { PageWrapper, DynamicTable, useToast } from "@/design-system";
+import {
+    PageWrapper,
+    DynamicTable,
+    useToast,
+    useServerTableSearch,
+} from "@/design-system";
 import type { TableColumn, TableData } from "@/shared/types";
 import { useCertificatesList } from "../api";
 import type { Certificate, CertificateStatus } from "../types";
@@ -41,7 +46,14 @@ function CertificatesPage() {
     const { t } = useTranslation("shared");
     const { addToast } = useToast();
     const navigate = useNavigate();
-    const [currentPage, setCurrentPage] = useState(1);
+    const [searchParams] = useSearchParams();
+
+    const currentPage = Number(searchParams.get("page")) || 1;
+
+    const { searchQuery, setSearchQuery, debouncedSearchQuery } =
+        useServerTableSearch({
+            delayMs: 400,
+        });
 
     const {
         data: certificates,
@@ -49,15 +61,8 @@ function CertificatesPage() {
         isError,
     } = useCertificatesList({
         page: currentPage,
+        search: debouncedSearchQuery || undefined,
     });
-
-    const paginationInfo = certificates
-        ? {
-              currentPage: 1,
-              lastPage: 1,
-              perPage: 10,
-          }
-        : null;
 
     const tableData: TableData[] = useMemo(
         () => certificates?.map(transformCertificateToTableData) || [],
@@ -76,10 +81,6 @@ function CertificatesPage() {
                 return status;
         }
     };
-
-    const handlePageChange = useCallback((page: number) => {
-        setCurrentPage(page);
-    }, []);
 
     const handleDownloadCertificate = useCallback(
         (certificateId: string, studentName: string, levelName: string) => {
@@ -334,30 +335,19 @@ function CertificatesPage() {
                     data={tableData}
                     columns={columns}
                     initialView="grid"
-                    itemsPerPage={paginationInfo?.perPage ?? 10}
                     hideHeader={true}
-                    currentPage={paginationInfo?.currentPage}
-                    lastPage={paginationInfo?.lastPage}
-                    totalCount={certificates?.length}
-                    onPageChange={paginationInfo ? handlePageChange : undefined}
                     disableRowClick
-                />
-            </div>
-
-            {isLoading && (
-                <div className="flex justify-center py-8">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-brand-500" />
-                </div>
-            )}
-
-            {isError && (
-                <div className="text-center py-8 text-red-500">
-                    {t(
+                    searchQuery={searchQuery}
+                    onSearchChange={setSearchQuery}
+                    // State
+                    isLoading={isLoading}
+                    isError={isError}
+                    errorMessage={t(
                         "certificates.errors.loadFailed",
                         "Failed to load certificates"
                     )}
-                </div>
-            )}
+                />
+            </div>
         </PageWrapper>
     );
 }
