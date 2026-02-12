@@ -17,6 +17,7 @@ import type {
     SupportTicketFilter,
     SupportMessage,
 } from "../types";
+import { ListQueryParams, PaginatedData } from "@/shared/api";
 
 /**
  * Paginated response type
@@ -38,14 +39,15 @@ interface PaginatedSupportTicketData {
  * Hook to fetch paginated support tickets list
  */
 export function useSupportTicketsList(
+    params: ListQueryParams,
     filter?: SupportTicketFilter,
-    page?: number,
-    options?: Partial<UseQueryOptions<PaginatedSupportTicketData, Error>>
+    options?: Partial<
+        UseQueryOptions<PaginatedData<SupportTicketListItem>, Error>
+    >
 ) {
     return useQuery({
-        queryKey: supportHelpKeys.list(filter),
-        queryFn: ({ signal }) => supportHelpApi.getList(filter, page, signal),
-        placeholderData: keepPreviousData,
+        queryKey: supportHelpKeys.list(params, filter),
+        queryFn: ({ signal }) => supportHelpApi.getList(params, filter, signal),
         staleTime: 1000 * 60 * 2, // 2 minutes
         ...options,
     });

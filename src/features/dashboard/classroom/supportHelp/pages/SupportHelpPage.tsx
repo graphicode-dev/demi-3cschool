@@ -7,7 +7,7 @@
 import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Search, Plus } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
     SupportFilterTabs,
     SupportTicketsList,
@@ -21,21 +21,37 @@ import {
 } from "../api";
 import type { SupportTicketFilter } from "../types";
 import { supportHelp } from "../navigation";
-import { PageWrapper } from "@/design-system";
+import { PageWrapper, useServerTableSearch } from "@/design-system";
+import Pagination from "@/design-system/components/table/Pagination";
 
 export function SupportHelpPage() {
     const { t } = useTranslation("supportHelp");
     const navigate = useNavigate();
-    const [searchQuery, setSearchQuery] = useState("");
     const [activeFilter, setActiveFilter] =
         useState<SupportTicketFilter>("all");
     const [selectedTicketId, setSelectedTicketId] = useState<string | null>(
         null
     );
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const currentPage = Number(searchParams.get("page")) || 1;
+
+    const { searchQuery, setSearchQuery, debouncedSearchQuery } =
+        useServerTableSearch({
+            delayMs: 400,
+        });
 
     // Fetch tickets list from API
     const { data: ticketsData, isLoading: isLoadingTickets } =
-        useSupportTicketsList(activeFilter);
+        useSupportTicketsList(
+            {
+                page: currentPage,
+                ...(debouncedSearchQuery
+                    ? { search: debouncedSearchQuery }
+                    : {}),
+            },
+            activeFilter
+        );
 
     // Fetch selected ticket detail
     const { data: selectedTicket, isLoading: isLoadingTicket } =
@@ -44,22 +60,17 @@ export function SupportHelpPage() {
     // Send message mutation
     const sendMessageMutation = useSendSupportMessage();
 
-    // Filter tickets based on search (API already filters by status)
-    const filteredTickets = useMemo(() => {
-        const tickets = ticketsData?.items ?? [];
+    const totalCount = useMemo(() => {
+        if (!ticketsData) return;
+        return ticketsData.lastPage > 1
+            ? (ticketsData.lastPage - 1) * ticketsData.perPage +
+                  ticketsData.items.length
+            : ticketsData.items.length;
+    }, [ticketsData]);
 
-        // Apply search filter
-        if (searchQuery.trim()) {
-            const query = searchQuery.toLowerCase();
-            return tickets.filter(
-                (ticket) =>
-                    ticket.subject.toLowerCase().includes(query) ||
-                    ticket.ticketNumber.toLowerCase().includes(query)
-            );
-        }
-
-        return tickets;
-    }, [ticketsData?.items, searchQuery]);
+    const handlePageChange = (page: number) => {
+        setSearchParams({ page: String(page) });
+    };
 
     const handleSendMessage = (content: string) => {
         if (!selectedTicketId) return;
@@ -123,12 +134,33 @@ export function SupportHelpPage() {
                 {/* Left Panel - Tickets List */}
                 <div className="w-full md:w-[320px] flex flex-col bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
                     <SupportTicketsList
-                        tickets={filteredTickets}
-                        total={ticketsData?.total ?? filteredTickets.length}
+                        tickets={ticketsData?.items ?? []}
+                        total={totalCount!}
                         selectedTicketId={selectedTicketId}
                         onSelectTicket={setSelectedTicketId}
                         isLoading={isLoadingTickets}
                     />
+
+                    {/* Pagination */}
+                    {ticketsData && (
+                        <div className="mt-6">
+                            <Pagination
+                                currentPage={ticketsData.currentPage}
+                                totalPages={ticketsData.lastPage}
+                                goToNextPage={() =>
+                                    handlePageChange(currentPage + 1)
+                                }
+                                goToPreviousPage={() =>
+                                    handlePageChange(currentPage - 1)
+                                }
+                                setPage={handlePageChange}
+                                itemsPerPage={ticketsData.perPage}
+                                totalItems={
+                                    ticketsData.lastPage * ticketsData.perPage
+                                }
+                            />
+                        </div>
+                    )}
                 </div>
 
                 {/* Right Panel - Ticket Detail or Empty State */}

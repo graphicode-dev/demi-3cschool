@@ -17,6 +17,8 @@ interface TicketFiltersProps {
     onFiltersChange: (filters: TicketFiltersType) => void;
     agents: { id: string; name: string }[];
     blocks: { id: string; name: string }[];
+    searchQuery: string;
+    setSearchQuery: (query: string) => void;
 }
 
 export function TicketFilters({
@@ -24,6 +26,8 @@ export function TicketFilters({
     onFiltersChange,
     agents,
     blocks,
+    searchQuery,
+    setSearchQuery,
 }: TicketFiltersProps) {
     const { t } = useTranslation("adminTicketsManagement");
 
@@ -62,13 +66,8 @@ export function TicketFilters({
                             "tickets.filters.searchPlaceholder",
                             "Search by ticket ID, student name, or subject..."
                         )}
-                        value={filters.search || ""}
-                        onChange={(e) =>
-                            onFiltersChange({
-                                ...filters,
-                                search: e.target.value,
-                            })
-                        }
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full pl-10 pr-4 py-2 border border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent text-sm"
                     />
                 </div>

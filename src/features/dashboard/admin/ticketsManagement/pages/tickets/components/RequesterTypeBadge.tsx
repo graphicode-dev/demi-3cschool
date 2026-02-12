@@ -39,7 +39,7 @@ export function RequesterTypeBadge({ type }: RequesterTypeBadgeProps) {
 
     return (
         <span
-            className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${styles.bg} ${styles.text}`}
+            className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${styles?.bg} ${styles?.text}`}
         >
             {typeLabels[type]}
         </span>

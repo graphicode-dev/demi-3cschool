@@ -19,6 +19,7 @@ import type {
     TicketMessage,
     InternalNote,
 } from "../types";
+import { ListQueryParams, PaginatedData } from "@/shared/api";
 
 // ============================================================================
 // Tickets List Query
@@ -28,14 +29,15 @@ import type {
  * Hook to fetch paginated tickets list
  */
 export function useTicketsList(
-    filters?: TicketFilters,
-    page?: number,
-    options?: Partial<UseQueryOptions<PaginatedTicketData, Error>>
+    params: ListQueryParams,
+    filter?: TicketFilters,
+    options?: Partial<
+        UseQueryOptions<PaginatedData<TicketListItem>, Error>
+    >
 ) {
     return useQuery({
-        queryKey: ticketsKeys.list(filters),
-        queryFn: ({ signal }) => ticketsApi.getList(filters, page, signal),
-        placeholderData: keepPreviousData,
+        queryKey: ticketsKeys.list(params, filter),
+        queryFn: ({ signal }) => ticketsApi.getList(params, filter, signal),
         staleTime: 1000 * 60 * 2, // 2 minutes
         ...options,
     });

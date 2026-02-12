@@ -25,7 +25,12 @@ import type {
     RawInternalNote,
     InternalNote,
 } from "../types";
-import { ApiResponse } from "@/shared/api";
+import {
+    ApiResponse,
+    ListQueryParams,
+    PaginatedData,
+    PaginatedResponse,
+} from "@/shared/api";
 
 const BASE_URL = "/tickets";
 
@@ -114,20 +119,55 @@ export const ticketsApi = {
      * GET /tickets?page=1
      */
     getList: async (
-        filters?: TicketFilters,
-        page?: number,
+        params: ListQueryParams,
+        filter?: TicketFilters,
         signal?: AbortSignal
-    ): Promise<PaginatedTicketData> => {
-        const response = await api.get<
-            ApiResponse<{
-                perPage: number;
-                currentPage: number;
-                lastPage: number;
-                nextPageUrl: string | null;
-                items: RawTicket[];
-            }>
-        >(BASE_URL, {
-            params: { ...filters, page } as Record<string, unknown>,
+    ): Promise<PaginatedData<TicketListItem>> => {
+        const { page, search } = params;
+
+        // Build query string parts manually to avoid encoding brackets
+        const queryParts: string[] = [];
+
+        // Only add page if it exists
+        if (page) {
+            queryParts.push(`page=${page}`);
+        }
+
+        // Only add search if it exists and is not empty
+        if (search && search.trim()) {
+            queryParts.push(`search=${encodeURIComponent(search.trim())}`);
+        }
+
+        // Add status filter if it's not "all"
+        if (filter?.status && filter.status !== "all") {
+            queryParts.push(`filter[status][operator]==`);
+            queryParts.push(`filter[status][value]=${filter.status}`);
+        }
+
+        // Add agent filter if it's not "all"
+        if (filter?.agentId && filter.agentId !== "all") {
+            queryParts.push(`filter[assignedAgentId][operator]==`);
+            queryParts.push(`filter[assignedAgentId][value]=${filter.agentId}`);
+        }
+
+        // Add block filter if it's not "all"
+        if (filter?.blockId && filter.blockId !== "all") {
+            queryParts.push(`filter[supportBlockId][operator]==`);
+            queryParts.push(`filter[supportBlockId][value]=${filter.blockId}`);
+        }
+
+        // Add priority filter if it's not "all"
+        if (filter?.priority && filter.priority !== "all") {
+            queryParts.push(`filter[priority][operator]==`);
+            queryParts.push(`filter[priority][value]=${filter.priority}`);
+        }
+
+        const url =
+            queryParts.length > 0
+                ? `${BASE_URL}?${queryParts.join("&")}`
+                : BASE_URL;
+
+        const response = await api.get<PaginatedResponse<TicketListItem>>(url, {
             signal,
         });
 
@@ -135,11 +175,7 @@ export const ticketsApi = {
             throw response.error;
         }
 
-        if (!response.data?.data) {
-            throw new Error("No data returned from server");
-        }
-
-        return transformPaginatedData(response.data.data);
+        return response.data!.data;
     },
 
     /**

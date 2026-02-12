@@ -26,7 +26,7 @@ export function TicketListItem({
 
     const getInitials = (name: string) => {
         return name
-            .split(" ")
+            ?.split(" ")
             .map((n) => n[0])
             .join("")
             .toUpperCase()

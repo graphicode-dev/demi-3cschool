@@ -4,6 +4,7 @@
  * Stable query key factory for TanStack Query.
  */
 
+import { ListQueryParams } from "@/shared/api";
 import type { TicketFilters } from "../types";
 
 /**
@@ -23,10 +24,43 @@ export const ticketsKeys = {
     /**
      * Key for filtered tickets list
      */
-    list: (filters?: TicketFilters) =>
-        filters
-            ? ([...ticketsKeys.lists(), filters] as const)
-            : ticketsKeys.lists(),
+    list: (params: ListQueryParams, filter?: TicketFilters) => {
+        const keyParts: (string | number)[] = [...ticketsKeys.lists()];
+
+        // Always add page (default to 1 if undefined)
+        keyParts.push("page", params.page || 1);
+
+        // Add search if it exists
+        if (params.search && params.search.trim()) {
+            keyParts.push("search", params.search.trim());
+        }
+
+        // Add status filter if it's not "all"
+        if (filter?.status && filter.status !== "all") {
+            keyParts.push("filter_status_operator", "==");
+            keyParts.push("filter_status_value", filter.status);
+        }
+
+        // Add agent filter if it's not "all"
+        if (filter?.agentId && filter.agentId !== "all") {
+            keyParts.push("filter_agentId_operator", "==");
+            keyParts.push("filter_agentId_value", filter.agentId);
+        }
+
+        // Add block filter if it's not "all"
+        if (filter?.blockId && filter.blockId !== "all") {
+            keyParts.push("filter_blockId_operator", "==");
+            keyParts.push("filter_blockId_value", filter.blockId);
+        }
+
+        // Add priority filter if it's not "all"
+        if (filter?.priority && filter.priority !== "all") {
+            keyParts.push("filter_priority_operator", "==");
+            keyParts.push("filter_priority_value", filter.priority);
+        }
+
+        return keyParts;
+    },
 
     /**
      * Key for unassigned tickets list

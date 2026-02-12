@@ -13,7 +13,12 @@ import type {
     CreateSupportTicketPayload,
     SendSupportMessagePayload,
 } from "../types";
-import { ApiResponse } from "@/shared/api";
+import {
+    ApiResponse,
+    ListQueryParams,
+    PaginatedData,
+    PaginatedResponse,
+} from "@/shared/api";
 
 const BASE_URL = "/tickets";
 
@@ -148,25 +153,39 @@ export const supportHelpApi = {
      * GET /tickets?page=1
      */
     getList: async (
+        params: ListQueryParams,
         filter?: SupportTicketFilter,
-        page?: number,
         signal?: AbortSignal
-    ): Promise<PaginatedSupportTicketData> => {
-        const params: Record<string, unknown> = { page };
-        if (filter && filter !== "all") {
-            params.status = filter;
+    ): Promise<PaginatedData<SupportTicketListItem>> => {
+        const { page, search } = params;
+
+        // Build query string parts manually to avoid encoding brackets
+        const queryParts: string[] = [];
+
+        // Only add page if it exists
+        if (page) {
+            queryParts.push(`page=${page}`);
         }
 
+        // Only add search if it exists and is not empty
+        if (search && search.trim()) {
+            queryParts.push(`search=${encodeURIComponent(search.trim())}`);
+        }
+
+        // Add filter if it's not "all" - don't encode brackets
+        if (filter && filter !== "all") {
+            queryParts.push(`filter[status][operator]==`);
+            queryParts.push(`filter[status][value]=${filter}`);
+        }
+
+        const url =
+            queryParts.length > 0
+                ? `${BASE_URL}?${queryParts.join("&")}`
+                : BASE_URL;
+
         const response = await api.get<
-            ApiResponse<{
-                perPage: number;
-                currentPage: number;
-                lastPage: number;
-                nextPageUrl: string | null;
-                items: RawSupportTicket[];
-            }>
-        >(BASE_URL, {
-            params,
+            PaginatedResponse<SupportTicketListItem>
+        >(url, {
             signal,
         });
 
@@ -174,19 +193,7 @@ export const supportHelpApi = {
             throw response.error;
         }
 
-        if (!response.data?.data) {
-            throw new Error("No data returned from server");
-        }
-
-        const data = response.data.data;
-        return {
-            perPage: data.perPage,
-            currentPage: data.currentPage,
-            lastPage: data.lastPage,
-            nextPageUrl: data.nextPageUrl,
-            items: data.items.map(transformTicketListItem),
-            total: data.lastPage * data.perPage,
-        };
+        return response.data!.data;
     },
 
     /**

@@ -4,6 +4,7 @@
  * Stable query key factory for TanStack Query.
  */
 
+import { ListQueryParams } from "@/shared/api";
 import type { SupportTicketFilter } from "../types";
 
 /**
@@ -23,10 +24,25 @@ export const supportHelpKeys = {
     /**
      * Key for filtered tickets list
      */
-    list: (filter?: SupportTicketFilter) =>
-        filter
-            ? ([...supportHelpKeys.lists(), filter] as const)
-            : supportHelpKeys.lists(),
+    list: (params: ListQueryParams, filter?: SupportTicketFilter) => {
+        const keyParts: (string | number)[] = [...supportHelpKeys.lists()];
+
+        // Add filter if it's not "all" using new structured format
+        if (filter && filter !== "all") {
+            keyParts.push("filter_status_operator", "==");
+            keyParts.push("filter_status_value", filter);
+        }
+
+        // Always add page (default to 1 if undefined)
+        keyParts.push("page", params.page || 1);
+
+        // Add search if it exists
+        if (params.search && params.search.trim()) {
+            keyParts.push("search", params.search.trim());
+        }
+
+        return keyParts;
+    },
 
     /**
      * Key for all ticket details
