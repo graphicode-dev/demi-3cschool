@@ -89,13 +89,13 @@ export function SessionInfoModal({
                         </h3>
                         <div className="grid grid-cols-2 gap-3">
                             {/* Date */}
-                            <div className="bg-gray-800 dark:bg-gray-800 rounded-xl p-3 flex items-center gap-3">
+                            <div className="bg-gray-100 dark:bg-gray-800 rounded-xl p-3 flex items-center gap-3">
                                 <Calendar className="size-5 text-brand-400" />
                                 <div className="flex flex-col">
-                                    <span className="text-xs text-gray-400">
+                                    <span className="text-xs dark:text-gray-400">
                                         {t("modal.date")}
                                     </span>
-                                    <span className="text-sm font-medium text-white">
+                                    <span className="text-sm font-medium dark:text-white">
                                         {(() => {
                                             const dateInfo = formatDateKey(
                                                 session.sessionDate
@@ -108,38 +108,38 @@ export function SessionInfoModal({
                                 </div>
                             </div>
                             {/* Time */}
-                            <div className="bg-gray-800 dark:bg-gray-800 rounded-xl p-3 flex items-center gap-3">
+                            <div className="bg-gray-100 dark:bg-gray-800 rounded-xl p-3 flex items-center gap-3">
                                 <Clock className="size-5 text-brand-400" />
                                 <div className="flex flex-col">
-                                    <span className="text-xs text-gray-400">
+                                    <span className="text-xs dark:text-gray-400">
                                         {t("modal.time")}
                                     </span>
-                                    <span className="text-sm font-medium text-white">
+                                    <span className="text-sm font-medium dark:text-white">
                                         {formatTime(session.startTime)}
                                     </span>
                                 </div>
                             </div>
                             {/* Duration */}
-                            <div className="bg-gray-800 dark:bg-gray-800 rounded-xl p-3 flex items-center gap-3">
+                            <div className="bg-gray-100 dark:bg-gray-800 rounded-xl p-3 flex items-center gap-3">
                                 <Timer className="size-5 text-warning-400" />
                                 <div className="flex flex-col">
-                                    <span className="text-xs text-gray-400">
+                                    <span className="text-xs dark:text-gray-400">
                                         {t("modal.duration")}
                                     </span>
-                                    <span className="text-sm font-medium text-white">
+                                    <span className="text-sm font-medium dark:text-white">
                                         {session.duration || 60}{" "}
                                         {t("common.min")}
                                     </span>
                                 </div>
                             </div>
                             {/* Timezone */}
-                            <div className="bg-gray-800 dark:bg-gray-800 rounded-xl p-3 flex items-center gap-3">
+                            <div className="bg-gray-100 dark:bg-gray-800 rounded-xl p-3 flex items-center gap-3">
                                 <Globe className="size-5 text-warning-400" />
                                 <div className="flex flex-col">
-                                    <span className="text-xs text-gray-400">
+                                    <span className="text-xs dark:text-gray-400">
                                         {t("modal.timezone")}
                                     </span>
-                                    <span className="text-sm font-medium text-white">
+                                    <span className="text-sm font-medium dark:text-white">
                                         {session.timezone || "GMT+3"}
                                     </span>
                                 </div>
