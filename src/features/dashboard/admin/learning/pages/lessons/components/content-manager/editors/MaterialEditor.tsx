@@ -24,6 +24,7 @@ import {
 import { useMutationHandler } from "@/shared/api";
 import type { ApiError } from "@/shared/api/types";
 import { LessonMaterial } from "../../../types";
+import { FilePreview } from "@/features/dashboard/shared/components/FilePreview";
 
 interface MaterialEditorProps {
     lessonId: string;
@@ -58,6 +59,7 @@ export default function MaterialEditor({
     });
 
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [showPreviewModal, setShowPreviewModal] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [showDeleteDialog, setShowDeleteDialog] = useState(false);
     const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -287,6 +289,14 @@ export default function MaterialEditor({
                                         )}
                                     </button>
                                 )}
+
+                                <FilePreview
+                                    t={t}
+                                    file={existingFile}
+                                    selectedFile={selectedFile}
+                                    showPreviewModal={showPreviewModal}
+                                    setShowPreviewModal={setShowPreviewModal}
+                                />
                             </div>
                         </div>
                     ) : (

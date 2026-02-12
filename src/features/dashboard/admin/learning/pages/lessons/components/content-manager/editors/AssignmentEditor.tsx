@@ -26,6 +26,7 @@ import {
 import { useMutationHandler } from "@/shared/api";
 import type { ApiError } from "@/shared/api/types";
 import { LessonAssignment } from "../../../types/lesson-assignments.types";
+import { FilePreview } from "@/features/dashboard/shared/components/FilePreview";
 
 interface AssignmentEditorProps {
     lessonId: string;
@@ -127,35 +128,6 @@ export default function AssignmentEditor({
             URL.revokeObjectURL(previewUrl);
             setPreviewUrl(null);
         }
-    };
-
-    const handlePreviewFile = () => {
-        if (selectedFile) {
-            const url = URL.createObjectURL(selectedFile);
-            setPreviewUrl(url);
-            setShowPreviewModal(true);
-        } else if (existingFile?.url) {
-            setPreviewUrl(existingFile.url);
-            setShowPreviewModal(true);
-        }
-    };
-
-    const closePreviewModal = () => {
-        setShowPreviewModal(false);
-        if (previewUrl && selectedFile) {
-            URL.revokeObjectURL(previewUrl);
-        }
-        setPreviewUrl(null);
-    };
-
-    const getFileExtension = (filename: string) => {
-        return filename.split(".").pop()?.toLowerCase() || "";
-    };
-
-    const canPreviewFile = () => {
-        const filename = selectedFile?.name || existingFile?.fileName || "";
-        const ext = getFileExtension(filename);
-        return ["pdf", "jpg", "jpeg", "png", "gif", "webp"].includes(ext);
     };
 
     const handleSaveChanges = async () => {
@@ -331,18 +303,13 @@ export default function AssignmentEditor({
                                         )}
                                     </button>
                                 )}
-                                {canPreviewFile() && (
-                                    <button
-                                        onClick={handlePreviewFile}
-                                        className="mt-2 flex items-center gap-1 text-xs text-brand-500 hover:text-brand-600"
-                                    >
-                                        <Eye className="w-3 h-3" />
-                                        {t(
-                                            "learning:lessons.content.assignments.previewFile",
-                                            "Preview file"
-                                        )}
-                                    </button>
-                                )}
+                                <FilePreview
+                                    t={t}
+                                    file={existingFile}
+                                    selectedFile={selectedFile}
+                                    showPreviewModal={showPreviewModal}
+                                    setShowPreviewModal={setShowPreviewModal}
+                                />
                             </div>
                         </div>
                     ) : (
@@ -470,47 +437,6 @@ export default function AssignmentEditor({
                 onConfirm={handleDeleteAssignment}
                 loading={isDeleting}
             />
-
-            {/* File Preview Modal */}
-            {showPreviewModal && previewUrl && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                    <div className="relative w-full max-w-4xl max-h-[90vh] bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden">
-                        <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
-                            <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                                {t(
-                                    "learning:lessons.content.assignments.filePreview",
-                                    "File Preview"
-                                )}
-                            </h3>
-                            <button
-                                onClick={closePreviewModal}
-                                className="p-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-                            >
-                                <X className="w-5 h-5" />
-                            </button>
-                        </div>
-                        <div className="p-4 overflow-auto max-h-[calc(90vh-80px)]">
-                            {getFileExtension(
-                                selectedFile?.name ||
-                                    existingFile?.fileName ||
-                                    ""
-                            ) === "pdf" ? (
-                                <iframe
-                                    src={`${previewUrl}#toolbar=0`}
-                                    className="w-full h-[70vh] border-0"
-                                    title="PDF Preview"
-                                />
-                            ) : (
-                                <img
-                                    src={previewUrl}
-                                    alt="File preview"
-                                    className="max-w-full h-auto mx-auto"
-                                />
-                            )}
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 }
