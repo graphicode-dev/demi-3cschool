@@ -16,9 +16,9 @@ import {
     useConfirmDialog,
 } from "@/design-system";
 import { useDeleteLesson, useLessonsByLevel } from "../api";
-import { ListCard } from "../../courses/components";
 import { Lesson } from "../types";
 import { useMutationHandler } from "@/shared/api";
+import ListCard from "../components/ListCard";
 
 export default function LearningLessonsList() {
     const { t } = useTranslation();

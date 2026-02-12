@@ -8,8 +8,8 @@
 
 import { useQuery, type UseQueryOptions } from "@tanstack/react-query";
 import { distributionKeys } from "./distribution.keys";
-import { getMockDistributionData } from "../mockData";
 import type { DistributionData } from "../types";
+import distributionApi from "./distribution.api";
 
 // ============================================================================
 // Complete Distribution Data Query
@@ -24,8 +24,7 @@ export function useDistributionData(
     return useQuery({
         queryKey: distributionKeys.data(),
         // TODO: Uncomment when using real API
-        // queryFn: ({ signal }) => distributionApi.getData(signal),
-        queryFn: () => Promise.resolve(getMockDistributionData()),
+        queryFn: ({ signal }) => distributionApi.getData(signal),
         staleTime: 1000 * 60 * 5, // 5 minutes
         ...options,
     });
