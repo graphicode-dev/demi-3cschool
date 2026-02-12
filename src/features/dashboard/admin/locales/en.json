@@ -10,7 +10,8 @@
         "resources": "Resources",
         "grades": "Grades",
         "teachers": "Teachers",
-        "students": "Students"
+        "students": "Students",
+        "userManagement": "User Management"
     },
     "title": "Admin"
 }

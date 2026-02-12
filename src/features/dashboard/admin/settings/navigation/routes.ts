@@ -1,7 +1,5 @@
 import { RouteConfig } from "@/router";
 import { slotsRoutes } from "../slots";
-import { studentsRoutes } from "../students";
-import { teachersRoutes } from "../teachers";
 import { trainingCentersRoutes } from "../trainingCenters";
 
 export const settingsRoutes: RouteConfig[] = [
@@ -13,7 +11,5 @@ export const settingsRoutes: RouteConfig[] = [
         handle: { crumb: "settings:breadcrumb.settings" },
     },
     ...slotsRoutes,
-    ...studentsRoutes,
-    ...teachersRoutes,
     ...trainingCentersRoutes,
 ];

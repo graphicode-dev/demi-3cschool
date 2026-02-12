@@ -17,8 +17,6 @@ import {
     History,
     ClipboardCheck,
     BookOpen,
-    Receipt,
-    CreditCard,
 } from "lucide-react";
 import { Tabs } from "@/design-system";
 import type { ProfileTabType } from "../types/profile.types";
@@ -29,8 +27,6 @@ import {
     mockAttendanceStats,
     mockAttendanceRecords,
     mockAssignments,
-    mockInvoices,
-    mockInstallments,
 } from "../mockData/profile.mock";
 import { PageWrapper } from "@/design-system";
 import { authStore } from "@/auth";
@@ -44,8 +40,6 @@ const AcademicDetailsTab = lazy(
 const GroupHistoryTab = lazy(() => import("../components/GroupHistoryTab"));
 const AttendanceTab = lazy(() => import("../components/AttendanceTab"));
 const AssignmentsTab = lazy(() => import("../components/AssignmentsTab"));
-const InvoicesTab = lazy(() => import("../components/InvoicesTab"));
-const InstallmentsTab = lazy(() => import("../components/InstallmentsTab"));
 
 function TabLoader() {
     return (
@@ -103,20 +97,6 @@ function ProfilePage() {
             fallback: "Assignments",
             icon: <BookOpen className="w-4 h-4" />,
             show: true,
-        },
-        {
-            key: "invoices",
-            labelKey: "profile.tabs.invoices",
-            fallback: "Invoices",
-            icon: <Receipt className="w-4 h-4" />,
-            show: isAdmin,
-        },
-        {
-            key: "installments",
-            labelKey: "profile.tabs.installments",
-            fallback: "Installments",
-            icon: <CreditCard className="w-4 h-4" />,
-            show: isAdmin,
         },
     ];
 
@@ -179,18 +159,6 @@ function ProfilePage() {
                         <Edit className="w-4 h-4" />
                         {t("profile.editProfile", "Edit Profile")}
                     </button>
-                    {isAdmin && (
-                        <>
-                            <button className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                                <Users className="w-4 h-4" />
-                                {t("profile.assignToGroup", "Assign to group")}
-                            </button>
-                            <button className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium text-white bg-brand-500 hover:bg-brand-600 rounded-lg transition-colors">
-                                <FileText className="w-4 h-4" />
-                                {t("profile.createInvoice", "Create Invoice")}
-                            </button>
-                        </>
-                    )}
                 </div>
             </div>
 
@@ -247,22 +215,6 @@ function ProfilePage() {
                             <AssignmentsTab assignments={mockAssignments} />
                         </Suspense>
                     </Tabs.Panel>
-                    {isAdmin && (
-                        <>
-                            <Tabs.Panel value="invoices">
-                                <Suspense fallback={<TabLoader />}>
-                                    <InvoicesTab invoices={mockInvoices} />
-                                </Suspense>
-                            </Tabs.Panel>
-                            <Tabs.Panel value="installments">
-                                <Suspense fallback={<TabLoader />}>
-                                    <InstallmentsTab
-                                        installments={mockInstallments}
-                                    />
-                                </Suspense>
-                            </Tabs.Panel>
-                        </>
-                    )}
                 </Tabs.Content>
             </Tabs>
         </PageWrapper>

@@ -1,0 +1,15 @@
+{
+    "sitemap": {
+        "title": "إدارة المستخدمين",
+        "description": "إدارة حسابات المستخدمين",
+        "routes": {
+            "teachers": "المعلمون",
+            "teachersDesc": "إدارة حسابات المعلمين",
+            "students": "الطلاب",
+            "studentsDesc": "إدارة حسابات الطلاب"
+        }
+    },
+    "breadcrumb": {
+        "userManagement": "إدارة المستخدمين"
+    }
+}

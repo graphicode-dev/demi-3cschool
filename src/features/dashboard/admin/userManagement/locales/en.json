@@ -1,0 +1,15 @@
+{
+    "sitemap": {
+        "title": "User Management",
+        "description": "Manage user accounts",
+        "routes": {
+            "teachers": "Teachers",
+            "teachersDesc": "Manage teacher accounts",
+            "students": "Students",
+            "studentsDesc": "Manage student accounts"
+        }
+    },
+    "breadcrumb": {
+        "userManagement": "User Management"
+    }
+}

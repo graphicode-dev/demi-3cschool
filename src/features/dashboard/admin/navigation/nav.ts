@@ -23,6 +23,7 @@ import { groupsAnalyticsNav } from "../groupsAnalytics/navigation";
 import { groupsManagementNav } from "../groupsManagement/navigation";
 import gradesNav from "../learning/navigation";
 import { settingsNavItem } from "../settings/navigation/nav";
+import { userManagementNavItem } from "../userManagement/navigation/nav";
 
 export const adminNav: FeatureNavModule = {
     featureId: "admin",
@@ -32,7 +33,7 @@ export const adminNav: FeatureNavModule = {
         // Grades (Learning)
         gradesNav,
         // Groups Analytics
-        groupsAnalyticsNav,
+        // groupsAnalyticsNav,
         // Groups Management
         groupsManagementNav,
         // Resources
@@ -43,6 +44,8 @@ export const adminNav: FeatureNavModule = {
         communityManagementNavItem,
         // Settings
         settingsNavItem,
+        // User Management
+        userManagementNavItem,
         // Programs Management
         programsManagementNav,
         // Shared features (profile, chat, certificates, reports)

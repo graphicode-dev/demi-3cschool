@@ -27,7 +27,7 @@ import type {
     SessionWithTeacher,
 } from "../../types/assignTeacher.types";
 import { groupKeys } from "../groups.keys";
-import { teachersKeys } from "@/features/dashboard/admin/settings/teachers/api";
+import { teachersKeys } from "../../../userManagement";
 
 // ============================================================================
 // Primary Teacher Assignment Mutation

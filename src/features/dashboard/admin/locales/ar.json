@@ -10,7 +10,8 @@
         "resources": "إدارة الموارد",
         "grades": "المراحل",
         "teachers": "المدرسين",
-        "students": "الطلاب"
+        "students": "الطلاب",
+        "userManagement": "إدارة المستخدمين"
     },
     "title": "الإدارة"
 }

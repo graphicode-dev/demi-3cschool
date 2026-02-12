@@ -22,16 +22,14 @@ import { ticketsManagementRoutes } from "../ticketsManagement/navigation";
 import { communityManagementRoutes } from "../communityManagement/navigation";
 import { slotsRoutes } from "../settings/slots/navigation";
 import { trainingCentersRoutes } from "../settings/trainingCenters/navigation";
-import { teachersRoutes } from "../settings/teachers/navigation";
-import { studentsRoutes } from "../settings/students/navigation";
 
 import { programsRoutes } from "../programs/navigation";
-import { groupsAnalyticsRoutes } from "../groupsAnalytics/navigation";
 import { groupsRoutes } from "../groupsManagement/navigation";
 import { gradesRoutes } from "../learning/navigation/routes";
 import { overviewRoutes } from "../overview/navigation";
 import { resourcesRoutes } from "../resources/navigation/routes";
 import { settingsRoutes } from "../settings/navigation/routes";
+import { userManagementRoutes } from "../userManagement/navigation/routes";
 
 // ============================================================================
 // Admin Shared Routes (profile, chat, certificates, reports)
@@ -62,7 +60,7 @@ export const adminRouteModule: FeatureRouteModule = {
             // Groups Management
             ...groupsRoutes,
             // Groups Analytics
-            ...groupsAnalyticsRoutes,
+            // ...groupsAnalyticsRoutes,
             // Resources Management
             ...resourcesRoutes,
             // Tickets Management
@@ -73,10 +71,8 @@ export const adminRouteModule: FeatureRouteModule = {
             ...slotsRoutes,
             // Training Centers (under settings)
             ...trainingCentersRoutes,
-            // Teachers (under settings)
-            ...teachersRoutes,
-            // Students (under settings)
-            ...studentsRoutes,
+            // User Management
+            ...userManagementRoutes,
             // Shared features (profile, chat, certificates, reports)
             ...adminOnlySharedRoutes,
             // Community Management

@@ -6,11 +6,7 @@
             "slots": "الفترات الزمنية",
             "slotsDesc": "إدارة الفترات الزمنية المتاحة",
             "trainingCenters": "مراكز التدريب",
-            "trainingCentersDesc": "إدارة مواقع مراكز التدريب",
-            "teachers": "المعلمون",
-            "teachersDesc": "إدارة حسابات المعلمين",
-            "students": "الطلاب",
-            "studentsDesc": "إدارة حسابات الطلاب"
+            "trainingCentersDesc": "إدارة مواقع مراكز التدريب"
         }
     },
     "breadcrumb": {

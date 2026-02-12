@@ -6,11 +6,7 @@
             "slots": "Time Slots",
             "slotsDesc": "Manage available time slots",
             "trainingCenters": "Training Centers",
-            "trainingCentersDesc": "Manage training center locations",
-            "teachers": "Teachers",
-            "teachersDesc": "Manage teacher accounts",
-            "students": "Students",
-            "studentsDesc": "Manage student accounts"
+            "trainingCentersDesc": "Manage training center locations"
         }
     },
     "breadcrumb": {
