@@ -13,7 +13,7 @@ import { PageWrapper, ErrorState, LoadingState } from "@/design-system";
 import { useMutationHandler } from "@/shared/api";
 import { useSetPrimaryTeacherMutation } from "../api/assignTeacher/assignTeacher.mutations";
 import { useGroup } from "../api";
-import { useTeachersList } from "@/features/dashboard/admin/settings/teachers/api";
+import { useTeachersList } from "@/features/dashboard/admin/userManagement";
 import { useDebounce } from "@/shared/observability";
 import { User } from "@/auth/auth.types";
 

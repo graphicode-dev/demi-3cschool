@@ -29,7 +29,7 @@ export function AddAgentPage() {
     const { blockId } = useParams<{ blockId: string }>();
 
     const { data: blockData } = useSupportBlock(blockId);
-    const { data: agentsData } = useSupportAgentsByBlock(blockId);
+    const { data: agentsData } = useSupportAgentsByBlock(blockId, {});
     const addAgentMutation = useAddAgent();
 
     const [searchQuery, setSearchQuery] = useState("");

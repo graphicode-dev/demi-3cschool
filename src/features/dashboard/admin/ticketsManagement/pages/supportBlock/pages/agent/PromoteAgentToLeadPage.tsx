@@ -34,7 +34,7 @@ export function PromoteAgentToLeadPage() {
         data: agentsData,
         isLoading,
         error,
-    } = useSupportAgentsByBlock(blockId);
+    } = useSupportAgentsByBlock(blockId, {});
     const reassignMutation = useReassignAgent();
 
     // Find the agent from agents list

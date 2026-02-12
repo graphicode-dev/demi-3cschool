@@ -33,7 +33,7 @@ export function EditLeadPage() {
         data: agentsData,
         isLoading,
         error,
-    } = useSupportAgentsByBlock(blockId);
+    } = useSupportAgentsByBlock(blockId, {});
     const updateStatusMutation = useUpdateAgentStatus();
 
     // Find the lead from agents list

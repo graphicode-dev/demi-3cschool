@@ -22,7 +22,7 @@ import { useMutationHandler } from "@/shared/api";
 import { useSetSessionTeacherMutation } from "../api/assignTeacher/assignTeacher.mutations";
 import { useSessionDetailQuery } from "../api/sessions/sessions.queries";
 import { useGroup } from "../api";
-import { useTeachersList } from "@/features/dashboard/admin/settings/teachers/api";
+import { useTeachersList } from "@/features/dashboard/admin/userManagement";
 import { useDebounce } from "@/shared/observability";
 import { User } from "@/auth/auth.types";
 

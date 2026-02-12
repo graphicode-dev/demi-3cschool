@@ -9,7 +9,7 @@
 export { useListQueryState } from "./useListQueryState";
 export { useTitle } from "./useTitle";
 export { useLanguage } from "./useLanguage";
-export { usePagination } from "./usePagination";
+export { useSimplePagination } from "./usePagination";
 export { useFormApiErrors } from "./useFormApiErrors";
 export type {
     ApiValidationError,
