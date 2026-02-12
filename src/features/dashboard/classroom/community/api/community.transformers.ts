@@ -52,7 +52,7 @@ export function transformUser(apiUser: ApiUserRef | null | undefined): UiUser {
     return {
         id: String(apiUser.id),
         name: apiUser.name || "Unknown",
-        avatar: apiUser.avatar || "https://picsum.photos/seed/default/100/100",
+        avatar: apiUser.avatar!,
         role: roleMap[apiUser.role || "student"] || "student",
     };
 }
@@ -87,8 +87,7 @@ export function transformChannel(apiChannel: ApiChannel): UiChannel {
             : { id: "0", name: "Unknown", avatar: "", role: "student" },
         admins: apiChannel.admins?.map(transformUser) || [],
         followers: apiChannel.followers_count || 0,
-        banner:
-            apiChannel.banner || "https://picsum.photos/seed/banner/600/200",
+        banner: apiChannel.banner!,
         thumbnail: apiChannel.thumbnail || undefined,
         isFollowing: apiChannel.is_following ?? false,
         accessType: accessTypeMap[apiChannel.access_type] || "General",

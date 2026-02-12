@@ -25,7 +25,6 @@ import {
 } from "lucide-react";
 import { ConfirmDialog } from "@/design-system";
 import type { Post, Channel, CommunityUser, PostReport } from "../types";
-import { MOCK_USERS } from "../mocks";
 import { PostCard } from "./PostCard";
 
 interface ManagementViewProps {
@@ -97,7 +96,7 @@ export function ManagementView({
         description: "",
         banner: "https://picsum.photos/seed/new/800/400",
         thumbnail: "https://picsum.photos/seed/thumb/200/200",
-        ownerId: MOCK_USERS[0].id,
+        ownerId: "",
         accessType: "General" as "General" | "Restricted",
         gradeRange: "All" as Channel["gradeRange"],
     });
@@ -655,11 +654,20 @@ export function ManagementView({
                                             className="bg-white dark:bg-gray-800 p-6 rounded-24px border border-gray-100 dark:border-gray-700 shadow-sm flex items-start justify-between group"
                                         >
                                             <div className="flex gap-4">
-                                                <img
-                                                    src={post.author.avatar}
-                                                    className="w-12 h-12 rounded-xl object-cover"
-                                                    alt=""
-                                                />
+                                                {post.author.avatar ? (
+                                                    <img
+                                                        src={post.author.avatar}
+                                                        className="w-12 h-12 rounded-xl object-cover"
+                                                        alt=""
+                                                    />
+                                                ) : (
+                                                    <div className="flex items-center justify-center w-12 h-12 rounded-full bg-linear-to-br from-blue-500 to-purple-500 text-white text-xl font-bold">
+                                                        {post.author.name.slice(
+                                                            0,
+                                                            2
+                                                        )}
+                                                    </div>
+                                                )}
                                                 <div>
                                                     <div className="flex items-center gap-2 mb-1">
                                                         <span className="font-bold text-gray-800 dark:text-white text-sm">
@@ -876,7 +884,7 @@ export function ManagementView({
                                                         thumbnail:
                                                             "https://picsum.photos/seed/thumb/200/200",
                                                         ownerId:
-                                                            MOCK_USERS[0].id,
+                                                            newChannel.ownerId,
                                                         accessType: "General",
                                                         gradeRange: "All",
                                                     });
@@ -966,66 +974,91 @@ export function ManagementView({
                                                                 Manage Admins
                                                             </h5>
                                                             <div className="grid grid-cols-2 gap-3">
-                                                                {MOCK_USERS.filter(
-                                                                    (u) =>
-                                                                        u.role !==
-                                                                        "student"
-                                                                ).map(
-                                                                    (user) => {
-                                                                        const isChanAdmin =
-                                                                            channel.admins.some(
-                                                                                (
-                                                                                    a
-                                                                                ) =>
-                                                                                    a.id ===
-                                                                                    user.id
+                                                                {posts
+                                                                    .filter(
+                                                                        (p) =>
+                                                                            p
+                                                                                .author
+                                                                                .role !==
+                                                                            "student"
+                                                                    )
+                                                                    .map(
+                                                                        (
+                                                                            post
+                                                                        ) => {
+                                                                            const isChanAdmin =
+                                                                                channel.admins.some(
+                                                                                    (
+                                                                                        a
+                                                                                    ) =>
+                                                                                        a.id ===
+                                                                                        post
+                                                                                            .author
+                                                                                            .id
+                                                                                );
+                                                                            return (
+                                                                                <button
+                                                                                    key={
+                                                                                        post
+                                                                                            .author
+                                                                                            .id
+                                                                                    }
+                                                                                    onClick={() =>
+                                                                                        handleToggleAdmin(
+                                                                                            channel.id,
+                                                                                            post.author
+                                                                                        )
+                                                                                    }
+                                                                                    className={`flex items-center justify-between p-3 rounded-xl border transition-all ${isChanAdmin ? "bg-white dark:bg-gray-800 border-[#00ADEF] shadow-sm" : "border-gray-100 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 opacity-60"}`}
+                                                                                >
+                                                                                    <div className="flex items-center gap-2">
+                                                                                        {post
+                                                                                            .author
+                                                                                            .avatar ? (
+                                                                                            <img
+                                                                                                src={
+                                                                                                    post
+                                                                                                        .author
+                                                                                                        .avatar
+                                                                                                }
+                                                                                                className="w-6 h-6 rounded-full"
+                                                                                                alt=""
+                                                                                            />
+                                                                                        ) : (
+                                                                                            <div className="flex items-center justify-center w-6 h-6 rounded-full bg-linear-to-br from-blue-500 to-purple-500 text-white text-xl font-bold">
+                                                                                                {post.author.name.slice(
+                                                                                                    0,
+                                                                                                    2
+                                                                                                )}
+                                                                                            </div>
+                                                                                        )}
+                                                                                        <span className="text-xs font-bold text-gray-700 dark:text-gray-200">
+                                                                                            {
+                                                                                                post
+                                                                                                    .author
+                                                                                                    .name
+                                                                                            }
+                                                                                        </span>
+                                                                                    </div>
+                                                                                    {isChanAdmin ? (
+                                                                                        <CheckCircle
+                                                                                            size={
+                                                                                                14
+                                                                                            }
+                                                                                            className="text-[#00ADEF]"
+                                                                                        />
+                                                                                    ) : (
+                                                                                        <UserPlus
+                                                                                            size={
+                                                                                                14
+                                                                                            }
+                                                                                            className="text-gray-300 dark:text-gray-600"
+                                                                                        />
+                                                                                    )}
+                                                                                </button>
                                                                             );
-                                                                        return (
-                                                                            <button
-                                                                                key={
-                                                                                    user.id
-                                                                                }
-                                                                                onClick={() =>
-                                                                                    handleToggleAdmin(
-                                                                                        channel.id,
-                                                                                        user
-                                                                                    )
-                                                                                }
-                                                                                className={`flex items-center justify-between p-3 rounded-xl border transition-all ${isChanAdmin ? "bg-white dark:bg-gray-800 border-[#00ADEF] shadow-sm" : "border-gray-100 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500 opacity-60"}`}
-                                                                            >
-                                                                                <div className="flex items-center gap-2">
-                                                                                    <img
-                                                                                        src={
-                                                                                            user.avatar
-                                                                                        }
-                                                                                        className="w-6 h-6 rounded-full"
-                                                                                        alt=""
-                                                                                    />
-                                                                                    <span className="text-xs font-bold text-gray-700 dark:text-gray-200">
-                                                                                        {
-                                                                                            user.name
-                                                                                        }
-                                                                                    </span>
-                                                                                </div>
-                                                                                {isChanAdmin ? (
-                                                                                    <CheckCircle
-                                                                                        size={
-                                                                                            14
-                                                                                        }
-                                                                                        className="text-[#00ADEF]"
-                                                                                    />
-                                                                                ) : (
-                                                                                    <UserPlus
-                                                                                        size={
-                                                                                            14
-                                                                                        }
-                                                                                        className="text-gray-300 dark:text-gray-600"
-                                                                                    />
-                                                                                )}
-                                                                            </button>
-                                                                        );
-                                                                    }
-                                                                )}
+                                                                        }
+                                                                    )}
                                                             </div>
                                                         </div>
                                                     )}

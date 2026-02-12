@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { usePostComments } from "../api";
 import {
-    Heart,
     MessageSquare,
     Bookmark,
     MoreHorizontal,
@@ -28,7 +27,7 @@ import {
 } from "lucide-react";
 import { ConfirmDialog } from "@/design-system";
 import type { Post, Comment } from "../types";
-import { CURRENT_USER } from "../mocks";
+import { authStore } from "@/auth";
 
 interface PostCardProps {
     post: Post;
@@ -56,6 +55,7 @@ export function PostCard({
     showReportCount = false,
 }: PostCardProps) {
     const { t } = useTranslation("community");
+    const { user } = authStore();
     const [showComments, setShowComments] = useState(false);
     // Initialize voted state from poll.hasVoted if available
     const [voted, setVoted] = useState(post.poll?.hasVoted ?? false);
@@ -122,8 +122,7 @@ export function PostCard({
     };
 
     // Check if current user owns this post
-    const isOwnPost =
-        post.author.id === CURRENT_USER.id || post.author.id === "2"; // TODO: Replace with actual current user ID from auth
+    const isOwnPost = String(post.author.id) === String(user?.id);
 
     // Format relative time
     const formatRelativeTime = (dateString: string) => {
@@ -189,14 +188,17 @@ export function PostCard({
                             className="text-gray-300 dark:text-gray-600 mt-2 shrink-0"
                         />
                     )}
-                    <img
-                        src={
-                            comment.author.avatar ||
-                            "https://via.placeholder.com/36"
-                        }
-                        alt=""
-                        className="w-9 h-9 rounded-xl shrink-0 border border-gray-100 dark:border-gray-700 shadow-sm"
-                    />
+                    {comment.author.avatar ? (
+                        <img
+                            src={comment.author.avatar}
+                            alt=""
+                            className="w-9 h-9 rounded-xl shrink-0 border border-gray-100 dark:border-gray-700 shadow-sm"
+                        />
+                    ) : (
+                        <div className="flex items-center justify-center w-9 h-9 rounded-full bg-linear-to-br from-blue-500 to-purple-500 text-white text-xl font-bold">
+                            {comment.author.name.slice(0, 2)}
+                        </div>
+                    )}
                     <div className="flex-1">
                         <div
                             className={`bg-white dark:bg-gray-800 border rounded-2xl p-4 shadow-sm relative ${comment.isSolution ? "border-emerald-500 ring-2 ring-emerald-50 dark:ring-emerald-900/30" : "border-gray-100 dark:border-gray-700"}`}
@@ -256,7 +258,7 @@ export function PostCard({
                         {replyingTo === comment.id && (
                             <div className="flex gap-3 mt-3 ml-2 animate-in slide-in-from-top-2">
                                 <img
-                                    src={CURRENT_USER.avatar}
+                                    src={user?.image}
                                     alt=""
                                     className="w-8 h-8 rounded-lg shrink-0 border border-gray-100 dark:border-gray-700"
                                 />
@@ -368,11 +370,17 @@ export function PostCard({
                 <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-4">
                         <div className="relative">
-                            <img
-                                src={post.author.avatar}
-                                alt=""
-                                className="w-12 h-12 rounded-2xl object-cover ring-4 ring-gray-50 dark:ring-gray-700 border border-gray-100 dark:border-gray-600"
-                            />
+                            {post.author.avatar ? (
+                                <img
+                                    src={post.author.avatar}
+                                    alt=""
+                                    className="w-12 h-12 rounded-2xl object-cover ring-4 ring-gray-50 dark:ring-gray-700 border border-gray-100 dark:border-gray-600"
+                                />
+                            ) : (
+                                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-linear-to-br from-blue-500 to-purple-500 text-white text-xl font-bold">
+                                    {post.author.name.slice(0, 2)}
+                                </div>
+                            )}
                             {(post.author.gradeLevel || 0) >= 8 && (
                                 <div className="absolute -top-1.5 -right-1.5 w-5 h-5 bg-yellow-400 rounded-lg flex items-center justify-center border-2 border-white shadow-sm">
                                     <Star
@@ -557,7 +565,7 @@ export function PostCard({
                                             }
                                         }}
                                         disabled={voted}
-                                        className={`w-full relative h-12 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-600 rounded-[18px] overflow-hidden group transition-all ${voted ? "cursor-default" : "hover:border-[#00ADEF]"}`}
+                                        className={`w-full relative h-12 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-600 rounded-landing-badge overflow-hidden group transition-all ${voted ? "cursor-default" : "hover:border-[#00ADEF]"}`}
                                     >
                                         <div
                                             className="absolute left-0 top-0 h-full bg-[#E0F4FF] dark:bg-[#00ADEF]/20 transition-all duration-1000"
@@ -698,7 +706,7 @@ export function PostCard({
 
                         <div className="flex gap-4 mt-8 pt-6 border-t border-gray-100 dark:border-gray-700">
                             <img
-                                src={CURRENT_USER.avatar}
+                                src={user?.image}
                                 alt=""
                                 className="w-10 h-10 rounded-xl shadow-sm border border-white dark:border-gray-700"
                             />

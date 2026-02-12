@@ -31,7 +31,7 @@ import type {
     PostCategory,
     CommunityTab,
 } from "../types";
-import { CURRENT_USER, MOCK_USERS } from "../mocks";
+import { authStore } from "@/auth";
 
 const FEELINGS = [
     { emoji: "😊", label: "Happy" },
@@ -97,6 +97,7 @@ export function CommunityView({
     onReportPost,
     onComment,
 }: CommunityViewProps) {
+    const { user } = authStore();
     const { t } = useTranslation("community");
     // Use controlled tab if provided, otherwise use internal state
     const [internalViewMode, setInternalViewMode] =
@@ -154,7 +155,13 @@ export function CommunityView({
         const newPost: Post = {
             commentsCount: 0,
             id: crypto.randomUUID(),
-            author: CURRENT_USER,
+            author: {
+                id: user!.id,
+                name: user!.name,
+                avatar: user!.image || "",
+                role: (user!.role as any) || "student",
+                gradeLevel: user!.grade ? (user!.grade as any).id : undefined,
+            },
             content: postText,
             likes: 0,
             comments: [],
@@ -399,7 +406,7 @@ export function CommunityView({
                             <div className="p-6">
                                 <div className="flex items-center gap-4 mb-5">
                                     <img
-                                        src={CURRENT_USER.avatar}
+                                        src={user?.image}
                                         alt=""
                                         className="w-11 h-11 rounded-2xl shadow-sm object-cover"
                                     />
@@ -703,11 +710,11 @@ export function CommunityView({
                                                     </button>
                                                     {showTagList && (
                                                         <div className="absolute bottom-full left-0 mb-3 w-56 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-2xl rounded-2xl z-50 p-2 overflow-y-auto max-h-48 no-scrollbar">
-                                                            {MOCK_USERS.map(
-                                                                (user) => (
+                                                            {posts.map(
+                                                                (post) => (
                                                                     <button
                                                                         key={
-                                                                            user.id
+                                                                            post.id
                                                                         }
                                                                         onClick={() => {
                                                                             if (
@@ -716,7 +723,9 @@ export function CommunityView({
                                                                                         u
                                                                                     ) =>
                                                                                         u.id ===
-                                                                                        user.id
+                                                                                        post
+                                                                                            .author
+                                                                                            .id
                                                                                 )
                                                                             )
                                                                                 setTaggedUsers(
@@ -724,7 +733,7 @@ export function CommunityView({
                                                                                         prev
                                                                                     ) => [
                                                                                         ...prev,
-                                                                                        user,
+                                                                                        post.author,
                                                                                     ]
                                                                                 );
                                                                             setShowTagList(
@@ -735,14 +744,18 @@ export function CommunityView({
                                                                     >
                                                                         <img
                                                                             src={
-                                                                                user.avatar
+                                                                                post
+                                                                                    .author
+                                                                                    .avatar
                                                                             }
                                                                             className="w-7 h-7 rounded-lg"
                                                                             alt=""
                                                                         />
                                                                         <span className="text-xs font-bold text-gray-700 dark:text-gray-300">
                                                                             {
-                                                                                user.name
+                                                                                post
+                                                                                    .author
+                                                                                    .name
                                                                             }
                                                                         </span>
                                                                     </button>
@@ -874,38 +887,40 @@ export function CommunityView({
                                 </h3>
                             </div>
                             <div className="space-y-5">
-                                {MOCK_USERS.filter(
-                                    (u) => (u.gradeLevel || 0) >= 8
-                                ).map((user) => (
-                                    <div
-                                        key={user.id}
-                                        className="flex items-center justify-between group cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 p-2 -m-2 rounded-2xl transition-colors"
-                                    >
-                                        <div className="flex items-center gap-4">
-                                            <div className="relative">
-                                                <img
-                                                    src={user.avatar}
-                                                    className="w-11 h-11 rounded-2xl border border-gray-100 dark:border-gray-600"
-                                                    alt=""
-                                                />
-                                                <div className="absolute -top-1.5 -right-1.5 bg-yellow-400 border-2 border-white rounded-full p-1 shadow-sm">
-                                                    <Star
-                                                        size={8}
-                                                        className="text-white fill-white"
+                                {posts
+                                    .filter(
+                                        (p) => (p.author.gradeLevel || 0) >= 8
+                                    )
+                                    .map((post) => (
+                                        <div
+                                            key={post.id}
+                                            className="flex items-center justify-between group cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 p-2 -m-2 rounded-2xl transition-colors"
+                                        >
+                                            <div className="flex items-center gap-4">
+                                                <div className="relative">
+                                                    <img
+                                                        src={post.author.avatar}
+                                                        className="w-11 h-11 rounded-2xl border border-gray-100 dark:border-gray-600"
+                                                        alt=""
                                                     />
+                                                    <div className="absolute -top-1.5 -right-1.5 bg-yellow-400 border-2 border-white rounded-full p-1 shadow-sm">
+                                                        <Star
+                                                            size={8}
+                                                            className="text-white fill-white"
+                                                        />
+                                                    </div>
                                                 </div>
+                                                <span className="text-[14px] font-bold text-gray-700 dark:text-gray-300 group-hover:text-[#00ADEF] transition-colors">
+                                                    {post.author.name}
+                                                </span>
                                             </div>
-                                            <span className="text-[14px] font-bold text-gray-700 dark:text-gray-300 group-hover:text-[#00ADEF] transition-colors">
-                                                {user.name}
-                                            </span>
+                                            <div className="px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 rounded-xl">
+                                                <p className="text-[11px] font-black text-indigo-600 dark:text-indigo-400">
+                                                    Lvl {post.author.gradeLevel}
+                                                </p>
+                                            </div>
                                         </div>
-                                        <div className="px-3 py-1 bg-indigo-50 dark:bg-indigo-900/30 rounded-xl">
-                                            <p className="text-[11px] font-black text-indigo-600 dark:text-indigo-400">
-                                                Lvl {user.gradeLevel}
-                                            </p>
-                                        </div>
-                                    </div>
-                                ))}
+                                    ))}
                             </div>
                         </div>
 
