@@ -81,11 +81,11 @@ export const lessonMaterialsApi = {
     ): Promise<PaginatedData<LessonMaterial>> => {
         const response = await api.get<
             ApiResponse<{
-                currentPage: number;
                 perPage: number;
+                currentPage: number;
                 lastPage: number;
                 nextPageUrl: string | null;
-                data: LessonMaterial[];
+                items: LessonMaterial[];
             }>
         >(`${BASE_URL}/lesson/${lessonId}`, {
             params: params as Record<string, unknown> | undefined,
@@ -102,7 +102,7 @@ export const lessonMaterialsApi = {
 
         const apiData = response.data.data;
         return {
-            items: apiData.data,
+            items: apiData.items,
             currentPage: apiData.currentPage,
             perPage: apiData.perPage,
             lastPage: apiData.lastPage,
