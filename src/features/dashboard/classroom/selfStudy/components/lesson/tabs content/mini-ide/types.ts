@@ -133,7 +133,7 @@ export const DEFAULT_FILES: FileNode[] = [
 
 body {
     font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-linear(135deg, #667eea 0%, #764ba2 100%);
     min-height: 100vh;
     display: flex;
     align-items: center;

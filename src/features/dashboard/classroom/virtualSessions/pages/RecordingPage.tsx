@@ -48,8 +48,6 @@ function RecordingPage() {
 
     const { data: lessonVideo, isLoading } = useLessonVideo(sessionId!);
 
-    const { setWatchInEnglish, watchInEnglish } = useVideo();
-
     // Set dynamic breadcrumb with recording title
     useEffect(() => {
         if (lessonVideo?.title) {
@@ -83,60 +81,98 @@ function RecordingPage() {
                     {t("recording.backToVirtualSessions")}
                 </button>
 
-                {/* Video Player */}
-                <div>
-                    <div className="flex items-center justify-end mb-3">
-                        <button
-                            onClick={() => setWatchInEnglish(false)}
-                            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
-                                !watchInEnglish
-                                    ? "bg-brand-500 text-white"
-                                    : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
-                            }`}
-                        >
-                            AR
-                        </button>
-                        <button
-                            onClick={() => setWatchInEnglish(true)}
-                            className={`ms-2 flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
-                                watchInEnglish
-                                    ? "bg-brand-500 text-white"
-                                    : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
-                            }`}
-                        >
-                            EN
-                        </button>
-                    </div>
-                    {lessonVideo?.embedHtml ? (
-                        <div className="relative bg-gray-900 rounded-2xl aspect-video flex items-center justify-center overflow-hidden">
-                            <BunnyStreamPlayer
-                                embedHtml={
-                                    watchInEnglish
-                                        ? lessonVideo.embedHtmlEn!
-                                        : lessonVideo.embedHtmlAr!
-                                }
-                                onState={() => {}}
-                            />
+                {/* Zoom Recording Link - Kid-Friendly Version */}
+                <div className="relative bg-linear-to-br from-purple-100 via-pink-50 to-blue-100 dark:from-purple-900/30 dark:via-pink-900/20 dark:to-blue-900/30 rounded-3xl p-8 overflow-hidden border-4 border-white dark:border-gray-700 shadow-xl">
+                    {/* Decorative floating elements */}
+                    <div className="absolute top-4 right-8 w-16 h-16 bg-yellow-300/40 rounded-full blur-xl animate-pulse"></div>
+                    <div className="absolute bottom-8 left-12 w-20 h-20 bg-pink-300/40 rounded-full blur-xl animate-pulse delay-700"></div>
+                    <div className="absolute top-1/2 left-8 w-12 h-12 bg-blue-300/40 rounded-full blur-lg animate-pulse delay-500"></div>
+
+                    <div className="relative text-center space-y-6">
+                        {/* Fun Video Icon */}
+                        <div className="w-24 h-24 flex items-center justify-center rounded-full bg-linear-to-br from-purple-400 to-pink-400 mx-auto shadow-lg transform hover:scale-110 transition-transform">
+                            <Play className="w-12 h-12 text-white fill-white" />
                         </div>
-                    ) : (
-                        <div className="aspect-video bg-gray-900 rounded-xl flex flex-col items-center justify-center">
-                            <div className="w-16 h-16 flex items-center justify-center rounded-full bg-gray-800 text-gray-500 mb-3">
-                                <Play className="w-8 h-8" />
+
+                        {/* Title */}
+                        <div className="space-y-2">
+                            <h3 className="text-3xl font-bold bg-linear-to-r from-purple-600 to-pink-600 dark:from-purple-400 dark:to-pink-400 bg-clip-text text-transparent">
+                                {t(
+                                    "recording.zoomRecording",
+                                    "Watch Your Class!"
+                                )}
+                            </h3>
+                            <p className="text-lg text-gray-700 dark:text-gray-300 font-medium">
+                                {t(
+                                    "recording.zoomRecordingDescription",
+                                    "Click the button below to watch 🎬"
+                                )}
+                            </p>
+                        </div>
+
+                        {/* Recording Link Button */}
+                        {lessonVideo?.videoReferenceAr ||
+                        lessonVideo?.videoReferenceEn ? (
+                            <div className="flex justify-center pt-4">
+                                <a
+                                    href={
+                                        lessonVideo.videoReferenceAr ||
+                                        lessonVideo.videoReferenceEn
+                                    }
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="group relative inline-flex items-center gap-3 px-8 py-5 bg-linear-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold rounded-2xl transition-all transform hover:scale-105 shadow-lg hover:shadow-2xl text-lg"
+                                >
+                                    <Play className="w-6 h-6 fill-white" />
+                                    <span>
+                                        {t(
+                                            "recording.openInZoom",
+                                            "Watch Now!"
+                                        )}
+                                    </span>
+                                    <svg
+                                        className="w-5 h-5 group-hover:translate-x-1 transition-transform"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={3}
+                                            d="M13 7l5 5m0 0l-5 5m5-5H6"
+                                        />
+                                    </svg>
+                                    {/* Fun sparkle effect */}
+                                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-300 rounded-full animate-ping"></div>
+                                </a>
                             </div>
-                            <p className="text-sm text-gray-400">
-                                {t(
-                                    "lessons:content.fields.noVideoUploaded",
-                                    "No video uploaded"
-                                )}
-                            </p>
-                            <p className="text-xs text-gray-500 mt-1">
-                                {t(
-                                    "lessons:content.fields.addVideoUrl",
-                                    "Add a video URL to preview"
-                                )}
-                            </p>
-                        </div>
-                    )}
+                        ) : (
+                            <div className="text-center py-8">
+                                <div className="w-20 h-20 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700 text-gray-400 mx-auto mb-4">
+                                    <svg
+                                        className="w-10 h-10"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
+                                        />
+                                    </svg>
+                                </div>
+                                <p className="text-lg text-gray-600 dark:text-gray-400 font-medium">
+                                    {t(
+                                        "recording.noZoomRecording",
+                                        "No video yet! 😊"
+                                    )}
+                                </p>
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 {/* Session Info */}

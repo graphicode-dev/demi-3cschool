@@ -267,10 +267,10 @@ const NavbarSessionCountdown = () => {
         };
     }, [timeLeft]);
 
-    // Gradient color stages based on time remaining
-    const gradientClass = useMemo(() => {
+    // linear color stages based on time remaining
+    const linearClass = useMemo(() => {
         if (countdownMode === "current") {
-            // Session is live - red/orange gradient
+            // Session is live - red/orange linear
             return "from-[#EF4444] via-[#F97316] to-[#EF4444]";
         }
 
@@ -370,7 +370,7 @@ const NavbarSessionCountdown = () => {
     return (
         <div className="relative w-full group overflow-hidden rounded-full animate-in slide-in-from-top duration-700 shadow-xl shadow-blue-500/10">
             <div
-                className={`absolute inset-0 bg-size-[300%_300%] animate-gradient-slow bg-linear-to-r opacity-95 ${gradientClass}`}
+                className={`absolute inset-0 bg-size-[300%_300%] animate-linear-slow bg-linear-to-r opacity-95 ${linearClass}`}
             />
 
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -538,13 +538,13 @@ const NavbarSessionCountdown = () => {
             </div>
 
             <style>{`
-          @keyframes gradient-slow {
+          @keyframes linear-slow {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
           }
-          .animate-gradient-slow {
-            animation: gradient-slow 10s ease infinite;
+          .animate-linear-slow {
+            animation: linear-slow 10s ease infinite;
           }
         `}</style>
 
