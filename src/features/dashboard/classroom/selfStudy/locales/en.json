@@ -12,7 +12,7 @@
     },
     "course": {
         "unifiedCourse": "Unified Course for This Term",
-        "courseDescription": "This is the official course for your grade this term. When you complete it, you will automatically move to the next course.",
+        "courseDescription": "This course will unlock when you have completed it. It's the official course for your grade this term.",
         "online": "Online",
         "offline": "Offline"
     },

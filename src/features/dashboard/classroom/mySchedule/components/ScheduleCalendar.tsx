@@ -1,54 +1,26 @@
 import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import {
-    ChevronLeft,
-    ChevronRight,
-    Monitor,
-    Building2,
-    Clock,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { ScheduleSession } from "../types";
+import { Legend } from "./Legend";
+import { SessionCard } from "./SessionCard";
+import {
+    formatLocalDateYYYYMMDD,
+    HOURS,
+    parseLocalYYYYMMDD,
+    startOfWeekSunday,
+} from "../utils";
+import SessionInfoModal from "./SessionInfoModal";
 
 interface ScheduleCalendarProps {
     sessions: ScheduleSession[];
 }
 
-const HOURS = [
-    "09:00",
-    "10:00",
-    "11:00",
-    "12:00",
-    "13:00",
-    "14:00",
-    "15:00",
-    "16:00",
-    "17:00",
-    "18:00",
-];
-
-function formatLocalDateYYYYMMDD(date: Date) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-}
-
-function parseLocalYYYYMMDD(yyyyMmDd: string) {
-    const [y, m, d] = yyyyMmDd.split("-").map((v) => Number(v));
-    if (!y || !m || !d) return null;
-    return new Date(y, m - 1, d, 12, 0, 0, 0);
-}
-
-function startOfWeekSunday(date: Date) {
-    const start = new Date(date);
-    start.setHours(12, 0, 0, 0);
-    start.setDate(start.getDate() - start.getDay());
-    return start;
-}
-
 export function ScheduleCalendar({ sessions }: ScheduleCalendarProps) {
     const { t, i18n } = useTranslation("mySchedule");
     const [currentDate, setCurrentDate] = useState(new Date());
+    const [selectedSession, setSelectedSession] =
+        useState<ScheduleSession | null>(null);
 
     const sessionWeekStarts = useMemo(() => {
         const unique = new Map<string, Date>();
@@ -95,17 +67,17 @@ export function ScheduleCalendar({ sessions }: ScheduleCalendarProps) {
         });
     }, [currentDate, i18n.language]);
 
-    const goToPreviousWeek = () => {
-        const newDate = new Date(currentDate);
-        newDate.setDate(newDate.getDate() - 7);
-        setCurrentDate(newDate);
-    };
+    // const goToPreviousWeek = () => {
+    //     const newDate = new Date(currentDate);
+    //     newDate.setDate(newDate.getDate() - 7);
+    //     setCurrentDate(newDate);
+    // };
 
-    const goToNextWeek = () => {
-        const newDate = new Date(currentDate);
-        newDate.setDate(newDate.getDate() + 7);
-        setCurrentDate(newDate);
-    };
+    // const goToNextWeek = () => {
+    //     const newDate = new Date(currentDate);
+    //     newDate.setDate(newDate.getDate() + 7);
+    //     setCurrentDate(newDate);
+    // };
 
     const goToCurrentWeek = () => {
         setCurrentDate(new Date());
@@ -159,21 +131,25 @@ export function ScheduleCalendar({ sessions }: ScheduleCalendarProps) {
             <div className="bg-white dark:bg-gray-900 rounded-3xl shadow-sm p-6">
                 {/* Month Navigation */}
                 <div className="flex items-center justify-between mb-6">
+                    {/* Previous Session Button */}
                     <div className="flex items-center gap-2">
-                        <button
+                        {/* <button
                             onClick={goToPreviousWeek}
                             className="size-10 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors flex items-center justify-center"
                         >
                             <ChevronLeft className="size-6 text-gray-600 dark:text-gray-400 rtl:rotate-180" />
-                        </button>
+                        </button> */}
                         <button
                             onClick={goToPreviousSessionWeek}
                             disabled={sessionWeekStarts.length === 0}
-                            className="h-10 px-3 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-xs font-semibold text-gray-700 dark:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="flex items-center gap-2 h-10 px-3 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-xs font-semibold text-gray-700 dark:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
+                            <ChevronLeft className="size-6 text-gray-600 dark:text-gray-400 rtl:rotate-180" />
                             {t("previousSession")}
                         </button>
                     </div>
+
+                    {/* Month Display */}
                     <div className="flex items-center gap-3">
                         <span className="text-xl font-semibold text-gray-900 dark:text-white">
                             {monthYear}
@@ -185,20 +161,23 @@ export function ScheduleCalendar({ sessions }: ScheduleCalendarProps) {
                             {t("today")}
                         </button>
                     </div>
+
+                    {/* Next Session Button */}
                     <div className="flex items-center gap-2">
                         <button
                             onClick={goToNextSessionWeek}
                             disabled={sessionWeekStarts.length === 0}
-                            className="h-10 px-3 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-xs font-semibold text-gray-700 dark:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="flex items-center gap-2 h-10 px-3 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-xs font-semibold text-gray-700 dark:text-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {t("nextSession")}
+                            <ChevronRight className="size-6 text-gray-600 dark:text-gray-400 rtl:rotate-180" />
                         </button>
-                        <button
+                        {/* <button
                             onClick={goToNextWeek}
                             className="size-10 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors flex items-center justify-center"
                         >
                             <ChevronRight className="size-6 text-gray-600 dark:text-gray-400 rtl:rotate-180" />
-                        </button>
+                        </button> */}
                     </div>
                 </div>
 
@@ -274,6 +253,9 @@ export function ScheduleCalendar({ sessions }: ScheduleCalendarProps) {
                                             key={session.id}
                                             session={session}
                                             style={getSessionStyle(session)}
+                                            onClick={() => {
+                                                setSelectedSession(session);
+                                            }}
                                             index={sessionIndex + 1}
                                         />
                                     ))}
@@ -284,88 +266,17 @@ export function ScheduleCalendar({ sessions }: ScheduleCalendarProps) {
             </div>
             {/* Legend */}
             <Legend t={t} />
+
+            {/* Session Info Modal */}
+            {selectedSession && (
+                <SessionInfoModal
+                    session={selectedSession}
+                    onClose={() => {
+                        setSelectedSession(null);
+                    }}
+                />
+            )}
         </>
-    );
-}
-
-interface SessionCardProps {
-    session: ScheduleSession;
-    style: React.CSSProperties;
-    index: number;
-}
-
-function SessionCard({ session, style, index }: SessionCardProps) {
-    const { t } = useTranslation("mySchedule");
-    const isOnline = session.type === "online";
-    const colorClass = isOnline ? "text-success-500" : "text-brand-500";
-    const bgClass = isOnline ? "bg-success-50" : "bg-brand-50";
-    const borderClass = isOnline ? "bg-success-500" : "bg-brand-500";
-
-    return (
-        <div
-            className={`absolute left-1 right-1 ${bgClass} rounded-md overflow-hidden flex`}
-            style={style}
-        >
-            {/* Left Border */}
-            <div className={`w-1.5 shrink-0 ${borderClass}`} />
-
-            {/* Content */}
-            <div className="flex-1 p-2 flex flex-col gap-1">
-                {/* Session Type */}
-                <div className={`flex items-center gap-2 ${colorClass}`}>
-                    {isOnline ? (
-                        <Monitor className="size-4" />
-                    ) : (
-                        <Building2 className="size-4" />
-                    )}
-                    <span className="text-xs font-bold">
-                        {isOnline ? t("onlineSession") : t("offlineSession")}
-                    </span>
-                </div>
-
-                {/* Title */}
-                <p className={`text-xs font-medium ${colorClass}`}>
-                    {index}. {session.title}
-                </p>
-
-                {/* Time */}
-                <div className={`flex items-center gap-1 ${colorClass}`}>
-                    <Clock className="size-3" />
-                    <span className="text-[10px]">
-                        {session.startTime} - {session.endTime}
-                    </span>
-                </div>
-            </div>
-        </div>
-    );
-}
-
-interface LegendProps {
-    t: (key: string) => string;
-}
-
-function Legend({ t }: LegendProps) {
-    return (
-        <div className="w-fit mx-auto mt-6 p-4 bg-white dark:bg-gray-900 rounded-3xl shadow-sm flex justify-center gap-8">
-            <div className="flex items-center gap-2">
-                <div className="size-2.5 rounded-full bg-success-500" />
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                    {t("onlineSession")}
-                </span>
-            </div>
-            <div className="flex items-center gap-2">
-                <div className="size-2.5 rounded-full bg-brand-500" />
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                    {t("offlineCenter")}
-                </span>
-            </div>
-            <div className="flex items-center gap-2">
-                <div className="size-2.5 rounded-full bg-error-500" />
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                    {t("cancelled")}
-                </span>
-            </div>
-        </div>
     );
 }
 

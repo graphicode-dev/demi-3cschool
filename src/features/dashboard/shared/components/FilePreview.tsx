@@ -9,6 +9,8 @@ type FilePreviewProps<T extends string> = {
     selectedFile: File | null;
     showPreviewModal: boolean;
     setShowPreviewModal: (show: boolean) => void;
+    showOnlyIcon?: boolean;
+    iconSize?: string;
 };
 
 export const FilePreview = <T extends string>({
@@ -17,6 +19,8 @@ export const FilePreview = <T extends string>({
     selectedFile,
     showPreviewModal,
     setShowPreviewModal,
+    showOnlyIcon = false,
+    iconSize,
 }: FilePreviewProps<T>) => {
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
     const [pptSlides, setPptSlides] = useState<string[]>([]);
@@ -165,11 +169,18 @@ export const FilePreview = <T extends string>({
         <>
             {canPreview && (
                 <button
+                    type="button"
                     onClick={handlePreviewFile}
                     className="mt-2 flex items-center gap-1 text-xs text-brand-500"
                 >
-                    <Eye className="w-3 h-3" />
-                    Preview file
+                    {showOnlyIcon ? (
+                        <Eye className={`w-3 h-3 ${iconSize || ""}`} />
+                    ) : (
+                        <>
+                            <Eye className={`w-3 h-3 ${iconSize || ""}`} />
+                            Preview file
+                        </>
+                    )}
                 </button>
             )}
 
@@ -178,26 +189,11 @@ export const FilePreview = <T extends string>({
                     <div className="w-full max-w-5xl bg-white dark:bg-gray-900 rounded-xl overflow-hidden">
                         <div className="flex justify-between p-4 border-b">
                             <h3 className="font-semibold">File Preview</h3>
-                            <button onClick={closePreviewModal}>
+                            <button type="button" onClick={closePreviewModal}>
                                 <X />
                             </button>
                         </div>
-                        {/* <div
-                            className="overflow-auto max-h-[85vh]"
-                            onContextMenu={(e) => e.preventDefault()}
-                            onKeyDown={(e) => {
-                                if (
-                                    (e.ctrlKey && e.key === "s") ||
-                                    (e.ctrlKey && e.key === "p") ||
-                                    (e.ctrlKey && e.key === "u")
-                                ) {
-                                    e.preventDefault();
-                                }
-                            }}
-                            tabIndex={0}
-                        > */}
                         {renderPreview()}
-                        {/* </div> */}
                     </div>
                 </div>
             )}

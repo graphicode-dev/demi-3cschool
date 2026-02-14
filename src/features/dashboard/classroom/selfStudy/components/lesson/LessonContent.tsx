@@ -20,7 +20,7 @@ interface LessonContentProps {
 }
 
 export function LessonContent({ lesson, activeTab }: LessonContentProps) {
-    console.log("Lesson: ", JSON.stringify(lesson, null, 2));
+    // console.log("Lesson: ", JSON.stringify(lesson, null, 2));
 
     const { t } = useTranslation("selfStudy");
 

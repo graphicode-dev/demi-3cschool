@@ -8,3 +8,4 @@ export * from "./lesson-video-quizzes.types";
 export * from "./lesson-video-quiz-questions.types";
 export * from "./lesson-video-quiz-options.types";
 export * from "./lessons.types";
+export * from "./lesson-quiz-attempts.types";
