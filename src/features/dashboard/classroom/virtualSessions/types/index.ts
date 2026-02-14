@@ -191,3 +191,13 @@ export interface TeacherAttendanceSummaryData {
     summary: TeacherAttendanceSummary;
     attendances: TeacherAttendanceRecord[];
 }
+
+export interface StudentReview {
+    id: number;
+    studentId: number;
+    studentName: string;
+    studentAvatar?: string;
+    rating: number;
+    comment?: string;
+    createdAt: string;
+}

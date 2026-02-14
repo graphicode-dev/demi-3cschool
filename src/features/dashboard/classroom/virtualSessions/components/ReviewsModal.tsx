@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { X, Star, User } from "lucide-react";
-import type { StudentReview } from "../mocks/sessionMockData";
+import { StudentReview } from "../types";
 
 interface ReviewsModalProps {
     isOpen: boolean;
@@ -95,7 +95,9 @@ export function ReviewsModal({
                                             <div className="size-10 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center">
                                                 {review.studentAvatar ? (
                                                     <img
-                                                        src={review.studentAvatar}
+                                                        src={
+                                                            review.studentAvatar
+                                                        }
                                                         alt={review.studentName}
                                                         className="size-10 rounded-full object-cover"
                                                     />
@@ -108,16 +110,19 @@ export function ReviewsModal({
                                                     {review.studentName}
                                                 </p>
                                                 <div className="flex gap-0.5">
-                                                    {[1, 2, 3, 4, 5].map((star) => (
-                                                        <Star
-                                                            key={star}
-                                                            className={`size-3.5 ${
-                                                                star <= review.rating
-                                                                    ? "text-warning-400 fill-warning-400"
-                                                                    : "text-gray-300 dark:text-gray-600"
-                                                            }`}
-                                                        />
-                                                    ))}
+                                                    {[1, 2, 3, 4, 5].map(
+                                                        (star) => (
+                                                            <Star
+                                                                key={star}
+                                                                className={`size-3.5 ${
+                                                                    star <=
+                                                                    review.rating
+                                                                        ? "text-warning-400 fill-warning-400"
+                                                                        : "text-gray-300 dark:text-gray-600"
+                                                                }`}
+                                                            />
+                                                        )
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>
