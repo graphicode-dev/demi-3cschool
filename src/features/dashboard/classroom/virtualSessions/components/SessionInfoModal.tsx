@@ -1,12 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { X, Calendar, Clock, Timer, Globe, Bell, User } from "lucide-react";
-import type { VirtualSession } from "../types";
+import type { OnlineSession } from "../types";
 
 interface SessionInfoModalProps {
-    session: VirtualSession;
+    session: OnlineSession;
     isOpen: boolean;
     onClose: () => void;
-    onRemindMe?: (session: VirtualSession) => void;
+    onRemindMe?: (session: OnlineSession) => void;
 }
 
 // Format time from "HH:mm:ss" to "HH:mm"
@@ -58,14 +58,11 @@ export function SessionInfoModal({
                 <div className="flex items-start justify-between p-4 border-b border-gray-200 dark:border-gray-700">
                     <div className="flex flex-col gap-2">
                         <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                            {session.topic}
+                            {session.lesson.title}
                         </h2>
                         <div className="flex items-center gap-2">
                             <span className="bg-brand-100 dark:bg-brand-500/20 text-brand-600 dark:text-brand-400 text-xs font-medium px-2 py-0.5 rounded">
-                                {session.course.title}
-                            </span>
-                            <span className="bg-brand-50 dark:bg-brand-500/10 text-brand-500 text-xs font-medium px-2 py-0.5 rounded border border-brand-200 dark:border-brand-500/30">
-                                {t("common.term")} {session.term.id}
+                                {session.lesson.title}
                             </span>
                             <span className="bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs font-medium px-2 py-0.5 rounded">
                                 {t("status.upcoming")}
@@ -120,7 +117,7 @@ export function SessionInfoModal({
                                 </div>
                             </div>
                             {/* Duration */}
-                            <div className="bg-gray-100 dark:bg-gray-800 rounded-xl p-3 flex items-center gap-3">
+                            {/* <div className="bg-gray-100 dark:bg-gray-800 rounded-xl p-3 flex items-center gap-3">
                                 <Timer className="size-5 text-warning-400" />
                                 <div className="flex flex-col">
                                     <span className="text-xs dark:text-gray-400">
@@ -131,19 +128,7 @@ export function SessionInfoModal({
                                         {t("common.min")}
                                     </span>
                                 </div>
-                            </div>
-                            {/* Timezone */}
-                            <div className="bg-gray-100 dark:bg-gray-800 rounded-xl p-3 flex items-center gap-3">
-                                <Globe className="size-5 text-warning-400" />
-                                <div className="flex flex-col">
-                                    <span className="text-xs dark:text-gray-400">
-                                        {t("modal.timezone")}
-                                    </span>
-                                    <span className="text-sm font-medium dark:text-white">
-                                        {session.timezone || "GMT+3"}
-                                    </span>
-                                </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
 
@@ -158,24 +143,24 @@ export function SessionInfoModal({
                             </div>
                             <div className="flex flex-col">
                                 <span className="text-sm font-medium text-gray-900 dark:text-white">
-                                    {session.instructor.name}
+                                    {session.teacher?.name}
                                 </span>
                                 <span className="text-xs text-brand-500">
-                                    {session.instructor.course}
+                                    {session.teacher?.teacherNote}
                                 </span>
                             </div>
                         </div>
                     </div>
 
                     {/* What we'll learn */}
-                    {session.description && (
+                    {session.lesson.title && (
                         <div className="flex flex-col gap-3">
                             <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">
                                 {t("modal.whatYouLearn")}
                             </h3>
                             <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
                                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                                    {session.description}
+                                    {session.lesson.title}
                                 </p>
                             </div>
                         </div>

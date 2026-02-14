@@ -1,137 +1,57 @@
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { ChevronRight, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { PageWrapper } from "@/design-system";
 import { TermStepper } from "../../components";
-import { VirtualSessionCard, SessionInfoModal } from "../components";
+import { VirtualSessionList } from "../components";
 import { useOnlineSessions } from "../api";
-import type { VirtualSession } from "../types";
-import { CLASSROOM_PATH } from "../../navigation/constant";
-import { useCurriculumTerms } from "../../components/TermStepper";
 import type { OnlineSession } from "../types";
+import { useCurriculumTerms } from "../../components/TermStepper";
 
 function VirtualSessionsPage() {
     const { t } = useTranslation("virtualSessions");
     const navigate = useNavigate();
 
-    const {
-        curriculums,
-        isLoadingCurriculum,
-        selectedTermId,
-        setSelectedTermId,
-        terms,
-    } = useCurriculumTerms();
+    const { isLoadingCurriculum, selectedTermId, setSelectedTermId, terms } =
+        useCurriculumTerms();
 
-    const {
-        data: onlineSessions,
-        isLoading: isLoadingSessions,
-        isError,
-    } = useOnlineSessions(selectedTermId, {
-        enabled: !!selectedTermId,
-    });
+    // Fetch online sessions for selected curriculum
+    const { data: onlineSessions, isLoading: isLoadingSessions } =
+        useOnlineSessions(selectedTermId, {
+            enabled: !!selectedTermId,
+        });
 
-    const sessions: VirtualSession[] = useMemo(() => {
-        const list = onlineSessions ?? [];
+    // Use original OnlineSession array for VirtualSessionList component
+    const sessions: OnlineSession[] = onlineSessions ?? [];
 
-        const mapStatus = (
-            status: string
-        ): "current" | "upcoming" | "completed" => {
-            const s = status.toLowerCase();
-            if (s.includes("current") || s.includes("running"))
-                return "current";
-            if (s.includes("complete") || s.includes("ended"))
-                return "completed";
-            return "upcoming";
-        };
-
-        return list.map((session: OnlineSession) => ({
-            id: session.id,
-            group: {
-                id: session.group.id,
-                name: session.group.name,
-                locationType: session.locationType,
-            },
-            course: {
-                id: Number(selectedTermId ?? 0),
-                title: session.group.name,
-            },
-            term: {
-                id: Number(selectedTermId ?? 0),
-                name:
-                    curriculums.find((c) => c.id === selectedTermId)?.name ??
-                    "",
-            },
-            sessionDate: session.sessionDate,
-            startTime: session.startTime,
-            endTime: session.endTime,
-            topic: session.lesson.title,
-            lesson: {
-                id: session.lesson.id,
-                title: session.lesson.title,
-            },
-            description: session.group.name,
-            isCancelled: Boolean(session.reason),
-            cancellationReason: session.reason,
-            meetingProvider: "zoom",
-            meetingId:
-                session.zoomMeeting?.meetingId ?? session.bbbMeetingId ?? "",
-            linkMeeting:
-                session.zoomMeeting?.meetingUrl ??
-                (session.hasMeeting ? (session.bbbMeetingId ?? "") : ""),
-            recordingUrl: undefined,
-            contentProgress: {
-                total: {
-                    totalContents: 0,
-                    completedContents: 0,
-                    totalProgressPercentage: 0,
-                },
-                items: [],
-            },
-            instructor: {
-                id: session.teacher?.id ?? 0,
-                name: session.teacher?.name ?? "",
-                course: session.group.name,
-            },
-            duration: undefined,
-            timezone: undefined,
-            createdAt: session.createdAt,
-            updatedAt: session.updatedAt,
-            // Zoom meeting fields
-            hasZoomMeeting: session.hasZoomMeeting,
-            zoomMeeting: session.zoomMeeting,
-            status: mapStatus(session.sessionState),
-        }));
-    }, [onlineSessions, selectedTermId, curriculums]);
-
-    const [selectedSession, setSelectedSession] =
-        useState<VirtualSession | null>(null);
-    const [showInfoModal, setShowInfoModal] = useState(false);
-
-    const liveSessions = sessions.filter((s) => s.status === "current");
-    const upcomingSessions = sessions.filter((s) => s.status === "upcoming");
-    const completedSessions = sessions.filter((s) => s.status === "completed");
-
-    const handleJoinSession = (session: VirtualSession) => {
-        if (session.linkMeeting) {
-            window.open(session.linkMeeting, "_blank");
+    const handleStartSession = (sessionId: number) => {
+        const session = sessions.find((s) => s.id === sessionId);
+        if (session) {
+            if (
+                session.sessionState === "current" &&
+                session.zoomMeeting?.meetingUrl
+            ) {
+                window.open(session.zoomMeeting.meetingUrl, "_blank");
+            } else if (session.sessionState === "completed") {
+                // Navigate to recording page
+                navigate(`/classroom/virtual-sessions/recording/${session.id}`);
+            } else if (session.sessionState === "upcoming") {
+                // For upcoming sessions, could show info modal or disable action
+                console.log("Session is upcoming:", session.id);
+            }
         }
     };
 
-    const handleViewInfo = (session: VirtualSession) => {
-        setSelectedSession(session);
-        setShowInfoModal(true);
-    };
-
-    const handleViewRecording = (session: VirtualSession) => {
-        navigate(`${CLASSROOM_PATH}/virtual-sessions/recording/${session.id}`);
-    };
-
-    const handleRemindMe = (session: VirtualSession) => {
-        // TODO: Implement reminder functionality
-        console.log("Remind me for session:", session.id);
-        setShowInfoModal(false);
-    };
+    if (isLoadingCurriculum) {
+        return (
+            <PageWrapper>
+                <div className="flex items-center justify-center min-h-[400px]">
+                    <Loader2 className="size-8 animate-spin text-brand-500" />
+                </div>
+            </PageWrapper>
+        );
+    }
 
     return (
         <PageWrapper
@@ -140,104 +60,32 @@ function VirtualSessionsPage() {
                 subtitle: t("description"),
             }}
         >
-            {/* Term Stepper */}
-            <TermStepper
-                terms={terms}
-                selectedTermId={selectedTermId}
-                onSelectTerm={setSelectedTermId}
-            />
-
-            {(isLoadingCurriculum || isLoadingSessions) && (
-                <div className="flex justify-center py-10">
-                    <Loader2 className="size-6 animate-spin text-brand-500" />
-                </div>
-            )}
-
-            {isError && (
-                <div className="text-center py-10 text-red-500">
-                    {t("errors.loadFailed")}
-                </div>
-            )}
-
-            {!isLoadingCurriculum &&
-                !isLoadingSessions &&
-                !isError &&
-                sessions.length === 0 && (
-                    <div className="text-center py-10 text-gray-500">
-                        {t("empty")}
-                    </div>
+            <div className="flex flex-col gap-6 max-w-4xl mx-auto px-6 py-6">
+                {/* Term Progress Stepper */}
+                {terms.length > 0 && (
+                    <TermStepper
+                        terms={terms}
+                        selectedTermId={selectedTermId}
+                        onSelectTerm={setSelectedTermId}
+                    />
                 )}
 
-            {/* Current Live Sessions */}
-            {liveSessions.length > 0 && (
-                <section className="flex flex-col gap-4">
-                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                        {t("sections.currentLive")}
-                    </h2>
-                    <div className="flex flex-wrap gap-4">
-                        {liveSessions.map((session) => (
-                            <VirtualSessionCard
-                                key={session.id}
-                                session={session}
-                                programId={selectedTermId}
-                                onJoinSession={handleJoinSession}
-                            />
-                        ))}
+                {/* Sessions List */}
+                {isLoadingSessions ? (
+                    <div className="flex items-center justify-center py-8">
+                        <Loader2 className="size-6 animate-spin text-brand-500" />
                     </div>
-                </section>
-            )}
-
-            {/* Upcoming Sessions */}
-            {upcomingSessions.length > 0 && (
-                <section className="flex flex-col gap-4">
-                    <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                        {t("sections.upcoming")}
-                    </h2>
-                    <div className="flex flex-wrap gap-4">
-                        {upcomingSessions.map((session) => (
-                            <VirtualSessionCard
-                                key={session.id}
-                                session={session}
-                                onViewInfo={handleViewInfo}
-                            />
-                        ))}
+                ) : sessions.length === 0 ? (
+                    <div className="text-center py-10 text-gray-500 dark:text-gray-400">
+                        {t("empty")}
                     </div>
-                </section>
-            )}
-
-            {/* Completed Sessions */}
-            {completedSessions.length > 0 && (
-                <section className="flex flex-col gap-4">
-                    <div className="flex items-center justify-between">
-                        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                            {t("sections.completed")}
-                        </h2>
-                        <button className="flex items-center gap-1 text-sm font-medium text-warning-500 hover:text-warning-600 transition-colors">
-                            {t("session.viewAllHistory")}
-                            <ChevronRight className="size-4 rtl:rotate-180" />
-                        </button>
-                    </div>
-                    <div className="flex flex-wrap gap-4">
-                        {completedSessions.slice(0, 4).map((session) => (
-                            <VirtualSessionCard
-                                key={session.id}
-                                session={session}
-                                onViewRecording={handleViewRecording}
-                            />
-                        ))}
-                    </div>
-                </section>
-            )}
-
-            {/* Session Info Modal */}
-            {selectedSession && (
-                <SessionInfoModal
-                    session={selectedSession}
-                    isOpen={showInfoModal}
-                    onClose={() => setShowInfoModal(false)}
-                    onRemindMe={handleRemindMe}
-                />
-            )}
+                ) : (
+                    <VirtualSessionList
+                        sessions={sessions}
+                        onStartSession={handleStartSession}
+                    />
+                )}
+            </div>
         </PageWrapper>
     );
 }

@@ -20,13 +20,14 @@ export interface ZoomMeeting {
 
 export interface OnlineSession {
     id: number;
+    sessionState: "current" | "completed" | "upcoming" | "canceled";
     sessionDate: string;
     startTime: string;
     endTime: string;
     locationType: "online" | "offline";
     effectiveLocationType: "online" | "offline";
     offlineLocation: string | null;
-    sessionState: "current" | "completed" | "upcoming";
+    status: string;
     reason: string | null;
     isManual: boolean;
     lesson: {
@@ -42,13 +43,6 @@ export interface OnlineSession {
         name: string;
         teacherNote?: string | null;
     } | null;
-    bbbMeetingId: string | null;
-    bbbIsRunning: boolean;
-    bbbRecord: boolean;
-    bbbStartedAt: string | null;
-    bbbEndedAt: string | null;
-    hasMeeting: boolean;
-    // Zoom meeting fields
     zoomMeeting: ZoomMeeting | null;
     hasZoomMeeting: boolean;
     createdAt: string;
@@ -95,39 +89,9 @@ export interface ContentProgress {
     items: ContentProgressItem[];
 }
 
-export interface VirtualSession {
-    id: number;
-    group: SessionGroup;
-    course: SessionCourse;
-    term: SessionTerm;
-    sessionDate: string;
-    startTime: string;
-    endTime: string;
-    topic: string;
-    lesson: SessionLesson;
-    description?: string;
-    isCancelled: boolean;
-    cancellationReason: string | null;
-    meetingProvider: string;
-    meetingId: string;
-    linkMeeting: string;
-    recordingUrl?: string;
-    contentProgress: ContentProgress;
-    instructor: SessionInstructor;
-    duration?: number;
-    timezone?: string;
-    createdAt: string;
-    updatedAt: string;
-    // Zoom meeting fields
-    zoomMeeting?: ZoomMeeting | null;
-    hasZoomMeeting?: boolean;
-    // Computed for UI
-    status?: VirtualSessionStatus;
-}
-
 export interface VirtualSessionsData {
     terms: Term[];
-    sessions: VirtualSession[];
+    sessions: OnlineSession[];
     currentTermId: number;
 }
 

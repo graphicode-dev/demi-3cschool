@@ -4,35 +4,7 @@ import { Sparkles, Monitor } from "lucide-react";
 import { useMyCurrentSession } from "@/features/dashboard/classroom/mySchedule/api";
 import type { MyCurrentSession } from "@/features/dashboard/classroom/mySchedule/types";
 import { SessionInfoModal } from "@/features/dashboard/classroom/virtualSessions/components/SessionInfoModal";
-import type { VirtualSession } from "@/features/dashboard/classroom/virtualSessions/types";
-
-interface SessionEvent {
-    id: number;
-    sessionState: string;
-    status: string;
-    effectiveLocationType: "online" | "offline";
-    group: {
-        id: number;
-        name: string;
-        locationType: "online" | "offline";
-        location: string;
-        locationMapUrl: string;
-    };
-    sessionDate: string;
-    startTime: string;
-    endTime: string;
-    topic: string;
-    lesson: {
-        id: number;
-        title: string;
-    };
-    isCancelled: boolean;
-    cancellationReason: string | null;
-    meetingProvider: string | null;
-    meetingId: string | null;
-    hasMeeting: boolean;
-    linkMeeing?: string | null;
-}
+import type { OnlineSession } from "@/features/dashboard/classroom/virtualSessions/types";
 
 interface TimeLeft {
     days: number;
@@ -56,7 +28,7 @@ const NavbarSessionCountdown = () => {
     const { data: currentSession, isLoading, isError } = useMyCurrentSession();
 
     const sessionEvent = useMemo(():
-        | (SessionEvent & { kind: SessionKind })
+        | (MyCurrentSession & { kind: SessionKind })
         | null => {
         const s: MyCurrentSession | null | undefined = currentSession;
         if (!s) return null;
@@ -69,35 +41,34 @@ const NavbarSessionCountdown = () => {
         return {
             id: s.id,
             kind,
-            sessionState: String(s.sessionState ?? ""),
-            status: String(s.status ?? ""),
-            effectiveLocationType: s.effectiveLocationType,
-            group: {
-                id: s.group?.id ?? 0,
-                name: s.group?.name ?? "",
-                locationType: kind,
-                location: s.offlineLocation ?? "",
-                locationMapUrl: "",
-            },
+            sessionState: s.sessionState,
             sessionDate: s.sessionDate,
             startTime: s.startTime,
             endTime: s.endTime,
-            topic: s.lesson?.title ?? "",
+            locationType: s.locationType,
+            effectiveLocationType: s.effectiveLocationType,
+            offlineLocation: s.offlineLocation,
+            status: String(s.status ?? ""),
+            reason: s.reason,
+            isManual: s.isManual,
             lesson: {
                 id: s.lesson?.id ?? 0,
                 title: s.lesson?.title ?? "",
             },
-            isCancelled: Boolean(s.reason),
-            cancellationReason: s.reason,
-            meetingProvider: "bbb",
-            meetingId: s.bbbMeetingId,
-            hasMeeting: Boolean(s.hasMeeting),
-            linkMeeing: s.hasMeeting ? (s.bbbMeetingId ?? null) : null,
+            group: {
+                id: s.group?.id ?? 0,
+                name: s.group?.name ?? "",
+            },
+            teacher: s.teacher,
+            zoomMeeting: s.zoomMeeting,
+            hasZoomMeeting: s.hasZoomMeeting,
+            createdAt: s.createdAt,
+            updatedAt: s.updatedAt,
         };
     }, [currentSession]);
 
     // Transform session data for SessionInfoModal
-    const virtualSession = useMemo((): VirtualSession | null => {
+    const virtualSession = useMemo((): OnlineSession | null => {
         if (!sessionEvent || !currentSession) return null;
 
         return {
@@ -105,40 +76,21 @@ const NavbarSessionCountdown = () => {
             group: {
                 id: sessionEvent.group.id,
                 name: sessionEvent.group.name,
-                locationType: sessionEvent.group.locationType,
             },
-            course: {
-                id: 0,
-                title: currentSession.group?.name ?? "",
-            },
-            term: {
-                id: 1,
-                name: t("sessionBanner.currentTerm", "Current Term"),
-            },
+            locationType: sessionEvent.locationType,
             sessionDate: sessionEvent.sessionDate,
             startTime: sessionEvent.startTime,
             endTime: sessionEvent.endTime,
-            topic: sessionEvent.topic || sessionEvent.lesson.title,
             lesson: sessionEvent.lesson,
-            description: "",
-            isCancelled: sessionEvent.isCancelled,
-            cancellationReason: sessionEvent.cancellationReason,
-            meetingProvider: sessionEvent.meetingProvider ?? "bbb",
-            meetingId: sessionEvent.meetingId ?? "",
-            linkMeeting: sessionEvent.linkMeeing ?? "",
-            contentProgress: {
-                total: {
-                    totalContents: 0,
-                    completedContents: 0,
-                    totalProgressPercentage: 0,
-                },
-                items: [],
-            },
-            instructor: {
-                id: currentSession.teacher?.id ?? 0,
-                name: currentSession.teacher?.name ?? "",
-                course: currentSession.group?.name ?? "",
-            },
+            effectiveLocationType: sessionEvent.effectiveLocationType,
+            hasZoomMeeting: sessionEvent.hasZoomMeeting,
+            isManual: sessionEvent.isManual,
+            offlineLocation: sessionEvent.offlineLocation,
+            reason: sessionEvent.reason,
+            status: sessionEvent.status,
+            teacher: sessionEvent.teacher,
+            zoomMeeting: sessionEvent.zoomMeeting,
+            sessionState: sessionEvent.sessionState,
             createdAt: currentSession.createdAt,
             updatedAt: currentSession.updatedAt,
         };
@@ -219,7 +171,6 @@ const NavbarSessionCountdown = () => {
     }, [sessionTiming]);
 
     const displayTitle =
-        sessionEvent?.topic ||
         sessionEvent?.lesson?.title ||
         (isLoading
             ? t("sessionBanner.loadingTitle")
@@ -337,11 +288,10 @@ const NavbarSessionCountdown = () => {
 
     const handleJoinClick = () => {
         if (!sessionEvent) return;
-        if (sessionEvent.group.locationType !== "online") return;
-        if (!sessionEvent.hasMeeting) return;
-        if (!sessionEvent.linkMeeing) return;
+        if (sessionEvent.locationType !== "online") return;
+        if (!sessionEvent.hasZoomMeeting) return;
 
-        window.open(sessionEvent.linkMeeing, "_blank");
+        window.open(sessionEvent.zoomMeeting?.meetingUrl, "_blank");
     };
 
     const isCurrent =
@@ -355,7 +305,7 @@ const NavbarSessionCountdown = () => {
             : t("sessionBanner.startsIn");
 
     const locationLabel =
-        sessionEvent?.group.locationType === "offline"
+        sessionEvent?.locationType === "offline"
             ? t("sessionBanner.offline")
             : t("sessionBanner.online");
 
@@ -444,17 +394,16 @@ const NavbarSessionCountdown = () => {
                                         {sessionEvent.status}
                                     </span>
                                 )}
-                                {!!sessionEvent.cancellationReason && (
+                                {!!sessionEvent.reason && (
                                     <span className="text-white/60 text-[9px] font-black uppercase tracking-widest line-clamp-1">
                                         {t("sessionBanner.reason")}:{" "}
-                                        {sessionEvent.cancellationReason}
+                                        {sessionEvent.reason}
                                     </span>
                                 )}
-                                {sessionEvent.group.locationType ===
-                                    "offline" &&
-                                    !!sessionEvent.group.location && (
+                                {sessionEvent.locationType === "offline" &&
+                                    !!sessionEvent.offlineLocation && (
                                         <a
-                                            href={sessionEvent.group.location}
+                                            href={sessionEvent.offlineLocation}
                                             target="_blank"
                                             rel="noreferrer"
                                             className="text-white/80 text-[9px] font-black uppercase tracking-widest underline underline-offset-2"
@@ -518,8 +467,8 @@ const NavbarSessionCountdown = () => {
                         <button
                             onClick={handleJoinClick}
                             disabled={
-                                !sessionEvent?.hasMeeting ||
-                                !sessionEvent?.linkMeeing
+                                !sessionEvent?.hasZoomMeeting ||
+                                !sessionEvent?.zoomMeeting?.meetingUrl
                             }
                             className="px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-widest bg-white/90 text-gray-900 hover:bg-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >

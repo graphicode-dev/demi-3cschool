@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { X, Calendar, Clock, Timer, Globe, Bell, User } from "lucide-react";
 import { ScheduleSession } from "../types";
 import { useCallback } from "react";
+import { useCalculateDuration } from "@/features/dashboard/shared";
 
 interface SessionInfoModalProps {
     session: ScheduleSession;
@@ -38,15 +39,10 @@ function formatDateKey(dateStr: string): {
 
 export function SessionInfoModal({ session, onClose }: SessionInfoModalProps) {
     const { t } = useTranslation("virtualSessions");
-
-    const calculatedDuration = useCallback(() => {
-        const startTime = new Date(`1970-01-01T${session.startTime}`);
-        const endTime = new Date(`1970-01-01T${session.endTime}`);
-        const duration = endTime.getTime() - startTime.getTime();
-        const hours = Math.floor(duration / (1000 * 60 * 60));
-        const minutes = Math.floor((duration % (1000 * 60 * 60)) / (1000 * 60));
-        return `${hours}h ${minutes}m`;
-    }, [session]);
+    const calculatedDuration = useCalculateDuration(
+        session.startTime,
+        session.endTime
+    );
 
     if (!session) return null;
 

@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { SessionItem } from "./SessionItem";
+import { SelfStudySessionItem } from "./SelfStudySessionItem";
 import type { CourseSession } from "../types";
 
 interface SessionListProps {
@@ -7,7 +7,10 @@ interface SessionListProps {
     onStartSession?: (sessionId: number) => void;
 }
 
-export function SessionList({ sessions, onStartSession }: SessionListProps) {
+export function SelfStudySessionList({
+    sessions,
+    onStartSession,
+}: SessionListProps) {
     const { t } = useTranslation("selfStudy");
 
     const sortedSessions = [...sessions].sort((a, b) => a.order - b.order);
@@ -22,7 +25,7 @@ export function SessionList({ sessions, onStartSession }: SessionListProps) {
             {/* Sessions */}
             <div className="flex flex-col gap-2">
                 {sortedSessions.map((session) => (
-                    <SessionItem
+                    <SelfStudySessionItem
                         key={session.id}
                         session={session}
                         onStart={onStartSession}
@@ -33,4 +36,4 @@ export function SessionList({ sessions, onStartSession }: SessionListProps) {
     );
 }
 
-export default SessionList;
+export default SelfStudySessionList;

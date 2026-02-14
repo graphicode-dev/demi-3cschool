@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Loader2 } from "lucide-react";
-import { SessionList, TermStepper, CourseCard } from "../components";
+import { SelfStudySessionList, TermStepper, CourseCard } from "../components";
 import { useMySessions } from "../api";
 import { selfStudyPaths } from "../navigation";
 import { PageWrapper } from "@/design-system";
@@ -89,18 +89,13 @@ function SelfStudyPage() {
     }
 
     return (
-        <PageWrapper>
+        <PageWrapper
+            pageHeaderProps={{
+                title: t("title"),
+                subtitle: t("description"),
+            }}
+        >
             <div className="flex flex-col gap-6 max-w-4xl mx-auto px-6 py-6">
-                {/* Header */}
-                <div className="flex flex-col gap-1">
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                        {t("title")}
-                    </h1>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                        {t("description")}
-                    </p>
-                </div>
-
                 {/* Term Progress Stepper */}
                 {terms.length > 0 && (
                     <TermStepper
@@ -119,7 +114,7 @@ function SelfStudyPage() {
                         <Loader2 className="size-6 animate-spin text-brand-500" />
                     </div>
                 ) : (
-                    <SessionList
+                    <SelfStudySessionList
                         sessions={courseSessions}
                         onStartSession={handleStartSession}
                     />

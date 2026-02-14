@@ -11,24 +11,19 @@ import {
     AlertCircle,
     Loader2,
 } from "lucide-react";
-import type { VirtualSession } from "../types";
+import type { AttendanceStatus, OnlineSession } from "../types";
 import { usePermissions } from "@/auth";
 import { useCreateZoomMeeting } from "../api";
 import { AttendanceModal } from "./AttendanceModal";
 import { ReviewsModal } from "./ReviewsModal";
 import { SessionRatingModal } from "./SessionRatingModal";
-import {
-    MOCK_STUDENT_REVIEWS,
-    MOCK_CURRENT_STUDENT_ATTENDANCE,
-    type AttendanceStatus,
-} from "../mocks/sessionMockData";
 
 interface VirtualSessionCardProps {
-    session: VirtualSession;
+    session: OnlineSession;
     programId?: number | string;
-    onJoinSession?: (session: VirtualSession, meetingUrl?: string) => void;
-    onViewInfo?: (session: VirtualSession) => void;
-    onViewRecording?: (session: VirtualSession) => void;
+    onJoinSession?: (session: OnlineSession, meetingUrl?: string) => void;
+    onViewInfo?: (session: OnlineSession) => void;
+    onViewRecording?: (session: OnlineSession) => void;
 }
 
 // Format time from "HH:mm:ss" to "HH:mm"
@@ -118,7 +113,7 @@ export function VirtualSessionCard({
     const hasZoomMeeting = session.hasZoomMeeting ?? false;
     const zoomMeetingUrl = session.zoomMeeting?.meetingUrl;
 
-    const studentAttendanceStatus = MOCK_CURRENT_STUDENT_ATTENDANCE;
+    const studentAttendanceStatus: AttendanceStatus = "present"; // TODO: Get from API
     const attendanceConfig = attendanceStatusConfig[studentAttendanceStatus];
     const AttendanceIcon = attendanceConfig.icon;
 
@@ -264,10 +259,7 @@ export function VirtualSessionCard({
             <div className="flex items-center justify-between gap-2 flex-wrap">
                 <div className="flex items-center gap-2">
                     <span className="bg-brand-100 dark:bg-brand-500/20 text-brand-600 dark:text-brand-400 text-xs font-medium px-2 py-0.5 rounded">
-                        {session.course.title}
-                    </span>
-                    <span className="bg-brand-50 dark:bg-brand-500/10 text-brand-500 text-xs font-medium px-2 py-0.5 rounded border border-brand-200 dark:border-brand-500/30">
-                        {t("common.term")} {session.term.id}
+                        {session.lesson.title}
                     </span>
                 </div>
                 {getStatusBadge()}
@@ -275,7 +267,7 @@ export function VirtualSessionCard({
 
             {/* Title */}
             <h3 className="text-base font-semibold text-gray-900 dark:text-white line-clamp-2">
-                {session.topic}
+                {session.lesson.title}
             </h3>
 
             {/* Instructor */}
@@ -285,10 +277,10 @@ export function VirtualSessionCard({
                 </div>
                 <div className="flex flex-col">
                     <span className="text-sm font-medium text-gray-900 dark:text-white">
-                        {session.instructor.name}
+                        {session.teacher?.name}
                     </span>
                     <span className="text-xs text-gray-500 dark:text-gray-400">
-                        {session.instructor.course}
+                        {session.teacher?.teacherNote}
                     </span>
                 </div>
             </div>
@@ -377,14 +369,14 @@ export function VirtualSessionCard({
                 isOpen={showAttendanceModal}
                 onClose={() => setShowAttendanceModal(false)}
                 sessionId={session.id}
-                sessionTopic={session.topic}
+                sessionTopic={session.lesson.title}
             />
 
             <ReviewsModal
                 isOpen={showReviewsModal}
                 onClose={() => setShowReviewsModal(false)}
-                reviews={MOCK_STUDENT_REVIEWS}
-                sessionTopic={session.topic}
+                reviews={[]} // TODO: Get reviews from API
+                sessionTopic={session.lesson.title}
             />
 
             <SessionRatingModal

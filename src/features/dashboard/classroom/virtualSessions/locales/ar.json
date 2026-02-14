@@ -13,7 +13,9 @@
     "status": {
         "live": "مباشر",
         "upcoming": "قادم",
-        "completed": "مكتمل"
+        "completed": "مكتمل",
+        "review": "مراجعة",
+        "cancelled": "ملغاة"
     },
     "common": {
         "today": "اليوم",
@@ -26,6 +28,12 @@
         "upcoming": "الجلسات القادمة",
         "completed": "الجلسات المكتملة"
     },
+    "sessions": {
+        "title": "الجلسات",
+        "onlineSession": "الجلسة الافتراضية",
+        "offlineSession": "الجلسة الميدانية",
+        "locationBased": "الجلسة المبنية على الموقع"
+    },
     "session": {
         "liveNow": "مباشر الآن",
         "joinSession": "انضم للجلسة",
@@ -36,7 +44,8 @@
         "viewAllHistory": "عرض كل السجل",
         "attendance": "الحضور",
         "reviews": "التقييمات",
-        "rateSession": "تقييم الجلسة"
+        "rateSession": "تقييم الجلسة",
+        "remindMe": "ذكرني"
     },
     "modal": {
         "classSchedule": "جدول الحصة",
@@ -98,5 +107,8 @@
             "sessionsList": "الجلسات الافتراضية",
             "sessionsListDesc": "عرض جميع الجلسات الافتراضية"
         }
+    },
+    "toast": {
+        "reminderSet": "تم تعيين التذكير بنجاح"
     }
 }

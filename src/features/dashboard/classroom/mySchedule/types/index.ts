@@ -21,19 +21,25 @@ export interface WeekDay {
     isToday: boolean;
 }
 
+export interface ZoomMeeting {
+    id: number;
+    meetingId: string;
+    meetingUrl: string;
+    password: string;
+}
+
 export interface MyAllSession {
     id: number;
-    sessionState: MyAllSessionState | string;
+    sessionState: "current" | "completed" | "upcoming";
     sessionDate: string;
     startTime: string;
     endTime: string;
-    locationType: SessionType;
-    effectiveLocationType: SessionType;
+    locationType: "online" | "offline";
+    effectiveLocationType: "online" | "offline";
     offlineLocation: string | null;
     status: string;
     reason: string | null;
     isManual: boolean;
-    recordingsCount?: Record<string, unknown> | null;
     lesson: {
         id: number;
         title: string;
@@ -41,18 +47,14 @@ export interface MyAllSession {
     group: {
         id: number;
         name: string;
-    } | null;
+    };
     teacher: {
         id: number;
         name: string;
-        teacherNote: string | null;
+        teacherNote?: string | null;
     } | null;
-    bbbMeetingId: string | null;
-    bbbIsRunning: boolean;
-    bbbRecord: boolean;
-    bbbStartedAt: string | null;
-    bbbEndedAt: string | null;
-    hasMeeting: boolean;
+    zoomMeeting: ZoomMeeting | null;
+    hasZoomMeeting: boolean;
     createdAt: string;
     updatedAt: string;
 }

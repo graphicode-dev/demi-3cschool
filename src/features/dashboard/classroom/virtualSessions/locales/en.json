@@ -13,7 +13,9 @@
     "status": {
         "live": "Live",
         "upcoming": "UPCOMING",
-        "completed": "COMPLETED"
+        "completed": "COMPLETED",
+        "review": "Review",
+        "cancelled": "Cancelled"
     },
     "common": {
         "today": "Today",
@@ -26,6 +28,12 @@
         "upcoming": "Upcoming Sessions",
         "completed": "Completed Sessions"
     },
+    "sessions": {
+        "title": "Sessions",
+        "onlineSession": "Online Session",
+        "offlineSession": "Offline Session",
+        "locationBased": "Location Based"
+    },
     "session": {
         "liveNow": "Live Now",
         "joinSession": "Join Session",
@@ -36,7 +44,8 @@
         "viewAllHistory": "View All History",
         "attendance": "Attendance",
         "reviews": "Reviews",
-        "rateSession": "Rate Session"
+        "rateSession": "Rate Session",
+        "remindMe": "Remind Me"
     },
     "modal": {
         "classSchedule": "Class Schedule",
@@ -98,5 +107,8 @@
             "sessionsList": "Virtual Sessions",
             "sessionsListDesc": "View all virtual sessions"
         }
+    },
+    "toast": {
+        "reminderSet": "Reminder set successfully"
     }
 }

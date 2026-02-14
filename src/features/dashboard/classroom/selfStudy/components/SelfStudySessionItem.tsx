@@ -7,7 +7,7 @@ interface SessionItemProps {
     onStart?: (sessionId: number) => void;
 }
 
-export function SessionItem({ session, onStart }: SessionItemProps) {
+export function SelfStudySessionItem({ session, onStart }: SessionItemProps) {
     const { t } = useTranslation("selfStudy");
 
     const isCompleted = session.status === "completed";
@@ -131,4 +131,4 @@ export function SessionItem({ session, onStart }: SessionItemProps) {
     );
 }
 
-export default SessionItem;
+export default SelfStudySessionItem;

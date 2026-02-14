@@ -1,5 +1,5 @@
 export * from "./TermStepper";
 export * from "./CourseCard";
-export * from "./SessionItem";
-export * from "./SessionList";
+export * from "./SelfStudySessionItem";
+export * from "./SelfStudySessionList";
 export * from "./lesson";
