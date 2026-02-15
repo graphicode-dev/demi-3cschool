@@ -41,11 +41,10 @@ export function MissionPath({
                 {sortedVideos.map((video) => {
                     const isCompleted = video.status === "completed";
                     const isCurrent = video.id === currentVideoId;
-                    const isLocked = !video.progress?.isCompleted;
+                    const isLocked = video.status === "locked";
                     const hasQuiz = video.quiz && video.quiz.totalQuestions > 0;
                     const isVideoWatched = video.progress?.isCompleted;
-                    const progressPercentage =
-                        video.progress?.progressPercentage || 0;
+                    const progressPercentage = video.progress?.progressPercentage || 0;
 
                     const videoButton = (
                         <button
@@ -149,9 +148,7 @@ export function MissionPath({
                                                             onQuizClick
                                                         ) {
                                                             e.stopPropagation();
-                                                            onQuizClick(
-                                                                video.id
-                                                            );
+                                                            onQuizClick(video.id);
                                                         }
                                                     }}
                                                 >
@@ -162,14 +159,11 @@ export function MissionPath({
                                                 </span>
                                             </Tooltip>
                                         )}
-                                    {(isLocked ||
-                                        video.quizStatus === "locked") &&
+                                    {(isLocked || video.quizStatus === "locked") &&
                                         hasQuiz && (
                                             <>
                                                 <Lock className="size-2.5" />
-                                                <span>
-                                                    {t("lesson.quizLabel")}
-                                                </span>
+                                                <span>{t("lesson.quizLabel")}</span>
                                             </>
                                         )}
                                 </div>
@@ -185,9 +179,7 @@ export function MissionPath({
                                                     ? "bg-success-500"
                                                     : "bg-brand-500"
                                             }`}
-                                            style={{
-                                                width: `${progressPercentage}%`,
-                                            }}
+                                            style={{ width: `${progressPercentage}%` }}
                                         />
                                     </div>
                                 </div>

@@ -49,63 +49,6 @@ function LessonPage() {
         ? quizAttempts[selectedVideoId] || 0
         : 0;
 
-    // Update video statuses based on progress
-    useEffect(() => {
-        if (videos.length === 0) return;
-
-        setVideos((prevVideos) => {
-            const updatedVideos = [...prevVideos];
-
-            // Sort by order to process sequentially
-            const sortedVideos = [...updatedVideos].sort(
-                (a, b) => a.order - b.order
-            );
-
-            sortedVideos.forEach((video, index) => {
-                const videoIndex = updatedVideos.findIndex(
-                    (v) => v.id === video.id
-                );
-
-                if (videoIndex === -1) return;
-
-                // First video is always unlocked
-                if (index === 0) {
-                    updatedVideos[videoIndex].status = video.progress
-                        ?.isCompleted
-                        ? "completed"
-                        : "current";
-                    updatedVideos[videoIndex].quizStatus = video.progress
-                        ?.isCompleted
-                        ? "passed"
-                        : "pending";
-                    return;
-                }
-
-                // Check previous video completion
-                const prevVideo = sortedVideos[index - 1];
-                const isPrevCompleted = prevVideo?.progress?.isCompleted;
-
-                if (isPrevCompleted) {
-                    // Current video is unlocked
-                    updatedVideos[videoIndex].status = video.progress
-                        ?.isCompleted
-                        ? "completed"
-                        : "current";
-                    updatedVideos[videoIndex].quizStatus = video.progress
-                        ?.isCompleted
-                        ? "passed"
-                        : "pending";
-                } else {
-                    // Video is locked
-                    updatedVideos[videoIndex].status = "locked";
-                    updatedVideos[videoIndex].quizStatus = "locked";
-                }
-            });
-
-            return updatedVideos;
-        });
-    }, [videos.map((v) => `${v.id}-${v.progress?.isCompleted}`).join(",")]);
-
     const handleQuizComplete = useCallback(
         (passed: boolean) => {
             const newAttemptCount = (quizAttempts[selectedVideoId] || 0) + 1;
@@ -252,7 +195,9 @@ function LessonPage() {
                     {selectedVideo?.contentable?.embedHtml ? (
                         <div className="relative bg-gray-900 rounded-2xl aspect-video flex items-center justify-center mb-4 overflow-hidden">
                             <BunnyStreamPlayer
-                                embedHtml={selectedVideo.contentable.embedHtml}
+                                embedHtml={
+                                    selectedVideo.contentable.embedHtml
+                                }
                                 onState={handlePlayerState}
                             />
                             {/* Quiz Button - Shows after video ends */}
@@ -268,7 +213,10 @@ function LessonPage() {
                                         >
                                             <FileQuestion className="size-5" />
                                             {t("lesson.takeQuiz")} (
-                                            {selectedVideo.quiz.totalQuestions}{" "}
+                                            {
+                                                selectedVideo.quiz
+                                                    .totalQuestions
+                                            }{" "}
                                             {t("lesson.questions")})
                                         </button>
                                     </div>

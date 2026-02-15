@@ -190,8 +190,13 @@ export const useVideo = () => {
             (video: any, index: number) => {
                 const id = Number(video.id);
                 const actualDuration = videoDurations[id];
-                const durationNum =
+                // durationNum is in seconds
+                const durationInSeconds =
                     Number(actualDuration || video.duration) || 0;
+                // Convert to minutes for display (rounded up)
+                const durationInMinutes = durationInSeconds > 0 
+                    ? Math.ceil(durationInSeconds / 60) 
+                    : 0;
 
                 const embedHtmlAr =
                     String(
@@ -222,13 +227,13 @@ export const useVideo = () => {
                         videoUrl: String(video.videoReferenceAr ?? ""),
                         videoUrlEn: String(video.videoReferenceEn ?? ""),
                         videoProvider: String(video.provider ?? ""),
-                        duration: durationNum,
+                        duration: durationInSeconds,
                         embedHtml: watchInEnglish ? embedHtmlEn : embedHtmlAr,
                     },
                     title: String(video.title ?? video.name ?? ""),
                     description: String(video.description ?? ""),
                     order: index + 1,
-                    duration: durationNum,
+                    duration: durationInMinutes,
                     isRequired: true,
                     isPublished: Number(video.isActive) === 1,
                     createdAt: String(video.createdAt ?? ""),
@@ -250,6 +255,36 @@ export const useVideo = () => {
             }
         );
 
+        // Sort videos by order before computing status
+        transformedVideos.sort((a, b) => a.order - b.order);
+
+        // Compute status based on progress - process in order
+        for (let i = 0; i < transformedVideos.length; i++) {
+            const video = transformedVideos[i];
+            const prevVideo = i > 0 ? transformedVideos[i - 1] : null;
+            
+            if (i === 0) {
+                // First video is always unlocked
+                video.status = video.progress?.isCompleted ? "completed" : "current";
+                video.quizStatus = video.progress?.isCompleted ? "passed" : "pending";
+            } else if (prevVideo?.progress?.isCompleted) {
+                // Unlock if previous video is completed
+                video.status = video.progress?.isCompleted ? "completed" : "current";
+                video.quizStatus = video.progress?.isCompleted ? "passed" : "pending";
+            } else {
+                // Keep locked if previous not completed
+                video.status = "locked";
+                video.quizStatus = "locked";
+            }
+            
+            console.log(`Video ${i} (id: ${video.id}, order: ${video.order}):`, {
+                title: video.title,
+                status: video.status,
+                isCompleted: video.progress?.isCompleted,
+                prevCompleted: prevVideo?.progress?.isCompleted,
+            });
+        }
+
         setVideos(transformedVideos);
         setSelectedVideoId((prev) => prev || transformedVideos[0]!.id);
 
@@ -267,7 +302,60 @@ export const useVideo = () => {
         });
         setVideoProgress((prev) => ({ ...prev, ...progressFromApi }));
         setLastPositions((prev) => ({ ...prev, ...positionsFromApi }));
-    }, [videosData, videoDurations, watchInEnglish]);
+    }, [videosData, videoDurations]);
+
+    // Update video durations in the list when actual durations are loaded from player
+    useEffect(() => {
+        if (Object.keys(videoDurations).length === 0) return;
+        
+        setVideos((prevVideos) =>
+            prevVideos.map((video) => {
+                const actualDuration = videoDurations[video.id];
+                if (actualDuration && actualDuration > 0) {
+                    return {
+                        ...video,
+                        duration: Math.ceil(actualDuration / 60), // Convert seconds to minutes
+                        contentable: {
+                            ...video.contentable,
+                            duration: actualDuration,
+                        },
+                    };
+                }
+                return video;
+            })
+        );
+    }, [videoDurations]);
+
+    // Separate effect to update embedHtml when language changes without recomputing status
+    useEffect(() => {
+        if (videos.length === 0) return;
+
+        setVideos((prevVideos) =>
+            prevVideos.map((video) => {
+                const apiVideo = videosData?.items?.find((v: any) => Number(v.id) === video.id);
+                if (!apiVideo) return video;
+
+                const embedHtmlAr =
+                    String(
+                        apiVideo.embedHtmlAr ??
+                            ""
+                    ) || String(apiVideo.embedHtml ?? "");
+                const embedHtmlEn =
+                    String(
+                        apiVideo.embedHtmlEn ??
+                            ""
+                    ) || String(apiVideo.embedHtml ?? "");
+
+                return {
+                    ...video,
+                    contentable: {
+                        ...video.contentable,
+                        embedHtml: watchInEnglish ? embedHtmlEn : embedHtmlAr,
+                    },
+                };
+            })
+        );
+    }, [watchInEnglish, videosData]);
 
     // Cleanup on unmount
     useEffect(() => {
@@ -280,6 +368,7 @@ export const useVideo = () => {
             if (hasMarkedCompleteRef.current[videoId]) return;
 
             hasMarkedCompleteRef.current[videoId] = true;
+            console.log(`🎉 Auto-marking video ${videoId} as complete`);
 
             markAsCompleted(
                 {
@@ -288,15 +377,56 @@ export const useVideo = () => {
                 },
                 {
                     onSuccess: () => {
+                        console.log(`✅ Video ${videoId} marked complete successfully`);
                         setVideoProgress((prev) => ({
                             ...prev,
                             [videoId]: 100,
                         }));
+                        
+                        // Update video status to completed and unlock next video
+                        setVideos((prevVideos) => {
+                            const updatedVideos = [...prevVideos];
+                            const currentIndex = updatedVideos.findIndex(
+                                (v) => v.id === videoId
+                            );
+
+                            if (currentIndex !== -1) {
+                                // Mark current video as completed
+                                const currentProgress = updatedVideos[currentIndex].progress;
+                                updatedVideos[currentIndex] = {
+                                    ...updatedVideos[currentIndex],
+                                    status: "completed",
+                                    quizStatus: "passed",
+                                    progress: {
+                                        progressPercentage: 100,
+                                        watchTime: currentProgress?.watchTime || 0,
+                                        lastPosition: currentProgress?.lastPosition || 0,
+                                        isCompleted: true,
+                                        completedAt: new Date().toISOString(),
+                                        lastWatchedAt: new Date().toISOString(),
+                                    },
+                                };
+
+                                console.log(`📝 Updated video ${videoId} status to completed`);
+
+                                // Unlock next video if exists
+                                if (currentIndex + 1 < updatedVideos.length) {
+                                    updatedVideos[currentIndex + 1] = {
+                                        ...updatedVideos[currentIndex + 1],
+                                        status: "current",
+                                        quizStatus: "pending",
+                                    };
+                                    console.log(`🔓 Unlocked next video: ${updatedVideos[currentIndex + 1].id}`);
+                                }
+                            }
+
+                            return updatedVideos;
+                        });
                     },
                 }
             );
         },
-        [groupId, markAsCompleted]
+        [groupId, markAsCompleted, setVideos]
     );
 
     // Helper to stop progress tracking
