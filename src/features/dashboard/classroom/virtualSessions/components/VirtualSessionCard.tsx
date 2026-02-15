@@ -371,7 +371,9 @@ export function VirtualSessionCard({
                     disabled={!!existingReview}
                     className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg border-2 border-brand-500 text-brand-500 hover:bg-brand-50 dark:hover:bg-brand-500/10 transition-colors disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                 >
-                    <Star className="size-4" />
+                    <Star
+                        className={`size-4 ${existingReview && "fill-yellow-400 text-yellow-400"}`}
+                    />
                     <span className="text-sm font-semibold">
                         {existingReview
                             ? t("session.reviewedWithRate", {

@@ -94,9 +94,6 @@ export function EnrollmentsGroupPage() {
     } = useCurriculumTerms();
 
     // State
-    const [selectedCurriculumId, setSelectedCurriculumId] = useState<
-        number | undefined
-    >(undefined);
     const [activeTab, setActiveTab] = useState<TabType>("online");
     const [selectedDay, setSelectedDay] = useState<DayOfWeek | "all">("all");
     const [selectedLocation, setSelectedLocation] = useState<string | "all">(
@@ -108,23 +105,13 @@ export function EnrollmentsGroupPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showMoreDetails, setShowMoreDetails] = useState(false);
 
-    // Auto-select first active curriculum if none selected
-    if (!selectedCurriculumId && curriculums.length > 0) {
-        const activeCurriculum = curriculums.find((c) => c.isActive);
-        if (activeCurriculum) {
-            setSelectedCurriculumId(activeCurriculum.id);
-        } else if (curriculums[0]) {
-            setSelectedCurriculumId(curriculums[0].id);
-        }
-    }
-
     // Fetch online groups for selected curriculum
     const {
         data: onlineData,
         isLoading: isLoadingOnline,
         refetch: refetchOnline,
-    } = useOnlineGroupsQuery(selectedCurriculumId, {
-        enabled: !!selectedCurriculumId,
+    } = useOnlineGroupsQuery(selectedTermId, {
+        enabled: !!selectedTermId,
     });
 
     // Fetch offline groups for selected curriculum
@@ -132,8 +119,8 @@ export function EnrollmentsGroupPage() {
         data: offlineData,
         isLoading: isLoadingOffline,
         refetch: refetchOffline,
-    } = useOfflineGroupsQuery(selectedCurriculumId, {
-        enabled: !!selectedCurriculumId,
+    } = useOfflineGroupsQuery(selectedTermId, {
+        enabled: !!selectedTermId,
     });
 
     // Enroll mutation
@@ -199,11 +186,6 @@ export function EnrollmentsGroupPage() {
 
     const dayOrder: DayOfWeek[] = useMemo(() => ["friday", "saturday"], []);
 
-    // Handlers
-    const handleTermSelect = useCallback((termId: number | string) => {
-        setSelectedCurriculumId(termId as number);
-    }, []);
-
     const handleEnroll = (group: EnrollmentGroup) => {
         setSelectedGroup(group);
         setIsModalOpen(true);
@@ -211,12 +193,12 @@ export function EnrollmentsGroupPage() {
 
     const handleConfirmEnrollment = async () => {
         if (!selectedGroup) return;
-        if (!selectedCurriculumId) return;
+        if (!selectedTermId) return;
 
         try {
             await enrollMutation.mutateAsync({
                 groupId: selectedGroup.id,
-                programId: selectedCurriculumId,
+                programId: selectedTermId,
             });
 
             addToast({
