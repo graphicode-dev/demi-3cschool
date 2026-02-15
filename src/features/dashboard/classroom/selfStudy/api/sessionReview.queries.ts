@@ -49,6 +49,8 @@ export const useCreateContentReview = (
 ) => {
     const queryClient = useQueryClient();
 
+    const userOnSuccess = options?.onSuccess;
+
     return useMutation({
         mutationFn: ({ sessionId, payload }) =>
             sessionReviewApi.createContentReview(sessionId, payload),
@@ -57,6 +59,13 @@ export const useCreateContentReview = (
             queryClient.invalidateQueries({
                 queryKey: selfStudyKeys.contentReview(variables.sessionId),
             });
+
+            userOnSuccess?.(
+                data,
+                variables,
+                undefined as never,
+                undefined as never
+            );
         },
         ...options,
     });
@@ -108,3 +117,4 @@ export const useCreateTeacherReview = (
         ...options,
     });
 };
+

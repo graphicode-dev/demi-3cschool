@@ -28,6 +28,10 @@ export function RatingModal({
 
     const handleSubmit = () => {
         if (rating > 0) {
+            console.log("Rating submitted:", {
+                rating,
+                feedback,
+            });
             onSubmit(rating, feedback);
             setRating(0);
             setFeedback("");

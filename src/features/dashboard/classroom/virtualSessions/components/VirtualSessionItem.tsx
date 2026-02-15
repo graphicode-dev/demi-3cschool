@@ -21,9 +21,13 @@ import { usePermissions } from "@/auth";
 import { useCreateZoomMeeting } from "../api";
 import { AttendanceModal } from "./AttendanceModal";
 import { ReviewsModal } from "./ReviewsModal";
-import { SessionRatingModal } from "./SessionRatingModal";
 import { useToast } from "@/design-system";
 import { useCalculateDuration } from "@/features/dashboard/shared";
+import {
+    useContentReview,
+    useCreateContentReview,
+} from "../../selfStudy/api/sessionReview.queries";
+import { RatingModal } from "../../selfStudy";
 
 interface SessionItemProps {
     session: OnlineSession;
@@ -84,6 +88,27 @@ export function VirtualSessionItem({
     const [showRatingModal, setShowRatingModal] = useState(false);
 
     const createZoomMeetingMutation = useCreateZoomMeeting();
+    const { data: existingReview } = useContentReview(session.id);
+
+    // Mutation for creating/updating review
+    const { mutate: submitReview, isPending: isSubmitting } =
+        useCreateContentReview({
+            onSuccess: () => {
+                setShowRatingModal(false);
+            },
+        });
+
+    const handleSubmitReview = (rating: number, feedback: string) => {
+        submitReview({
+            sessionId: session.id,
+            payload: {
+                rate: rating,
+                comment: feedback,
+            },
+        });
+    };
+
+    const currentRating = existingReview?.rate ?? 0;
 
     const isCompleted = session.sessionState === "completed";
     const isCurrent = session.sessionState === "current";
@@ -159,16 +184,6 @@ export function VirtualSessionItem({
         });
     };
 
-    const handleSubmitRating = (rating: number, feedback: string) => {
-        // TODO: Implement API call when ready
-        console.log("Rating submitted:", {
-            sessionId: session.id,
-            rating,
-            feedback,
-        });
-        setShowRatingModal(false);
-    };
-
     const isCreatingMeeting = createZoomMeetingMutation.isPending;
     const orderNumber = String(index + 1).padStart(2, "0");
 
@@ -177,7 +192,8 @@ export function VirtualSessionItem({
             <div
                 className={`
                     flex items-center justify-between px-6 py-4 rounded-2xl
-                    ${isCurrent ? "bg-success-50 dark:bg-success-500/10 border border-success-500" : "bg-white dark:bg-gray-900 shadow-theme-sm"}
+                ${isCompleted ? "bg-success-50 dark:bg-success-500/10 border border-success-500" : "bg-white dark:bg-gray-900 shadow-theme-sm"}
+                ${isCurrent ? "bg-brand-50 dark:bg-brand-500/10 border border-brand-500" : "bg-white dark:bg-gray-900 shadow-theme-sm"}
                     ${isCancelled ? "bg-error-50 dark:bg-error-500/10 border border-error-500" : ""}
                 `}
             >
@@ -188,7 +204,7 @@ export function VirtualSessionItem({
                         className={`
                         text-xl font-bold w-8
                         ${isCompleted ? "text-success-500" : ""}
-                        ${isCurrent ? "text-success-500" : ""}
+                        ${isCurrent ? "text-brand-500" : ""}
                         ${isLocked ? "text-gray-400/50 dark:text-gray-500/50" : ""}
                     `}
                     >
@@ -200,7 +216,7 @@ export function VirtualSessionItem({
                         className={`
                                 size-6
                                 ${isCompleted ? "text-success-500" : ""}
-                                ${isCurrent ? "text-success-500" : ""}
+                                ${isCurrent ? "text-brand-500" : ""}
                                 ${isLocked ? "text-gray-400/50 dark:text-gray-500/50" : ""}
                                 ${isCancelled ? "text-error-500" : ""}
                             `}
@@ -298,7 +314,7 @@ export function VirtualSessionItem({
                                 isCreatingMeeting ||
                                 (isStudent && !hasZoomMeeting)
                             }
-                            className="flex items-center gap-1.5 bg-success-500 hover:bg-success-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="flex items-center gap-1.5 bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {isCreatingMeeting && (
                                 <Loader2 className="size-4 animate-spin" />
@@ -392,10 +408,13 @@ export function VirtualSessionItem({
                 sessionTopic={session.lesson.title}
             />
 
-            <SessionRatingModal
+            <RatingModal
                 isOpen={showRatingModal}
                 onClose={() => setShowRatingModal(false)}
-                onSubmit={handleSubmitRating}
+                onSubmit={handleSubmitReview}
+                initialRating={currentRating}
+                initialComment={existingReview?.comment}
+                isSubmitting={isSubmitting}
             />
         </>
     );

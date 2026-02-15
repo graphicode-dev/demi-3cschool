@@ -25,6 +25,7 @@ function PhysicalSessionsPage() {
                 terms={terms}
                 selectedTermId={selectedTermId}
                 onSelectTerm={setSelectedTermId}
+                tipText={t("termStepper")}
             />
 
             {/* Summer Camp Banner - Only for summer term */}

@@ -1,4 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap")
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap&family=Baloo+Bhaijaan+2:wght@400..800&display=swap")
+
 layer(base);
 
 @font-face {
@@ -27,7 +28,7 @@ layer(base);
     --font-outfit: Outfit, sans-serif;
     --font-poppins: "Poppins", sans-serif;
     --font-segoe-arabic: "segoe ui", sans-serif;
-      --font-expo-arabic: "ExpoArabic", sans-serif;
+      --font-expo-arabic: "ExpoArabic","Baloo Bhaijaan 2", sans-serif;
 
     --breakpoint-*: initial;
     --breakpoint-2xsm: 375px;

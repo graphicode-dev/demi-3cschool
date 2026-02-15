@@ -160,7 +160,7 @@ function LessonPage() {
                     />
                 </div>
             </div>
-            <div className="flex flex-col gap-6 max-w-6xl mx-auto px-4 py-6">
+
                 {/* Main Content Area */}
                 <div className="flex gap-4">
                     {/* Video Player Section */}
@@ -260,7 +260,6 @@ function LessonPage() {
                         }}
                     />
                 </div>
-            </div>
 
             {/* Quiz Modal */}
             {showQuizModal && selectedVideo?.quiz && (

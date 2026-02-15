@@ -5,6 +5,7 @@
         "virtualStudyContent": "محتوى الدراسة الافتراضية",
         "recording": "التسجيل"
     },
+    "termStepper": " ستتمكن من الحصول على المحتوى بعد إنتهاء الفصل الحالي",
     "terms": {
         "first": "الفصل الأول",
         "second": "الفصل الثاني",
@@ -45,6 +46,7 @@
         "attendance": "الحضور",
         "reviews": "التقييمات",
         "rateSession": "تقييم الجلسة",
+        "reviewedWithRate": "تم التقييم ({{rate}}/5)",
         "remindMe": "ذكرني"
     },
     "modal": {

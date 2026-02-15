@@ -16,7 +16,8 @@ import { usePermissions } from "@/auth";
 import { useCreateZoomMeeting } from "../api";
 import { AttendanceModal } from "./AttendanceModal";
 import { ReviewsModal } from "./ReviewsModal";
-import { SessionRatingModal } from "./SessionRatingModal";
+import { useContentReview, useCreateContentReview } from "../../selfStudy/api";
+import { RatingModal } from "../../selfStudy";
 
 interface VirtualSessionCardProps {
     session: OnlineSession;
@@ -117,15 +118,27 @@ export function VirtualSessionCard({
     const attendanceConfig = attendanceStatusConfig[studentAttendanceStatus];
     const AttendanceIcon = attendanceConfig.icon;
 
-    const handleSubmitRating = (rating: number, feedback: string) => {
-        // TODO: Implement API call when ready
-        console.log("Rating submitted:", {
-            sessionId: session.id,
-            rating,
-            feedback,
+    const { data: existingReview } = useContentReview(session.id);
+
+    // Mutation for creating/updating review
+    const { mutate: submitReview, isPending: isSubmitting } =
+        useCreateContentReview({
+            onSuccess: () => {
+                setShowRatingModal(false);
+            },
         });
-        setShowRatingModal(false);
+
+    const handleSubmitReview = (rating: number, feedback: string) => {
+        submitReview({
+            sessionId: session.id,
+            payload: {
+                rate: rating,
+                comment: feedback,
+            },
+        });
     };
+
+    const currentRating = existingReview?.rate ?? 0;
 
     const getStatusBadge = () => {
         if (isLive) {
@@ -355,11 +368,17 @@ export function VirtualSessionCard({
             {isStudent && isCompleted && (
                 <button
                     onClick={() => setShowRatingModal(true)}
-                    className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg border-2 border-brand-500 text-brand-500 hover:bg-brand-50 dark:hover:bg-brand-500/10 transition-colors"
+                    disabled={!!existingReview}
+                    className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg border-2 border-brand-500 text-brand-500 hover:bg-brand-50 dark:hover:bg-brand-500/10 transition-colors disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                 >
                     <Star className="size-4" />
                     <span className="text-sm font-semibold">
-                        {t("session.rateSession")}
+                        {existingReview
+                            ? t("session.reviewedWithRate", {
+                                  defaultValue: "Reviewed ({{rate}}/5)",
+                                  rate: currentRating,
+                              })
+                            : t("session.rateSession")}
                     </span>
                 </button>
             )}
@@ -379,10 +398,13 @@ export function VirtualSessionCard({
                 sessionTopic={session.lesson.title}
             />
 
-            <SessionRatingModal
+            <RatingModal
                 isOpen={showRatingModal}
                 onClose={() => setShowRatingModal(false)}
-                onSubmit={handleSubmitRating}
+                onSubmit={handleSubmitReview}
+                initialRating={currentRating}
+                initialComment={existingReview?.comment}
+                isSubmitting={isSubmitting}
             />
         </div>
     );

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Check, Lock } from "lucide-react";
 import { useProgramsCurriculumList } from "../../admin/programs";
+import { Tooltip } from "@/design-system";
 
 export type TermStatus = "completed" | "current" | "locked";
 
@@ -19,6 +19,7 @@ interface TermStepperProps {
     onSelectTerm: (termId: number) => void;
     isLoading?: boolean;
     className?: string;
+    tipText?: string;
 }
 
 export function TermStepper({
@@ -27,6 +28,7 @@ export function TermStepper({
     onSelectTerm,
     className,
     isLoading,
+    tipText,
 }: TermStepperProps) {
     const getStepStyles = (status: TermStatus, isSelected: boolean) => {
         switch (status) {
@@ -78,37 +80,44 @@ export function TermStepper({
                 return (
                     <div key={term.id} className="flex items-center">
                         {/* Step */}
-                        <button
-                            type="button"
-                            onClick={() => handleTermClick(term, term.id)}
-                            disabled={term.status === "locked" || isLoading}
-                            className={`flex flex-col items-center ${
-                                styles.clickable
-                                    ? "cursor-pointer hover:opacity-80"
-                                    : "cursor-not-allowed"
-                            } transition-opacity disabled:opacity-50`}
+                        <Tooltip
+                            content={tipText}
+                            placement="top"
+                            disabled={term.status !== "locked"}
+                            childClassName="w-[200px]"
                         >
-                            {/* Circle */}
-                            <div
-                                className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${styles.circle}`}
+                            <button
+                                type="button"
+                                onClick={() => handleTermClick(term, term.id)}
+                                disabled={term.status === "locked" || isLoading}
+                                className={`flex flex-col items-center ${
+                                    styles.clickable
+                                        ? "cursor-pointer hover:opacity-80"
+                                        : "cursor-not-allowed"
+                                } transition-opacity disabled:opacity-50`}
                             >
-                                {term.status === "completed" ? (
-                                    <Check className="w-5 h-5" />
-                                ) : term.status === "locked" ? (
-                                    <Lock className="w-4 h-4" />
-                                ) : (
-                                    <span className="text-sm font-bold">
-                                        {index + 1}
-                                    </span>
-                                )}
-                            </div>
-                            {/* Label */}
-                            <span
-                                className={`mt-2 text-sm whitespace-nowrap transition-colors ${styles.label}`}
-                            >
-                                {term.caption}
-                            </span>
-                        </button>
+                                {/* Circle */}
+                                <div
+                                    className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${styles.circle}`}
+                                >
+                                    {term.status === "completed" ? (
+                                        <Check className="w-5 h-5" />
+                                    ) : term.status === "locked" ? (
+                                        <Lock className="w-4 h-4" />
+                                    ) : (
+                                        <span className="text-sm font-bold">
+                                            {index + 1}
+                                        </span>
+                                    )}
+                                </div>
+                                {/* Label */}
+                                <span
+                                    className={`mt-2 text-sm whitespace-nowrap transition-colors ${styles.label}`}
+                                >
+                                    {term.caption}
+                                </span>
+                            </button>
+                        </Tooltip>
 
                         {/* Connector Line */}
                         {!isLast && (

@@ -5,6 +5,7 @@
         "selfStudyContent": "Self Study Content",
         "lesson": "Lesson"
     },
+    "termStepper": "You will be able to access content after finishing the current term",
     "terms": {
         "firstTerm": "First Term",
         "secondTerm": "Second Term",

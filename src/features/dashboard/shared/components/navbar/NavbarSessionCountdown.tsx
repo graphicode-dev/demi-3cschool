@@ -178,14 +178,6 @@ const NavbarSessionCountdown = () => {
               ? t("sessionBanner.errorTitle")
               : t("sessionBanner.emptyTitle"));
 
-    const displaySubtitle =
-        sessionEvent?.group?.name ||
-        (isLoading
-            ? t("sessionBanner.loadingSubtitle")
-            : isError
-              ? t("sessionBanner.errorSubtitle")
-              : t("sessionBanner.emptySubtitle"));
-
     // Calculate total minutes for display logic
     const displayTime = useMemo(() => {
         if (!timeLeft)
@@ -304,21 +296,49 @@ const NavbarSessionCountdown = () => {
             ? t("sessionBanner.endsIn")
             : t("sessionBanner.startsIn");
 
-    const locationLabel =
-        sessionEvent?.locationType === "offline"
-            ? t("sessionBanner.offline")
-            : t("sessionBanner.online");
+    const statusLabel =
+        countdownMode === "current"
+            ? t("sessionBanner.status.current", { defaultValue: "Current" })
+            : countdownMode === "upcoming"
+              ? t("sessionBanner.status.upcoming", {
+                    defaultValue: "Upcoming",
+                })
+              : t("sessionBanner.status.ended", { defaultValue: "Ended" });
 
-    const formatTimeRange = () => {
+    const typeLabel =
+        sessionEvent?.locationType === "offline"
+            ? t("sessionBanner.offline", { defaultValue: "Offline" })
+            : t("sessionBanner.online", { defaultValue: "Online" });
+
+    const formatDayWithTimeRange = () => {
         if (!sessionEvent) return "";
-        const start = sessionEvent.startTime?.slice(0, 5) ?? "";
-        const end = sessionEvent.endTime?.slice(0, 5) ?? "";
-        if (!start || !end) return "";
-        return `${start} - ${end}`;
+
+        const start = new Date(
+            `${sessionEvent.sessionDate}T${sessionEvent.startTime}`
+        );
+        const end = new Date(
+            `${sessionEvent.sessionDate}T${sessionEvent.endTime}`
+        );
+        if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()))
+            return "";
+
+        const locale = isRTL ? "ar-EG" : "en-US";
+        const weekday = start.toLocaleDateString(locale, { weekday: "long" });
+        const startTime = start.toLocaleTimeString(locale, {
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true,
+        });
+        const endTime = end.toLocaleTimeString(locale, {
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true,
+        });
+        return `${weekday} • ${startTime} - ${endTime}`;
     };
 
     return (
-        <div className="relative w-full group overflow-hidden rounded-full animate-in slide-in-from-top duration-700 shadow-xl shadow-blue-500/10">
+        <div className="relative w-full group overflow-hidden animate-in slide-in-from-top duration-700 shadow-xl shadow-blue-500/10">
             <div
                 className={`absolute inset-0 bg-size-[300%_300%] animate-linear-slow bg-linear-to-r opacity-95 ${linearClass}`}
             />
@@ -328,7 +348,7 @@ const NavbarSessionCountdown = () => {
                 <div className="absolute bottom-[-50%] right-[-10%] w-[30%] h-[150%] bg-yellow-200/20 blur-[80px] -rotate-45 animate-pulse delay-1000" />
             </div>
 
-            <div className="max-w-7xl mx-auto px-10 py-3 flex items-start justify-between gap-4 relative z-10">
+            <div className="mx-auto px-10 py-3 flex items-start justify-between gap-4 relative z-10">
                 <div className="flex items-start gap-6">
                     <div className="flex items-center gap-2 bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/30">
                         <span className="relative flex h-2 w-2">
@@ -336,9 +356,7 @@ const NavbarSessionCountdown = () => {
                             <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
                         </span>
                         <span className="text-[10px] font-black text-white uppercase tracking-widest">
-                            {isCurrent
-                                ? t("sessionBanner.liveNow")
-                                : t("sessionBanner.upcoming")}
+                            {statusLabel}
                         </span>
                     </div>
 
@@ -353,66 +371,14 @@ const NavbarSessionCountdown = () => {
                         <div className="flex items-center gap-3 mt-0.5">
                             <div className="flex items-center gap-1.5 text-white/80 text-[10px] font-black uppercase tracking-widest">
                                 <Monitor size={12} strokeWidth={2.5} />
-                                {locationLabel}
+                                {typeLabel}
                             </div>
                             <span className="w-1 h-1 bg-white/40 rounded-full" />
                             <p className="text-white/80 text-[10px] font-black uppercase tracking-widest">
-                                {formatBannerDayTime()}
+                                {formatDayWithTimeRange() ||
+                                    formatBannerDayTime()}
                             </p>
-                            {!!sessionEvent && !!formatTimeRange() && (
-                                <>
-                                    <span className="w-1 h-1 bg-white/40 rounded-full" />
-                                    <p className="text-white/80 text-[10px] font-black uppercase tracking-widest">
-                                        {t("sessionBanner.timeRange", {
-                                            defaultValue: "Time",
-                                        })}
-                                        : {formatTimeRange()}
-                                    </p>
-                                </>
-                            )}
                         </div>
-                        {!!displaySubtitle && (
-                            <p className="text-white/70 text-[10px] font-black uppercase tracking-widest mt-0.5">
-                                {displaySubtitle}
-                            </p>
-                        )}
-                        {!!sessionEvent && (
-                            <div className="flex flex-wrap items-center gap-2 mt-1">
-                                <span className="text-white/60 text-[9px] font-black uppercase tracking-widest">
-                                    {t("sessionBanner.sessionId")}: #
-                                    {sessionEvent.id}
-                                </span>
-                                {!!sessionEvent.sessionState && (
-                                    <span className="text-white/60 text-[9px] font-black uppercase tracking-widest">
-                                        {t("sessionBanner.state")}:{" "}
-                                        {sessionEvent.sessionState}
-                                    </span>
-                                )}
-                                {!!sessionEvent.status && (
-                                    <span className="text-white/60 text-[9px] font-black uppercase tracking-widest">
-                                        {t("sessionBanner.status")}:{" "}
-                                        {sessionEvent.status}
-                                    </span>
-                                )}
-                                {!!sessionEvent.reason && (
-                                    <span className="text-white/60 text-[9px] font-black uppercase tracking-widest line-clamp-1">
-                                        {t("sessionBanner.reason")}:{" "}
-                                        {sessionEvent.reason}
-                                    </span>
-                                )}
-                                {sessionEvent.locationType === "offline" &&
-                                    !!sessionEvent.offlineLocation && (
-                                        <a
-                                            href={sessionEvent.offlineLocation}
-                                            target="_blank"
-                                            rel="noreferrer"
-                                            className="text-white/80 text-[9px] font-black uppercase tracking-widest underline underline-offset-2"
-                                        >
-                                            {t("sessionBanner.openLocation")}
-                                        </a>
-                                    )}
-                            </div>
-                        )}
                     </div>
                 </div>
 

@@ -95,31 +95,30 @@ function SelfStudyPage() {
                 subtitle: t("description"),
             }}
         >
-            <div className="flex flex-col gap-6 max-w-4xl mx-auto px-6 py-6">
-                {/* Term Progress Stepper */}
-                {terms.length > 0 && (
-                    <TermStepper
-                        terms={terms}
-                        selectedTermId={selectedTermId}
-                        onSelectTerm={setSelectedTermId}
-                    />
-                )}
+            {/* Term Progress Stepper */}
+            {terms.length > 0 && (
+                <TermStepper
+                    terms={terms}
+                    selectedTermId={selectedTermId}
+                    onSelectTerm={setSelectedTermId}
+                    tipText={t("termStepper")}
+                />
+            )}
 
-                {/* Course Card */}
-                {selectedCourse && <CourseCard course={selectedCourse} />}
+            {/* Course Card */}
+            {selectedCourse && <CourseCard course={selectedCourse} />}
 
-                {/* Sessions List */}
-                {isLoadingSessions ? (
-                    <div className="flex items-center justify-center py-8">
-                        <Loader2 className="size-6 animate-spin text-brand-500" />
-                    </div>
-                ) : (
-                    <SelfStudySessionList
-                        sessions={courseSessions}
-                        onStartSession={handleStartSession}
-                    />
-                )}
-            </div>
+            {/* Sessions List */}
+            {isLoadingSessions ? (
+                <div className="flex items-center justify-center py-8">
+                    <Loader2 className="size-6 animate-spin text-brand-500" />
+                </div>
+            ) : (
+                <SelfStudySessionList
+                    sessions={courseSessions}
+                    onStartSession={handleStartSession}
+                />
+            )}
         </PageWrapper>
     );
 }

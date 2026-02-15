@@ -5,6 +5,7 @@
         "virtualStudyContent": "Virtual Study Content",
         "recording": "Recording"
     },
+    "termStepper": "You will be able to access content after finishing the current term",
     "terms": {
         "first": "First Term",
         "second": "Second Term",
@@ -45,6 +46,7 @@
         "attendance": "Attendance",
         "reviews": "Reviews",
         "rateSession": "Rate Session",
+        "reviewedWithRate": "Reviewed ({{rate}}/5)",
         "remindMe": "Remind Me"
     },
     "modal": {
