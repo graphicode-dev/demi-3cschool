@@ -7,7 +7,10 @@ export function useMarkAsCompleted() {
             payload: { lessonVideoId: string; group_id?: number },
             options?: { onSuccess?: () => void; onError?: () => void }
         ) => {
-            api.post(`/groups/progress/video/${payload.lessonVideoId}/complete`, payload.group_id)
+            api.post(
+                `/groups/progress/video/${payload.lessonVideoId}/complete`,
+                { group_id: payload.group_id }
+            )
                 .then(() => options?.onSuccess?.())
                 .catch(() => options?.onError?.());
         },

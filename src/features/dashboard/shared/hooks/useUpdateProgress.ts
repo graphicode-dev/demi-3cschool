@@ -2,7 +2,7 @@ import { api } from "@/shared/api";
 import { useCallback } from "react";
 
 export function useUpdateProgress(
-    lessonVideoId:number
+    lessonVideoId: number
 ) {
     const mutate = useCallback(
         (
@@ -18,7 +18,7 @@ export function useUpdateProgress(
                 .then(() => options?.onSuccess?.())
                 .catch(() => options?.onError?.());
         },
-        []
+        [lessonVideoId]
     );
 
     return { mutate };
