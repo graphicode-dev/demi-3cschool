@@ -27,9 +27,11 @@ export interface VideoContentable {
 
 export interface ContentProgress {
     progressPercentage: number;
-    isCompleted: boolean;
-    lastPosition: number;
     watchTime: number;
+    lastPosition: number;
+    isCompleted: boolean;
+    completedAt: string | null;
+    lastWatchedAt: string | null;
 }
 
 export interface LessonInfo {
@@ -52,7 +54,7 @@ export interface LessonVideo {
     isPublished: boolean;
     createdAt: string;
     updatedAt: string;
-    contentProgress: ContentProgress;
+    progress: ContentProgress | null;
     // UI computed fields
     status?: VideoStatus;
     quiz?: VideoQuiz;

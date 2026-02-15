@@ -135,14 +135,14 @@ export const useVideo = () => {
         if (videos.length === 0) return 0;
 
         const perVideoPercents = videos.map((v) => {
-            if (v.contentProgress?.isCompleted) return 100;
+            if (v.progress?.isCompleted) return 100;
 
             const fromMap = videoProgress[v.id];
             if (typeof fromMap === "number" && Number.isFinite(fromMap)) {
                 return Math.max(0, Math.min(100, fromMap));
             }
 
-            const fromContent = v.contentProgress?.progressPercentage;
+            const fromContent = v.progress?.progressPercentage;
             if (
                 typeof fromContent === "number" &&
                 Number.isFinite(fromContent)
@@ -233,18 +233,17 @@ export const useVideo = () => {
                     isPublished: Number(video.isActive) === 1,
                     createdAt: String(video.createdAt ?? ""),
                     updatedAt: String(video.updatedAt ?? ""),
-                    contentProgress: {
+                    progress: video.progress ? {
                         progressPercentage:
-                            Number(video.contentProgress?.progressPercentage) ||
-                            0,
-                        isCompleted: Boolean(
-                            video.contentProgress?.isCompleted
-                        ),
-                        lastPosition:
-                            Number(video.contentProgress?.lastPosition) || 0,
+                            Number(video.progress.progressPercentage) || 0,
                         watchTime:
-                            Number(video.contentProgress?.watchTime) || 0,
-                    },
+                            Number(video.progress.watchTime) || 0,
+                        lastPosition:
+                            Number(video.progress.lastPosition) || 0,
+                        isCompleted: Boolean(video.progress.isCompleted),
+                        completedAt: video.progress.completedAt || null,
+                        lastWatchedAt: video.progress.lastWatchedAt || null,
+                    } : null,
                     status: index === 0 ? "current" : "locked",
                     quizStatus: "pending",
                 } as LessonVideo;
@@ -257,11 +256,11 @@ export const useVideo = () => {
         const progressFromApi: Record<number, number> = {};
         const positionsFromApi: Record<number, number> = {};
         transformedVideos.forEach((v) => {
-            if (v.contentProgress) {
+            if (v.progress) {
                 progressFromApi[v.id] =
-                    v.contentProgress.progressPercentage || 0;
-                positionsFromApi[v.id] = v.contentProgress.lastPosition || 0;
-                if (v.contentProgress.isCompleted) {
+                    v.progress.progressPercentage || 0;
+                positionsFromApi[v.id] = v.progress.lastPosition || 0;
+                if (v.progress.isCompleted) {
                     hasMarkedCompleteRef.current[v.id] = true;
                 }
             }

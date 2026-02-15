@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { FileQuestion, Loader2 } from "lucide-react";
 import {
@@ -49,6 +49,63 @@ function LessonPage() {
         ? quizAttempts[selectedVideoId] || 0
         : 0;
 
+    // Update video statuses based on progress
+    useEffect(() => {
+        if (videos.length === 0) return;
+
+        setVideos((prevVideos) => {
+            const updatedVideos = [...prevVideos];
+
+            // Sort by order to process sequentially
+            const sortedVideos = [...updatedVideos].sort(
+                (a, b) => a.order - b.order
+            );
+
+            sortedVideos.forEach((video, index) => {
+                const videoIndex = updatedVideos.findIndex(
+                    (v) => v.id === video.id
+                );
+
+                if (videoIndex === -1) return;
+
+                // First video is always unlocked
+                if (index === 0) {
+                    updatedVideos[videoIndex].status = video.progress
+                        ?.isCompleted
+                        ? "completed"
+                        : "current";
+                    updatedVideos[videoIndex].quizStatus = video.progress
+                        ?.isCompleted
+                        ? "passed"
+                        : "pending";
+                    return;
+                }
+
+                // Check previous video completion
+                const prevVideo = sortedVideos[index - 1];
+                const isPrevCompleted = prevVideo?.progress?.isCompleted;
+
+                if (isPrevCompleted) {
+                    // Current video is unlocked
+                    updatedVideos[videoIndex].status = video.progress
+                        ?.isCompleted
+                        ? "completed"
+                        : "current";
+                    updatedVideos[videoIndex].quizStatus = video.progress
+                        ?.isCompleted
+                        ? "passed"
+                        : "pending";
+                } else {
+                    // Video is locked
+                    updatedVideos[videoIndex].status = "locked";
+                    updatedVideos[videoIndex].quizStatus = "locked";
+                }
+            });
+
+            return updatedVideos;
+        });
+    }, [videos.map((v) => `${v.id}-${v.progress?.isCompleted}`).join(",")]);
+
     const handleQuizComplete = useCallback(
         (passed: boolean) => {
             const newAttemptCount = (quizAttempts[selectedVideoId] || 0) + 1;
@@ -73,6 +130,11 @@ function LessonPage() {
                             ...updatedVideos[currentIndex],
                             status: "completed",
                             quizStatus: "passed",
+                            progress: {
+                                ...updatedVideos[currentIndex].progress!,
+                                isCompleted: true,
+                                progressPercentage: 100,
+                            },
                         };
 
                         // Unlock next video if exists
@@ -161,105 +223,100 @@ function LessonPage() {
                 </div>
             </div>
 
-                {/* Main Content Area */}
-                <div className="flex gap-4">
-                    {/* Video Player Section */}
-                    <div className="flex-1">
-                        <div className="flex items-center justify-end mb-3">
-                            <button
-                                onClick={() => setWatchInEnglish(false)}
-                                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
-                                    !watchInEnglish
-                                        ? "bg-brand-500 text-white"
-                                        : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
-                                }`}
-                            >
-                                AR
-                            </button>
-                            <button
-                                onClick={() => setWatchInEnglish(true)}
-                                className={`ms-2 flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
-                                    watchInEnglish
-                                        ? "bg-brand-500 text-white"
-                                        : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
-                                }`}
-                            >
-                                EN
-                            </button>
-                        </div>
-                        {selectedVideo?.contentable?.embedHtml ? (
-                            <div className="relative bg-gray-900 rounded-2xl aspect-video flex items-center justify-center mb-4 overflow-hidden">
-                                <BunnyStreamPlayer
-                                    embedHtml={
-                                        selectedVideo.contentable.embedHtml
-                                    }
-                                    onState={handlePlayerState}
-                                />
-                                {/* Quiz Button - Shows after video ends */}
-                                {videoEnded &&
-                                    selectedVideo?.quiz &&
-                                    selectedVideo.quizStatus === "pending" && (
-                                        <div className="absolute inset-0 bg-black/60 flex items-center justify-center rounded-2xl">
-                                            <button
-                                                onClick={() =>
-                                                    setShowQuizModal(true)
-                                                }
-                                                className="flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-xl font-bold transition-colors shadow-lg"
-                                            >
-                                                <FileQuestion className="size-5" />
-                                                {t("lesson.takeQuiz")} (
-                                                {
-                                                    selectedVideo.quiz
-                                                        .totalQuestions
-                                                }{" "}
-                                                {t("lesson.questions")})
-                                            </button>
-                                        </div>
-                                    )}
-                            </div>
-                        ) : (
-                            <div className="w-full aspect-video bg-gray-700 rounded-2xl flex items-center justify-center border-4 border-white dark:border-gray-800 shadow-lg">
-                                <p className="text-white text-sm">
-                                    {t("lesson.videoLocked")}
-                                </p>
-                            </div>
-                        )}
-
-                        {/* Lesson Info Card */}
-                        <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-theme-sm p-6 overflow-visible">
-                            {/* Tabs */}
-                            <LessonTabs
-                                activeTab={activeTab}
-                                onTabChange={setActiveTab}
+            {/* Main Content Area */}
+            <div className="flex gap-4">
+                {/* Video Player Section */}
+                <div className="flex-1">
+                    <div className="flex items-center justify-end mb-3">
+                        <button
+                            onClick={() => setWatchInEnglish(false)}
+                            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                                !watchInEnglish
+                                    ? "bg-brand-500 text-white"
+                                    : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+                            }`}
+                        >
+                            AR
+                        </button>
+                        <button
+                            onClick={() => setWatchInEnglish(true)}
+                            className={`ms-2 flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                                watchInEnglish
+                                    ? "bg-brand-500 text-white"
+                                    : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+                            }`}
+                        >
+                            EN
+                        </button>
+                    </div>
+                    {selectedVideo?.contentable?.embedHtml ? (
+                        <div className="relative bg-gray-900 rounded-2xl aspect-video flex items-center justify-center mb-4 overflow-hidden">
+                            <BunnyStreamPlayer
+                                embedHtml={selectedVideo.contentable.embedHtml}
+                                onState={handlePlayerState}
                             />
+                            {/* Quiz Button - Shows after video ends */}
+                            {videoEnded &&
+                                selectedVideo?.quiz &&
+                                selectedVideo.quizStatus === "pending" && (
+                                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center rounded-2xl">
+                                        <button
+                                            onClick={() =>
+                                                setShowQuizModal(true)
+                                            }
+                                            className="flex items-center gap-2 bg-brand-500 hover:bg-brand-600 text-white px-6 py-3 rounded-xl font-bold transition-colors shadow-lg"
+                                        >
+                                            <FileQuestion className="size-5" />
+                                            {t("lesson.takeQuiz")} (
+                                            {selectedVideo.quiz.totalQuestions}{" "}
+                                            {t("lesson.questions")})
+                                        </button>
+                                    </div>
+                                )}
+                        </div>
+                    ) : (
+                        <div className="w-full aspect-video bg-gray-700 rounded-2xl flex items-center justify-center border-4 border-white dark:border-gray-800 shadow-lg">
+                            <p className="text-white text-sm">
+                                {t("lesson.videoLocked")}
+                            </p>
+                        </div>
+                    )}
 
-                            {/* Tab Content */}
-                            <div className="mt-6 overflow-visible">
-                                <LessonContent
-                                    lesson={lesson}
-                                    activeTab={activeTab}
-                                />
-                            </div>
+                    {/* Lesson Info Card */}
+                    <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-theme-sm p-6 overflow-visible">
+                        {/* Tabs */}
+                        <LessonTabs
+                            activeTab={activeTab}
+                            onTabChange={setActiveTab}
+                        />
+
+                        {/* Tab Content */}
+                        <div className="mt-6 overflow-visible">
+                            <LessonContent
+                                lesson={lesson}
+                                activeTab={activeTab}
+                            />
                         </div>
                     </div>
-
-                    {/* Videos List Sidebar */}
-                    <MissionPath
-                        videos={videos}
-                        currentVideoId={selectedVideoId}
-                        onVideoSelect={handleVideoSelect}
-                        onQuizClick={(videoId) => {
-                            const video = videos.find((v) => v.id === videoId);
-                            if (
-                                video?.contentProgress?.isCompleted &&
-                                video.quizStatus === "pending"
-                            ) {
-                                setSelectedVideoId(videoId);
-                                setShowQuizModal(true);
-                            }
-                        }}
-                    />
                 </div>
+
+                {/* Videos List Sidebar */}
+                <MissionPath
+                    videos={videos}
+                    currentVideoId={selectedVideoId}
+                    onVideoSelect={handleVideoSelect}
+                    onQuizClick={(videoId) => {
+                        const video = videos.find((v) => v.id === videoId);
+                        if (
+                            video?.progress?.isCompleted &&
+                            video.quizStatus === "pending"
+                        ) {
+                            setSelectedVideoId(videoId);
+                            setShowQuizModal(true);
+                        }
+                    }}
+                />
+            </div>
 
             {/* Quiz Modal */}
             {showQuizModal && selectedVideo?.quiz && (
