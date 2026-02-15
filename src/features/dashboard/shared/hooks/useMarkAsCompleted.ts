@@ -4,10 +4,10 @@ import { useCallback } from "react";
 export function useMarkAsCompleted() {
     const mutate = useCallback(
         (
-            payload: { lessonContentId: string; groupId?: number },
+            payload: { lessonVideoId: string; group_id?: number },
             options?: { onSuccess?: () => void; onError?: () => void }
         ) => {
-            api.post("/content-progress/complete", payload)
+            api.post(`/groups/progress/video/${payload.lessonVideoId}/complete`, payload.group_id)
                 .then(() => options?.onSuccess?.())
                 .catch(() => options?.onError?.());
         },

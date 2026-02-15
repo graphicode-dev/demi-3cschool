@@ -4,6 +4,7 @@ import { X, Send, Loader2 } from "lucide-react";
 import { FileInput } from "@/design-system";
 import { useCreateLessonAssignment } from "@/features/dashboard/admin/learning/pages/lessons/api";
 import type { LessonAssignment } from "@/features/dashboard/admin/learning/pages/lessons/types/lesson-assignments.types";
+import { FilePreview } from "@/features/dashboard/shared/components/FilePreview";
 
 interface AssignmentSubmitModalProps {
     isOpen: boolean;
@@ -24,6 +25,7 @@ export function AssignmentSubmitModal({
     const [file, setFile] = useState<File | null>(null);
     const [title, setTitle] = useState("");
     const [isVisible, setIsVisible] = useState(false);
+    const [showPreviewModal, setShowPreviewModal] = useState(false);
 
     const createMutation = useCreateLessonAssignment();
 
@@ -68,6 +70,18 @@ export function AssignmentSubmitModal({
             onClose();
         }
     };
+
+    const existingFile = assignment?.file;
+
+    const formatFileSize = (bytes: number) => {
+        if (bytes === 0) return "0 Bytes";
+        const k = 1024;
+        const sizes = ["Bytes", "KB", "MB", "GB"];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+    };
+
+    const hasFile = file || existingFile;
 
     return (
         <>
@@ -149,6 +163,33 @@ export function AssignmentSubmitModal({
                             maxSize={10 * 1024 * 1024} // 10MB
                             disabled={createMutation.isPending}
                         />
+                        {hasFile && (
+                            <div className="mt-3 flex items-center justify-between rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 px-3 py-2">
+                                <div className="min-w-0">
+                                    <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">
+                                        {file?.name || existingFile?.fileName}
+                                    </p>
+                                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                                        {file
+                                            ? formatFileSize(file.size)
+                                            : existingFile?.humanReadableSize}
+                                    </p>
+                                </div>
+                                <div className="shrink-0">
+                                    <FilePreview
+                                        t={t}
+                                        file={existingFile}
+                                        selectedFile={file}
+                                        showPreviewModal={showPreviewModal}
+                                        setShowPreviewModal={
+                                            setShowPreviewModal
+                                        }
+                                        showOnlyIcon
+                                        iconSize="w-5 h-5"
+                                    />
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     {/* Actions */}

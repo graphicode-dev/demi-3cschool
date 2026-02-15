@@ -1,14 +1,14 @@
 import { api } from "@/shared/api";
 import { useEffect, useState } from "react";
 
-export function useGetGroupProgress(groupId: string | null, enabled: boolean) {
+export function useGetGroupProgress(sessionId: number | null, enabled: boolean) {
     const [data, setData] = useState<unknown>(undefined);
 
     useEffect(() => {
-        if (!enabled || !groupId) return;
+        if (!enabled || !sessionId) return;
 
         let cancelled = false;
-        api.get("/content-progress", { params: { groupId } })
+        api.get(`/groups/progress/session/${sessionId}`)
             .then((res) => {
                 if (cancelled) return;
                 setData((res as any)?.data ?? res);
@@ -21,7 +21,7 @@ export function useGetGroupProgress(groupId: string | null, enabled: boolean) {
         return () => {
             cancelled = true;
         };
-    }, [enabled, groupId]);
+    }, [enabled, sessionId]);
 
     return { data };
 }

@@ -2,7 +2,7 @@ import { api } from "@/shared/api";
 import { useEffect, useState } from "react";
 
 export function useGetContentProgress(
-    lessonContentId: string,
+    sessionId: string,
     groupId: string | null,
     enabled: boolean
 ) {
@@ -12,7 +12,7 @@ export function useGetContentProgress(
         if (!enabled) return;
 
         let cancelled = false;
-        api.get(`/content-progress/${lessonContentId}`, {
+        api.get(`/groups/progress/session/${sessionId}`, {
             params: groupId ? { groupId } : undefined,
         })
             .then((res) => {
@@ -27,7 +27,7 @@ export function useGetContentProgress(
         return () => {
             cancelled = true;
         };
-    }, [enabled, groupId, lessonContentId]);
+    }, [enabled, groupId, sessionId]);
 
     return { data };
 }

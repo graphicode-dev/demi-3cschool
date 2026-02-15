@@ -75,6 +75,19 @@ export const useVideo = () => {
     const { data: lessonData, isLoading: isLoadingLesson } =
         useLesson(lessonId);
 
+            const lesson = useMemo(() => {
+        if (!lessonData) return null;
+        return {
+            id: Number(lessonData.id),
+            sessionId: Number(lessonId),
+            title: String(lessonData.title ?? ""),
+            description: String((lessonData as any).description ?? ""),
+            videos,
+            currentVideoId: selectedVideoId,
+        };
+    }, [lessonData, lessonId, selectedVideoId, videos]);
+
+
     // Set dynamic breadcrumb with lesson title
     useEffect(() => {
         if (lessonData?.title) {
@@ -88,11 +101,11 @@ export const useVideo = () => {
     // Fetch lesson videos
     const { data: videosData, isLoading: isLoadingVideos } =
         useLessonVideosByLesson(lessonId);
-    const { mutate: updateProgress } = useUpdateProgress();
+    const { mutate: updateProgress } = useUpdateProgress(lesson?.currentVideoId!);
     const { mutate: markAsCompleted } = useMarkAsCompleted();
 
     const { data: groupProgressData } = useGetGroupProgress(
-        groupId,
+        lesson?.sessionId!,
         Boolean(groupId)
     );
 
@@ -117,17 +130,6 @@ export const useVideo = () => {
         }
     }, [groupProgressData]);
 
-    const lesson = useMemo(() => {
-        if (!lessonData) return null;
-        return {
-            id: Number(lessonData.id),
-            sessionId: Number(lessonId),
-            title: String(lessonData.title ?? ""),
-            description: String((lessonData as any).description ?? ""),
-            videos,
-            currentVideoId: selectedVideoId,
-        };
-    }, [lessonData, lessonId, selectedVideoId, videos]);
 
     const overallProgressPercent = useMemo(() => {
         if (videos.length === 0) return 0;
@@ -282,8 +284,8 @@ export const useVideo = () => {
 
             markAsCompleted(
                 {
-                    lessonContentId: String(videoId),
-                    groupId: groupId ? parseInt(groupId) : undefined,
+                    lessonVideoId: String(videoId),
+                    group_id: groupId ? parseInt(groupId) : undefined,
                 },
                 {
                     onSuccess: () => {
@@ -374,11 +376,10 @@ export const useVideo = () => {
 
                 // Send final progress update as 100% when video ends
                 const finalPayload = {
-                    lessonContentId: videoId,
-                    groupId: safeGroupId,
-                    progressPercentage: 100,
-                    lastPosition: Math.floor(currentTime),
-                    watchTime: Math.max(
+                    group_id: safeGroupId,
+                    progress_percentage: 100,
+                    last_position: Math.floor(currentTime),
+                    watch_time: Math.max(
                         0,
                         Math.floor(currentTime) - lastSentPos
                     ),
@@ -417,11 +418,10 @@ export const useVideo = () => {
             const finalProgress = ps.isEnded ? 100 : progress;
 
             const payload = {
-                lessonContentId: videoId,
-                groupId: safeGroupId,
-                progressPercentage: Math.floor(finalProgress),
-                lastPosition: currentTimeInt,
-                watchTime: Math.max(0, currentTimeInt - lastSentPos),
+                group_id: safeGroupId,
+                progress_percentage: Math.floor(finalProgress),
+                last_position: currentTimeInt,
+                watch_time: Math.max(0, currentTimeInt - lastSentPos),
             };
 
             updateProgress(payload);
