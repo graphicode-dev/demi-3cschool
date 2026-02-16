@@ -2,7 +2,7 @@ import { api } from "@/shared/api";
 import { useCallback } from "react";
 
 export function useUpdateProgress(
-    lessonVideoId: number
+    lessonVideoId?: number
 ) {
     const mutate = useCallback(
         (
@@ -12,9 +12,12 @@ export function useUpdateProgress(
                 last_position: number;
                 watch_time: number;
             },
-            options?: { onSuccess?: () => void; onError?: () => void }
+            options?: { onSuccess?: () => void; onError?: () => void },
+            overrideVideoId?: number
         ) => {
-            api.post(`/groups/progress/video/${lessonVideoId}`, payload)
+            const videoId = overrideVideoId ?? lessonVideoId;
+            if (!videoId) return;
+            api.post(`/groups/progress/video/${videoId}`, payload)
                 .then(() => options?.onSuccess?.())
                 .catch(() => options?.onError?.());
         },

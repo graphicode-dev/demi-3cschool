@@ -18,6 +18,13 @@ export function MissionPath({
 }: MissionPathProps) {
     const { t } = useTranslation("selfStudy");
 
+    const formatDuration = (seconds: number) => {
+        if (!seconds || seconds <= 0) return "0:00";
+        const m = Math.floor(seconds / 60);
+        const s = Math.floor(seconds % 60);
+        return `${m}:${s.toString().padStart(2, "0")}`;
+    };
+
     const sortedVideos = [...videos].sort((a, b) => a.order - b.order);
 
     const handleVideoClick = (video: LessonVideo) => {
@@ -44,7 +51,8 @@ export function MissionPath({
                     const isLocked = video.status === "locked";
                     const hasQuiz = video.quiz && video.quiz.totalQuestions > 0;
                     const isVideoWatched = video.progress?.isCompleted;
-                    const progressPercentage = video.progress?.progressPercentage || 0;
+                    const progressPercentage =
+                        video.progress?.progressPercentage || 0;
 
                     const videoButton = (
                         <button
@@ -105,7 +113,7 @@ export function MissionPath({
                                                 ${isCompleted || isLocked ? "text-gray-400/50" : "text-gray-500"}
                                             `}
                                         >
-                                            {video.duration} {t("common.min")}
+                                            {formatDuration(video.duration)}
                                         </span>
                                     </div>
                                 </div>
@@ -148,7 +156,9 @@ export function MissionPath({
                                                             onQuizClick
                                                         ) {
                                                             e.stopPropagation();
-                                                            onQuizClick(video.id);
+                                                            onQuizClick(
+                                                                video.id
+                                                            );
                                                         }
                                                     }}
                                                 >
@@ -159,11 +169,14 @@ export function MissionPath({
                                                 </span>
                                             </Tooltip>
                                         )}
-                                    {(isLocked || video.quizStatus === "locked") &&
+                                    {(isLocked ||
+                                        video.quizStatus === "locked") &&
                                         hasQuiz && (
                                             <>
                                                 <Lock className="size-2.5" />
-                                                <span>{t("lesson.quizLabel")}</span>
+                                                <span>
+                                                    {t("lesson.quizLabel")}
+                                                </span>
                                             </>
                                         )}
                                 </div>
@@ -179,7 +192,9 @@ export function MissionPath({
                                                     ? "bg-success-500"
                                                     : "bg-brand-500"
                                             }`}
-                                            style={{ width: `${progressPercentage}%` }}
+                                            style={{
+                                                width: `${progressPercentage}%`,
+                                            }}
                                         />
                                     </div>
                                 </div>

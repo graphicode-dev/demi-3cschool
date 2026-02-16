@@ -195,9 +195,7 @@ function LessonPage() {
                     {selectedVideo?.contentable?.embedHtml ? (
                         <div className="relative bg-gray-900 rounded-2xl aspect-video flex items-center justify-center mb-4 overflow-hidden">
                             <BunnyStreamPlayer
-                                embedHtml={
-                                    selectedVideo.contentable.embedHtml
-                                }
+                                embedHtml={selectedVideo.contentable.embedHtml}
                                 onState={handlePlayerState}
                             />
                             {/* Quiz Button - Shows after video ends */}
@@ -213,10 +211,7 @@ function LessonPage() {
                                         >
                                             <FileQuestion className="size-5" />
                                             {t("lesson.takeQuiz")} (
-                                            {
-                                                selectedVideo.quiz
-                                                    .totalQuestions
-                                            }{" "}
+                                            {selectedVideo.quiz.totalQuestions}{" "}
                                             {t("lesson.questions")})
                                         </button>
                                     </div>
@@ -283,8 +278,13 @@ function LessonPage() {
                                         {selectedVideo.title}
                                     </p>
                                     <p className="text-xs text-gray-500">
-                                        {selectedVideo.duration}{" "}
-                                        {t("common.min")}
+                                        {selectedVideo.duration > 0
+                                            ? `${Math.floor(selectedVideo.duration / 60)}:${Math.floor(
+                                                  selectedVideo.duration % 60
+                                              )
+                                                  .toString()
+                                                  .padStart(2, "0")}`
+                                            : "0:00"}
                                     </p>
                                 </div>
                             </div>

@@ -11,6 +11,7 @@ import { useUpdateProgress } from "./useUpdateProgress";
 import { useMarkAsCompleted } from "./useMarkAsCompleted";
 import { useGetGroupProgress } from "./useGetGroupProgress";
 import { useGetContentProgress } from "./useGetContentProgress";
+import { useBunnyDurations } from "./useBunnyDurations";
 
 export const useVideo = () => {
     const { sessionId: lessonId } = useParams<{ sessionId: string }>();
@@ -101,8 +102,44 @@ export const useVideo = () => {
     // Fetch lesson videos
     const { data: videosData, isLoading: isLoadingVideos } =
         useLessonVideosByLesson(lessonId);
-    const { mutate: updateProgress } = useUpdateProgress(lesson?.currentVideoId!);
+    const { mutate: updateProgress } = useUpdateProgress();
     const { mutate: markAsCompleted } = useMarkAsCompleted();
+
+    // Build embed info list from API data for duration preloading
+    const videoEmbedInfos = useMemo(() => {
+        const apiVideos = videosData?.items ?? [];
+        return apiVideos.map((video: any) => ({
+            id: Number(video.id),
+            embedHtml: String(
+                video.embedHtmlAr ??
+                    video.embed_html_ar ??
+                    video.embedHtmlAR ??
+                    video.embedHtml ??
+                    video.embed_html ??
+                    ""
+            ),
+        }));
+    }, [videosData]);
+
+    // Preload durations for ALL videos via hidden iframes
+    const preloadedDurations = useBunnyDurations(videoEmbedInfos, videoDurations);
+
+    // Merge preloaded durations into videoDurations state
+    useEffect(() => {
+        if (Object.keys(preloadedDurations).length === 0) return;
+        setVideoDurations((prev) => {
+            const next = { ...prev };
+            let changed = false;
+            for (const [idStr, dur] of Object.entries(preloadedDurations)) {
+                const id = Number(idStr);
+                if (dur > 0 && (!prev[id] || prev[id] <= 0)) {
+                    next[id] = dur;
+                    changed = true;
+                }
+            }
+            return changed ? next : prev;
+        });
+    }, [preloadedDurations]);
 
     const { data: groupProgressData } = useGetGroupProgress(
         lesson?.sessionId!,
@@ -157,6 +194,39 @@ export const useVideo = () => {
         return Math.floor(sum / perVideoPercents.length);
     }, [videoProgress, videos]);
 
+    const parseDurationToSeconds = useCallback((duration: unknown): number => {
+        if (duration == null) return 0;
+
+        if (typeof duration === "number") {
+            return Number.isFinite(duration) ? Math.max(0, duration) : 0;
+        }
+
+        if (typeof duration !== "string") return 0;
+
+        const trimmed = duration.trim();
+        if (!trimmed) return 0;
+
+        // numeric string (e.g. "300")
+        if (/^\d+(\.\d+)?$/.test(trimmed)) {
+            const n = Number(trimmed);
+            return Number.isFinite(n) ? Math.max(0, n) : 0;
+        }
+
+        // time string (e.g. "mm:ss" or "hh:mm:ss")
+        if (/^\d{1,2}:\d{1,2}(:\d{1,2})?$/.test(trimmed)) {
+            const parts = trimmed.split(":").map((p) => Number(p));
+            if (parts.some((p) => !Number.isFinite(p))) return 0;
+            if (parts.length === 2) {
+                const [m, s] = parts;
+                return Math.max(0, m * 60 + s);
+            }
+            const [h, m, s] = parts;
+            return Math.max(0, h * 3600 + m * 60 + s);
+        }
+
+        return 0;
+    }, []);
+
     // Utility to format duration in seconds to MM:SS format
     const formatDuration = (duration: number | string | undefined | null) => {
         if (duration === undefined || duration === null) return "0:00";
@@ -190,13 +260,19 @@ export const useVideo = () => {
             (video: any, index: number) => {
                 const id = Number(video.id);
                 const actualDuration = videoDurations[id];
-                // durationNum is in seconds
+                const localProgressPercent = videoProgressRef.current[id];
+                const localIsCompleted =
+                    hasMarkedCompleteRef.current[id] === true ||
+                    localProgressPercent === 100;
+                const durationFromApiSeconds = parseDurationToSeconds(
+                    video.duration
+                );
                 const durationInSeconds =
-                    Number(actualDuration || video.duration) || 0;
-                // Convert to minutes for display (rounded up)
-                const durationInMinutes = durationInSeconds > 0 
-                    ? Math.ceil(durationInSeconds / 60) 
-                    : 0;
+                    Number(actualDuration) > 0
+                        ? Number(actualDuration)
+                        : durationFromApiSeconds;
+                // Keep duration in seconds for accurate display
+                const durationForDisplay = durationInSeconds;
 
                 const embedHtmlAr =
                     String(
@@ -212,6 +288,54 @@ export const useVideo = () => {
                             video.embedHtmlEN ??
                             ""
                     ) || String(video.embedHtml ?? video.embed_html ?? "");
+
+                const apiProgress = video.progress
+                    ? {
+                          progressPercentage:
+                              Number(video.progress.progressPercentage) || 0,
+                          watchTime: Number(video.progress.watchTime) || 0,
+                          lastPosition:
+                              Number(video.progress.lastPosition) || 0,
+                          isCompleted: Boolean(video.progress.isCompleted),
+                          completedAt: video.progress.completedAt || null,
+                          lastWatchedAt: video.progress.lastWatchedAt || null,
+                      }
+                    : null;
+
+                const mergedProgress = apiProgress
+                    ? {
+                          ...apiProgress,
+                          progressPercentage:
+                              typeof localProgressPercent === "number" &&
+                              Number.isFinite(localProgressPercent)
+                                  ? Math.max(
+                                        apiProgress.progressPercentage,
+                                        localProgressPercent
+                                    )
+                                  : apiProgress.progressPercentage,
+                          isCompleted: apiProgress.isCompleted || localIsCompleted,
+                      }
+                    : localIsCompleted ||
+                        (typeof localProgressPercent === "number" &&
+                            Number.isFinite(localProgressPercent) &&
+                            localProgressPercent > 0)
+                      ? {
+                            progressPercentage:
+                                typeof localProgressPercent === "number" &&
+                                Number.isFinite(localProgressPercent)
+                                    ? Math.max(0, Math.min(100, localProgressPercent))
+                                    : localIsCompleted
+                                      ? 100
+                                      : 0,
+                            watchTime: 0,
+                            lastPosition: 0,
+                            isCompleted: localIsCompleted,
+                            completedAt: localIsCompleted
+                                ? new Date().toISOString()
+                                : null,
+                            lastWatchedAt: new Date().toISOString(),
+                        }
+                      : null;
 
                 return {
                     id,
@@ -233,22 +357,12 @@ export const useVideo = () => {
                     title: String(video.title ?? video.name ?? ""),
                     description: String(video.description ?? ""),
                     order: index + 1,
-                    duration: durationInMinutes,
+                    duration: durationForDisplay,
                     isRequired: true,
                     isPublished: Number(video.isActive) === 1,
                     createdAt: String(video.createdAt ?? ""),
                     updatedAt: String(video.updatedAt ?? ""),
-                    progress: video.progress ? {
-                        progressPercentage:
-                            Number(video.progress.progressPercentage) || 0,
-                        watchTime:
-                            Number(video.progress.watchTime) || 0,
-                        lastPosition:
-                            Number(video.progress.lastPosition) || 0,
-                        isCompleted: Boolean(video.progress.isCompleted),
-                        completedAt: video.progress.completedAt || null,
-                        lastWatchedAt: video.progress.lastWatchedAt || null,
-                    } : null,
+                    progress: mergedProgress,
                     status: index === 0 ? "current" : "locked",
                     quizStatus: "pending",
                 } as LessonVideo;
@@ -302,7 +416,7 @@ export const useVideo = () => {
         });
         setVideoProgress((prev) => ({ ...prev, ...progressFromApi }));
         setLastPositions((prev) => ({ ...prev, ...positionsFromApi }));
-    }, [videosData, videoDurations]);
+    }, [parseDurationToSeconds, videosData]);
 
     // Update video durations in the list when actual durations are loaded from player
     useEffect(() => {
@@ -314,7 +428,7 @@ export const useVideo = () => {
                 if (actualDuration && actualDuration > 0) {
                     return {
                         ...video,
-                        duration: Math.ceil(actualDuration / 60), // Convert seconds to minutes
+                        duration: actualDuration, // Keep in seconds for mm:ss display
                         contentable: {
                             ...video.contentable,
                             duration: actualDuration,
@@ -513,7 +627,7 @@ export const useVideo = () => {
                         Math.floor(currentTime) - lastSentPos
                     ),
                 };
-                updateProgress(finalPayload);
+                updateProgress(finalPayload, undefined, videoId);
 
                 autoMarkAsComplete(videoId);
                 return;
@@ -553,7 +667,7 @@ export const useVideo = () => {
                 watch_time: Math.max(0, currentTimeInt - lastSentPos),
             };
 
-            updateProgress(payload);
+            updateProgress(payload, undefined, videoId);
 
             // Progress bar is synced with API via useGetGroupProgress cache updates
             // No local state updates needed here
