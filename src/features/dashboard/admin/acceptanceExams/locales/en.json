@@ -1,0 +1,88 @@
+{
+    "title": "Acceptance Exams",
+    "common": {
+        "loading": "Loading...",
+        "delete": "Delete",
+        "cancel": "Cancel",
+        "save": "Save",
+        "saving": "Saving...",
+        "edit": "Edit"
+    },
+    "errors": {
+        "fetchFailed": "Failed to load acceptance exam"
+    },
+    "levels": {
+        "levelQuiz": "Acceptance Exam",
+        "levelQuizzes": "Acceptance Exams",
+        "examsCount": "{{count}} Exams",
+        "addLevelQuiz": "Add Acceptance Exam",
+        "progressionGate": "Acceptance Gate",
+        "progressionGateDescription": "Students must pass this acceptance exam to be accepted. This exam serves as a checkpoint to ensure readiness and mastery of all required concepts.",
+        "lockBehavior": "Acceptance Behavior",
+        "lockBehaviorDescription": "When students complete this acceptance exam with a passing score (75% or higher), they will be accepted automatically.",
+        "quiz": {
+            "title": "Acceptance Exam",
+            "quizTitle": "Exam #{{id}}",
+            "min": "min",
+            "attempts": "attempts",
+            "questions": "questions",
+            "questionsTitle": "Questions",
+            "addQuestion": "Add Question",
+            "noQuestions": "No questions yet",
+            "addFirstQuestion": "Click 'Add Question' to create your first question",
+            "shuffleEnabled": "Shuffle enabled",
+            "resultsVisible": "Results visible",
+            "noQuizzes": "No exams yet",
+            "addFirstQuiz": "Click 'Add Acceptance Exam' to create your first exam",
+            "editQuiz": "Edit Exam",
+            "editQuestion": "Edit Question",
+            "createNew": "Create New Exam",
+            "timeLimit": "Time Limit (minutes)",
+            "passingScore": "Passing Score (%)",
+            "maxAttempts": "Max Attempts",
+            "shuffleQuestions": "Shuffle Questions",
+            "showAnswers": "Show Answers",
+            "pts": "pts",
+            "options": "Options",
+            "explanation": "Explanation",
+            "newQuestion": "New Question",
+            "questionText": "Question",
+            "questionPlaceholder": "Enter your question",
+            "questionType": "Type",
+            "points": "Points",
+            "order": "Order",
+            "addOption": "Add Option",
+            "optionPlaceholder": "Option text",
+            "explanationPlaceholder": "Explain the correct answer",
+            "saveQuestion": "Save Question",
+            "questionTypes": {
+                "singleChoice": "Single Choice",
+                "multipleChoice": "Multiple Choice",
+                "trueFalse": "True/False",
+                "shortAnswer": "Short Answer"
+            },
+            "messages": {
+                "createSuccess": "Acceptance exam created successfully",
+                "updateSuccess": "Acceptance exam updated successfully",
+                "deleteSuccess": "Acceptance exam deleted successfully",
+                "questionCreateSuccess": "Question created successfully",
+                "questionUpdateSuccess": "Question updated successfully",
+                "questionDeleteSuccess": "Question deleted successfully"
+            },
+            "deleteDialog": {
+                "title": "Delete Exam",
+                "message": "Are you sure you want to delete this acceptance exam? All questions and options will be permanently removed. This action cannot be undone."
+            },
+            "deleteQuestionDialog": {
+                "title": "Delete Question",
+                "message": "Are you sure you want to delete this question? All options will be permanently removed. This action cannot be undone."
+            }
+        }
+    },
+    "exams": {
+        "navTitle": "Exams"
+    },
+    "submissions": {
+        "navTitle": "Submissions"
+    }
+}

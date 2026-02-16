@@ -25,6 +25,7 @@ import gradesNav from "../learning/navigation";
 import { settingsNavItem } from "../settings/navigation/nav";
 import { userManagementNavItem } from "../userManagement/navigation/nav";
 import { auditingNavItem } from "../auditing/navigation";
+import { acceptanceExamsNav } from "../acceptanceExams/navigation/nav";
 
 export const adminNav: FeatureNavModule = {
     featureId: "admin",
@@ -53,6 +54,8 @@ export const adminNav: FeatureNavModule = {
         ...adminSharedNavItems,
         // Auditing
         auditingNavItem,
+        // Acceptance Exams
+        acceptanceExamsNav,
     ],
 };
 

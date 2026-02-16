@@ -31,6 +31,7 @@ import { resourcesRoutes } from "../resources/navigation/routes";
 import { settingsRoutes } from "../settings/navigation/routes";
 import { userManagementRoutes } from "../userManagement/navigation/routes";
 import { auditingRoutes } from "../auditing/navigation";
+import { acceptanceExamsRoutes } from "../acceptanceExams/navigation";
 
 // ============================================================================
 // Admin Shared Routes (profile, chat, certificates, reports)
@@ -80,6 +81,8 @@ export const adminRouteModule: FeatureRouteModule = {
             ...communityManagementRoutes,
             // Auditing
             ...auditingRoutes,
+            // Acceptance Exams
+            ...acceptanceExamsRoutes,
         ],
     },
 };

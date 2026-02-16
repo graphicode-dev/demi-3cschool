@@ -1,0 +1,88 @@
+{
+    "title": "إختبارات القبول",
+    "common": {
+        "loading": "جاري التحميل...",
+        "delete": "حذف",
+        "cancel": "إلغاء",
+        "save": "حفظ",
+        "saving": "جاري الحفظ...",
+        "edit": "تعديل"
+    },
+    "errors": {
+        "fetchFailed": "فشل في تحميل اختبار القبول"
+    },
+    "levels": {
+        "levelQuiz": "اختبار القبول",
+        "levelQuizzes": "اختبارات القبول",
+        "examsCount": "{{count}} اختبارات",
+        "addLevelQuiz": "إضافة اختبار قبول",
+        "progressionGate": "بوابة القبول",
+        "progressionGateDescription": "يجب على الطلاب اجتياز اختبار القبول هذا ليتم قبولهم. يعمل هذا الاختبار كنقطة تفتيش لضمان الجاهزية وإتقان جميع المفاهيم المطلوبة.",
+        "lockBehavior": "سلوك القبول",
+        "lockBehaviorDescription": "عندما يكمل الطلاب اختبار القبول هذا بدرجة نجاح (75% أو أعلى)، سيتم قبولهم تلقائياً.",
+        "quiz": {
+            "title": "اختبار القبول",
+            "quizTitle": "اختبار #{{id}}",
+            "min": "دقيقة",
+            "attempts": "محاولات",
+            "questions": "أسئلة",
+            "questionsTitle": "الأسئلة",
+            "addQuestion": "إضافة سؤال",
+            "noQuestions": "لا توجد أسئلة بعد",
+            "addFirstQuestion": "انقر على 'إضافة سؤال' لإنشاء أول سؤال",
+            "shuffleEnabled": "الخلط مفعل",
+            "resultsVisible": "النتائج مرئية",
+            "noQuizzes": "لا توجد اختبارات بعد",
+            "addFirstQuiz": "انقر على 'إضافة اختبار قبول' لإنشاء أول اختبار",
+            "editQuiz": "تعديل الاختبار",
+            "editQuestion": "تعديل السؤال",
+            "createNew": "إنشاء اختبار قبول جديد",
+            "timeLimit": "الحد الزمني (بالدقائق)",
+            "passingScore": "درجة النجاح (%)",
+            "maxAttempts": "الحد الأقصى للمحاولات",
+            "shuffleQuestions": "خلط الأسئلة",
+            "showAnswers": "إظهار الإجابات",
+            "pts": "نقاط",
+            "options": "الخيارات",
+            "explanation": "الشرح",
+            "newQuestion": "سؤال جديد",
+            "questionText": "السؤال",
+            "questionPlaceholder": "أدخل سؤالك",
+            "questionType": "النوع",
+            "points": "النقاط",
+            "order": "الترتيب",
+            "addOption": "إضافة خيار",
+            "optionPlaceholder": "نص الخيار",
+            "explanationPlaceholder": "اشرح الإجابة الصحيحة",
+            "saveQuestion": "حفظ السؤال",
+            "questionTypes": {
+                "singleChoice": "اختيار واحد",
+                "multipleChoice": "اختيار متعدد",
+                "trueFalse": "صح/خطأ",
+                "shortAnswer": "إجابة قصيرة"
+            },
+            "messages": {
+                "createSuccess": "تم إنشاء اختبار القبول بنجاح",
+                "updateSuccess": "تم تحديث اختبار القبول بنجاح",
+                "deleteSuccess": "تم حذف اختبار القبول بنجاح",
+                "questionCreateSuccess": "تم إنشاء السؤال بنجاح",
+                "questionUpdateSuccess": "تم تحديث السؤال بنجاح",
+                "questionDeleteSuccess": "تم حذف السؤال بنجاح"
+            },
+            "deleteDialog": {
+                "title": "حذف الاختبار",
+                "message": "هل أنت متأكد من حذف اختبار القبول هذا؟ سيتم حذف جميع الأسئلة والخيارات نهائياً. لا يمكن التراجع عن هذا الإجراء."
+            },
+            "deleteQuestionDialog": {
+                "title": "حذف السؤال",
+                "message": "هل أنت متأكد من حذف هذا السؤال؟ سيتم حذف جميع الخيارات نهائياً. لا يمكن التراجع عن هذا الإجراء."
+            }
+        }
+    },
+    "exams": {
+        "navTitle": "الاختبارات"
+    },
+    "submissions": {
+        "navTitle": "التقديمات"
+    }
+}
