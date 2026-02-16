@@ -10,7 +10,11 @@ export async function generateAndDownloadCertificate(
         image.crossOrigin = "anonymous";
         image.src = "/certificate-template.png";
 
-        image.onload = () => {
+        image.onload = async () => {
+            // Ensure the Fredoka font is loaded before drawing on canvas
+            await document.fonts.load("500 400px Fredoka");
+            await document.fonts.ready;
+
             const canvas = document.createElement("canvas");
             const ctx = canvas.getContext("2d");
 
@@ -26,14 +30,14 @@ export async function generateAndDownloadCertificate(
 
             // Student name styling — large, brand-500 cyan, centered in gap
             // between "To our beloved..." (~48%) and "For Completing..." (~64%)
-            ctx.font = "bold 400px Cairo, Arial, sans-serif";
-            ctx.fillStyle = "#465FFF";
+            ctx.font = "500 400px Fredoka, sans-serif";
+            ctx.fillStyle = "#e4ae0e";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
 
             // Name position: centered in the gap area (~55% from top)
             const nameY = Math.round(canvas.height * 0.55);
-            ctx.fillText(name, canvas.width / 2, nameY);
+            ctx.fillText(name.toUpperCase(), canvas.width / 2, nameY);
 
             canvas.toBlob(
                 (blob) => {
