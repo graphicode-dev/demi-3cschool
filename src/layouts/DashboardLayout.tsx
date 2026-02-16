@@ -55,7 +55,7 @@ const LayoutContent: React.FC = () => {
                         </div>
                     </Suspense>
                 )}
-                <div className="mx-auto bg-gray-50 dark:bg-gray-900 max-w-(--breakpoint-3xl) overflow-x-hidden">
+                <div className="mx-auto bg-gray-50 dark:bg-gray-900 max-w-(--breakpoint-4xl) overflow-x-hidden">
                     <Breadcrumb />
                     <Outlet />
                 </div>
