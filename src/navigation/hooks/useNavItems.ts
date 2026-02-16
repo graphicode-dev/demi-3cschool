@@ -112,17 +112,17 @@ export const useNavItems = (
     // TEMPORARY: Bypassed until backend is ready - uncomment when ready
     const acceptanceExamStatus = useMemo(() => {
         // TODO: Uncomment when backend is ready
-        // const user = authStore.getState().user;
-        // const userRole = user?.role?.name?.toLowerCase();
-        // // Only students have acceptance exam requirement
-        // if (userRole !== "student") {
-        //     return "accepted" as AcceptanceExamStatus; // Non-students bypass
-        // }
-        // return (
-        //     (user?.userInformation?.acceptanceExam as AcceptanceExamStatus) ||
-        //     "pending"
-        // );
-        return "accepted" as AcceptanceExamStatus; // TEMPORARY: Bypass
+        const user = authStore.getState().user;
+        const userRole = user?.role?.name?.toLowerCase();
+        // Only students have acceptance exam requirement
+        if (userRole !== "student") {
+            return "accepted" as AcceptanceExamStatus; // Non-students bypass
+        }
+        return (
+            (user?.userInformation?.acceptanceExam as AcceptanceExamStatus) ||
+            "pending"
+        );
+        // return "accepted" as AcceptanceExamStatus; // TEMPORARY: Bypass
     }, []);
 
     // Check if student needs to complete acceptance exam

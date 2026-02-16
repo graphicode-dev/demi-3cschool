@@ -31,18 +31,18 @@ export function AcceptanceExamRouteGuard() {
         | undefined;
 
     // TEMPORARY: Bypassed until backend is ready - uncomment when ready
-    // console.log("AcceptanceExamRouteGuard Debug:", {
-    //     userRole,
-    //     isStudent,
-    //     rawStatus,
-    //     userInformation: user?.userInformation,
-    // });
+    console.log("AcceptanceExamRouteGuard Debug:", {
+        userRole,
+        isStudent,
+        rawStatus,
+        userInformation: user?.userInformation,
+    });
 
     // TODO: Uncomment when backend is ready
-    // const acceptanceExamStatus: AcceptanceExamStatus = isStudent
-    //     ? rawStatus || "pending" // Students: null/undefined defaults to "pending"
-    //     : "accepted"; // Non-students: bypass
-    const acceptanceExamStatus: AcceptanceExamStatus = "accepted"; // TEMPORARY: Bypass
+    const acceptanceExamStatus: AcceptanceExamStatus = isStudent
+        ? rawStatus || "pending" // Students: null/undefined defaults to "pending"
+        : "accepted"; // Non-students: bypass
+    // const acceptanceExamStatus: AcceptanceExamStatus = "accepted"; // TEMPORARY: Bypass
 
     useEffect(() => {
         if (!user) return;

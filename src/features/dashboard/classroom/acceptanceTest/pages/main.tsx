@@ -397,10 +397,10 @@ function AcceptanceExamTakePage() {
 
     return (
         <PageWrapper>
-            {/* Header */}
-            <div className="fixed top-15 left-1/2 -translate-x-1/2 z-50 w-xl bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800">
-                <div className="px-6 py-4">
-                    <div className="flex items-center justify-between">
+            <div className="max-w-3xl mx-auto space-y-6">
+                {/* Header Bar */}
+                <div className="sticky top-0 z-30 bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm px-6 py-4">
+                    <div className="flex items-center justify-between mb-3">
                         <div>
                             <h1 className="text-lg font-bold text-gray-900 dark:text-white">
                                 {t("exam.title")}
@@ -417,18 +417,18 @@ function AcceptanceExamTakePage() {
                                 className={`flex items-center gap-2 px-4 py-2 rounded-xl border ${
                                     timeLeft <= 60
                                         ? "bg-red-50 dark:bg-red-500/10 border-red-200 dark:border-red-500/20"
-                                        : "bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700"
+                                        : "bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700"
                                 }`}
                             >
                                 <Clock
                                     className={`h-5 w-5 ${
                                         timeLeft <= 60
-                                            ? "text-red-500"
+                                            ? "text-red-500 animate-pulse"
                                             : "text-brand-500"
                                     }`}
                                 />
                                 <span
-                                    className={`text-lg font-semibold ${
+                                    className={`text-lg font-bold tabular-nums ${
                                         timeLeft <= 60
                                             ? "text-red-600 dark:text-red-400"
                                             : "text-gray-900 dark:text-white"
@@ -441,138 +441,139 @@ function AcceptanceExamTakePage() {
                     </div>
 
                     {/* Progress Bar */}
-                    <div className="mt-4">
-                        <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-                            <div
-                                className="h-full bg-brand-500 rounded-full transition-all duration-300"
-                                style={{ width: `${progressPercentage}%` }}
-                            />
+                    <div className="h-2.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                        <div
+                            className="h-full bg-brand-500 rounded-full transition-all duration-500 ease-out"
+                            style={{ width: `${progressPercentage}%` }}
+                        />
+                    </div>
+                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-1.5">
+                        {t("exam.questionsAnswered", {
+                            answered: answeredCount,
+                            total: questionsCount,
+                        })}
+                    </p>
+                </div>
+
+                {/* Question Card */}
+                <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm">
+                    <div className="p-6 sm:p-8">
+                        {/* Question Header */}
+                        <div className="flex items-start justify-between mb-6 gap-4">
+                            <h2 className="text-lg font-bold text-gray-900 dark:text-white leading-relaxed">
+                                {currentQuestion.question}
+                            </h2>
+                            <span className="px-3 py-1 rounded-full text-xs font-bold bg-brand-100 dark:bg-brand-500/15 text-brand-600 dark:text-brand-400 whitespace-nowrap">
+                                {t("exam.points", {
+                                    count: currentQuestion.points,
+                                })}
+                            </span>
                         </div>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                            {t("exam.questionsAnswered", {
-                                answered: answeredCount,
-                                total: questionsCount,
-                            })}
-                        </p>
-                    </div>
-                </div>
-            </div>
 
-            {/* Question Content */}
-            <div className="max-w-xl h-screen flex flex-col justify-center items-center mx-auto mt-40">
-                <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-6 mb-6">
-                    {/* Question Header */}
-                    <div className="flex items-start justify-between mb-6">
-                        <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-                            {currentQuestion.question}
-                        </h2>
-                        <span className="px-3 py-1 rounded-full text-sm font-medium bg-brand-50 dark:bg-brand-500/10 text-brand-700 dark:text-brand-400 whitespace-nowrap ml-4">
-                            {t("exam.points", {
-                                count: currentQuestion.points,
-                            })}
-                        </span>
-                    </div>
-
-                    {/* Options */}
-                    <div className="space-y-3">
-                        {currentQuestion.options?.map(
-                            (option: any, optIndex: number) => {
-                                const questionId =
-                                    (currentQuestion as any).id || optIndex;
-                                const optionId = option.id || optIndex;
-                                const isSelected =
-                                    answers[questionId] === optionId;
-                                return (
-                                    <button
-                                        key={optionId}
-                                        onClick={() =>
-                                            handleAnswerSelect(
-                                                questionId,
-                                                optionId
-                                            )
-                                        }
-                                        className={`w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all text-left ${
-                                            isSelected
-                                                ? "border-brand-500 bg-brand-50 dark:bg-brand-500/10"
-                                                : "border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-gray-800"
-                                        }`}
-                                    >
-                                        <div
-                                            className={`flex h-6 w-6 items-center justify-center rounded-full border-2 transition-colors ${
+                        {/* Options */}
+                        <div className="space-y-3">
+                            {currentQuestion.options?.map(
+                                (option: any, optIndex: number) => {
+                                    const questionId =
+                                        (currentQuestion as any).id || optIndex;
+                                    const optionId = option.id || optIndex;
+                                    const isSelected =
+                                        answers[questionId] === optionId;
+                                    return (
+                                        <button
+                                            key={optionId}
+                                            onClick={() =>
+                                                handleAnswerSelect(
+                                                    questionId,
+                                                    optionId
+                                                )
+                                            }
+                                            className={`w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all duration-150 text-left active:scale-[0.98] ${
                                                 isSelected
-                                                    ? "border-brand-500 bg-brand-500"
-                                                    : "border-gray-300 dark:border-gray-600"
+                                                    ? "border-brand-500 bg-brand-50 dark:bg-brand-500/10"
+                                                    : "border-gray-200 dark:border-gray-700 hover:border-brand-300 dark:hover:border-brand-600 bg-white dark:bg-gray-800"
                                             }`}
                                         >
-                                            {isSelected && (
-                                                <svg
-                                                    className="h-4 w-4 text-white"
-                                                    fill="currentColor"
-                                                    viewBox="0 0 20 20"
-                                                >
-                                                    <path
-                                                        fillRule="evenodd"
-                                                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                                                        clipRule="evenodd"
-                                                    />
-                                                </svg>
-                                            )}
-                                        </div>
-                                        <span
-                                            className={`text-sm ${
-                                                isSelected
-                                                    ? "text-brand-700 dark:text-brand-400 font-medium"
-                                                    : "text-gray-700 dark:text-gray-300"
-                                            }`}
-                                        >
-                                            {option.optionText || option.text}
-                                        </span>
-                                    </button>
-                                );
-                            }
-                        )}
+                                            <div
+                                                className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
+                                                    isSelected
+                                                        ? "border-brand-500 bg-brand-500"
+                                                        : "border-gray-300 dark:border-gray-600"
+                                                }`}
+                                            >
+                                                {isSelected && (
+                                                    <svg
+                                                        className="h-3.5 w-3.5 text-white"
+                                                        fill="currentColor"
+                                                        viewBox="0 0 20 20"
+                                                    >
+                                                        <path
+                                                            fillRule="evenodd"
+                                                            d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                            clipRule="evenodd"
+                                                        />
+                                                    </svg>
+                                                )}
+                                            </div>
+                                            <span
+                                                className={`text-sm leading-relaxed ${
+                                                    isSelected
+                                                        ? "text-brand-700 dark:text-brand-400 font-semibold"
+                                                        : "text-gray-700 dark:text-gray-300"
+                                                }`}
+                                            >
+                                                {option.optionText ||
+                                                    option.text}
+                                            </span>
+                                        </button>
+                                    );
+                                }
+                            )}
+                        </div>
                     </div>
-                </div>
-                <div className="flex items-center justify-between">
-                    <button
-                        onClick={() =>
-                            setCurrentQuestionIndex((prev) =>
-                                Math.max(0, prev - 1)
-                            )
-                        }
-                        disabled={currentQuestionIndex === 0}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-colors ${
-                            currentQuestionIndex === 0
-                                ? "border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-600 cursor-not-allowed"
-                                : "border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
-                        }`}
-                    >
-                        <ChevronLeft className="h-4 w-4 rtl:rotate-180" />
-                        {t("exam.previous")}
-                    </button>
 
-                    {currentQuestionIndex === questionsCount - 1 ? (
-                        <button
-                            onClick={confirmSubmit}
-                            disabled={isSubmitting}
-                            className="flex items-center gap-2 px-6 py-2 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-medium transition-colors disabled:opacity-50"
-                        >
-                            <Send className="h-4 w-4" />
-                            {t("exam.submitExam")}
-                        </button>
-                    ) : (
+                    {/* Navigation — inside the card */}
+                    <div className="flex items-center justify-between gap-4 px-6 sm:px-8 py-5 border-t border-gray-100 dark:border-gray-800">
                         <button
                             onClick={() =>
                                 setCurrentQuestionIndex((prev) =>
-                                    Math.min(questionsCount - 1, prev + 1)
+                                    Math.max(0, prev - 1)
                                 )
                             }
-                            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-medium transition-colors"
+                            disabled={currentQuestionIndex === 0}
+                            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border text-sm font-semibold transition-all active:scale-[0.97] ${
+                                currentQuestionIndex === 0
+                                    ? "border-gray-200 dark:border-gray-700 text-gray-300 dark:text-gray-600 cursor-not-allowed"
+                                    : "border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
+                            }`}
                         >
-                            {t("exam.next")}
-                            <ChevronRight className="h-4 w-4 rtl:rotate-180" />
+                            <ChevronLeft className="h-4 w-4 rtl:rotate-180" />
+                            {t("exam.previous")}
                         </button>
-                    )}
+
+                        {currentQuestionIndex === questionsCount - 1 ? (
+                            <button
+                                onClick={confirmSubmit}
+                                disabled={isSubmitting}
+                                className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-green-500 hover:bg-green-600 active:scale-[0.97] text-white text-sm font-bold transition-all disabled:opacity-50 shadow-sm"
+                            >
+                                <Send className="h-4 w-4" />
+                                {t("exam.submitExam")}
+                            </button>
+                        ) : (
+                            <button
+                                onClick={() =>
+                                    setCurrentQuestionIndex((prev) =>
+                                        Math.min(questionsCount - 1, prev + 1)
+                                    )
+                                }
+                                className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-600 active:scale-[0.97] text-white text-sm font-bold transition-all shadow-sm"
+                            >
+                                {t("exam.next")}
+                                <ChevronRight className="h-4 w-4 rtl:rotate-180" />
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
         </PageWrapper>

@@ -8,64 +8,64 @@ function AcceptanceExamWaitingPage() {
 
     return (
         <PageWrapper>
-            <div className="max-w-2xl h-screen mx-auto flex justify-center items-center px-4">
-                <div className="relative w-full bg-linear-to-br from-white via-white to-yellow-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-yellow-950/20 rounded-3xl border-2 border-yellow-200 dark:border-yellow-900/50 overflow-hidden shadow-xl">
-                    {/* Decorative background elements */}
-                    <div className="absolute top-0 right-0 w-72 h-72 bg-yellow-500/5 dark:bg-yellow-500/10 rounded-full blur-3xl -translate-y-1/3 translate-x-1/3"></div>
-                    <div className="absolute bottom-0 left-0 w-56 h-56 bg-amber-400/5 dark:bg-amber-400/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3"></div>
+            <div className="max-w-xl min-h-[80vh] mx-auto flex justify-center items-center px-4 py-8">
+                <div className="relative w-full bg-white dark:bg-gray-900 rounded-3xl border-2 border-amber-200 dark:border-amber-800 overflow-hidden shadow-2xl">
+                    {/* Decorative background blobs */}
+                    <div className="absolute top-0 right-0 w-72 h-72 bg-amber-400/10 dark:bg-amber-500/10 rounded-full blur-3xl -translate-y-1/3 translate-x-1/3 pointer-events-none" />
+                    <div className="absolute bottom-0 left-0 w-56 h-56 bg-yellow-400/10 dark:bg-yellow-400/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3 pointer-events-none" />
 
-                    <div className="relative p-8 sm:p-12 text-center">
-                        {/* Animated icon container */}
-                        <div className="relative inline-block mb-6">
-                            <div className="absolute inset-0 bg-yellow-500/20 dark:bg-yellow-500/30 rounded-full blur-xl animate-pulse"></div>
-                            <div className="relative flex h-24 w-24 items-center justify-center rounded-full bg-linear-to-br from-yellow-100 to-amber-200 dark:from-yellow-900/40 dark:to-amber-800/40 border-4 border-yellow-200 dark:border-yellow-700 mx-auto shadow-lg">
+                    <div className="relative px-8 py-12 sm:px-12 text-center">
+                        {/* Animated icon */}
+                        <div className="relative inline-block mb-8">
+                            <div className="absolute inset-0 bg-amber-400/25 rounded-full blur-2xl animate-pulse" />
+                            <div className="relative flex h-28 w-28 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/30 border-4 border-amber-300 dark:border-amber-700 mx-auto shadow-lg">
                                 <Clock
-                                    className="h-12 w-12 text-yellow-600 dark:text-yellow-400"
-                                    strokeWidth={2.5}
+                                    className="h-14 w-14 text-amber-600 dark:text-amber-400"
+                                    strokeWidth={2}
                                 />
                             </div>
                         </div>
 
-                        <h1 className="text-3xl sm:text-4xl font-bold bg-linear-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent mb-4">
+                        <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white mb-4">
                             {t("waiting.title")}
                         </h1>
 
-                        <p className="text-lg text-gray-600 dark:text-gray-400 mb-8 max-w-md mx-auto">
+                        <p className="text-lg text-gray-500 dark:text-gray-400 mb-10 max-w-sm mx-auto leading-relaxed">
                             {t("waiting.description")}
                         </p>
 
                         {/* Processing status card */}
-                        <div className="relative p-6 rounded-2xl bg-linear-to-br from-yellow-50 to-amber-100/50 dark:from-yellow-950/30 dark:to-amber-900/20 border-2 border-yellow-200 dark:border-yellow-800/50 mb-8 shadow-md overflow-hidden">
+                        <div className="relative p-7 rounded-2xl bg-amber-50/80 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800/50 mb-10 overflow-hidden">
                             {/* Animated shimmer effect */}
-                            <div className="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite] bg-linear-to-r from-transparent via-white/10 to-transparent"></div>
+                            <div className="absolute inset-0 -translate-x-full animate-[shimmer_2s_infinite] bg-linear-to-r from-transparent via-white/10 to-transparent" />
 
-                            <div className="relative flex items-center justify-center gap-3 mb-4">
+                            <div className="relative flex items-center justify-center gap-3 mb-6">
                                 <Loader2
-                                    className="h-6 w-6 text-yellow-600 dark:text-yellow-400 animate-spin"
+                                    className="h-6 w-6 text-amber-600 dark:text-amber-400 animate-spin"
                                     strokeWidth={3}
                                 />
-                                <span className="text-lg font-semibold text-yellow-800 dark:text-yellow-300">
+                                <span className="text-lg font-bold text-amber-800 dark:text-amber-300">
                                     {t("waiting.processing")}
                                 </span>
                             </div>
 
                             {/* Processing steps */}
-                            <div className="space-y-3 text-left max-w-xs mx-auto">
-                                <div className="flex items-center gap-3 text-sm">
-                                    <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400 shrink-0" />
-                                    <span className="text-gray-700 dark:text-gray-300">
+                            <div className="space-y-4 text-left max-w-xs mx-auto">
+                                <div className="flex items-center gap-3">
+                                    <CheckCircle className="h-5 w-5 text-green-500 dark:text-green-400 shrink-0" />
+                                    <span className="text-base font-medium text-gray-700 dark:text-gray-300">
                                         {t("waiting.examSubmitted")}
                                     </span>
                                 </div>
-                                <div className="flex items-center gap-3 text-sm">
-                                    <div className="h-4 w-4 rounded-full border-2 border-yellow-500 border-t-transparent animate-spin shrink-0"></div>
-                                    <span className="text-gray-700 dark:text-gray-300">
+                                <div className="flex items-center gap-3">
+                                    <div className="h-5 w-5 rounded-full border-[2.5px] border-amber-500 border-t-transparent animate-spin shrink-0" />
+                                    <span className="text-base font-medium text-gray-700 dark:text-gray-300">
                                         {t("waiting.reviewingAnswers")}
                                     </span>
                                 </div>
-                                <div className="flex items-center gap-3 text-sm opacity-50">
-                                    <FileSearch className="h-4 w-4 text-gray-400 shrink-0" />
-                                    <span className="text-gray-500 dark:text-gray-400">
+                                <div className="flex items-center gap-3 opacity-40">
+                                    <FileSearch className="h-5 w-5 text-gray-400 shrink-0" />
+                                    <span className="text-base text-gray-400 dark:text-gray-500">
                                         {t("waiting.generatingResults")}
                                     </span>
                                 </div>
@@ -73,9 +73,9 @@ function AcceptanceExamWaitingPage() {
                         </div>
 
                         {/* Info message */}
-                        <div className="inline-flex items-center gap-3 px-6 py-3 rounded-xl bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-                            <div className="h-2 w-2 rounded-full bg-yellow-500 animate-pulse"></div>
-                            <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
+                        <div className="inline-flex items-center gap-3 px-6 py-3.5 rounded-2xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                            <div className="h-2.5 w-2.5 rounded-full bg-amber-500 animate-pulse" />
+                            <p className="text-sm font-semibold text-gray-500 dark:text-gray-400">
                                 {t("waiting.checkBack")}
                             </p>
                         </div>
