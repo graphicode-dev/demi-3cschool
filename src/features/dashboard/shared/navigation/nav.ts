@@ -35,7 +35,6 @@ export const createSharedNavItems = (
             label: "Chat",
             href: `${basePath}/chat`,
             icon: MessageSquare,
-            permissions: [conversation.viewAny],
         },
         {
             key: "certificates",
@@ -43,7 +42,6 @@ export const createSharedNavItems = (
             label: "Certificates",
             href: `${basePath}/certificates`,
             icon: Award,
-            permissions: [certificate.viewAny],
         },
         {
             key: "reports",
@@ -51,7 +49,6 @@ export const createSharedNavItems = (
             label: "Reports",
             href: `${basePath}/reports`,
             icon: FileText,
-            permissions: [report.viewAny],
         },
     ];
 };

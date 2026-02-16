@@ -7,9 +7,7 @@
  */
 
 import type { RouteConfig } from "@/router";
-import { accountPermissions } from "@/auth";
 
-const { conversation, certificate, report } = accountPermissions;
 
 /**
  * Create shared routes with a specific base path prefix
@@ -44,22 +42,22 @@ export const createSharedRoutes = (
             titleKey: `${basePath}:nav.chat`,
             requiresAuth: true,
         },
-        permissions: [conversation.viewAny],
     },
     {
         path: "certificates",
         lazy: () =>
-            import("@/features/dashboard/shared/certificates/pages/Main").then(
-                (m) => ({
-                    default: m.default,
-                })
-            ),
+            basePath === "classroom"
+                ? import(
+                      "@/features/dashboard/shared/certificates/pages/ClassroomCertificates"
+                  ).then((m) => ({ default: m.default }))
+                : import(
+                      "@/features/dashboard/shared/certificates/pages/Main"
+                  ).then((m) => ({ default: m.default })),
         meta: {
             title: "Certificates",
             titleKey: `${basePath}:nav.certificates`,
             requiresAuth: true,
         },
-        permissions: [certificate.viewAny],
     },
     {
         path: "reports",
@@ -74,7 +72,6 @@ export const createSharedRoutes = (
             titleKey: `${basePath}:nav.reports`,
             requiresAuth: true,
         },
-        permissions: [report.viewAny],
     },
     {
         path: "reports/view/:id",
@@ -89,7 +86,6 @@ export const createSharedRoutes = (
             titleKey: `${basePath}:nav.reports`,
             requiresAuth: true,
         },
-        permissions: [report.view],
     },
 ];
 
