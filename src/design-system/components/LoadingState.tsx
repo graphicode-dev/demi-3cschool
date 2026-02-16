@@ -41,7 +41,9 @@ export function LoadingState({
     testId,
 }: Props) {
     const content = (
-        <div className="h-screen flex flex-col items-center justify-center gap-4">
+        <div className={`${
+                fullScreen ? "h-screen" : "h-full min-h-[200px]"
+            } flex flex-col items-center justify-center gap-4`}>
             <div className="relative">
                 <div
                     className={`animate-spin rounded-full ${sizeClasses[size]} border-brand-200 dark:border-gray-700`}

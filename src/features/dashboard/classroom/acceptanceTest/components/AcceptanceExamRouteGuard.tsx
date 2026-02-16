@@ -44,14 +44,16 @@ export function AcceptanceExamRouteGuard() {
         : "accepted"; // Non-students: bypass
     // const acceptanceExamStatus: AcceptanceExamStatus = "accepted"; // TEMPORARY: Bypass
 
+    const pathname = location.pathname;
+
     useEffect(() => {
         if (!user) return;
 
-        const { pathname } = location;
-
         // If user has already passed the exam (or is non-student), redirect to profile
         if (acceptanceExamStatus === "accepted") {
-            navigate(`${CLASSROOM_PATH}/profile`, { replace: true });
+            if (pathname !== `${CLASSROOM_PATH}/profile`) {
+                navigate(`${CLASSROOM_PATH}/profile`, { replace: true });
+            }
             return;
         }
 
@@ -61,8 +63,6 @@ export function AcceptanceExamRouteGuard() {
             pathname === `${acceptanceTestPaths.main()}/`;
         const isWaitingPage = pathname.includes("/waiting");
         const isRejectedPage = pathname.includes("/rejected");
-
-        console.log("acceptanceExamStatus", acceptanceExamStatus);
 
         switch (acceptanceExamStatus) {
             case "pending":
@@ -84,7 +84,7 @@ export function AcceptanceExamRouteGuard() {
                 }
                 break;
         }
-    }, [acceptanceExamStatus, user, location, navigate]);
+    }, [acceptanceExamStatus, user, pathname, navigate]);
 
     // If accepted (or non-student), don't render anything (redirect will happen)
     if (acceptanceExamStatus === "accepted") {

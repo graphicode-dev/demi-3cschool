@@ -21,7 +21,11 @@ import {
 } from "../api";
 import type { SupportTicketFilter } from "../types";
 import { supportHelp } from "../navigation";
-import { PageWrapper, useServerTableSearch } from "@/design-system";
+import {
+    LoadingState,
+    PageWrapper,
+    useServerTableSearch,
+} from "@/design-system";
 import Pagination from "@/design-system/components/table/Pagination";
 
 export function SupportHelpPage() {
@@ -165,12 +169,16 @@ export function SupportHelpPage() {
 
                 {/* Right Panel - Ticket Detail or Empty State */}
                 <div className="hidden md:flex flex-1 flex-col overflow-hidden">
-                    {selectedTicket ? (
-                        <SupportTicketDetailPanel
-                            ticket={selectedTicket}
-                            onSendMessage={handleSendMessage}
-                            isLoading={isLoadingTicket}
-                        />
+                    {selectedTicketId ? (
+                        isLoadingTicket || !selectedTicket ? (
+                            <LoadingState fullScreen={false}/>
+                        ) : (
+                            <SupportTicketDetailPanel
+                                ticket={selectedTicket}
+                                onSendMessage={handleSendMessage}
+                                isLoading={isLoadingTicket}
+                            />
+                        )
                     ) : (
                         <SupportTicketEmptyState />
                     )}

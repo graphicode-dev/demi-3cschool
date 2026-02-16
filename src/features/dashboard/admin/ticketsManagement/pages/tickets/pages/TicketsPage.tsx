@@ -26,7 +26,11 @@ import type {
     TicketStatus,
     TicketPriority,
 } from "../types";
-import { PageWrapper, useServerTableSearch } from "@/design-system";
+import {
+    LoadingState,
+    PageWrapper,
+    useServerTableSearch,
+} from "@/design-system";
 import { useSearchParams } from "react-router-dom";
 import Pagination from "@/design-system/components/table/Pagination";
 
@@ -167,17 +171,21 @@ export function TicketsPage() {
                 </div>
 
                 {/* Right panel - Ticket detail or empty state */}
-                <div className="hidden md:flex flex-1 flex-col">
-                    {selectedTicket ? (
-                        <TicketDetailPanel
-                            ticket={selectedTicket}
-                            agents={filterOptions?.agents || []}
-                            onClose={() => setSelectedTicketId(null)}
-                            onSendMessage={handleSendMessage}
-                            onAddNote={handleAddNote}
-                            onUpdateTicket={handleUpdateTicket}
-                            isLoading={isLoadingTicket}
-                        />
+                <div className="hidden md:flex flex-1 flex-col overflow-hidden">
+                    {selectedTicketId ? (
+                        isLoadingTicket || !selectedTicket ? (
+                            <LoadingState fullScreen={false} />
+                        ) : (
+                            <TicketDetailPanel
+                                ticket={selectedTicket}
+                                agents={filterOptions?.agents || []}
+                                onClose={() => setSelectedTicketId(null)}
+                                onSendMessage={handleSendMessage}
+                                onAddNote={handleAddNote}
+                                onUpdateTicket={handleUpdateTicket}
+                                isLoading={isLoadingTicket}
+                            />
+                        )
                     ) : (
                         <TicketEmptyState />
                     )}

@@ -273,6 +273,19 @@ const Sidebar: React.FC = () => {
 
         // Leaf node (no children) - active if exact match or path is under href
         if (isTopLevel) {
+            // Disabled items: render as non-clickable span with muted styling
+            if (item.disabled) {
+                return (
+                    <li key={item.key}>
+                        <span className="menu-item group menu-item-inactive opacity-40 cursor-not-allowed select-none">
+                            <span className="menu-item-icon-size menu-item-icon-inactive">
+                                {renderIcon(item)}
+                            </span>
+                            {showContent && <span>{getLabel(item)}</span>}
+                        </span>
+                    </li>
+                );
+            }
             return (
                 <li key={item.key}>
                     <Link
@@ -288,6 +301,22 @@ const Sidebar: React.FC = () => {
                             <span className="">{getLabel(item)}</span>
                         )}
                     </Link>
+                </li>
+            );
+        }
+
+        // Disabled nested items
+        if (item.disabled) {
+            return (
+                <li key={item.key}>
+                    <span className="menu-dropdown-item flex items-center gap-2 menu-dropdown-item-inactive opacity-40 cursor-not-allowed select-none text-sm">
+                        {item.icon && (
+                            <span className="w-4 h-4">
+                                {renderIcon(item, "sm")}
+                            </span>
+                        )}
+                        {getLabel(item)}
+                    </span>
                 </li>
             );
         }

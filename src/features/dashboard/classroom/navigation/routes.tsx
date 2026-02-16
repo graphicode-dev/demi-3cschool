@@ -23,6 +23,7 @@ import { enrollmentsGroupRoutes } from "../enrollmentsGroup/navigation";
 import { communityRoutes } from "../community/navigation";
 import { classroomPaths } from "./paths";
 import { CLASSROOM_PATH } from "./constant";
+import { ClassroomAcceptanceGuard } from "../components/ClassroomAcceptanceGuard";
 
 /**
  * Classroom Route Module
@@ -33,6 +34,7 @@ export const classroomRouteModule: FeatureRouteModule = {
     basePath: CLASSROOM_PATH,
     layout: "dashboard",
     routes: {
+        element: <ClassroomAcceptanceGuard />,
         children: [
             // Index redirect to profile
             {

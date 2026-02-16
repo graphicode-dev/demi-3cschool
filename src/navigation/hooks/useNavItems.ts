@@ -30,6 +30,13 @@ const ADMIN_ONLY_SECTIONS: string[] = ["Admin"];
 // Classroom-only sections
 const CLASSROOM_ONLY_SECTIONS: string[] = ["Classroom"];
 
+// Nav keys allowed during acceptance exam phase
+export const ACCEPTANCE_EXAM_ALLOWED_KEYS = [
+    "acceptanceTest",
+    "profile",
+    "support-help",
+] as const;
+
 interface UseNavItemsReturn {
     /**
      * Sections with their filtered items
@@ -64,6 +71,11 @@ interface UseNavItemsReturn {
      * Current user's permissions
      */
     permissions: Permission[];
+
+    /**
+     * Whether the student needs to complete the acceptance exam
+     */
+    needsAcceptanceExam: boolean;
 }
 
 export const useNavItems = (
@@ -111,8 +123,8 @@ export const useNavItems = (
     // Get acceptance exam status for students
     // TEMPORARY: Bypassed until backend is ready - uncomment when ready
     const acceptanceExamStatus = useMemo(() => {
-        // TODO: Uncomment when backend is ready
-        const user = authStore.getState().user;
+        // If user hasn't loaded yet, stay restrictive to avoid flash
+        if (!user) return "pending" as AcceptanceExamStatus;
         const userRole = user?.role?.name?.toLowerCase();
         // Only students have acceptance exam requirement
         if (userRole !== "student") {
@@ -123,7 +135,7 @@ export const useNavItems = (
             "pending"
         );
         // return "accepted" as AcceptanceExamStatus; // TEMPORARY: Bypass
-    }, []);
+    }, [user]);
 
     // Check if student needs to complete acceptance exam
     const needsAcceptanceExam = acceptanceExamStatus !== "accepted";
@@ -151,19 +163,16 @@ export const useNavItems = (
                 return true;
             })
             .map((section) => {
-                // If student needs acceptance exam, filter items in Classroom section
+                // If student needs acceptance exam, mark non-allowed items as disabled
                 if (needsAcceptanceExam && section.id === "Classroom") {
-                    // Only show acceptanceTest and profile items
-                    const allowedKeys = [
-                        "acceptanceTest",
-                        "profile",
-                        "tickets-management",
-                    ];
                     return {
                         ...section,
-                        items: section.items.filter((item) =>
-                            allowedKeys.includes(item.key)
-                        ),
+                        items: section.items.map((item) => ({
+                            ...item,
+                            disabled: !ACCEPTANCE_EXAM_ALLOWED_KEYS.includes(
+                                item.key as (typeof ACCEPTANCE_EXAM_ALLOWED_KEYS)[number]
+                            ),
+                        })),
                     };
                 }
 
@@ -212,6 +221,7 @@ export const useNavItems = (
         hasRole,
         hasAnyRole,
         permissions,
+        needsAcceptanceExam,
     };
 };
 
