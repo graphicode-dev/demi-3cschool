@@ -24,7 +24,6 @@ function AppRouter() {
                 path: "/",
                 element: <RootLayout />,
                 errorElement: <RouteErrorBoundary />,
-                hydrateFallbackElement: <LoadingState />,
                 children: [
                     // Site routes (public landing pages)
                     {

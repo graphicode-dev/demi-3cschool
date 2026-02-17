@@ -33,7 +33,8 @@ const LayoutContent: React.FC = () => {
     const user = authStore((state) => state.user);
     const roleName = user?.role?.name?.toLowerCase().trim();
     const canSeeSessionBanner =
-        (roleName === "student" || roleName === "teacher") &&
+        roleName === "student" ||
+        roleName === "teacher" ||
         user?.userInformation?.acceptanceExam === "accepted";
 
     return (
@@ -103,7 +104,7 @@ export const DashboardLayout = () => {
 
     // Show loading while store is hydrating
     if (!hasHydrated) {
-        return <LoadingState />;
+        return;
     }
 
     return (

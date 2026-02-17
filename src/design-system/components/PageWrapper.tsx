@@ -1,19 +1,22 @@
 import React from "react";
 import PageHeader, { PageHeaderProps } from "./PageHeader";
+import { LoadingScopeProvider } from "../skeleton/LoadingScopeContext";
 
 export function PageWrapper({
     children,
     classname,
     pageHeaderProps,
     containerClassname,
+    isLoading = false,
 }: {
     children: React.ReactNode;
     classname?: string;
     containerClassname?: string;
     pageHeaderProps?: Partial<PageHeaderProps>;
+    isLoading?: boolean;
 }) {
     return (
-        <>
+        <LoadingScopeProvider isLoading={isLoading}>
             {pageHeaderProps?.title && (
                 <PageHeader {...(pageHeaderProps as PageHeaderProps)} />
             )}
@@ -24,6 +27,6 @@ export function PageWrapper({
                     {children}
                 </div>
             </div>
-        </>
+        </LoadingScopeProvider>
     );
 }
