@@ -1,19 +1,5 @@
 /**
- * Level Quiz Options Feature - API Module
- *
- * Public exports for the level quiz options API layer.
- * Import from '@/features/levels/quiz-options'.
- *
- * @example
- * ```ts
- * import {
- *     useAcceptanceExamOptionsList,
- *     useAcceptanceExamOption,
- *     useCreateAcceptanceExamOption,
- *     useAcceptanceExamOptionsMetadata,
- *     acceptanceExamOptionKeys,
- * } from '@/features/levels/quiz-options';
- * ```
+ * Acceptance Exam Options Feature - API Module
  */
 
 // Query Keys
@@ -28,8 +14,6 @@ export { acceptanceExamOptionsApi } from "./acceptance-exam-options.api";
 // Query Hooks
 export {
     useAcceptanceExamOptionsMetadata,
-    useAcceptanceExamOptionsList,
-    useAcceptanceExamOptionsInfinite,
     useAcceptanceExamOption,
     useAcceptanceExamOptionsByQuestion,
 } from "./acceptance-exam-options.queries";

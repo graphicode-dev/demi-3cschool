@@ -5,11 +5,12 @@
 
 import { useTranslation } from "react-i18next";
 import { Save, X } from "lucide-react";
+import { useGrades } from "@/features/dashboard/admin/systemManagements/api/systemManagement.queries";
 import type { NewAcceptanceExamData } from "../../types";
 
 interface AcceptanceExamFormProps {
-    quiz: Omit<NewAcceptanceExamData, "levelId">;
-    onChange: (quiz: Omit<NewAcceptanceExamData, "levelId">) => void;
+    quiz: NewAcceptanceExamData;
+    onChange: (quiz: NewAcceptanceExamData) => void;
     onSave: () => void;
     onCancel: () => void;
     isDisabled?: boolean;
@@ -25,6 +26,8 @@ export function AcceptanceExamForm({
     isPending = false,
 }: AcceptanceExamFormProps) {
     const { t } = useTranslation();
+    const { data: gradesData, isLoading: gradesLoading } = useGrades();
+    const grades = gradesData?.items || [];
 
     return (
         <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
@@ -32,6 +35,76 @@ export function AcceptanceExamForm({
                 {t("learning:levels.quiz.createNew", "Create New Quiz")}
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        {t("learning:levels.quiz.grade", "Grade")}
+                    </label>
+                    <select
+                        value={quiz.gradeId}
+                        onChange={(e) =>
+                            onChange({
+                                ...quiz,
+                                gradeId: e.target.value,
+                            })
+                        }
+                        disabled={gradesLoading}
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-transparent disabled:opacity-50"
+                    >
+                        <option value="">
+                            {gradesLoading
+                                ? t("common.loading", "Loading...")
+                                : t(
+                                      "learning:levels.quiz.selectGrade",
+                                      "Select a grade"
+                                  )}
+                        </option>
+                        {grades.map((grade) => (
+                            <option key={grade.id} value={String(grade.id)}>
+                                {grade.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        {t("learning:levels.quiz.title", "Title")}
+                    </label>
+                    <input
+                        type="text"
+                        value={quiz.title}
+                        onChange={(e) =>
+                            onChange({
+                                ...quiz,
+                                title: e.target.value,
+                            })
+                        }
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                        placeholder={t(
+                            "learning:levels.quiz.titlePlaceholder",
+                            "Enter exam title"
+                        )}
+                    />
+                </div>
+                <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        {t("learning:levels.quiz.description", "Description")}
+                    </label>
+                    <textarea
+                        value={quiz.description}
+                        onChange={(e) =>
+                            onChange({
+                                ...quiz,
+                                description: e.target.value,
+                            })
+                        }
+                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                        rows={3}
+                        placeholder={t(
+                            "learning:levels.quiz.descriptionPlaceholder",
+                            "Enter exam description"
+                        )}
+                    />
+                </div>
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                         {t(

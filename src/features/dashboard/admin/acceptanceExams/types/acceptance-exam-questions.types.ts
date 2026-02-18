@@ -14,13 +14,6 @@
 // ============================================================================
 
 /**
- * Quiz reference in question
- */
-export interface AcceptanceExamQuestionQuizRef {
-    id: number;
-}
-
-/**
  * Question type enum
  */
 export type QuestionType =
@@ -34,13 +27,13 @@ export type QuestionType =
  */
 export interface AcceptanceExamQuestion {
     id: number;
-    quiz: AcceptanceExamQuestionQuizRef;
+    acceptanceExamId: number;
     question: string;
     type: QuestionType;
     points: number;
     order: number;
     explanation: string;
-    isActive: number;
+    isActive: boolean;
     createdAt: string;
     updatedAt: string;
 }
@@ -117,7 +110,7 @@ export interface AcceptanceExamQuestionsListParams {
  * Create acceptance exam question payload
  */
 export interface AcceptanceExamQuestionCreatePayload {
-    quizId: string;
+    acceptanceExamId: number;
     question: string;
     type: QuestionType;
     points: number;
@@ -130,7 +123,6 @@ export interface AcceptanceExamQuestionCreatePayload {
  * Update acceptance exam question payload
  */
 export interface AcceptanceExamQuestionUpdatePayload {
-    quizId?: string;
     question?: string;
     type?: QuestionType;
     points?: number;

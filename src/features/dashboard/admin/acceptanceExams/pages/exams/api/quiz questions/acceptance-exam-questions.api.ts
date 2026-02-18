@@ -1,18 +1,9 @@
 /**
- * Level Quiz Questions Feature - API Functions
+ * Acceptance Exam Questions Feature - API Functions
  *
- * Raw API functions for level quiz questions domain.
+ * Raw API functions for acceptance exam questions domain.
  * These are pure functions that make HTTP requests.
  * They are used by query and mutation hooks.
- *
- * @example
- * ```ts
- * // In a query hook
- * const { data } = useQuery({
- *     queryKey: acceptanceExamQuestionKeys.list(params),
- *     queryFn: ({ signal }) => acceptanceExamQuestionsApi.getList(params, signal),
- * });
- * ```
  */
 
 import { api } from "@/shared/api/client";
@@ -26,22 +17,21 @@ import {
 } from "../../../../types/acceptance-exam-questions.types";
 import { PaginatedData } from "@/shared/api";
 
-const BASE_URL = "/level-quiz-questions";
+const BASE_URL = "/acceptance-exam-questions";
 
 /**
- * Level Quiz Questions API functions
+ * Acceptance Exam Questions API functions
  */
 export const acceptanceExamQuestionsApi = {
     /**
-     * Get level quiz questions metadata (filters, operators, field types)
+     * Get acceptance exam questions metadata (filters, operators, field types)
      */
     getMetadata: async (
         signal?: AbortSignal
     ): Promise<AcceptanceExamQuestionsMetadata> => {
-        const response = await api.get<ApiResponse<AcceptanceExamQuestionsMetadata>>(
-            `${BASE_URL}/metadata`,
-            { signal }
-        );
+        const response = await api.get<
+            ApiResponse<AcceptanceExamQuestionsMetadata>
+        >(`${BASE_URL}/metadata`, { signal });
 
         if (response.error) {
             throw response.error;
@@ -55,39 +45,10 @@ export const acceptanceExamQuestionsApi = {
     },
 
     /**
-     * Get list of all level quiz questions
+     * Get list of questions by exam ID
      */
-    getList: async (
-        params?: AcceptanceExamQuestionsListParams,
-        signal?: AbortSignal
-    ): Promise<PaginatedData<AcceptanceExamQuestion>> => {
-        const response = await api.get<ApiResponse<AcceptanceExamQuestion[]>>(
-            BASE_URL,
-            {
-                params: params as Record<string, unknown> | undefined,
-                signal,
-            }
-        );
-
-        if (response.error) {
-            throw response.error;
-        }
-
-        const items = response.data!.data!;
-        return {
-            items,
-            perPage: items.length,
-            currentPage: 1,
-            lastPage: 1,
-            nextPageUrl: null,
-        };
-    },
-
-    /**
-     * Get list of level quiz questions by quiz ID
-     */
-    getByQuizId: async (
-        quizId: string,
+    getByExamId: async (
+        examId: string,
         params?: AcceptanceExamQuestionsListParams,
         signal?: AbortSignal
     ): Promise<PaginatedData<AcceptanceExamQuestion>> => {
@@ -99,7 +60,7 @@ export const acceptanceExamQuestionsApi = {
                 nextPageUrl: string | null;
                 items: AcceptanceExamQuestion[];
             }>
-        >(`${BASE_URL}/quiz/${quizId}`, {
+        >(`${BASE_URL}/exam/${examId}`, {
             params: params as Record<string, unknown> | undefined,
             signal,
         });
@@ -123,7 +84,7 @@ export const acceptanceExamQuestionsApi = {
     },
 
     /**
-     * Get single level quiz question by ID
+     * Get single question by ID
      */
     getById: async (
         id: string,
@@ -146,21 +107,21 @@ export const acceptanceExamQuestionsApi = {
     },
 
     /**
-     * Create a new level quiz question
+     * Create a new question
      */
     create: async (
         payload: AcceptanceExamQuestionCreatePayload
-    ): Promise<AcceptanceExamQuestion[]> => {
-        const response = await api.post<ApiResponse<AcceptanceExamQuestion[]>>(
+    ): Promise<AcceptanceExamQuestion> => {
+        const response = await api.post<ApiResponse<AcceptanceExamQuestion>>(
             BASE_URL,
             {
-                quizId: payload.quizId,
+                acceptanceExamId: payload.acceptanceExamId,
                 question: payload.question,
                 type: payload.type,
                 points: payload.points,
                 order: payload.order,
                 explanation: payload.explanation,
-                isActive: payload.isActive ? 1 : 0,
+                isActive: payload.isActive,
             }
         );
 
@@ -176,7 +137,7 @@ export const acceptanceExamQuestionsApi = {
     },
 
     /**
-     * Update an existing level quiz question
+     * Update an existing question
      */
     update: async (
         id: string,
@@ -185,18 +146,12 @@ export const acceptanceExamQuestionsApi = {
         const response = await api.patch<ApiResponse<AcceptanceExamQuestion>>(
             `${BASE_URL}/${id}`,
             {
-                quizId: payload.quizId,
                 question: payload.question,
                 type: payload.type,
                 points: payload.points,
                 order: payload.order,
                 explanation: payload.explanation,
-                isActive:
-                    payload.isActive !== undefined
-                        ? payload.isActive
-                            ? 1
-                            : 0
-                        : undefined,
+                isActive: payload.isActive,
             }
         );
 
@@ -212,7 +167,7 @@ export const acceptanceExamQuestionsApi = {
     },
 
     /**
-     * Delete a level quiz question
+     * Delete a question
      */
     delete: async (id: string): Promise<void> => {
         const response = await api.delete(`${BASE_URL}/${id}`);

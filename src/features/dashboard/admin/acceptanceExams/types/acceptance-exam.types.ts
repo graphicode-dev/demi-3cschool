@@ -1,5 +1,7 @@
 export interface NewAcceptanceExamData {
-    levelId: string;
+    gradeId: string;
+    title: string;
+    description: string;
     timeLimit: number;
     passingScore: number;
     maxAttempts: number;
@@ -18,7 +20,7 @@ export interface AcceptanceExamQuestion {
     points: number;
     order: number;
     explanation?: string;
-    isActive?: number;
+    isActive?: boolean;
 }
 export interface NewAcceptanceExamQuestionData {
     quizId: string;
@@ -62,13 +64,18 @@ export interface QuestionOptionUI {
     order?: number;
 }
 
-export interface AcceptanceExamQuestionWithOptions extends Omit<AcceptanceExamQuestion, "quiz"> {
+export interface AcceptanceExamQuestionWithOptions extends Omit<
+    AcceptanceExamQuestion,
+    "quiz"
+> {
     options: QuestionOptionUI[];
 }
 
 export interface AcceptanceExamWithQuestions {
     id: string;
     levelId: string;
+    title: string;
+    description: string;
     timeLimit: number;
     passingScore: number;
     maxAttempts: number;

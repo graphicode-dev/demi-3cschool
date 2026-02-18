@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { QuestionCard } from "./QuestionCard";
 import { QuestionForm } from "./QuestionForm";
+import Pagination from "@/design-system/components/table/Pagination";
 import {
     AcceptanceExamWithQuestions,
     NewAcceptanceExamQuestionFormData,
@@ -38,7 +39,24 @@ interface AcceptanceExamCardProps {
     onCancelAddQuestion: () => void;
     onNewQuestionChange: (question: NewAcceptanceExamQuestionFormData) => void;
     onSaveQuestion: () => void;
+    onEditQuestion: (questionId: string) => void;
     onDeleteQuestion: (questionId: string) => void;
+    onEditOption?: (questionId: string, optionId: string) => void;
+    onDeleteOption?: (questionId: string, optionId: string) => void;
+    questionsPagination?: {
+        currentPage: number;
+        lastPage: number;
+        perPage: number;
+        total: number;
+    } | null;
+    onQuestionsPageChange?: (page: number) => void;
+    optionsPagination?: {
+        currentPage: number;
+        lastPage: number;
+        perPage: number;
+        total: number;
+    } | null;
+    onOptionsPageChange?: (page: number) => void;
     isPending?: boolean;
     isQuestionPending?: boolean;
 }
@@ -57,7 +75,14 @@ export function AcceptanceExamCard({
     onCancelAddQuestion,
     onNewQuestionChange,
     onSaveQuestion,
+    onEditQuestion,
     onDeleteQuestion,
+    onEditOption,
+    onDeleteOption,
+    questionsPagination,
+    onQuestionsPageChange,
+    optionsPagination,
+    onOptionsPageChange,
     isPending = false,
     isQuestionPending = false,
 }: AcceptanceExamCardProps) {
@@ -77,9 +102,10 @@ export function AcceptanceExamCard({
                         </div>
                         <div>
                             <h3 className="font-medium text-gray-900 dark:text-white">
-                                {t("levels.quiz.quizTitle", "Quiz #{{id}}", {
-                                    id: quiz.id,
-                                })}
+                                {quiz.title ||
+                                    t("levels.quiz.quizTitle", "Quiz #{{id}}", {
+                                        id: quiz.id,
+                                    })}
                             </h3>
                             <div className="flex items-center gap-4 mt-1 text-sm text-gray-500 dark:text-gray-400">
                                 <span className="flex items-center gap-1">
@@ -215,13 +241,69 @@ export function AcceptanceExamCard({
                                     onToggleExpand={() =>
                                         onToggleQuestionExpand(question.id)
                                     }
+                                    onEdit={() => onEditQuestion(question.id)}
                                     onDelete={() =>
                                         onDeleteQuestion(question.id)
                                     }
+                                    onEditOption={
+                                        onEditOption
+                                            ? (optionId) =>
+                                                  onEditOption(
+                                                      question.id,
+                                                      optionId
+                                                  )
+                                            : undefined
+                                    }
+                                    onDeleteOption={
+                                        onDeleteOption
+                                            ? (optionId) =>
+                                                  onDeleteOption(
+                                                      question.id,
+                                                      optionId
+                                                  )
+                                            : undefined
+                                    }
+                                    optionsPagination={optionsPagination}
+                                    onOptionsPageChange={onOptionsPageChange}
                                 />
                             ))}
                         </div>
                     )}
+
+                    {/* Questions Pagination */}
+                    {questionsPagination &&
+                        questionsPagination.lastPage > 1 &&
+                        onQuestionsPageChange && (
+                            <div className="mt-4">
+                                <Pagination
+                                    currentPage={
+                                        questionsPagination.currentPage
+                                    }
+                                    totalPages={questionsPagination.lastPage}
+                                    goToNextPage={() =>
+                                        onQuestionsPageChange(
+                                            Math.min(
+                                                questionsPagination.currentPage +
+                                                    1,
+                                                questionsPagination.lastPage
+                                            )
+                                        )
+                                    }
+                                    goToPreviousPage={() =>
+                                        onQuestionsPageChange(
+                                            Math.max(
+                                                questionsPagination.currentPage -
+                                                    1,
+                                                1
+                                            )
+                                        )
+                                    }
+                                    setPage={onQuestionsPageChange}
+                                    itemsPerPage={questionsPagination.perPage}
+                                    totalItems={questionsPagination.total}
+                                />
+                            </div>
+                        )}
                 </div>
             )}
         </div>

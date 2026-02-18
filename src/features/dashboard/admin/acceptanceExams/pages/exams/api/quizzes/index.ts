@@ -1,25 +1,13 @@
 /**
- * Level Quizzes Feature - API Module
+ * Acceptance Exams Feature - API Module
  *
- * Public exports for the level quizzes API layer.
- * Import from '@/features/levels/quizzes'.
- *
- * @example
- * ```ts
- * import {
- *     useAcceptanceExamsList,
- *     useAcceptanceExam,
- *     useCreateAcceptanceExam,
- *     useAcceptanceExamsMetadata,
- *     acceptanceExamKeys,
- * } from '@/features/levels/quizzes';
- * ```
+ * Public exports for the acceptance exams API layer.
  */
 
 // Types
 export type {
     AcceptanceExam,
-    AcceptanceExamLevelRef,
+    AcceptanceExamGradeRef,
     AcceptanceExamsListParams,
     AcceptanceExamCreatePayload,
     AcceptanceExamUpdatePayload,
@@ -32,7 +20,10 @@ export type {
 } from "../../../../types/acceptance-exams.types";
 
 // Query Keys
-export { acceptanceExamKeys, type AcceptanceExamQueryKey } from "./acceptance-exams.keys";
+export {
+    acceptanceExamKeys,
+    type AcceptanceExamQueryKey,
+} from "./acceptance-exams.keys";
 
 // API Functions
 export { acceptanceExamApi } from "./acceptance-exams.api";
@@ -40,7 +31,7 @@ export { acceptanceExamApi } from "./acceptance-exams.api";
 // Query Hooks
 export {
     useAcceptanceExamsMetadata,
-    useAcceptanceExamsByLevel,
+    useAcceptanceExamsList,
     useAcceptanceExam,
 } from "./acceptance-exams.queries";
 

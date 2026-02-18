@@ -14,11 +14,11 @@
 // ============================================================================
 
 /**
- * Level reference in quiz
+ * Grade reference in acceptance exam
  */
-export interface AcceptanceExamLevelRef {
+export interface AcceptanceExamGradeRef {
     id: number;
-    title: string;
+    name: string;
 }
 
 /**
@@ -26,12 +26,16 @@ export interface AcceptanceExamLevelRef {
  */
 export interface AcceptanceExam {
     id: number;
-    level: AcceptanceExamLevelRef;
+    grade: AcceptanceExamGradeRef;
+    title: string;
+    description: string;
     timeLimit: number;
     passingScore: number;
     maxAttempts: number;
-    shuffleQuestions: number;
-    showAnswers: number;
+    shuffleQuestions: boolean;
+    showAnswers: boolean;
+    isActive: boolean;
+    questionsCount?: Record<string, unknown>;
     createdAt: string;
     updatedAt: string;
 }
@@ -108,10 +112,12 @@ export interface AcceptanceExamsListParams {
  * Create acceptance exam payload
  */
 export interface AcceptanceExamCreatePayload {
-    levelId: string;
-    timeLimit: number;
-    passingScore: number;
-    maxAttempts: number;
+    gradeId: string;
+    title: string;
+    description: string;
+    timeLimit: string;
+    passingScore: string;
+    maxAttempts: string;
     shuffleQuestions: boolean;
     showAnswers: boolean;
 }
@@ -120,10 +126,12 @@ export interface AcceptanceExamCreatePayload {
  * Update acceptance exam payload
  */
 export interface AcceptanceExamUpdatePayload {
-    levelId?: string;
-    timeLimit?: number;
-    passingScore?: number;
-    maxAttempts?: number;
+    gradeId?: string;
+    title?: string;
+    description?: string;
+    timeLimit?: string;
+    passingScore?: string;
+    maxAttempts?: string;
     shuffleQuestions?: boolean;
     showAnswers?: boolean;
 }

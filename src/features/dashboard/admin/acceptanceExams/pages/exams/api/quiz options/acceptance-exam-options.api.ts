@@ -1,18 +1,5 @@
 /**
- * Level Quiz Options Feature - API Functions
- *
- * Raw API functions for level quiz options domain.
- * These are pure functions that make HTTP requests.
- * They are used by query and mutation hooks.
- *
- * @example
- * ```ts
- * // In a query hook
- * const { data } = useQuery({
- *     queryKey: acceptanceExamOptionKeys.list(params),
- *     queryFn: ({ signal }) => acceptanceExamOptionsApi.getList(params, signal),
- * });
- * ```
+ * Acceptance Exam Options Feature - API Functions
  */
 
 import { api } from "@/shared/api/client";
@@ -26,22 +13,21 @@ import {
 } from "../../../../types/acceptance-exam-options.types";
 import { PaginatedData } from "@/shared/api";
 
-const BASE_URL = "/level-quiz-options";
+const BASE_URL = "/acceptance-exam-options";
 
 /**
- * Level Quiz Options API functions
+ * Acceptance Exam Options API functions
  */
 export const acceptanceExamOptionsApi = {
     /**
-     * Get level quiz options metadata (filters, operators, field types)
+     * Get options metadata (filters, operators, field types)
      */
     getMetadata: async (
         signal?: AbortSignal
     ): Promise<AcceptanceExamOptionsMetadata> => {
-        const response = await api.get<ApiResponse<AcceptanceExamOptionsMetadata>>(
-            `${BASE_URL}/metadata`,
-            { signal }
-        );
+        const response = await api.get<
+            ApiResponse<AcceptanceExamOptionsMetadata>
+        >(`${BASE_URL}/metadata`, { signal });
 
         if (response.error) {
             throw response.error;
@@ -55,36 +41,7 @@ export const acceptanceExamOptionsApi = {
     },
 
     /**
-     * Get list of all level quiz options
-     */
-    getList: async (
-        params?: AcceptanceExamOptionsListParams,
-        signal?: AbortSignal
-    ): Promise<PaginatedData<AcceptanceExamOption>> => {
-        const response = await api.get<ApiResponse<AcceptanceExamOption[]>>(
-            BASE_URL,
-            {
-                params: params as Record<string, unknown> | undefined,
-                signal,
-            }
-        );
-
-        if (response.error) {
-            throw response.error;
-        }
-
-        const items = response.data!.data!;
-        return {
-            items,
-            perPage: items.length,
-            currentPage: 1,
-            lastPage: 1,
-            nextPageUrl: null,
-        };
-    },
-
-    /**
-     * Get list of level quiz options by question ID
+     * Get options by question ID
      */
     getByQuestionId: async (
         questionId: string,
@@ -113,7 +70,7 @@ export const acceptanceExamOptionsApi = {
     },
 
     /**
-     * Get single level quiz option by ID
+     * Get single option by ID
      */
     getById: async (
         id: string,
@@ -136,15 +93,17 @@ export const acceptanceExamOptionsApi = {
     },
 
     /**
-     * Create level quiz option(s)
-     * Supports both single option and multiple options payload
+     * Create options (batch)
      */
     create: async (
         payload: AcceptanceExamOptionCreatePayload
     ): Promise<AcceptanceExamOption[]> => {
         const response = await api.post<ApiResponse<AcceptanceExamOption[]>>(
             BASE_URL,
-            payload
+            {
+                questionId: payload.questionId,
+                options: payload.options,
+            }
         );
 
         if (response.error) {
@@ -159,7 +118,7 @@ export const acceptanceExamOptionsApi = {
     },
 
     /**
-     * Update an existing level quiz option
+     * Update an existing option
      */
     update: async (
         id: string,
@@ -168,9 +127,8 @@ export const acceptanceExamOptionsApi = {
         const response = await api.patch<ApiResponse<AcceptanceExamOption>>(
             `${BASE_URL}/${id}`,
             {
-                questionId: payload.questionId,
-                optionText: payload.optionText,
-                isCorrect: payload.isCorrect,
+                option_text: payload.option_text,
+                is_correct: payload.is_correct,
                 order: payload.order,
             }
         );
@@ -187,7 +145,7 @@ export const acceptanceExamOptionsApi = {
     },
 
     /**
-     * Delete a level quiz option
+     * Delete an option
      */
     delete: async (id: string): Promise<void> => {
         const response = await api.delete(`${BASE_URL}/${id}`);

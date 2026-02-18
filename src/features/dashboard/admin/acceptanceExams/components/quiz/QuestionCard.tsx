@@ -6,11 +6,13 @@
 import { useTranslation } from "react-i18next";
 import {
     Trash2,
+    Edit3,
     ChevronDown,
     ChevronUp,
     CheckCircle,
     Circle,
 } from "lucide-react";
+import Pagination from "@/design-system/components/table/Pagination";
 import type { AcceptanceExamQuestionWithOptions } from "../../types";
 
 interface QuestionCardProps {
@@ -18,7 +20,17 @@ interface QuestionCardProps {
     index: number;
     isExpanded: boolean;
     onToggleExpand: () => void;
+    onEdit: () => void;
     onDelete: () => void;
+    onEditOption?: (optionId: string) => void;
+    onDeleteOption?: (optionId: string) => void;
+    optionsPagination?: {
+        currentPage: number;
+        lastPage: number;
+        perPage: number;
+        total: number;
+    } | null;
+    onOptionsPageChange?: (page: number) => void;
     isPending?: boolean;
 }
 
@@ -27,7 +39,12 @@ export function QuestionCard({
     index,
     isExpanded,
     onToggleExpand,
+    onEdit,
     onDelete,
+    onEditOption,
+    onDeleteOption,
+    optionsPagination,
+    onOptionsPageChange,
 }: QuestionCardProps) {
     const { t } = useTranslation();
 
@@ -89,9 +106,21 @@ export function QuestionCard({
                             type="button"
                             onClick={(e) => {
                                 e.stopPropagation();
+                                onEdit();
+                            }}
+                            className="p-1.5 text-gray-400 hover:text-brand-500 transition-colors"
+                            title={t("common.edit", "Edit")}
+                        >
+                            <Edit3 className="w-4 h-4" />
+                        </button>
+                        <button
+                            type="button"
+                            onClick={(e) => {
+                                e.stopPropagation();
                                 onDelete();
                             }}
                             className="p-1.5 text-gray-400 hover:text-red-500 transition-colors"
+                            title={t("common.delete", "Delete")}
                         >
                             <Trash2 className="w-4 h-4" />
                         </button>
@@ -126,7 +155,7 @@ export function QuestionCard({
                                     <Circle className="w-4 h-4 text-gray-300 dark:text-gray-600 shrink-0" />
                                 )}
                                 <span
-                                    className={`text-sm ${
+                                    className={`text-sm flex-1 ${
                                         option.isCorrect
                                             ? "text-green-700 dark:text-green-300 font-medium"
                                             : "text-gray-700 dark:text-gray-300"
@@ -134,9 +163,72 @@ export function QuestionCard({
                                 >
                                     {option.text}
                                 </span>
+                                {option.id && (
+                                    <div className="flex items-center gap-1 shrink-0">
+                                        {onEditOption && (
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    onEditOption(option.id!)
+                                                }
+                                                className="p-1 text-gray-400 hover:text-brand-500 transition-colors"
+                                                title={t("common.edit", "Edit")}
+                                            >
+                                                <Edit3 className="w-3.5 h-3.5" />
+                                            </button>
+                                        )}
+                                        {onDeleteOption && (
+                                            <button
+                                                type="button"
+                                                onClick={() =>
+                                                    onDeleteOption(option.id!)
+                                                }
+                                                className="p-1 text-gray-400 hover:text-red-500 transition-colors"
+                                                title={t(
+                                                    "common.delete",
+                                                    "Delete"
+                                                )}
+                                            >
+                                                <Trash2 className="w-3.5 h-3.5" />
+                                            </button>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         ))}
                     </div>
+                    {/* Options Pagination */}
+                    {optionsPagination &&
+                        optionsPagination.lastPage > 1 &&
+                        onOptionsPageChange && (
+                            <div className="mt-3">
+                                <Pagination
+                                    currentPage={optionsPagination.currentPage}
+                                    totalPages={optionsPagination.lastPage}
+                                    goToNextPage={() =>
+                                        onOptionsPageChange(
+                                            Math.min(
+                                                optionsPagination.currentPage +
+                                                    1,
+                                                optionsPagination.lastPage
+                                            )
+                                        )
+                                    }
+                                    goToPreviousPage={() =>
+                                        onOptionsPageChange(
+                                            Math.max(
+                                                optionsPagination.currentPage -
+                                                    1,
+                                                1
+                                            )
+                                        )
+                                    }
+                                    setPage={onOptionsPageChange}
+                                    itemsPerPage={optionsPagination.perPage}
+                                    totalItems={optionsPagination.total}
+                                />
+                            </div>
+                        )}
                     {question.explanation && (
                         <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
                             <p className="text-sm font-medium text-blue-700 dark:text-blue-300 mb-1">

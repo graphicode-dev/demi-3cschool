@@ -4,13 +4,15 @@ import {
     useCreateAcceptanceExam,
     useUpdateAcceptanceExam,
     useDeleteAcceptanceExam,
-    useAcceptanceExamsByLevel,
+    useAcceptanceExamsList,
     useAcceptanceExam,
     useCreateAcceptanceExamQuestion,
     useUpdateAcceptanceExamQuestion,
     useDeleteAcceptanceExamQuestion,
-    useAcceptanceExamQuestionsByQuiz,
+    useAcceptanceExamQuestionsByExam,
     useCreateAcceptanceExamOption,
+    useUpdateAcceptanceExamOption,
+    useDeleteAcceptanceExamOption,
     useAcceptanceExamOptionsByQuestion,
 } from "../api";
 import { useMutationHandler } from "@/shared/api";
@@ -30,6 +32,7 @@ import {
     LoadingState,
     PageWrapper,
 } from "@/design-system";
+import Pagination from "@/design-system/components/table/Pagination";
 import { AlertTriangle, Plus } from "lucide-react";
 import {
     AcceptanceExamCard,
@@ -37,7 +40,10 @@ import {
     QuestionForm,
 } from "../../../components/quiz";
 
-const DEFAULT_NEW_QUIZ: Omit<NewAcceptanceExamData, "levelId"> = {
+const DEFAULT_NEW_QUIZ: NewAcceptanceExamData = {
+    gradeId: "",
+    title: "",
+    description: "",
     timeLimit: 60,
     passingScore: 60,
     maxAttempts: 1,
@@ -46,7 +52,7 @@ const DEFAULT_NEW_QUIZ: Omit<NewAcceptanceExamData, "levelId"> = {
 };
 
 const DEFAULT_NEW_QUESTION: NewAcceptanceExamQuestionFormData = {
-    quizId: "",
+    quizId: "", // legacy UI field
     question: "",
     type: "single_choice",
     points: 5,
@@ -69,21 +75,23 @@ function transformAcceptanceExamToUI(
     const safeQuestions = Array.isArray(questions) ? questions : [];
     const safeOptions = Array.isArray(options) ? options : [];
     const quizQuestions = safeQuestions.filter(
-        (q) => String(q.quiz.id) === quizIdStr
+        (q) => String(q.acceptanceExamId) === quizIdStr
     );
 
     return {
         id: quizIdStr,
-        levelId: String(quiz.level.id),
+        levelId: String(quiz.grade.id),
+        title: quiz.title,
+        description: quiz.description,
         timeLimit: quiz.timeLimit,
         passingScore: quiz.passingScore,
         maxAttempts: quiz.maxAttempts,
-        shuffleQuestions: quiz.shuffleQuestions === 1,
-        showAnswers: quiz.showAnswers === 1,
+        shuffleQuestions: quiz.shuffleQuestions,
+        showAnswers: quiz.showAnswers,
         questions: quizQuestions.map((q) => {
             const questionIdStr = String(q.id);
             const questionOptions = safeOptions.filter(
-                (o) => String(o.question.id) === questionIdStr
+                (o) => String(o.questionId) === questionIdStr
             );
             return {
                 id: questionIdStr,
@@ -96,7 +104,7 @@ function transformAcceptanceExamToUI(
                 options: questionOptions.map((o) => ({
                     id: String(o.id),
                     text: o.optionText,
-                    isCorrect: o.isCorrect === 1,
+                    isCorrect: o.isCorrect,
                     order: o.order,
                 })),
             };
@@ -109,6 +117,11 @@ function ExamsPage() {
     const { id, levelId } = useParams<{ id?: string; levelId?: string }>();
     const resolvedId = id || levelId;
 
+    // Pagination states
+    const [examsPage, setExamsPage] = useState(1);
+    const [questionsPage, setQuestionsPage] = useState(1);
+    const [optionsPage, setOptionsPage] = useState(1);
+
     const {
         data: level,
         isLoading: levelLoading,
@@ -120,7 +133,7 @@ function ExamsPage() {
         data: quizzesData,
         isLoading: quizzesLoading,
         refetch: refetchQuizzes,
-    } = useAcceptanceExamsByLevel(resolvedId, { page: 1 });
+    } = useAcceptanceExamsList({ page: examsPage });
 
     const { mutateAsync: createQuizAsync, isPending: isCreatingQuiz } =
         useCreateAcceptanceExam();
@@ -138,6 +151,10 @@ function ExamsPage() {
 
     const { mutateAsync: createOptionAsync, isPending: isCreatingOption } =
         useCreateAcceptanceExamOption();
+    const { mutateAsync: updateOptionAsync, isPending: isUpdatingOption } =
+        useUpdateAcceptanceExamOption();
+    const { mutateAsync: deleteOptionAsync, isPending: isDeletingOption } =
+        useDeleteAcceptanceExamOption();
     const { execute } = useMutationHandler();
 
     const [expandedQuizzes, setExpandedQuizzes] = useState<string[]>([]);
@@ -153,7 +170,7 @@ function ExamsPage() {
         null
     );
     const [newQuiz, setNewQuiz] =
-        useState<Omit<NewAcceptanceExamData, "levelId">>(DEFAULT_NEW_QUIZ);
+        useState<NewAcceptanceExamData>(DEFAULT_NEW_QUIZ);
     const [newQuestion, setNewQuestion] =
         useState<NewAcceptanceExamQuestionFormData>(DEFAULT_NEW_QUESTION);
 
@@ -161,7 +178,7 @@ function ExamsPage() {
     const [editingQuiz, setEditingQuiz] =
         useState<AcceptanceExamWithQuestions | null>(null);
     const [editQuizData, setEditQuizData] =
-        useState<Omit<NewAcceptanceExamData, "levelId">>(DEFAULT_NEW_QUIZ);
+        useState<NewAcceptanceExamData>(DEFAULT_NEW_QUIZ);
     const [editingQuestion, setEditingQuestion] = useState<{
         quizId: string;
         question: AcceptanceExamQuestionWithOptions;
@@ -179,17 +196,41 @@ function ExamsPage() {
         quizId: string | null;
         questionId: string | null;
     }>({ isOpen: false, quizId: null, questionId: null });
+    const [deleteOptionDialog, setDeleteOptionDialog] = useState<{
+        isOpen: boolean;
+        questionId: string | null;
+        optionId: string | null;
+    }>({ isOpen: false, questionId: null, optionId: null });
+
+    // Option edit states
+    const [editingOption, setEditingOption] = useState<{
+        questionId: string;
+        optionId: string;
+    } | null>(null);
+    const [editOptionData, setEditOptionData] = useState<{
+        option_text?: string;
+        is_correct?: boolean;
+        order?: number;
+    }>({ option_text: "", is_correct: false, order: 0 });
 
     const quizzes = quizzesData?.items || [];
+    const quizzesPagination = quizzesData
+        ? {
+              currentPage: quizzesData.currentPage,
+              lastPage: quizzesData.lastPage,
+              perPage: quizzesData.perPage,
+              total: quizzesData.lastPage * quizzesData.perPage,
+          }
+        : null;
 
     // Fetch questions only for selected quiz
     const {
         data: questionsData,
         isLoading: questionsLoading,
         refetch: refetchQuestions,
-    } = useAcceptanceExamQuestionsByQuiz(
+    } = useAcceptanceExamQuestionsByExam(
         selectedQuizId,
-        { page: 1 },
+        { page: questionsPage },
         {
             enabled: !!selectedQuizId,
         }
@@ -202,14 +243,30 @@ function ExamsPage() {
         refetch: refetchOptions,
     } = useAcceptanceExamOptionsByQuestion(
         selectedQuestionId,
-        { page: 1 },
+        { page: optionsPage },
         {
             enabled: !!selectedQuestionId,
         }
     );
 
     const questions = questionsData?.items || [];
+    const questionsPagination = questionsData
+        ? {
+              currentPage: questionsData.currentPage,
+              lastPage: questionsData.lastPage,
+              perPage: questionsData.perPage,
+              total: questionsData.lastPage * questionsData.perPage,
+          }
+        : null;
     const options = optionsData?.items || [];
+    const optionsPagination = optionsData
+        ? {
+              currentPage: optionsData.currentPage,
+              lastPage: optionsData.lastPage,
+              perPage: optionsData.perPage,
+              total: optionsData.lastPage * optionsData.perPage,
+          }
+        : null;
 
     const transformedQuizzes: AcceptanceExamWithQuestions[] = quizzes.map(
         (quiz) => transformAcceptanceExamToUI(quiz, questions, options)
@@ -253,15 +310,17 @@ function ExamsPage() {
     const resetNewQuestion = () => setNewQuestion(DEFAULT_NEW_QUESTION);
 
     const handleCreateQuiz = () => {
-        if (!resolvedId) return;
+        if (!newQuiz.gradeId || !newQuiz.title) return;
 
         execute(
             () =>
                 createQuizAsync({
-                    levelId: resolvedId,
-                    timeLimit: newQuiz.timeLimit,
-                    passingScore: newQuiz.passingScore,
-                    maxAttempts: newQuiz.maxAttempts,
+                    gradeId: newQuiz.gradeId,
+                    title: newQuiz.title,
+                    description: newQuiz.description,
+                    timeLimit: String(newQuiz.timeLimit),
+                    passingScore: String(newQuiz.passingScore),
+                    maxAttempts: String(newQuiz.maxAttempts),
                     shuffleQuestions: newQuiz.shuffleQuestions,
                     showAnswers: newQuiz.showAnswers,
                 }),
@@ -298,6 +357,9 @@ function ExamsPage() {
     const handleEditQuiz = (quiz: AcceptanceExamWithQuestions) => {
         setEditingQuiz(quiz);
         setEditQuizData({
+            gradeId: quiz.levelId,
+            title: quiz.title,
+            description: quiz.description,
             timeLimit: quiz.timeLimit,
             passingScore: quiz.passingScore,
             maxAttempts: quiz.maxAttempts,
@@ -307,17 +369,19 @@ function ExamsPage() {
     };
 
     const handleUpdateQuiz = async () => {
-        if (!editingQuiz || !resolvedId) return;
+        if (!editingQuiz) return;
 
         execute(
             () =>
                 updateQuizAsync({
                     id: editingQuiz.id,
                     data: {
-                        levelId: resolvedId,
-                        timeLimit: editQuizData.timeLimit,
-                        passingScore: editQuizData.passingScore,
-                        maxAttempts: editQuizData.maxAttempts,
+                        gradeId: editQuizData.gradeId,
+                        title: editQuizData.title,
+                        description: editQuizData.description,
+                        timeLimit: String(editQuizData.timeLimit),
+                        passingScore: String(editQuizData.passingScore),
+                        maxAttempts: String(editQuizData.maxAttempts),
                         shuffleQuestions: editQuizData.shuffleQuestions,
                         showAnswers: editQuizData.showAnswers,
                     },
@@ -370,7 +434,6 @@ function ExamsPage() {
                 updateQuestionAsync({
                     id: editingQuestion.question.id,
                     data: {
-                        quizId: editingQuestion.quizId,
                         question: editQuestionData.question,
                         type: editQuestionData.type,
                         points: editQuestionData.points,
@@ -403,8 +466,8 @@ function ExamsPage() {
 
         execute(
             async () => {
-                const createdQuestions = await createQuestionAsync({
-                    quizId,
+                const createdQuestion = await createQuestionAsync({
+                    acceptanceExamId: Number(quizId),
                     question: newQuestion.question,
                     type: newQuestion.type,
                     points: newQuestion.points,
@@ -413,14 +476,10 @@ function ExamsPage() {
                     isActive: newQuestion.isActive,
                 });
 
-                if (
-                    createdQuestions &&
-                    createdQuestions.length > 0 &&
-                    newQuestion.options.length > 0
-                ) {
-                    const questionId = String(createdQuestions[0].id);
+                if (createdQuestion && newQuestion.options.length > 0) {
+                    const questionId = Number(createdQuestion.id);
                     await createOptionAsync({
-                        question_id: questionId,
+                        questionId,
                         options: newQuestion.options.map((opt, index) => ({
                             option_text: opt.text,
                             is_correct: opt.isCorrect,
@@ -428,7 +487,7 @@ function ExamsPage() {
                         })),
                     });
                 }
-                return createdQuestions;
+                return createdQuestion;
             },
             {
                 successMessage: t(
@@ -469,6 +528,77 @@ function ExamsPage() {
             quizId: null,
             questionId: null,
         });
+    };
+
+    const handleDeleteOption = (questionId: string, optionId: string) => {
+        setDeleteOptionDialog({ isOpen: true, questionId, optionId });
+    };
+
+    const confirmDeleteOption = async () => {
+        if (!deleteOptionDialog.optionId) return;
+        await execute(() => deleteOptionAsync(deleteOptionDialog.optionId!), {
+            successMessage: t(
+                "levels.quiz.messages.optionDeleteSuccess",
+                "Option deleted successfully"
+            ),
+            onSuccess: () => {
+                refetchOptions();
+            },
+        });
+        setDeleteOptionDialog({
+            isOpen: false,
+            questionId: null,
+            optionId: null,
+        });
+    };
+
+    const handleEditOption = (questionId: string, optionId: string) => {
+        // Find the option from the transformed data
+        const quiz = transformedQuizzes.find((q) =>
+            q.questions.some((question) => question.id === questionId)
+        );
+        const question = quiz?.questions.find((q) => q.id === questionId);
+        const option = question?.options.find((o) => o.id === optionId);
+        if (!option) return;
+
+        setEditingOption({ questionId, optionId });
+        setEditOptionData({
+            option_text: option.text,
+            is_correct: option.isCorrect,
+            order: option.order,
+        });
+    };
+
+    const handleUpdateOption = async () => {
+        if (!editingOption) return;
+
+        execute(
+            () =>
+                updateOptionAsync({
+                    id: editingOption.optionId,
+                    data: editOptionData,
+                }),
+            {
+                successMessage: t(
+                    "levels.quiz.messages.optionUpdateSuccess",
+                    "Option updated successfully"
+                ),
+                onSuccess: () => {
+                    setEditingOption(null);
+                    setEditOptionData({
+                        option_text: "",
+                        is_correct: false,
+                        order: 0,
+                    });
+                    refetchOptions();
+                },
+            }
+        );
+    };
+
+    const handleCancelEditOption = () => {
+        setEditingOption(null);
+        setEditOptionData({ option_text: "", is_correct: false, order: 0 });
     };
 
     const isLoading =
@@ -589,9 +719,18 @@ function ExamsPage() {
                                 onSaveQuestion={() =>
                                     handleCreateQuestion(quiz.id)
                                 }
+                                onEditQuestion={(questionId) =>
+                                    handleEditQuestion(quiz.id, questionId)
+                                }
                                 onDeleteQuestion={(questionId) =>
                                     handleDeleteQuestion(quiz.id, questionId)
                                 }
+                                onEditOption={handleEditOption}
+                                onDeleteOption={handleDeleteOption}
+                                questionsPagination={questionsPagination}
+                                onQuestionsPageChange={setQuestionsPage}
+                                optionsPagination={optionsPagination}
+                                onOptionsPageChange={setOptionsPage}
                                 isPending={isDeletingQuiz}
                                 isQuestionPending={
                                     isCreatingQuestion || isCreatingOption
@@ -600,6 +739,25 @@ function ExamsPage() {
                         ))
                     )}
                 </div>
+
+                {/* Exams Pagination */}
+                {quizzesPagination && quizzesPagination.lastPage > 1 && (
+                    <Pagination
+                        currentPage={quizzesPagination.currentPage}
+                        totalPages={quizzesPagination.lastPage}
+                        goToNextPage={() =>
+                            setExamsPage((p) =>
+                                Math.min(p + 1, quizzesPagination.lastPage)
+                            )
+                        }
+                        goToPreviousPage={() =>
+                            setExamsPage((p) => Math.max(p - 1, 1))
+                        }
+                        setPage={setExamsPage}
+                        itemsPerPage={quizzesPagination.perPage}
+                        totalItems={quizzesPagination.total}
+                    />
+                )}
             </div>
 
             {/* Lock Behavior Notice */}
@@ -690,6 +848,117 @@ function ExamsPage() {
                             onCancel={handleCancelEditQuestion}
                             isPending={isUpdatingQuestion}
                         />
+                    </div>
+                </div>
+            )}
+
+            {/* Delete Option Confirmation Dialog */}
+            <ConfirmDialog
+                isOpen={deleteOptionDialog.isOpen}
+                onClose={() =>
+                    setDeleteOptionDialog({
+                        isOpen: false,
+                        questionId: null,
+                        optionId: null,
+                    })
+                }
+                variant="danger"
+                title={t(
+                    "levels.quiz.deleteOptionDialog.title",
+                    "Delete Option"
+                )}
+                message={t(
+                    "levels.quiz.deleteOptionDialog.message",
+                    "Are you sure you want to delete this option? This action cannot be undone."
+                )}
+                confirmText={t("common.delete", "Delete")}
+                cancelText={t("common.cancel", "Cancel")}
+                onConfirm={confirmDeleteOption}
+                loading={isDeletingOption}
+            />
+
+            {/* Edit Option Modal */}
+            {editingOption && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                    <div className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-lg mx-4">
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                            {t("levels.quiz.editOption", "Edit Option")}
+                        </h3>
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                    {t("levels.quiz.optionText", "Option Text")}
+                                </label>
+                                <input
+                                    type="text"
+                                    value={editOptionData.option_text || ""}
+                                    onChange={(e) =>
+                                        setEditOptionData({
+                                            ...editOptionData,
+                                            option_text: e.target.value,
+                                        })
+                                    }
+                                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                    {t("levels.quiz.order", "Order")}
+                                </label>
+                                <input
+                                    type="number"
+                                    value={editOptionData.order || 0}
+                                    onChange={(e) =>
+                                        setEditOptionData({
+                                            ...editOptionData,
+                                            order:
+                                                parseInt(e.target.value) || 0,
+                                        })
+                                    }
+                                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                                    min="0"
+                                />
+                            </div>
+                            <label className="flex items-center gap-2 cursor-pointer">
+                                <input
+                                    type="checkbox"
+                                    checked={editOptionData.is_correct || false}
+                                    onChange={(e) =>
+                                        setEditOptionData({
+                                            ...editOptionData,
+                                            is_correct: e.target.checked,
+                                        })
+                                    }
+                                    className="w-4 h-4 text-brand-500 border-gray-300 rounded focus:ring-brand-500"
+                                />
+                                <span className="text-sm text-gray-700 dark:text-gray-300">
+                                    {t(
+                                        "levels.quiz.isCorrect",
+                                        "Correct Answer"
+                                    )}
+                                </span>
+                            </label>
+                        </div>
+                        <div className="flex justify-end gap-3 mt-6">
+                            <button
+                                type="button"
+                                onClick={handleCancelEditOption}
+                                disabled={isUpdatingOption}
+                                className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50"
+                            >
+                                {t("common.cancel", "Cancel")}
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleUpdateOption}
+                                disabled={isUpdatingOption}
+                                className="px-4 py-2 text-sm font-medium text-white bg-brand-500 rounded-lg hover:bg-brand-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            >
+                                {isUpdatingOption
+                                    ? t("common.saving", "Saving...")
+                                    : t("common.save", "Save")}
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

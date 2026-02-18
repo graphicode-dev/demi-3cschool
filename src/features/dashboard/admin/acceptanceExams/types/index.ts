@@ -1,5 +1,6 @@
 export * from "./acceptance-exam-options.types";
 export * from "./acceptance-exam-questions.types";
+export * from "./acceptance-exam-attempts.types";
 export type {
     NewAcceptanceExamData,
     NewAcceptanceExamQuestionData,

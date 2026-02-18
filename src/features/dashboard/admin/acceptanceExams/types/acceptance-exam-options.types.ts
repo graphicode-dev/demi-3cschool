@@ -14,21 +14,13 @@
 // ============================================================================
 
 /**
- * Question reference in option
- */
-export interface AcceptanceExamOptionQuestionRef {
-    id: number;
-    question: string;
-}
-
-/**
  * Acceptance Exam Option entity
  */
 export interface AcceptanceExamOption {
     id: number;
-    question: AcceptanceExamOptionQuestionRef;
+    questionId: number;
     optionText: string;
-    isCorrect: number;
+    isCorrect: boolean;
     order: number;
     createdAt: string;
     updatedAt: string;
@@ -108,36 +100,18 @@ export interface OptionItem {
 }
 
 /**
- * Create acceptance exam option payload (single option)
+ * Create acceptance exam options payload
  */
-export interface AcceptanceExamOptionCreateSinglePayload {
-    question_id: string;
-    option_text: string;
-    is_correct: boolean;
-    order: number;
-}
-
-/**
- * Create acceptance exam options payload (multiple options)
- */
-export interface AcceptanceExamOptionCreateMultiPayload {
-    question_id: string;
+export interface AcceptanceExamOptionCreatePayload {
+    questionId: number;
     options: OptionItem[];
 }
-
-/**
- * Create acceptance exam option payload (union type)
- */
-export type AcceptanceExamOptionCreatePayload =
-    | AcceptanceExamOptionCreateSinglePayload
-    | AcceptanceExamOptionCreateMultiPayload;
 
 /**
  * Update acceptance exam option payload
  */
 export interface AcceptanceExamOptionUpdatePayload {
-    questionId?: string;
-    optionText?: string;
-    isCorrect?: number;
+    option_text?: string;
+    is_correct?: boolean;
     order?: number;
 }

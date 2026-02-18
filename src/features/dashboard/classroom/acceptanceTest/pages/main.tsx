@@ -3,7 +3,11 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { Clock, ChevronLeft, ChevronRight, Send } from "lucide-react";
 import PreExam from "./pre-exam";
-import { AcceptanceExamQuestion } from "../types";
+import {
+    AcceptanceExamQuestion,
+    AcceptanceExam as StudentAcceptanceExam,
+    AcceptanceExamQuestionOption,
+} from "../types";
 import {
     PageWrapper,
     ErrorState,
@@ -11,14 +15,13 @@ import {
     useToast,
 } from "@/design-system";
 import {
-    useStudentExam,
-    useAttemptResult,
-    useStartExam,
-    useSubmitAnswer,
-    useCompleteExam,
-} from "../api";
+    useAcceptanceExamsList,
+    useAcceptanceExamAttemptResult,
+    useStartAcceptanceExamAttempt,
+    useAnswerAcceptanceExamQuestion,
+    useCompleteAcceptanceExamAttempt,
+} from "@/features/dashboard/admin/acceptanceExams/pages/exams/api";
 import { acceptanceTestPaths } from "../navigation";
-import { USE_MOCK_DATA, MOCK_EXAM, MOCK_ATTEMPT } from "../mocks";
 
 interface QuizData {
     id: number;
@@ -45,31 +48,34 @@ function AcceptanceExamTakePage() {
 
     // Fetch available exams (skip if using mock data)
     const {
-        data: realStudentExam,
+        data: realExamsData,
         isLoading: realExamsLoading,
         error: realExamsError,
-    } = useStudentExam();
+    } = useAcceptanceExamsList({ page: 1 });
+    const realStudentExam =
+        (realExamsData?.items?.[0] as unknown as StudentAcceptanceExam) ?? null;
 
     const {
         data: realAttemptData,
         isLoading: realAttemptLoading,
         error: realAttemptError,
-    } = useAttemptResult(attemptId ?? "", {
-        enabled: !!attemptId && !USE_MOCK_DATA,
+    } = useAcceptanceExamAttemptResult(attemptId || undefined, {
+        enabled: !!attemptId,
     });
 
     // Use mock data or real data based on configuration
-    const studentExam = USE_MOCK_DATA ? MOCK_EXAM : realStudentExam;
-    const examsLoading = USE_MOCK_DATA ? false : realExamsLoading;
-    const examsError = USE_MOCK_DATA ? null : realExamsError;
-    const attemptData =
-        USE_MOCK_DATA && attemptId ? MOCK_ATTEMPT : realAttemptData;
-    const attemptLoading = USE_MOCK_DATA ? false : realAttemptLoading;
-    const attemptError = USE_MOCK_DATA ? null : realAttemptError;
+    const studentExam = realStudentExam;
+    const examsLoading = realExamsLoading;
+    const examsError = realExamsError;
+    const attemptData = realAttemptData;
+    const attemptLoading = realAttemptLoading;
+    const attemptError = realAttemptError;
 
-    const { mutateAsync: startExamMutation } = useStartExam();
-    const { mutateAsync: submitAnswerMutation } = useSubmitAnswer();
-    const { mutateAsync: completeExamMutation } = useCompleteExam();
+    const { mutateAsync: startExamMutation } = useStartAcceptanceExamAttempt();
+    const { mutateAsync: submitAnswerMutation } =
+        useAnswerAcceptanceExamQuestion();
+    const { mutateAsync: completeExamMutation } =
+        useCompleteAcceptanceExamAttempt();
 
     // Map attempt data to quiz state when available
     useEffect(() => {
@@ -154,19 +160,17 @@ function AcceptanceExamTakePage() {
         }));
 
         // Submit answer to API (skip for mock data)
-        if (!USE_MOCK_DATA) {
-            submittingAnswerRef.current = true;
-            try {
-                await submitAnswerMutation({
-                    attemptId,
-                    questionId: String(questionId),
-                    data: { selectedOptionId: optionId },
-                });
-            } catch (error: any) {
-                console.error("Failed to submit answer:", error);
-            } finally {
-                submittingAnswerRef.current = false;
-            }
+        submittingAnswerRef.current = true;
+        try {
+            await submitAnswerMutation({
+                attemptId,
+                questionId: String(questionId),
+                data: { selected_option_id: String(optionId) },
+            });
+        } catch (error: any) {
+            console.error("Failed to submit answer:", error);
+        } finally {
+            submittingAnswerRef.current = false;
         }
     };
 
@@ -187,17 +191,9 @@ function AcceptanceExamTakePage() {
         setIsStarting(true);
         try {
             let newAttemptId: string;
-
-            if (USE_MOCK_DATA) {
-                // Use mock attempt ID for testing
-                newAttemptId = String(MOCK_ATTEMPT.id);
-            } else {
-                const response = await startExamMutation(
-                    String(studentExam.id)
-                );
-                const data = (response as any)?.data || response;
-                newAttemptId = data?.id;
-            }
+            const response = await startExamMutation(String(studentExam.id));
+            const data = (response as any)?.data || response;
+            newAttemptId = data?.id;
 
             if (newAttemptId) {
                 setAttemptId(String(newAttemptId));
@@ -224,13 +220,15 @@ function AcceptanceExamTakePage() {
                     questions: questionsArray.map((q) => ({
                         id: q.id,
                         question: q.question,
-                        options: q.options.map((opt) => ({
-                            id: opt.id,
-                            questionId: opt.questionId,
-                            optionText: opt.optionText,
-                            isCorrect: opt.isCorrect,
-                            order: opt.order,
-                        })),
+                        options: q.options.map(
+                            (opt: AcceptanceExamQuestionOption) => ({
+                                id: opt.id,
+                                questionId: opt.questionId,
+                                optionText: opt.optionText,
+                                isCorrect: opt.isCorrect,
+                                order: opt.order,
+                            })
+                        ),
                         points: q.points || 1,
                         acceptanceExamId: studentExam.id,
                         type: q.type || "single_choice",
@@ -269,9 +267,7 @@ function AcceptanceExamTakePage() {
         setIsSubmitting(true);
         try {
             // Skip API call for mock data
-            if (!USE_MOCK_DATA) {
-                await completeExamMutation(attemptId);
-            }
+            await completeExamMutation(attemptId);
 
             addToast({
                 type: "success",
