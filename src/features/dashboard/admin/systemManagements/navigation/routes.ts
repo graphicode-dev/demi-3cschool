@@ -1,5 +1,7 @@
 import { RouteConfig } from "@/router";
 import { permissionRoutes } from "../pages/permissions/navigation/routes";
+import { usersRoutes } from "../pages/users/navigation";
+import { rolesRoutes } from "../pages/roles/navigation";
 
 export const managementRoutes: RouteConfig[] = [
     {
@@ -13,6 +15,8 @@ export const managementRoutes: RouteConfig[] = [
                 handle: { crumb: "systemManagements:title" },
             },
             ...permissionRoutes,
+            ...usersRoutes,
+            ...rolesRoutes
         ],
     },
 ];
