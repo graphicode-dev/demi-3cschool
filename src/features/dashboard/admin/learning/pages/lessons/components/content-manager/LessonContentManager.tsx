@@ -10,6 +10,7 @@ import { lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 import { useSearchParams } from "react-router-dom";
 import { Tabs } from "@/design-system";
+import { SkeletonRegistry } from "@/design-system/skeleton/SkeletonRegistry";
 
 const VideosTab = lazy(() => import("./tabs/VideosTab"));
 const QuizzesTab = lazy(() => import("./tabs/QuizzesTab"));
@@ -47,11 +48,8 @@ const tabs: { key: ContentTabType; labelKey: string; fallback: string }[] = [
 ];
 
 function TabLoader() {
-    return (
-        <div className="flex items-center justify-center h-64">
-            <div className="w-8 h-8 border-2 border-brand-500 border-t-transparent rounded-full animate-spin" />
-        </div>
-    );
+    const Skeleton = SkeletonRegistry["lesson-content-list-item"];
+    return <Skeleton />;
 }
 
 export default function LessonContentManager({

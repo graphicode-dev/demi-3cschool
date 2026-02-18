@@ -7,9 +7,10 @@
  */
 
 import { useTranslation } from "react-i18next";
-import { PageWrapper, LoadingState, ErrorState } from "@/design-system";
+import { PageWrapper, ErrorState } from "@/design-system";
 import { useGrades } from "@/features/dashboard/admin/systemManagements/api/systemManagement.queries";
 import { NavigationCard, CardGrid } from "../components";
+import { SkeletonList } from "@/design-system/hooks/useSkeleton";
 
 /**
  * Grade icon component
@@ -59,10 +60,6 @@ export default function GradesList() {
     const { t } = useTranslation();
     const { data: grades, isLoading, error, refetch } = useGrades();
 
-    if (isLoading) {
-        return <LoadingState message={t("common.loading", "Loading...")} />;
-    }
-
     if (error) {
         return (
             <ErrorState
@@ -77,6 +74,7 @@ export default function GradesList() {
 
     return (
         <PageWrapper
+            isLoading={isLoading}
             pageHeaderProps={{
                 title: t("learning:grades.title", "Grades"),
                 subtitle: t(
@@ -86,10 +84,10 @@ export default function GradesList() {
             }}
         >
             <CardGrid columns={3}>
-                {grades?.items?.map((grade, index) => {
-                    console.log(JSON.stringify(grade, null, 2));
-
-                    return (
+                <SkeletonList
+                    data={grades?.items ?? []}
+                    type="grade-card"
+                    renderItem={(grade, index) => (
                         <NavigationCard
                             key={grade.id}
                             title={grade.name}
@@ -99,11 +97,11 @@ export default function GradesList() {
                             })}
                             href={`/admin/grades/${grade.id}/levels`}
                             icon={<GradeIcon gradeCode={grade.code} />}
-                            iconBg={getIconBg(index)}
+                            iconBg={getIconBg(index!)}
                             testId={`grade-card-${grade.id}`}
                         />
-                    );
-                })}
+                    )}
+                />
             </CardGrid>
         </PageWrapper>
     );

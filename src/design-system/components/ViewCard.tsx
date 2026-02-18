@@ -8,6 +8,8 @@ import {
 } from "@/shared/types";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "@/shared/context/ThemeContext";
+import { SkeletonList } from "../hooks/useSkeleton";
+import { count } from "console";
 
 const ViewCardSection: React.FC<ViewCardSectionProps> = ({
     label,
@@ -682,7 +684,15 @@ const ViewCard: React.FC<ViewCardProps> = ({
                 !hideBorder ? "border border-gray-200 dark:border-gray-800" : ""
             }`}
         >
-            {renderContent()}
+            {
+                <SkeletonList
+                    data={[1]}
+                    count={1}
+                    type="view-card"
+                    renderItem={() => renderContent()}
+                />
+                
+            }
 
             {/* Global Show More button */}
             {needsShowMore && (

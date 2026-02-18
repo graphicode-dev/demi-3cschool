@@ -27,27 +27,21 @@ export function SkeletonList<T>({
     type,
     count = 3,
     renderItem,
-    className,
 }: {
     data: T[];
     type: SkeletonType;
     count?: number;
-    renderItem: (item: T) => React.ReactNode;
-    className?: string;
+    renderItem: (item: T, index?: number) => React.ReactNode;
 }) {
     const { isLoading } = useLoadingScope();
 
     if (isLoading) {
         const Skeleton = SkeletonRegistry[type];
         if (!Skeleton) return null;
-        return (
-            <div className={className}>
-                {Array.from({ length: count }).map((_, i) => (
-                    <Skeleton key={i} />
-                ))}
-            </div>
-        );
+        return Array.from({ length: count }).map((_, i) => (
+            <Skeleton key={i} />
+        ));
     }
 
-    return <div className={className}>{data.map(renderItem)}</div>;
+    return <>{data.map(renderItem)}</>;
 }

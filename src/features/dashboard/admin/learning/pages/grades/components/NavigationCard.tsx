@@ -7,6 +7,7 @@
 
 import { Link } from "react-router-dom";
 import { ChevronRight, ClipboardList } from "lucide-react";
+import { withSkeleton } from "@/design-system/hooks/useSkeleton";
 
 interface NavigationCardProps {
     title: string;
@@ -18,7 +19,7 @@ interface NavigationCardProps {
     onQuiz?: () => void;
 }
 
-export function NavigationCard({
+export function NavigationCardBase({
     title,
     description,
     href,
@@ -73,4 +74,4 @@ export function NavigationCard({
     );
 }
 
-export default NavigationCard;
+export const NavigationCard = withSkeleton("grade-card", NavigationCardBase);

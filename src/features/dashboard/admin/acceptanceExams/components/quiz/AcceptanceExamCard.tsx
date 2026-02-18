@@ -24,6 +24,7 @@ import {
     AcceptanceExamWithQuestions,
     NewAcceptanceExamQuestionFormData,
 } from "../../types";
+import { withSkeleton } from "@/design-system/hooks/useSkeleton";
 
 interface AcceptanceExamCardProps {
     quiz: AcceptanceExamWithQuestions;
@@ -61,7 +62,7 @@ interface AcceptanceExamCardProps {
     isQuestionPending?: boolean;
 }
 
-export function AcceptanceExamCard({
+export function AcceptanceExamCardBase({
     quiz,
     isExpanded,
     expandedQuestions,
@@ -310,4 +311,7 @@ export function AcceptanceExamCard({
     );
 }
 
-export default AcceptanceExamCard;
+export const AcceptanceExamCard = withSkeleton(
+    "acceptance-exam-card",
+    AcceptanceExamCardBase
+);

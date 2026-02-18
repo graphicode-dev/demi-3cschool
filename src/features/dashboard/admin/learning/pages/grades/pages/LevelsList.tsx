@@ -8,14 +8,10 @@
 
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-    PageWrapper,
-    LoadingState,
-    ErrorState,
-    EmptyState,
-} from "@/design-system";
+import { PageWrapper, ErrorState, EmptyState } from "@/design-system";
 import { useLevelsByGrade } from "../../levels";
 import { NavigationCard, CardGrid } from "../components";
+import { SkeletonList } from "@/design-system/hooks/useSkeleton";
 
 /**
  * Level icon component
@@ -97,10 +93,6 @@ export default function LevelsList() {
         navigate(`/admin/grades/${gradeId}/levels/${levelId}/quiz`);
     };
 
-    if (isLoading) {
-        return <LoadingState message={t("common.loading", "Loading...")} />;
-    }
-
     if (error) {
         return (
             <ErrorState
@@ -113,7 +105,7 @@ export default function LevelsList() {
         );
     }
 
-    if (!levels || levels?.items?.length === 0) {
+    if (!isLoading && (!levels || levels?.items?.length === 0)) {
         return (
             <PageWrapper
                 pageHeaderProps={{
@@ -135,6 +127,7 @@ export default function LevelsList() {
 
     return (
         <PageWrapper
+            isLoading={isLoading}
             pageHeaderProps={{
                 title: t("learning:levels.title", "Levels"),
                 subtitle: t("learning:levels.subtitle", {
@@ -152,18 +145,22 @@ export default function LevelsList() {
             </div>
 
             <CardGrid columns={3}>
-                {levels?.items?.map((level, index) => (
-                    <NavigationCard
-                        key={level.id}
-                        title={level.title}
-                        description={`${getTermDisplayName(level.programsCurriculum.name, t)} • ${level.description || t("learning:levels.viewLessons", "View lessons")}`}
-                        href={`/admin/grades/${gradeId}/levels/${level.id}/lessons`}
-                        icon={<LevelIcon index={index} />}
-                        iconBg={getIconBg(index)}
-                        testId={`level-card-${level.id}`}
-                        onQuiz={() => handleQuiz(level.id)}
-                    />
-                ))}
+                <SkeletonList
+                    data={levels?.items ?? []}
+                    type="program-card"
+                    renderItem={(level, index) => (
+                        <NavigationCard
+                            key={level.id}
+                            title={level.title}
+                            description={`${getTermDisplayName(level.programsCurriculum.name, t)} • ${level.description || t("learning:levels.viewLessons", "View lessons")}`}
+                            href={`/admin/grades/${gradeId}/levels/${level.id}/lessons`}
+                            icon={<LevelIcon index={index!} />}
+                            iconBg={getIconBg(index!)}
+                            testId={`level-card-${level.id}`}
+                            onQuiz={() => handleQuiz(level.id)}
+                        />
+                    )}
+                />
             </CardGrid>
 
             {/* Levels Overview */}
@@ -172,42 +169,46 @@ export default function LevelsList() {
                     {t("learning:levels.overview", "Levels Overview")}
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {levels?.items?.map((level, index) => (
-                        <div
-                            key={level.id}
-                            className="flex items-center gap-3 p-3 bg-white dark:bg-gray-800 rounded-xl"
-                        >
+                    <SkeletonList
+                        data={levels?.items ?? []}
+                        type="program-card"
+                        renderItem={(level, index) => (
                             <div
-                                className={`w-10 h-10 rounded-lg ${getIconBg(index)} flex items-center justify-center`}
+                                key={level.id}
+                                className="flex items-center gap-3 p-3 bg-white dark:bg-gray-800 rounded-xl"
                             >
-                                <LevelIcon index={index} />
-                            </div>
-                            <div>
-                                <p className="text-sm font-medium text-gray-900 dark:text-white">
-                                    {level.title}
-                                </p>
-                                <p className="text-xs text-gray-500 dark:text-gray-400">
-                                    {getTermDisplayName(
-                                        level.programsCurriculum.name,
-                                        t
-                                    )}
-                                </p>
-                            </div>
-                            <div className="ml-auto">
-                                <span
-                                    className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                                        level.isActive
-                                            ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
-                                            : "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-400"
-                                    }`}
+                                <div
+                                    className={`w-10 h-10 rounded-lg ${getIconBg(index!)} flex items-center justify-center`}
                                 >
-                                    {level.isActive
-                                        ? t("common.active", "Active")
-                                        : t("common.inactive", "Inactive")}
-                                </span>
+                                    <LevelIcon index={index!} />
+                                </div>
+                                <div>
+                                    <p className="text-sm font-medium text-gray-900 dark:text-white">
+                                        {level.title}
+                                    </p>
+                                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                                        {getTermDisplayName(
+                                            level.programsCurriculum.name,
+                                            t
+                                        )}
+                                    </p>
+                                </div>
+                                <div className="ml-auto">
+                                    <span
+                                        className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                            level.isActive
+                                                ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
+                                                : "bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-400"
+                                        }`}
+                                    >
+                                        {level.isActive
+                                            ? t("common.active", "Active")
+                                            : t("common.inactive", "Inactive")}
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        )}
+                    />
                 </div>
             </div>
         </PageWrapper>

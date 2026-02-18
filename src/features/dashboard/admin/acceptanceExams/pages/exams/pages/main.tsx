@@ -26,12 +26,7 @@ import {
     NewAcceptanceExamData,
     NewAcceptanceExamQuestionFormData,
 } from "../../../types";
-import {
-    ConfirmDialog,
-    ErrorState,
-    LoadingState,
-    PageWrapper,
-} from "@/design-system";
+import { ConfirmDialog, ErrorState, PageWrapper } from "@/design-system";
 import Pagination from "@/design-system/components/table/Pagination";
 import { AlertTriangle, Plus } from "lucide-react";
 import {
@@ -39,6 +34,7 @@ import {
     AcceptanceExamForm,
     QuestionForm,
 } from "../../../components/quiz";
+import { SkeletonList } from "@/design-system/hooks/useSkeleton";
 
 const DEFAULT_NEW_QUIZ: NewAcceptanceExamData = {
     gradeId: "",
@@ -604,10 +600,6 @@ function ExamsPage() {
     const isLoading =
         levelLoading || quizzesLoading || questionsLoading || optionsLoading;
 
-    if (isLoading) {
-        return <LoadingState message={t("common.loading", "Loading...")} />;
-    }
-
     if (levelError) {
         return (
             <ErrorState
@@ -619,8 +611,10 @@ function ExamsPage() {
             />
         );
     }
+
     return (
         <PageWrapper
+            isLoading={isLoading}
             pageHeaderProps={{
                 title: `${t("acceptanceExams:title", "Acceptance Exam")}`,
             }}
@@ -683,7 +677,7 @@ function ExamsPage() {
 
                 {/* Quiz Cards */}
                 <div className="space-y-4">
-                    {transformedQuizzes.length === 0 ? (
+                    {!isLoading && transformedQuizzes.length === 0 ? (
                         <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
                             <p className="text-gray-500 dark:text-gray-400">
                                 {t("levels.quiz.noQuizzes", "No quizzes yet")}
@@ -696,47 +690,62 @@ function ExamsPage() {
                             </p>
                         </div>
                     ) : (
-                        transformedQuizzes.map((quiz) => (
-                            <AcceptanceExamCard
-                                key={quiz.id}
-                                quiz={quiz}
-                                isExpanded={expandedQuizzes.includes(quiz.id)}
-                                expandedQuestions={expandedQuestions}
-                                isAddingQuestion={isAddingQuestion === quiz.id}
-                                newQuestion={newQuestion}
-                                onToggleExpand={() => toggleQuizExpand(quiz.id)}
-                                onToggleQuestionExpand={toggleQuestionExpand}
-                                onEdit={() => handleEditQuiz(quiz)}
-                                onDelete={() => handleDeleteQuiz(quiz.id)}
-                                onAddQuestion={() =>
-                                    setIsAddingQuestion(quiz.id)
-                                }
-                                onCancelAddQuestion={() => {
-                                    setIsAddingQuestion(null);
-                                    resetNewQuestion();
-                                }}
-                                onNewQuestionChange={setNewQuestion}
-                                onSaveQuestion={() =>
-                                    handleCreateQuestion(quiz.id)
-                                }
-                                onEditQuestion={(questionId) =>
-                                    handleEditQuestion(quiz.id, questionId)
-                                }
-                                onDeleteQuestion={(questionId) =>
-                                    handleDeleteQuestion(quiz.id, questionId)
-                                }
-                                onEditOption={handleEditOption}
-                                onDeleteOption={handleDeleteOption}
-                                questionsPagination={questionsPagination}
-                                onQuestionsPageChange={setQuestionsPage}
-                                optionsPagination={optionsPagination}
-                                onOptionsPageChange={setOptionsPage}
-                                isPending={isDeletingQuiz}
-                                isQuestionPending={
-                                    isCreatingQuestion || isCreatingOption
-                                }
-                            />
-                        ))
+                        <SkeletonList
+                            data={transformedQuizzes}
+                            type="acceptance-exam-card"
+                            renderItem={(quiz) => (
+                                <AcceptanceExamCard
+                                    key={quiz.id}
+                                    quiz={quiz}
+                                    isExpanded={expandedQuizzes.includes(
+                                        quiz.id
+                                    )}
+                                    expandedQuestions={expandedQuestions}
+                                    isAddingQuestion={
+                                        isAddingQuestion === quiz.id
+                                    }
+                                    newQuestion={newQuestion}
+                                    onToggleExpand={() =>
+                                        toggleQuizExpand(quiz.id)
+                                    }
+                                    onToggleQuestionExpand={
+                                        toggleQuestionExpand
+                                    }
+                                    onEdit={() => handleEditQuiz(quiz)}
+                                    onDelete={() => handleDeleteQuiz(quiz.id)}
+                                    onAddQuestion={() =>
+                                        setIsAddingQuestion(quiz.id)
+                                    }
+                                    onCancelAddQuestion={() => {
+                                        setIsAddingQuestion(null);
+                                        resetNewQuestion();
+                                    }}
+                                    onNewQuestionChange={setNewQuestion}
+                                    onSaveQuestion={() =>
+                                        handleCreateQuestion(quiz.id)
+                                    }
+                                    onEditQuestion={(questionId) =>
+                                        handleEditQuestion(quiz.id, questionId)
+                                    }
+                                    onDeleteQuestion={(questionId) =>
+                                        handleDeleteQuestion(
+                                            quiz.id,
+                                            questionId
+                                        )
+                                    }
+                                    onEditOption={handleEditOption}
+                                    onDeleteOption={handleDeleteOption}
+                                    questionsPagination={questionsPagination}
+                                    onQuestionsPageChange={setQuestionsPage}
+                                    optionsPagination={optionsPagination}
+                                    onOptionsPageChange={setOptionsPage}
+                                    isPending={isDeletingQuiz}
+                                    isQuestionPending={
+                                        isCreatingQuestion || isCreatingOption
+                                    }
+                                />
+                            )}
+                        />
                     )}
                 </div>
 

@@ -10,7 +10,6 @@ import { useTranslation } from "react-i18next";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import {
     PageWrapper,
-    LoadingState,
     ErrorState,
     EmptyState,
     useConfirmDialog,
@@ -19,6 +18,7 @@ import { useDeleteLesson, useLessonsByLevel } from "../api";
 import { Lesson } from "../types";
 import { useMutationHandler } from "@/shared/api";
 import ListCard from "../components/ListCard";
+import { SkeletonList } from "@/design-system/hooks/useSkeleton";
 
 export default function LearningLessonsList() {
     const { t } = useTranslation();
@@ -83,10 +83,6 @@ export default function LearningLessonsList() {
         : ((lessonsData as { items?: Lesson[] })?.items ?? []);
     const levelTitle = lessons[0]?.level?.title || `Level ${levelId}`;
 
-    if (isLoading) {
-        return <LoadingState message={t("common.loading", "Loading...")} />;
-    }
-
     if (error) {
         return (
             <ErrorState
@@ -101,6 +97,7 @@ export default function LearningLessonsList() {
 
     return (
         <PageWrapper
+            isLoading={isLoading}
             pageHeaderProps={{
                 title: t("learning:lessons.title", "Lessons"),
                 subtitle: levelTitle,
@@ -130,12 +127,19 @@ export default function LearningLessonsList() {
         >
             {/* Level Badge */}
             <div className="mb-6">
-                <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-brand-100 text-brand-700 dark:bg-brand-900/30 dark:text-brand-400">
-                    {levelTitle}
-                </span>
+                <SkeletonList
+                    data={[1]}
+                    count={1}
+                    type="text-line"
+                    renderItem={() => (
+                        <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-brand-100 text-brand-700 dark:bg-brand-900/30 dark:text-brand-400">
+                            {levelTitle}
+                        </span>
+                    )}
+                />
             </div>
 
-            {lessons.length === 0 ? (
+            {!isLoading && lessons.length === 0 ? (
                 <EmptyState
                     title={t(
                         "learning:lessons.empty.title",
@@ -148,42 +152,55 @@ export default function LearningLessonsList() {
                 />
             ) : (
                 <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
-                    <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-                        <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                            {levelTitle}
-                        </h2>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                            {t(
-                                "learning:lessons.lessonsCount",
-                                "{{count}} Lessons",
-                                { count: lessons.length }
+                    <div className="p-6 border-b border-gray-200 dark:border-gray-700 space-y-4">
+                        <SkeletonList
+                            data={[1]}
+                            type="text-line"
+                            count={2}
+                            renderItem={() => (
+                                <>
+                                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                                        {levelTitle}
+                                    </h2>
+                                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                                        {t(
+                                            "learning:lessons.lessonsCount",
+                                            "{{count}} Lessons",
+                                            { count: lessons.length }
+                                        )}
+                                    </p>
+                                </>
                             )}
-                        </p>
+                        />
                     </div>
 
                     <div className="divide-y divide-gray-200 dark:divide-gray-700">
-                        {lessons.map((lesson: Lesson) => (
-                            <ListCard
-                                key={lesson.id}
-                                title={lesson.title}
-                                description={lesson.description}
-                                status={{
-                                    label: lesson.isActive
-                                        ? t("common.active", "Active")
-                                        : t("common.inactive", "Inactive"),
-                                    variant: lesson.isActive
-                                        ? "success"
-                                        : "default",
-                                }}
-                                meta={new Date(
-                                    lesson.createdAt
-                                ).toLocaleDateString()}
-                                onEdit={() => handleEdit(String(lesson.id))}
-                                onDelete={() => handleDelete(lesson)}
-                                onView={() => handleView(String(lesson.id))}
-                                onQuiz={() => handleQuiz(String(lesson.id))}
-                            />
-                        ))}
+                        <SkeletonList
+                            data={lessons}
+                            type="program-card"
+                            renderItem={(lesson) => (
+                                <ListCard
+                                    key={lesson.id}
+                                    title={lesson.title}
+                                    description={lesson.description}
+                                    status={{
+                                        label: lesson.isActive
+                                            ? t("common.active", "Active")
+                                            : t("common.inactive", "Inactive"),
+                                        variant: lesson.isActive
+                                            ? "success"
+                                            : "default",
+                                    }}
+                                    meta={new Date(
+                                        lesson.createdAt
+                                    ).toLocaleDateString()}
+                                    onEdit={() => handleEdit(String(lesson.id))}
+                                    onDelete={() => handleDelete(lesson)}
+                                    onView={() => handleView(String(lesson.id))}
+                                    onQuiz={() => handleQuiz(String(lesson.id))}
+                                />
+                            )}
+                        />
                     </div>
                 </div>
             )}

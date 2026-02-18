@@ -7,12 +7,7 @@
 
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import {
-    PageWrapper,
-    ErrorState,
-    LoadingState,
-    ViewCard,
-} from "@/design-system";
+import { PageWrapper, ErrorState, ViewCard } from "@/design-system";
 import { useLesson } from "../api";
 import { LessonContentManager } from "../components";
 
@@ -22,11 +17,7 @@ export default function LearningLessonsDetail() {
 
     const { data: lesson, isLoading, error, refetch } = useLesson(id);
 
-    if (isLoading) {
-        return <LoadingState message={t("common.loading", "Loading...")} />;
-    }
-
-    if (error || !lesson) {
+    if (!isLoading && error) {
         return (
             <ErrorState
                 message={
@@ -40,8 +31,9 @@ export default function LearningLessonsDetail() {
 
     return (
         <PageWrapper
+            isLoading={isLoading}
             pageHeaderProps={{
-                title: lesson?.title,
+                title: lesson?.title || "",
                 subtitle: t(
                     "learning:lessons.content.subtitle",
                     "Manage videos, quizzes, assignments, and materials"
@@ -71,7 +63,9 @@ export default function LearningLessonsDetail() {
                 }}
             />
 
-            <LessonContentManager lessonId={lesson.id} levelId={levelId!} />
+            {lesson && (
+                <LessonContentManager lessonId={lesson.id} levelId={levelId!} />
+            )}
         </PageWrapper>
     );
 }

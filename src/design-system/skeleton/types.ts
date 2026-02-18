@@ -1,9 +1,10 @@
 // types.ts
 
 export type SkeletonType =
-    | "student-card"
-    | "chart"
-    | "students-table"
-    | "dashboard-card"
-    | "page-header"
-    | "program-card";
+    | "text-line"
+    | "header"
+    | "view-card"
+    | "program-card"
+    | "acceptance-exam-card"
+    | "grade-card"
+    | "lesson-content-list-item";

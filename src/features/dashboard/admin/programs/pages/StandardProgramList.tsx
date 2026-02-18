@@ -61,7 +61,6 @@ export default function StandardProgramList() {
             <SkeletonList
                 data={programs}
                 type="program-card"
-                className="space-y-4"
                 renderItem={(program) => (
                     <ProgramCurriculumCard
                         key={program.id}
