@@ -1,0 +1,34 @@
+{
+    "title": "System Management",
+    "permissions": {
+        "title": "Permissions",
+        "subtitle": "Manage roles and user access controls",
+        "roles": "Roles",
+        "users": "Users",
+        "grantAll": "Grant All",
+        "revokeAll": "Revoke All",
+        "save": "Save Changes",
+        "saving": "Saving...",
+        "saved": "Permissions saved successfully",
+        "searchUsers": "Search users...",
+        "searchPermissions": "Search permissions...",
+        "active": "Active",
+        "maxAuthWarning": "Maximum authorization mode — all permissions granted",
+        "resetGuard": "Reset",
+        "syncStatus": "{{active}} / {{total}} active",
+        "securityCluster": "Security Cluster",
+        "auditNote": "Audit logs are generated for every permission change",
+        "roles_list": {
+            "manager": "Global Manager",
+            "manager_desc": "L1 Authority",
+            "cx_leader": "Core Leader",
+            "cx_leader_desc": "L2 HQ Lead",
+            "block_admin": "Squad Admin",
+            "block_admin_desc": "L3 Hub Manager",
+            "instructor": "Team Member",
+            "instructor_desc": "L4 Specialist",
+            "student": "General User",
+            "student_desc": "L5 Member"
+        }
+    }
+}

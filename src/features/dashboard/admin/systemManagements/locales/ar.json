@@ -1,0 +1,34 @@
+{
+    "title": "إدارة النظام",
+    "permissions": {
+        "title": "الصلاحيات",
+        "subtitle": "إدارة الأدوار وصلاحيات الوصول للمستخدمين",
+        "roles": "الأدوار",
+        "users": "المستخدمون",
+        "grantAll": "منح الكل",
+        "revokeAll": "سحب الكل",
+        "save": "حفظ التغييرات",
+        "saving": "جاري الحفظ...",
+        "saved": "تم حفظ الصلاحيات بنجاح",
+        "searchUsers": "بحث عن مستخدمين...",
+        "searchPermissions": "بحث في الصلاحيات...",
+        "active": "نشط",
+        "maxAuthWarning": "وضع التفويض الكامل — جميع الصلاحيات ممنوحة",
+        "resetGuard": "إعادة تعيين",
+        "syncStatus": "{{active}} / {{total}} نشط",
+        "securityCluster": "مجموعة الأمان",
+        "auditNote": "يتم إنشاء سجلات التدقيق لكل تغيير في الصلاحيات",
+        "roles_list": {
+            "manager": "المدير العام",
+            "manager_desc": "المستوى الأول",
+            "cx_leader": "القائد الأساسي",
+            "cx_leader_desc": "المستوى الثاني",
+            "block_admin": "مدير الوحدة",
+            "block_admin_desc": "المستوى الثالث",
+            "instructor": "عضو الفريق",
+            "instructor_desc": "المستوى الرابع",
+            "student": "مستخدم عام",
+            "student_desc": "المستوى الخامس"
+        }
+    }
+}

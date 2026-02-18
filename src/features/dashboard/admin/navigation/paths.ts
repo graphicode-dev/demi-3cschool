@@ -18,6 +18,7 @@ import { settingsPaths } from "../settings/navigation/paths";
 import { userManagementPaths } from "../userManagement/navigation/paths";
 import { auditingPaths } from "../auditing/navigation";
 import { acceptanceExamsPaths } from "../acceptanceExams/navigation";
+import { managementPaths } from "../systemManagements/navigation";
 
 export const adminPaths = {
     root: () => ADMIN_PATH,
@@ -37,6 +38,7 @@ export const adminPaths = {
     userManagementPaths,
     auditingPaths,
     acceptanceExamsPaths,
+    managementPaths,
 } as const;
 
 export const adminManagementPaths = registerFeaturePaths("admin", {

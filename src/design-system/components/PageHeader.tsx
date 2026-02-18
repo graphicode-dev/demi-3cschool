@@ -35,6 +35,8 @@ export interface PageHeaderProps extends BaseComponentProps {
     backButton?: boolean;
     /** ID for accessibility (used in aria-labelledby) */
     id?: string;
+    /** Render actions on a full-width row below the title */
+    fullWidthActions?: boolean;
 }
 
 /**
@@ -49,6 +51,7 @@ export function PageHeader({
     className = "",
     testId,
     id,
+    fullWidthActions = false,
 }: PageHeaderProps) {
     const navigate = useNavigate();
     const headingId =
@@ -70,49 +73,55 @@ export function PageHeader({
                     data-testid={testId}
                     aria-labelledby={headingId}
                 >
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                        <div className="flex items-center gap-4">
-                            {backButton && (
-                                <div
-                                    onClick={handleBack}
-                                    className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer"
-                                    aria-label="Go back"
-                                >
-                                    <svg
-                                        className="w-5 h-5 text-gray-600 dark:text-gray-400 rtl:rotate-180"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
+                    <div className="flex flex-col gap-4">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                            <div className="flex items-center gap-4">
+                                {backButton && (
+                                    <div
+                                        onClick={handleBack}
+                                        className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer"
+                                        aria-label="Go back"
                                     >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth="2"
-                                            d="M15 19l-7-7 7-7"
-                                        />
-                                    </svg>
+                                        <svg
+                                            className="w-5 h-5 text-gray-600 dark:text-gray-400 rtl:rotate-180"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth="2"
+                                                d="M15 19l-7-7 7-7"
+                                            />
+                                        </svg>
+                                    </div>
+                                )}
+
+                                <div>
+                                    <h1
+                                        id={headingId}
+                                        className="text-2xl font-bold text-gray-900 dark:text-white"
+                                    >
+                                        {title}
+                                    </h1>
+                                    {subtitle && (
+                                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                                            {subtitle}
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
+
+                            {actions && !fullWidthActions && (
+                                <div className="flex items-center gap-2">
+                                    {actions}
                                 </div>
                             )}
-
-                            <div>
-                                <h1
-                                    id={headingId}
-                                    className="text-2xl font-bold text-gray-900 dark:text-white"
-                                >
-                                    {title}
-                                </h1>
-                                {subtitle && (
-                                    <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                                        {subtitle}
-                                    </p>
-                                )}
-                            </div>
                         </div>
 
-                        {actions && (
-                            <div className="flex items-center gap-2">
-                                {actions}
-                            </div>
+                        {actions && fullWidthActions && (
+                            <div className="w-full">{actions}</div>
                         )}
                     </div>
                 </header>

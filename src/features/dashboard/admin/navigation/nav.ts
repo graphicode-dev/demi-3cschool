@@ -26,6 +26,7 @@ import { settingsNavItem } from "../settings/navigation/nav";
 import { userManagementNavItem } from "../userManagement/navigation/nav";
 import { auditingNavItem } from "../auditing/navigation";
 import { acceptanceExamsNav } from "../acceptanceExams/navigation/nav";
+import { managementNavItem } from "../systemManagements/navigation";
 
 export const adminNav: FeatureNavModule = {
     featureId: "admin",
@@ -44,6 +45,8 @@ export const adminNav: FeatureNavModule = {
         ticketsManagementNavItem,
         // Community Management
         communityManagementNavItem,
+        // System Management
+        managementNavItem,
         // Settings
         settingsNavItem,
         // User Management
