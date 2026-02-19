@@ -26,6 +26,7 @@ import type {
     GroupRecommendPayload,
     GroupRecommendationsData,
     ListResponse,
+    AssignBlocksPayload,
 } from "../types/groups.types";
 import type { GroupSession } from "../types/sessions.types";
 import {
@@ -223,6 +224,40 @@ export const groupsApi = {
         }
 
         return response.data.data;
+    },
+
+    /**
+     * Assign blocks to a group
+     */
+    assignBlocks: async (
+        groupId: number,
+        payload: AssignBlocksPayload
+    ): Promise<void> => {
+        const response = await api.post<ApiResponse<void>>(
+            `${BASE_URL}/${groupId}/blocks`,
+            payload
+        );
+
+        if (response.error) {
+            throw response.error;
+        }
+    },
+
+    /**
+     * Reassign instructor to a group
+     */
+    reassignInstructor: async (
+        groupId: number,
+        instructorId: number
+    ): Promise<void> => {
+        const response = await api.put<ApiResponse<void>>(
+            `${BASE_URL}/${groupId}/instructor`,
+            { instructorId }
+        );
+
+        if (response.error) {
+            throw response.error;
+        }
     },
 };
 

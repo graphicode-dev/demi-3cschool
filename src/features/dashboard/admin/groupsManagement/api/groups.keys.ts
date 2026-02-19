@@ -113,6 +113,10 @@ export const groupKeys = {
     sessions: () => [...groupKeys.all, "sessions"] as const,
     sessionsByGroup: (groupId: number) =>
         [...groupKeys.sessions(), groupId] as const,
+    blocks: (groupId: number) => [...groupKeys.all, "blocks", groupId] as const,
+
+    students: (groupId: number) =>
+        [...groupKeys.all, "students", groupId] as const,
 };
 
 /**
@@ -132,4 +136,6 @@ export type GroupQueryKey =
     | ReturnType<typeof groupKeys.byLevels>
     | ReturnType<typeof groupKeys.byLevel>
     | ReturnType<typeof groupKeys.sessions>
-    | ReturnType<typeof groupKeys.sessionsByGroup>;
+    | ReturnType<typeof groupKeys.sessionsByGroup>
+    | ReturnType<typeof groupKeys.blocks>
+    | ReturnType<typeof groupKeys.students>;

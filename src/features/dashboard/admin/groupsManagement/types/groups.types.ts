@@ -10,6 +10,9 @@
  * - Recommendation types
  */
 
+import { Teacher } from "../../systemManagements/pages/users/api";
+import { Student } from "../../systemManagements/types";
+
 // ============================================================================
 // Entity Types
 // ============================================================================
@@ -110,6 +113,13 @@ export interface GroupAgeRule {
     maxAge: number;
 }
 
+export interface GroupSquadRef {
+    id: number;
+    name: string;
+    caption: string;
+    type: string;
+}
+
 /**
  * Group entity
  */
@@ -120,11 +130,14 @@ export interface Group {
     locationType: LocationType | null;
     isActive: boolean | null;
     level: GroupLevelRef;
-    programsCurriculum: GroupProgramsCurriculumRef;
     grade: GroupGradeRef;
-    schedules: GroupSchedule[];
-    trainer?: GroupTrainerRef;
+    instructor?: Teacher;
+    students?: Student[];
     gradeRule?: GroupGradeRef;
+    schedules: GroupSchedule[];
+    squads?: GroupSquadRef[];
+    trainer?: GroupTrainerRef;
+    programsCurriculum: GroupProgramsCurriculumRef;
     primaryTeacher?: GroupPrimaryTeacherRef;
     createdAt: string;
     updatedAt: string;
@@ -241,6 +254,10 @@ export interface GroupUpdatePayload {
     location_type?: "online" | "offline";
     groupSchedules?: GroupSchedulePayload[];
     trainer_id?: string | number;
+}
+
+export interface AssignBlocksPayload {
+    block_ids: number[];
 }
 
 // ============================================================================

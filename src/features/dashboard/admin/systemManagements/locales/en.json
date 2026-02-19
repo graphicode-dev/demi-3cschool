@@ -201,10 +201,86 @@
             "syncCsv": "Sync CSV",
             "newGroup": "New Group",
             "newGroupDescription": "System-wide deployment of a new group cluster"
+        }
+    },
+    "squads": {
+        "title": "Squads Management",
+        "subtitle": "Manage squads, members, and operational assignments",
+        "hub": "Squad Hub",
+        "hubSubtitle": "Scaling the future, unit by unit.",
+        "searchPlaceholder": "Search matrix...",
+        "noResults": "No squads found",
+        "status": {
+            "active": "Active",
+            "inactive": "Inactive"
         },
-        "assign": {
-            "alignment": "Alignment",
-            "unitMapping": "Unit Deployment Mapping"
+        "stats": {
+            "total": "Total Squads",
+            "active": "Active Squads",
+            "core": "Core Squads",
+            "execution": "Execution Squads"
+        },
+        "card": {
+            "members": "Members"
+        },
+        "mainTabs": {
+            "matrix": "Squad Matrix",
+            "directory": "Entity Vault"
+        },
+        "tabs": {
+            "dashboard": "Dashboard",
+            "team": "Team",
+            "groups": "Groups",
+            "logs": "History & Logs"
+        },
+        "detail": {
+            "overview": "Unit Overview",
+            "noDescription": "No description provided for this unit.",
+            "members": "Total Members",
+            "type": "Squad Type",
+            "status": "Status",
+            "readiness": "Readiness: High",
+            "readinessDesc": "Unit Alpha terminal operational and synchronized with global HQ architecture.",
+            "squadLead": "Squad Lead",
+            "noLead": "No lead assigned to this squad.",
+            "noMembers": "No members assigned to this squad.",
+            "operationalAudit": "Operational Audit",
+            "noLogs": "No serialized logs found for this unit.",
+            "ops": "Ops",
+            "lead": "Lead",
+            "nodes": "Nodes",
+            "viewMission": "View Mission",
+            "noGroups": "No groups assigned to this squad."
+        },
+        "directory": {
+            "title": "Personnel Vault",
+            "subtitle": "Comprehensive index of all authorized entities.",
+            "identity": "Operational Identity",
+            "rank": "Matrix Rank",
+            "unit": "Unit Mapping",
+            "unassigned": "Unassigned"
+        },
+        "actions": {
+            "create": "Launch Squad",
+            "removeMember": "Remove Member"
+        },
+        "modal": {
+            "title": "Deploy New Squad",
+            "subtitle": "Operational Deployment Interface",
+            "name": "Squad Name",
+            "namePlaceholder": "e.g. core_gamma",
+            "caption": "Caption",
+            "captionPlaceholder": "e.g. Core Gamma Operations",
+            "type": "Squad Type",
+            "core": "Core",
+            "coreDesc": "Strategic governance squad",
+            "execution": "Execution",
+            "executionDesc": "Day-to-day operations squad",
+            "description": "Description",
+            "descriptionPlaceholder": "Define the primary operational goals...",
+            "cancel": "Cancel",
+            "create": "Launch Squad",
+            "creating": "Launching..."
         }
     }
 }

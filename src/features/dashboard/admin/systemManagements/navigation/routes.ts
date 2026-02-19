@@ -3,6 +3,7 @@ import { permissionRoutes } from "../pages/permissions/navigation/routes";
 import { usersRoutes } from "../pages/users/navigation";
 import { rolesRoutes } from "../pages/roles/navigation";
 import { groupsRoutes } from "../pages/groups/navigation";
+import { squadsRoutes } from "../pages/squads/navigation";
 
 export const managementRoutes: RouteConfig[] = [
     {
@@ -19,6 +20,7 @@ export const managementRoutes: RouteConfig[] = [
             ...usersRoutes,
             ...rolesRoutes,
             ...groupsRoutes,
+            ...squadsRoutes,
         ],
     },
 ];

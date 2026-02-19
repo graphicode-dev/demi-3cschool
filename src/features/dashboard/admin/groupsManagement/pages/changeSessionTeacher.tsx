@@ -22,9 +22,12 @@ import { useMutationHandler } from "@/shared/api";
 import { useSetSessionTeacherMutation } from "../api/assignTeacher/assignTeacher.mutations";
 import { useSessionDetailQuery } from "../api/sessions/sessions.queries";
 import { useGroup } from "../api";
-import { useTeachersList } from "@/features/dashboard/admin/userManagement";
 import { useDebounce } from "@/shared/observability";
 import { User } from "@/auth/auth.types";
+import {
+    Teacher,
+    useTeachersList,
+} from "../../systemManagements/pages/users/api";
 
 const AVATAR_COLORS = [
     "bg-purple-500",
@@ -49,7 +52,7 @@ function getInitials(name: string): string {
 }
 
 interface TeacherCardProps {
-    teacher: User;
+    teacher: Teacher;
     colorIndex: number;
     onSelect: (teacherId: number) => void;
     isSelecting: boolean;
@@ -232,7 +235,7 @@ export default function ChangeSessionTeacherPage() {
         navigate(-1);
     };
 
-    const teachers = teachersResponse?.items ?? [];
+    const teachers = teachersResponse ?? [];
 
     const filteredTeachers = teachers.filter((teacher) =>
         teacher.name.toLowerCase().includes(searchQuery.toLowerCase())

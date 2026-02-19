@@ -13,9 +13,12 @@ import { ErrorState, LoadingState, PageWrapper } from "@/design-system";
 import { useMutationHandler } from "@/shared/api";
 import { useSetPrimaryTeacherMutation } from "../api/assignTeacher/assignTeacher.mutations";
 import { useGroup } from "../api";
-import { useTeachersList } from "@/features/dashboard/admin/userManagement";
 import { useDebounce } from "@/shared/observability";
 import { User } from "@/auth/auth.types";
+import {
+    Teacher,
+    useTeachersList,
+} from "../../systemManagements/pages/users/api";
 
 const AVATAR_COLORS = [
     "bg-purple-500",
@@ -40,7 +43,7 @@ function getInitials(name: string): string {
 }
 
 interface TeacherCardProps {
-    teacher: User;
+    teacher: Teacher;
     colorIndex: number;
     onSelect: (teacherId: number) => void;
     isSelecting: boolean;
@@ -216,7 +219,7 @@ function AssignTeacherPage() {
         navigate(-1);
     };
 
-    const teachers = teachersResponse?.items ?? [];
+    const teachers = teachersResponse ?? [];
 
     const filteredTeachers = teachers.filter((teacher) =>
         teacher.name.toLowerCase().includes(searchQuery.toLowerCase())

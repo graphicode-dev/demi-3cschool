@@ -4,6 +4,7 @@ import { permissionNavItem } from "../pages/permissions/navigation";
 import { usersNavItem } from "../pages/users/navigation";
 import { rolesNavItem } from "../pages/roles/navigation";
 import { groupsNavItem } from "../pages/groups/navigation";
+import { squadsNavItem } from "../pages/squads/navigation";
 
 export const managementNavItem: NavItem = {
     key: "system-management",
@@ -11,5 +12,11 @@ export const managementNavItem: NavItem = {
     label: "System Management",
     href: "/admin/system-management",
     icon: Settings,
-    children: [permissionNavItem, usersNavItem, rolesNavItem, groupsNavItem],
+    children: [
+        permissionNavItem,
+        usersNavItem,
+        rolesNavItem,
+        groupsNavItem,
+        squadsNavItem,
+    ],
 };

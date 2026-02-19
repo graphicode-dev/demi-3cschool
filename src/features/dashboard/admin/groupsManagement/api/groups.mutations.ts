@@ -24,6 +24,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { groupKeys } from "./groups.keys";
 import { groupsApi } from "./groups.api";
 import type {
+    AssignBlocksPayload,
     Group,
     GroupCreatePayload,
     GroupUpdatePayload,
@@ -88,7 +89,11 @@ export function useCreateGroup() {
 export function useUpdateGroup() {
     const queryClient = useQueryClient();
 
-    return useMutation<Group, ApiError, { id: string; data: GroupUpdatePayload }>({
+    return useMutation<
+        Group,
+        ApiError,
+        { id: string; data: GroupUpdatePayload }
+    >({
         mutationFn: ({ id, data }) => groupsApi.update(id, data),
         onSuccess: (_, variables) => {
             queryClient.invalidateQueries({ queryKey: groupKeys.lists() });
@@ -133,3 +138,35 @@ export function useDeleteGroup() {
         },
     });
 }
+
+export const useAssignBlocks = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({
+            groupId,
+            payload,
+        }: {
+            groupId: number;
+            payload: AssignBlocksPayload;
+        }) => groupsApi.assignBlocks(groupId, payload),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: groupKeys.all });
+        },
+    });
+};
+
+export const useReassignInstructor = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({
+            groupId,
+            instructorId,
+        }: {
+            groupId: number;
+            instructorId: number;
+        }) => groupsApi.reassignInstructor(groupId, instructorId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: groupKeys.all });
+        },
+    });
+};
