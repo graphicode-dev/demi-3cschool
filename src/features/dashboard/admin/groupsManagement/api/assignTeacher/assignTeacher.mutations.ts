@@ -17,7 +17,7 @@
  */
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { assignTeacherKeys } from "./assignTeacher.keys";
+import { assignTeacherKeys, teachersKeys } from "./assignTeacher.keys";
 import { assignTeacherApi } from "./assignTeacher.api";
 import type { ApiError } from "@/shared/api";
 import type {
@@ -27,7 +27,6 @@ import type {
     SessionWithTeacher,
 } from "../../types/assignTeacher.types";
 import { groupKeys } from "../groups.keys";
-import { teachersKeys } from "../../../userManagement";
 
 // ============================================================================
 // Primary Teacher Assignment Mutation

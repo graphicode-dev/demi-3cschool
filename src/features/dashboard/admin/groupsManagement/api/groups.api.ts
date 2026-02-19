@@ -28,7 +28,12 @@ import type {
     ListResponse,
 } from "../types/groups.types";
 import type { GroupSession } from "../types/sessions.types";
-import { ApiResponse, PaginatedData, PaginatedResponse } from "@/shared/api";
+import {
+    ApiResponse,
+    ListQueryParams,
+    PaginatedData,
+    PaginatedResponse,
+} from "@/shared/api";
 
 const BASE_URL = "/groups";
 
@@ -60,17 +65,16 @@ export const groupsApi = {
      * Get list of groups by type (paginated if page param provided, otherwise returns array)
      */
     getList: async (
-        params: GroupsListParams,
+        params: ListQueryParams,
         signal?: AbortSignal
-    ): Promise<Group[] | PaginatedData<Group>> => {
-        const { groupType, page } = params;
-
-        const response = await api.get<
-            ListResponse<Group> | PaginatedResponse<Group>
-        >(`${BASE_URL}/${groupType}`, {
-            params: page ? { page } : undefined,
-            signal,
-        });
+    ): Promise<PaginatedData<Group>> => {
+        const response = await api.get<PaginatedResponse<Group>>(
+            `${BASE_URL}`,
+            {
+                ...params,
+                signal,
+            }
+        );
 
         if (response.error) {
             throw response.error;

@@ -17,6 +17,7 @@
  * ```
  */
 
+import { ListQueryParams } from "@/shared/api";
 import type {
     GroupsListParams,
     GroupsByLevelParams,
@@ -55,7 +56,7 @@ export const groupKeys = {
     /**
      * Key for specific list with params (includes groupType and page)
      */
-    list: (params: GroupsListParams) =>
+    list: (params: ListQueryParams) =>
         [
             ...groupKeys.lists(),
             params.groupType,

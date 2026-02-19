@@ -29,7 +29,6 @@ import { gradesRoutes } from "../learning/navigation/routes";
 import { overviewRoutes } from "../overview/navigation";
 import { resourcesRoutes } from "../resources/navigation/routes";
 import { settingsRoutes } from "../settings/navigation/routes";
-import { userManagementRoutes } from "../userManagement/navigation/routes";
 import { auditingRoutes } from "../auditing/navigation";
 import { acceptanceExamsRoutes } from "../acceptanceExams/navigation";
 import { managementRoutes } from "../systemManagements/navigation";
@@ -74,8 +73,6 @@ export const adminRouteModule: FeatureRouteModule = {
             ...slotsRoutes,
             // Training Centers (under settings)
             ...trainingCentersRoutes,
-            // User Management
-            ...userManagementRoutes,
             // Shared features (profile, chat, certificates, reports)
             ...adminOnlySharedRoutes,
             // Community Management

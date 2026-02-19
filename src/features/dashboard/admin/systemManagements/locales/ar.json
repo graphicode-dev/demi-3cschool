@@ -160,5 +160,51 @@
         "createError": "فشل في إنشاء الدور",
         "updated": "تم تحديث الدور بنجاح",
         "updateError": "فشل في تحديث الدور"
+    },
+    "groups": {
+        "title": "إدارة المجموعات",
+        "subtitle": "إدارة المجموعات والمعلمين والطلاب وتعيينات الوحدات",
+        "searchPlaceholder": "بحث في المجموعات بالاسم أو المعلم أو المستوى...",
+        "compact": "مضغوط",
+        "detailed": "مفصل",
+        "filters": "فلاتر",
+        "card": {
+            "matrix": "مصفوفة",
+            "leadSpecialist": "المتخصص الرئيسي",
+            "operationalSlot": "الفترة التشغيلية",
+            "unmapped": "فريق غير معين",
+            "activeUnits": "الوحدات النشطة"
+        },
+        "details": {
+            "cluster": "مجموعة",
+            "nodes": "عقد",
+            "instructor": "المعلم",
+            "activeOps": "عمليات نشطة",
+            "reassignLead": "إعادة تعيين المتخصص الرئيسي",
+            "confirmQuestion": "تأكيد؟",
+            "transitionTo": "نقل قيادة العقدة إلى",
+            "searchInstructors": "بحث عن معلمين...",
+            "specialist": "متخصص رئيسي",
+            "noMatchingSpecialists": "لا يوجد متخصصون مطابقون",
+            "personnelDirectory": "دليل الموظفين",
+            "deploymentMatrix": "مصفوفة النشر",
+            "noUnits": "لا توجد وحدات معينة لهذه العقدة.",
+            "operationalWindow": "النافذة التشغيلية",
+            "students": "الطلاب",
+            "authorizedEntities": "كيانات الطلاب المعتمدة"
+        },
+        "actions": {
+            "assign": "تعيين",
+            "cancel": "إلغاء",
+            "confirmAssign": "تأكيد التعيين",
+            "confirmDeployment": "تأكيد النشر",
+            "syncCsv": "مزامنة CSV",
+            "newGroup": "مجموعة جديدة",
+            "newGroupDescription": "نشر مجموعة جديدة على مستوى النظام"
+        },
+        "assign": {
+            "alignment": "المحاذاة",
+            "unitMapping": "تعيين نشر الوحدات"
+        }
     }
 }

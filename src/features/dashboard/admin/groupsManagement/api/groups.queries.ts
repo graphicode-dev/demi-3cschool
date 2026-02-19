@@ -40,7 +40,7 @@ import type {
     GroupType,
 } from "../types/groups.types";
 import type { GroupSession } from "../types/sessions.types";
-import { PaginatedData } from "@/shared/api";
+import { ListQueryParams, PaginatedData } from "@/shared/api";
 
 // ============================================================================
 // Metadata Query
@@ -96,57 +96,13 @@ export function useGroupsMetadata(
  * ```
  */
 export function useGroupsList(
-    params: GroupsListParams,
-    options?: Partial<UseQueryOptions<Group[] | PaginatedData<Group>, Error>>
+    params?: ListQueryParams,
+    options?: Partial<PaginatedData<Group>>
 ) {
     return useQuery({
-        queryKey: groupKeys.list(params),
-        queryFn: ({ signal }) => groupsApi.getList(params, signal),
+        queryKey: groupKeys.list(params!),
+        queryFn: ({ signal }) => groupsApi.getList(params!, signal),
         ...options,
-    });
-}
-
-/**
- * Hook to fetch infinite list of groups by type (for infinite scroll)
- *
- * @param groupType - The group type to filter by
- *
- * @example
- * ```tsx
- * const {
- *     data,
- *     fetchNextPage,
- *     hasNextPage,
- *     isFetchingNextPage,
- * } = useGroupsInfinite('regular');
- *
- * return (
- *     <>
- *         {data?.pages.map(page =>
- *             page.items.map(group => <GroupCard key={group.id} group={group} />)
- *         )}
- *         {hasNextPage && (
- *             <button onClick={() => fetchNextPage()}>
- *                 {isFetchingNextPage ? 'Loading...' : 'Load More'}
- *             </button>
- *         )}
- *     </>
- * );
- * ```
- */
-export function useGroupsInfinite(groupType: GroupType) {
-    return useInfiniteQuery({
-        queryKey: groupKeys.infinite(groupType),
-        queryFn: ({ pageParam, signal }) =>
-            groupsApi.getList(
-                { groupType, page: pageParam as number },
-                signal
-            ) as Promise<PaginatedData<Group>>,
-        initialPageParam: 1,
-        getNextPageParam: (lastPage) => {
-            const { currentPage, lastPage: totalPages } = lastPage;
-            return currentPage < totalPages ? currentPage + 1 : undefined;
-        },
     });
 }
 

@@ -2,6 +2,7 @@ import { RouteConfig } from "@/router";
 import { permissionRoutes } from "../pages/permissions/navigation/routes";
 import { usersRoutes } from "../pages/users/navigation";
 import { rolesRoutes } from "../pages/roles/navigation";
+import { groupsRoutes } from "../pages/groups/navigation";
 
 export const managementRoutes: RouteConfig[] = [
     {
@@ -16,7 +17,8 @@ export const managementRoutes: RouteConfig[] = [
             },
             ...permissionRoutes,
             ...usersRoutes,
-            ...rolesRoutes
+            ...rolesRoutes,
+            ...groupsRoutes,
         ],
     },
 ];

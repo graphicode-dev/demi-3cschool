@@ -1,3 +1,4 @@
+import { groupsPaths } from "../pages/groups/navigation";
 import { permissionPaths } from "../pages/permissions/navigation";
 import { rolesPaths } from "../pages/roles/navigation";
 import { usersPaths } from "../pages/users/navigation";
@@ -5,5 +6,6 @@ import { usersPaths } from "../pages/users/navigation";
 export const managementPaths = {
     permissionPaths,
     usersPaths,
-    rolesPaths
+    rolesPaths,
+    groupsPaths
 } as const;

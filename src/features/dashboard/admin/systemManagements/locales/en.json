@@ -160,5 +160,51 @@
         "createError": "Failed to create role",
         "updated": "Role updated successfully",
         "updateError": "Failed to update role"
+    },
+    "groups": {
+        "title": "Groups Management",
+        "subtitle": "Manage groups, instructors, students, and block assignments",
+        "searchPlaceholder": "Search groups by name, instructor, or level...",
+        "compact": "Compact",
+        "detailed": "Detailed",
+        "filters": "Filters",
+        "card": {
+            "matrix": "Matrix",
+            "leadSpecialist": "Lead Specialist",
+            "operationalSlot": "Operational Slot",
+            "unmapped": "Unmapped Squad",
+            "activeUnits": "Active Units"
+        },
+        "details": {
+            "cluster": "Cluster",
+            "nodes": "Nodes",
+            "instructor": "Instructor",
+            "activeOps": "Active Ops",
+            "reassignLead": "Reassign Lead Specialist",
+            "confirmQuestion": "Confirm?",
+            "transitionTo": "Transition node lead to",
+            "searchInstructors": "Search instructors...",
+            "specialist": "Master Specialist",
+            "noMatchingSpecialists": "No matching specialists",
+            "personnelDirectory": "Personnel Directory Matrix",
+            "deploymentMatrix": "Deployment Matrix",
+            "noUnits": "No units assigned to this node.",
+            "operationalWindow": "Operational Window",
+            "students": "Students",
+            "authorizedEntities": "Authorized Student Entities"
+        },
+        "actions": {
+            "assign": "Assign",
+            "cancel": "Cancel",
+            "confirmAssign": "Confirm Assign",
+            "confirmDeployment": "Confirm Deployment",
+            "syncCsv": "Sync CSV",
+            "newGroup": "New Group",
+            "newGroupDescription": "System-wide deployment of a new group cluster"
+        },
+        "assign": {
+            "alignment": "Alignment",
+            "unitMapping": "Unit Deployment Mapping"
+        }
     }
 }

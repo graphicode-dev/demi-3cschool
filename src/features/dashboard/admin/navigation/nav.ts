@@ -23,7 +23,6 @@ import { groupsAnalyticsNav } from "../groupsAnalytics/navigation";
 import { groupsManagementNav } from "../groupsManagement/navigation";
 import gradesNav from "../learning/navigation";
 import { settingsNavItem } from "../settings/navigation/nav";
-import { userManagementNavItem } from "../userManagement/navigation/nav";
 import { auditingNavItem } from "../auditing/navigation";
 import { acceptanceExamsNav } from "../acceptanceExams/navigation/nav";
 import { managementNavItem } from "../systemManagements/navigation";
@@ -50,7 +49,6 @@ export const adminNav: FeatureNavModule = {
         // Settings
         settingsNavItem,
         // User Management
-        userManagementNavItem,
         // Programs Management
         programsManagementNav,
         // Shared features (profile, chat, certificates, reports)

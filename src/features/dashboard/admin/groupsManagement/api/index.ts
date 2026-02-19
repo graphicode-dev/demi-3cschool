@@ -86,7 +86,6 @@ export { attendanceApi } from "./attendance/attendance.api";
 export {
     useGroupsMetadata,
     useGroupsList,
-    useGroupsInfinite,
     useGroup,
     useGroupSessionsQuery,
     useGroupRecommendations,
