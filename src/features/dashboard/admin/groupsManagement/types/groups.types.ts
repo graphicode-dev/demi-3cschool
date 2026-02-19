@@ -138,7 +138,7 @@ export interface Group {
     squads?: GroupSquadRef[];
     trainer?: GroupTrainerRef;
     programsCurriculum: GroupProgramsCurriculumRef;
-    primaryTeacher?: GroupPrimaryTeacherRef;
+    primaryTeacher?: Teacher;
     createdAt: string;
     updatedAt: string;
 }

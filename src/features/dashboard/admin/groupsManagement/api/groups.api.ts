@@ -72,7 +72,7 @@ export const groupsApi = {
         const response = await api.get<PaginatedResponse<Group>>(
             `${BASE_URL}`,
             {
-                ...params,
+                params: params as Record<string, unknown>,
                 signal,
             }
         );

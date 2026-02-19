@@ -54,14 +54,9 @@ export const groupKeys = {
     lists: () => [...groupKeys.all, "list"] as const,
 
     /**
-     * Key for specific list with params (includes groupType and page)
+     * Key for specific list with params
      */
-    list: (params: ListQueryParams) =>
-        [
-            ...groupKeys.lists(),
-            params.groupType,
-            { page: params.page },
-        ] as const,
+    list: (params: ListQueryParams) => [...groupKeys.lists(), params] as const,
 
     /**
      * Key for all lists of a specific group type

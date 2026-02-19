@@ -119,6 +119,8 @@ export {
     useCreateGroup,
     useUpdateGroup,
     useDeleteGroup,
+    useAssignBlocks,
+    useReassignInstructor,
 } from "./groups.mutations";
 
 export {
