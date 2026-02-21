@@ -346,7 +346,7 @@ layer(base);
 }
 
 @utility menu-item-inactive {
-    @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-gray-300 hover:border hover:border-brand-500 hover:rounded-3xl hover:bg-brand-50! transition-all duration-100 ease-in-out;
+    @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-black hover:border hover:border-brand-500 hover:rounded-3xl hover:bg-brand-50! transition-all duration-100 ease-in-out;
 }
 
 @utility menu-item-icon {
@@ -373,7 +373,7 @@ layer(base);
 }
 
 @utility menu-item-icon-inactive {
-    @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300;
+    @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-black;
 }
 
 @utility menu-item-arrow {
