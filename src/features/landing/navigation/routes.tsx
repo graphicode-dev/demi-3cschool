@@ -11,7 +11,7 @@ const siteRoutes: RouteConfig[] = [
     {
         index: true,
         lazy: () => import("@/features/landing/pages/LandingPage"),
-        meta: { titleKey: "landing:landing.meta.home.title" },
+        meta: { titleKey: "landing:nav.home" },
     },
 ];
 

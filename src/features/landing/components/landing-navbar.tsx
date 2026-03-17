@@ -15,20 +15,29 @@ import LogoEn from "@/assets/images/logos/EnglishDark.png";
 import { authStore } from "@/auth";
 import { useLogout } from "@/features/auth/api";
 import { paths } from "@/router";
+import { Icons } from "@/constants";
 
 const navLinks = [
     { href: paths.site.home(), sectionId: "home", labelKey: "nav.home" },
-    { href: paths.site.about(), sectionId: "about", labelKey: "nav.about" },
+    {
+        href: paths.site.about(),
+        sectionId: "about-us",
+        labelKey: "nav.aboutUs",
+    },
     {
         href: paths.site.howItWorks(),
-        sectionId: "how-it-works",
-        labelKey: "nav.howItWorks",
+        sectionId: "why-3c",
+        labelKey: "nav.why3C",
     },
-    { href: paths.site.faq(), sectionId: "faq", labelKey: "nav.faq" },
+    {
+        href: paths.site.faq(),
+        sectionId: "accreditation",
+        labelKey: "nav.accreditation",
+    },
     {
         href: paths.site.contact(),
-        sectionId: "contact",
-        labelKey: "nav.contact",
+        sectionId: "our-packages",
+        labelKey: "nav.ourPackages",
     },
 ];
 
@@ -110,10 +119,10 @@ function LandingNavbar() {
 
     return (
         <nav
-            className={`sticky top-0 left-0 right-0 z-100 w-full flex items-center justify-between px-4 sm:px-8 lg:px-16 py-4 lg:py-6 transition-all duration-300 ${
+            className={`fixed top-0 left-0 right-0 z-100 w-full flex items-center justify-between px-4 sm:px-8 lg:px-16 py-4 lg:py-6 transition-all duration-300 ${
                 isScrolled
                     ? "bg-white/95 backdrop-blur-md shadow-md"
-                    : "bg-brand-50"
+                    : "bg-transparent"
             }`}
         >
             {/* Logos */}
@@ -122,13 +131,13 @@ function LandingNavbar() {
                     <img
                         src={LogoAr}
                         alt="Ministry of Communications"
-                        className="h-17 w-auto object-fill transition-transform duration-300 hover:scale-105"
+                        className="h-10 w-auto object-fill transition-transform duration-300 hover:scale-105"
                     />
                 ) : (
                     <img
                         src={LogoEn}
                         alt="Ministry of Communications"
-                        className="h-17 w-auto object-fill transition-transform duration-300 hover:scale-105"
+                        className="h-10 w-auto object-fill transition-transform duration-300 hover:scale-105"
                     />
                 )}
             </div>
@@ -142,14 +151,23 @@ function LandingNavbar() {
                         onClick={(e) =>
                             handleNavClick(e, link.sectionId, link.href)
                         }
-                        className={`relative transition-all duration-300 hover:text-brand-500 ${
+                        className={`relative transition-all duration-300 hover:text-brand-500 text-[16px] ${
                             activeSection === link.sectionId
-                                ? "text-brand-500 text-[18px] font-medium"
-                                : "text-gray-500 text-[16px]"
+                                ? "text-brand-500 font-medium"
+                                : "text-gray-500"
                         }`}
                         replace
                     >
                         {t(link.labelKey)}
+
+                        {activeSection === link.sectionId && (
+                            <div className="absolute -bottom-4 left-0 right-0 flex justify-center">
+                                <Icons.Landing.NavActiveIcon
+                                    size={20}
+                                    color="#24ADE3"
+                                />
+                            </div>
+                        )}
                     </Link>
                 ))}
             </div>
@@ -165,8 +183,7 @@ function LandingNavbar() {
                         aria-haspopup="menu"
                         aria-expanded={langMenuOpen}
                     >
-                        <span>{currentLang}</span>
-                        <ChevronDown className="w-6 h-6" />
+                        <Icons.Landing.LanguageIcon size={30} color="#393838" />
                     </button>
 
                     {langMenuOpen && (
@@ -269,9 +286,15 @@ function LandingNavbar() {
                 ) : (
                     <Link
                         to={loginPath}
-                        className="text-[18px] font-semibold text-gray-900 hover:text-brand-500 transition-colors duration-300"
+                        className="flex items-center justify-between gap-2 w-30 px-1 ps-4 py-1 bg-brand-500 text-white text-[18px] border border-black font-semibold rounded-full hover:bg-brand-600 transition-colors duration-300"
                     >
                         {t("nav.login")}
+                        <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                            <Icons.General.ChevronIcon
+                                size={20}
+                                color="var(--color-brand-500)"
+                            />
+                        </div>
                     </Link>
                 )}
             </div>

@@ -11,7 +11,6 @@ import "./i18n";
 // Import router to trigger feature registration
 import "@/router";
 import ErrorBoundaryClass from "./shared/observability/ErrorBoundary.tsx";
-import { LoadingState } from "./design-system/index.ts";
 
 function AppRouter() {
     const router = useMemo(() => {
