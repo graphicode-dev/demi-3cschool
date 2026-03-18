@@ -2,12 +2,14 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import {
     HeroSection,
-    InitiativeSection,
-    VideoSection,
-    HowItWorksSection,
-    LearningModeSection,
-    WhoCanJoinSection,
-    FAQSection,
+    AboutSection,
+    Why3C,
+    Strap,
+    OurLeaders,
+    Tracks,
+    Plans,
+    Certificate,
+    Register,
 } from "../components";
 import { scrollToSection } from "../hooks";
 
@@ -28,12 +30,14 @@ function HomePage() {
     return (
         <div className="min-h-screen">
             <HeroSection />
-            <InitiativeSection />
-            <VideoSection />
-            <HowItWorksSection />
-            <LearningModeSection />
-            <WhoCanJoinSection />
-            <FAQSection />
+            <AboutSection />
+            <Why3C />
+            <Strap />
+            <OurLeaders />
+            <Tracks />
+            <Plans />
+            <Certificate />
+            <Register />
         </div>
     );
 }

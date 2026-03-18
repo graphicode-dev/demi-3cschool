@@ -8,6 +8,16 @@ import kid2 from "@/assets/images/landing/hero/kid2.png";
 import kid3 from "@/assets/images/landing/hero/kid3.png";
 import kid4 from "@/assets/images/landing/hero/kid4.png";
 import kid5 from "@/assets/images/landing/hero/kid5.png";
+import coding1 from "@/assets/images/landing/about/coding1.png";
+import coding2 from "@/assets/images/landing/about/coding2.png";
+import kid from "@/assets/images/landing/about/kid.png";
+import leftCloud from "@/assets/images/landing/about/left-cloud.png";
+import rightCloud from "@/assets/images/landing/about/right-cloud.png";
+import cardBlue from "@/assets/images/landing/about/card-blue.png";
+import cardOrange from "@/assets/images/landing/about/card-orange.png";
+import cardWhite from "@/assets/images/landing/about/card-white.png";
+import sectionBg from "@/assets/images/landing/about/section-bg.png";
+import statsBg from "@/assets/images/landing/about/stats-bg.png";
 
 export const LandingImages = {
     hero: {
@@ -23,5 +33,17 @@ export const LandingImages = {
             kid4,
             kid5,
         },
+    },
+    about: {
+        coding1,
+        coding2,
+        kid,
+        leftCloud,
+        rightCloud,
+        cardBlue,
+        cardOrange,
+        cardWhite,
+        sectionBg,
+        statsBg,
     },
 };

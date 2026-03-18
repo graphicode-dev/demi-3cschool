@@ -26,23 +26,13 @@ function HeroSection() {
                 <ThemedText as="span" size="6xl" weight="medium">
                     {t("hero.title1")}
                 </ThemedText>
-                <ThemedText
-                    as="span"
-                    size="6xl"
-                    font="akaya-telivigala"
-                    color="primary"
-                >
+                <ThemedText as="span" size="6xl" color="primary" weight="bold">
                     {t("hero.titleCode")}
                 </ThemedText>
                 <ThemedText as="span" size="6xl" weight="medium">
                     {t("hero.title2")}
                 </ThemedText>
-                <ThemedText
-                    as="span"
-                    size="6xl"
-                    font="akaya-telivigala"
-                    color="primary"
-                >
+                <ThemedText as="span" size="6xl" color="primary" weight="bold">
                     {t("hero.titleCreative")}
                 </ThemedText>
                 <ThemedText as="span" size="6xl" weight="medium">
