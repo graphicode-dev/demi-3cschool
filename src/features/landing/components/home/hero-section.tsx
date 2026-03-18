@@ -10,33 +10,44 @@ function HeroSection() {
     return (
         <section
             id="home"
-            className="relative w-full h-screen overflow-hidden"
+            className="w-full min-h-screen flex flex-col items-center justify-evenly text-center pt-20"
             style={{
                 background: `url(${Images.landing.hero.bg}) no-repeat center center/cover`,
             }}
         >
             {/* Titles */}
-            <div className="absolute top-[40%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
+            <div className="relative max-w-[80%] py-20">
                 {/* Tagline */}
                 <ThemedText weight="medium" size="2xl" color="primary" as="h3">
                     {t("hero.tagline")}
                 </ThemedText>
 
                 {/* Title */}
-                <ThemedText as="span" size="6xl" weight="medium">
+                <ThemedText as="h1" size="6xl" weight="medium">
                     {t("hero.title1")}
+                    <ThemedText
+                        as="span"
+                        size="6xl"
+                        color="primary"
+                        weight="bold"
+                    >
+                        {t("hero.titleCode")}
+                    </ThemedText>
+                    <ThemedText as="span" size="6xl" weight="medium">
+                        {t("hero.title2")}
+                    </ThemedText>
                 </ThemedText>
-                <ThemedText as="span" size="6xl" color="primary" weight="bold">
-                    {t("hero.titleCode")}
-                </ThemedText>
-                <ThemedText as="span" size="6xl" weight="medium">
-                    {t("hero.title2")}
-                </ThemedText>
-                <ThemedText as="span" size="6xl" color="primary" weight="bold">
+
+                <ThemedText as="h1" size="6xl" color="primary" weight="bold">
                     {t("hero.titleCreative")}
-                </ThemedText>
-                <ThemedText as="span" size="6xl" weight="medium">
-                    {t("hero.title3")}
+                    <ThemedText
+                        as="span"
+                        size="6xl"
+                        className="text-black"
+                        weight="medium"
+                    >
+                        {t("hero.title3")}
+                    </ThemedText>
                 </ThemedText>
 
                 {/* Subtitle */}
@@ -53,22 +64,22 @@ function HeroSection() {
                     <img
                         src={Images.landing.hero.coding}
                         alt="Kid 1"
-                        className={`w-50 h-50 object-contain hidden lg:block absolute -top-20 ${isRTL ? "-right-50" : "-left-50"}`}
+                        className={`w-50 h-50 object-contain hidden lg:block absolute top-0 ${isRTL ? "-right-50" : "-left-50"}`}
                     />
                     <img
                         src={Images.landing.hero.leftCoding}
                         alt="Kid 3"
-                        className={`w-50 h-50 object-contain hidden lg:block absolute -bottom-40 ${isRTL ? "-right-50" : "-left-50"}`}
+                        className={`w-50 h-50 object-contain hidden lg:block absolute bottom-0 ${isRTL ? "-right-50" : "-left-50"}`}
                     />
                     <img
                         src={Images.landing.hero.hello}
                         alt="Kid 2"
-                        className={`w-50 h-50 object-contain hidden lg:block absolute -bottom-40 ${isRTL ? "-left-50" : "-right-50"}`}
+                        className={`w-50 h-50 object-contain hidden lg:block absolute bottom-0 ${isRTL ? "-left-50" : "-right-50"}`}
                     />
                     <img
                         src={Images.landing.hero.rightCoding}
                         alt="Kid 3"
-                        className={`w-50 h-50 object-contain hidden lg:block absolute -top-20 ${isRTL ? "-left-50" : "-right-50"}`}
+                        className={`w-50 h-50 object-contain hidden lg:block absolute top-0 ${isRTL ? "-left-50" : "-right-50"}`}
                     />
                 </>
             </div>

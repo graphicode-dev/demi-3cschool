@@ -51,6 +51,7 @@ export interface ThemedTextProps {
     italic?: boolean;
     underline?: boolean;
     lineThrough?: boolean;
+    fullWidth?: boolean;
 }
 
 // Configuration Objects
@@ -164,6 +165,7 @@ const ThemedText: React.FC<ThemedTextProps> = ({
     italic = false,
     underline = false,
     lineThrough = false,
+    fullWidth = false,
     ...props
 }) => {
     const { isRTL } = useLanguage();
@@ -205,6 +207,9 @@ const ThemedText: React.FC<ThemedTextProps> = ({
 
         // Truncation
         truncate && "truncate",
+
+        // Full width
+        fullWidth && "w-full",
 
         // Custom className
         className,
