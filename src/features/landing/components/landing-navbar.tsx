@@ -286,7 +286,7 @@ function LandingNavbar() {
                 ) : (
                     <Link
                         to={loginPath}
-                        className="flex items-center justify-between gap-2 w-30 px-1 ps-4 py-1 bg-brand-500 text-white text-[18px] border border-black font-semibold rounded-full hover:bg-brand-600 transition-colors duration-300"
+                        className="flex items-center justify-between gap-2 min-w-30 px-1 ps-4 py-1 bg-brand-500 text-white text-[18px] border border-black font-semibold rounded-full hover:bg-brand-600 transition-colors duration-300"
                     >
                         {t("nav.login")}
                         <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">

@@ -64,18 +64,18 @@ function AboutSection() {
 
     const cardsData: CardData[] = [
         {
-            title: "Fun & Interactive Learning",
-            description: "Engaging activities that make coding feel like play",
+            title: t("about.cards.funLearning.title"),
+            description: t("about.cards.funLearning.description"),
             image: Images.landing.about.cardBlue,
         },
         {
-            title: "Age-Appropriate Programs",
-            description: "Curriculum designed for every skill level and age",
+            title: t("about.cards.ageAppropriate.title"),
+            description: t("about.cards.ageAppropriate.description"),
             image: Images.landing.about.cardOrange,
         },
         {
-            title: "Safe Learning Environment",
-            description: "Trusted instructors and secure online platform",
+            title: t("about.cards.safeEnvironment.title"),
+            description: t("about.cards.safeEnvironment.description"),
             image: Images.landing.about.cardWhite,
         },
     ];
@@ -106,43 +106,30 @@ function AboutSection() {
                     {/* Heading */}
                     <div>
                         <ThemedText size="5xl" weight="bold" variant="heading">
-                            About{" "}
+                            {t("about.title")}{" "}
                             <ThemedText
                                 size="5xl"
                                 weight="bold"
                                 color="primary"
                                 as="span"
                             >
-                                Us
+                                {t("about.titleHighlight")}
                             </ThemedText>
                         </ThemedText>
 
                         {/* Body paragraph */}
                         <div className="mt-4 ps-0 sm:ps-8 lg:ps-20 mb-8 lg:mb-14">
-                            <ThemedText
-                                size="3xl"
-                                variant="body"
-                                as="p"
-                                className="text-justify"
-                                color="secondary"
-                            >
-                                <ThemedText
-                                    size="3xl"
-                                    weight="bold"
-                                    variant="body"
-                                    as="span"
-                                    color="primary"
-                                >
-                                    3C{" "}
-                                </ThemedText>
-                                is the leading coding school for kids aged 6 to
-                                18 in Egypt and the Middle East. Accredited by
-                                STEM.org and ISO certified, 3C has trained over
-                                100,000 students across 22 countries. We teach
-                                real, text-based programming from day one using
-                                fun, intuitive, and gamified methods that make
-                                learning smooth and enjoyable.
-                            </ThemedText>
+                            <div
+                                className="text-justify text-3xl"
+                                style={{ color: "var(--secondary)" }}
+                                dangerouslySetInnerHTML={{
+                                    __html: t("about.description", {
+                                        highlight:
+                                            '<span style="font-weight: bold; color: var(--color-brand-500);">',
+                                        "/highlight": "</span>",
+                                    }),
+                                }}
+                            />
                         </div>
                     </div>
 

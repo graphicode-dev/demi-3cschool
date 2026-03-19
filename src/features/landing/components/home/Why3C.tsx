@@ -2,6 +2,8 @@ import { Icons } from "@/constants";
 import { Images } from "@/constants/images";
 import ThemedText from "@/design-system/components/ThemedText";
 import { useScrollAnimation } from "../../hooks";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "@/shared/hooks";
 
 interface CardData {
     id: string;
@@ -15,34 +17,32 @@ interface CardData {
 const CARDS: CardData[] = [
     {
         id: "small-class",
-        titleKey: "Small Class Sizes",
-        descriptionKey:
-            "Maximum 8 students per class for personalized attention",
+        titleKey: "why3C.cards.smallClass.title",
+        descriptionKey: "why3C.cards.smallClass.description",
         prominent: true,
     },
     {
         id: "project-based",
-        titleKey: "Project-Based Learning",
-        descriptionKey: "Build real games, apps, and websites you can show off",
+        titleKey: "why3C.cards.projectBased.title",
+        descriptionKey: "why3C.cards.projectBased.description",
         prominent: false,
     },
     {
         id: "industry-standard",
-        titleKey: "Industry-Standard Tools",
-        descriptionKey:
-            "Learn with professional coding platforms and languages",
+        titleKey: "why3C.cards.industryStandard.title",
+        descriptionKey: "why3C.cards.industryStandard.description",
         prominent: false,
     },
     {
         id: "passion-mentors",
-        titleKey: "Passion-Driven Mentors",
-        descriptionKey: "Teachers who love coding and love teaching kids",
+        titleKey: "why3C.cards.passionMentors.title",
+        descriptionKey: "why3C.cards.passionMentors.description",
         prominent: false,
     },
     {
         id: "certification",
-        titleKey: "Certification & Portfolio",
-        descriptionKey: "Earn certificates and build a showcase of your work",
+        titleKey: "why3C.cards.certification.title",
+        descriptionKey: "why3C.cards.certification.description",
         prominent: false,
     },
 ];
@@ -51,9 +51,11 @@ interface Why3CCardProps {
     card: CardData;
     index: number;
     isVisible: boolean;
+    isRtl: boolean;
+    t: (key: string) => string;
 }
 
-function Why3CCard({ card, index, isVisible }: Why3CCardProps) {
+function Why3CCard({ card, index, isVisible, isRtl, t }: Why3CCardProps) {
     const isEven = index % 2 === 0; // 0, 2, 4 → shifted RIGHT
 
     return (
@@ -61,7 +63,7 @@ function Why3CCard({ card, index, isVisible }: Why3CCardProps) {
             className={`
                 transition-all duration-500
                 w-[80%]
-                ${isEven ? "ml-[20%]" : "ml-0"}
+                ${isEven ? (isRtl ? "mr-[20%] ml-0" : "ml-[20%]") : isRtl ? "mr-0" : "ml-0"}
             `}
             style={{ transitionDelay: `${index * 80}ms` }}
         >
@@ -104,13 +106,13 @@ function Why3CCard({ card, index, isVisible }: Why3CCardProps) {
                     size="xl"
                     className="text-[#393838]"
                 >
-                    {card.titleKey}
+                    {t(card.titleKey)}
                 </ThemedText>
                 <ThemedText
                     size="base"
                     className={`${isEven ? "text-[#4b4a4a]" : "text-[#616060]"}`}
                 >
-                    {card.descriptionKey}
+                    {t(card.descriptionKey)}
                 </ThemedText>
             </div>
         </div>
@@ -126,6 +128,7 @@ function CardConnector() {
 }
 
 function Why3C() {
+    const { t, isRTL } = useLanguage("landing");
     const { ref: cardsRef, isVisible: cardsVisible } = useScrollAnimation();
     return (
         <section
@@ -156,7 +159,7 @@ function Why3C() {
                     className="relative flex items-center justify-center gap-2 mb-5"
                     weight="semibold"
                 >
-                    Why Choose
+                    {t("why3C.title")}
                     <ThemedText
                         size="6xl"
                         variant="heading"
@@ -165,9 +168,11 @@ function Why3C() {
                         weight="semibold"
                     >
                         {" "}
-                        3C?
+                        {t("why3C.titleHighlight")}
                     </ThemedText>
-                    <div className="absolute top-0 left-[13%] -translate-x-1/2">
+                    <div
+                        className={`absolute top-0 ${isRTL ? "-right-[25%]" : "left-[13%]"}  -translate-x-1/2`}
+                    >
                         <Icons.General.WavyStroke />
                     </div>
                 </ThemedText>
@@ -178,8 +183,7 @@ function Why3C() {
                     variant="caption"
                     color="secondary"
                 >
-                    We make learning to code exciting, interactive, and easy for
-                    young minds.
+                    {t("why3C.subtitle")}
                 </ThemedText>
 
                 <img
@@ -211,7 +215,7 @@ function Why3C() {
                 {/* Right – Staggered Cards */}
                 <div
                     ref={cardsRef}
-                    className="w-1/2 absolute top-50 right-50 flex flex-col"
+                    className={`w-1/2 absolute top-50  ${isRTL ? "left-50" : "right-50"} flex flex-col`}
                 >
                     {CARDS.map((card, index) => (
                         <div key={card.id}>
@@ -219,6 +223,8 @@ function Why3C() {
                                 card={card}
                                 index={index}
                                 isVisible={cardsVisible}
+                                isRtl={isRTL}
+                                t={t}
                             />
 
                             {/* Orange dashed connector between cards */}
@@ -229,7 +235,11 @@ function Why3C() {
             </div>
 
             {/* Bottom Arch Circles */}
-            <div className="absolute -bottom-[12%] left-1/2 transform -translate-x-1/2 translate-y-[15%] rotate-180 w-full flex justify-center items-center overflow-hidden pointer-events-none z-50">
+            <div
+                className={
+                    "absolute -bottom-[12%] left-1/2 transform -translate-x-1/2 translate-y-[15%] rotate-180 w-full flex justify-center items-center overflow-hidden pointer-events-none z-50"
+                }
+            >
                 {[...Array(5)].map((_, index) => (
                     <div
                         key={index}

@@ -3,12 +3,13 @@ import { useTranslation } from "react-i18next";
 import { useScrollAnimation } from "../../hooks";
 import ThemedText from "@/design-system/components/ThemedText";
 import { Icons } from "@/constants";
+import { useLanguage } from "@/shared/hooks";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface Leader {
     id: string;
-    name: string;
+    nameKey: string;
     imageSrc?: string;
     /** vertical offset from baseline — alternates high/low */
     yOffset: string;
@@ -19,10 +20,25 @@ interface Leader {
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
 const LEADERS: Leader[] = [
-    { id: "alya", name: "Alya Ahmed", yOffset: "0px", blob: 1 },
-    { id: "omar", name: "OmaR Ali", yOffset: "80px", blob: 2 },
-    { id: "zein", name: "Zein Ahmed", yOffset: "60px", blob: 3 },
-    { id: "farida", name: "Farida Ali", yOffset: "0px", blob: 4 },
+    { id: "alya", nameKey: "ourLeaders.leaders.alya", yOffset: "0px", blob: 1 },
+    {
+        id: "omar",
+        nameKey: "ourLeaders.leaders.omar",
+        yOffset: "80px",
+        blob: 2,
+    },
+    {
+        id: "zein",
+        nameKey: "ourLeaders.leaders.zein",
+        yOffset: "60px",
+        blob: 3,
+    },
+    {
+        id: "farida",
+        nameKey: "ourLeaders.leaders.farida",
+        yOffset: "0px",
+        blob: 4,
+    },
 ];
 
 // ─── Blob SVG Masks ───────────────────────────────────────────────────────────
@@ -114,7 +130,7 @@ function BackgroundPattern() {
 
 // ─── Speech Bubble ────────────────────────────────────────────────────────────
 
-function SpeechBubble() {
+function SpeechBubble({ t }: { t: (key: string) => string }) {
     return (
         <div
             className="absolute z-20 pointer-events-none"
@@ -125,9 +141,9 @@ function SpeechBubble() {
                 style={{ minWidth: 140 }}
             >
                 <p className="text-sm font-semibold text-gray-700 leading-snug">
-                    3c your way
+                    {t("ourLeaders.speechBubble.line1")}
                     <br />
-                    for coding
+                    {t("ourLeaders.speechBubble.line2")}
                 </p>
                 {/* Tail pointing down-left */}
                 <svg
@@ -155,9 +171,10 @@ interface LeaderCardProps {
     leader: Leader;
     index: number;
     isVisible: boolean;
+    t: (key: string) => string;
 }
 
-function LeaderCard({ leader, index, isVisible }: LeaderCardProps) {
+function LeaderCard({ leader, index, isVisible, t }: LeaderCardProps) {
     return (
         <div
             className={`
@@ -183,7 +200,7 @@ function LeaderCard({ leader, index, isVisible }: LeaderCardProps) {
                     {leader.imageSrc ? (
                         <img
                             src={leader.imageSrc}
-                            alt={leader.name}
+                            alt={t(leader.nameKey)}
                             className="relative z-10 h-[95%] w-auto object-contain object-bottom"
                         />
                     ) : (
@@ -196,7 +213,7 @@ function LeaderCard({ leader, index, isVisible }: LeaderCardProps) {
 
                 {/* Play button */}
                 <button
-                    aria-label={`Play ${leader.name}'s video`}
+                    aria-label={`Play ${t(leader.nameKey)}'s video`}
                     className="
                         absolute z-20 bottom-4 left-4
                         w-11 h-11 rounded-full
@@ -212,7 +229,7 @@ function LeaderCard({ leader, index, isVisible }: LeaderCardProps) {
 
             {/* Name */}
             <p className="mt-3 text-base font-semibold text-brand-500 tracking-wide">
-                {leader.name}
+                {t(leader.nameKey)}
             </p>
         </div>
     );
@@ -221,7 +238,7 @@ function LeaderCard({ leader, index, isVisible }: LeaderCardProps) {
 // ─── Main Section ─────────────────────────────────────────────────────────────
 
 function OurLeaders() {
-    const { t } = useTranslation("landing");
+    const { t, isRTL } = useLanguage("landing");
     const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
     const { ref: gridRef, isVisible: gridVisible } = useScrollAnimation();
 
@@ -241,7 +258,7 @@ function OurLeaders() {
                     className="relative flex items-center justify-center gap-2 mb-5"
                     weight="semibold"
                 >
-                    Meet our Tech
+                    {t("ourLeaders.title")}
                     <ThemedText
                         size="6xl"
                         variant="heading"
@@ -250,9 +267,11 @@ function OurLeaders() {
                         weight="semibold"
                     >
                         {" "}
-                        Leaders
+                        {t("ourLeaders.titleHighlight")}
                     </ThemedText>
-                    <div className="absolute top-0 left-[13%] -translate-x-1/2">
+                    <div
+                        className={`absolute top-0 ${isRTL ? "-right-[25%]" : "left-[13%]"}  -translate-x-1/2`}
+                    >
                         <Icons.General.WavyStroke />
                     </div>
                 </ThemedText>
@@ -263,8 +282,7 @@ function OurLeaders() {
                     variant="caption"
                     color="secondary"
                 >
-                    Teaching kids how to think, create, and build with
-                    technology.
+                    {t("ourLeaders.subtitle")}
                 </ThemedText>
             </div>
 
@@ -283,7 +301,7 @@ function OurLeaders() {
                 </div>
 
                 {/* Speech bubble above 2nd kid */}
-                <SpeechBubble />
+                <SpeechBubble t={t} />
 
                 {/* 4 leader cards in a row */}
                 <div className="relative flex items-start justify-between gap-4 lg:gap-8 pt-8">
@@ -296,6 +314,7 @@ function OurLeaders() {
                                 leader={leader}
                                 index={index}
                                 isVisible={gridVisible}
+                                t={t}
                             />
                         </div>
                     ))}

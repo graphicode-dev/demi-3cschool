@@ -50,7 +50,7 @@ function StatsSection() {
                 }}
             >
                 <div
-                    className={`grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-16 transition-all duration-700 ${
+                    className={`w-full flex flex-wrap justify-between items-center transition-all duration-700 ${
                         statsVisible
                             ? "opacity-100 translate-y-0"
                             : "opacity-0 translate-y-8"
@@ -79,7 +79,7 @@ function StatsSection() {
                                 className="text-gray-400"
                                 size="3xl"
                             >
-                                {stat.label}
+                                {t(stat.labelKey)}
                             </ThemedText>
                         </div>
                     ))}

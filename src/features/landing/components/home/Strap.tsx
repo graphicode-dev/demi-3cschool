@@ -1,11 +1,12 @@
 import { Icon } from "@iconify/react";
 import { useScrollAnimation } from "../../hooks";
+import { useTranslation } from "react-i18next";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface StrapItem {
     id: string;
-    label: string;
+    labelKey: string;
     /** Optional iconify icon string */
     icon?: string;
     /** Optional image src (for ISO badge, Code.org logo, etc.) */
@@ -18,32 +19,32 @@ interface StrapItem {
 const STRAP_ITEMS: StrapItem[] = [
     {
         id: "iste",
-        label: "ISTE Member",
+        labelKey: "strap.iste",
         icon: "fluent:hat-graduation-24-regular",
     },
     {
         id: "iso",
-        label: "ISO 21001",
+        labelKey: "strap.iso",
         icon: "material-symbols:verified-outline-rounded",
     },
     {
         id: "codeorg-partner",
-        label: "Code.org Partner",
+        labelKey: "strap.codeorgPartner",
         icon: "simple-icons:codeforces",
     },
     {
         id: "certified-educators",
-        label: "Certified Educators Code.org Partner",
+        labelKey: "strap.certifiedEducators",
         icon: "fluent:certificate-24-regular",
     },
     {
         id: "stem",
-        label: "STEM Accredited",
+        labelKey: "strap.stem",
         icon: "carbon:skill-level-advanced",
     },
     {
         id: "ministry",
-        label: "Ministry of Communications",
+        labelKey: "strap.ministry",
         icon: "carbon:badge",
     },
 ];
@@ -61,13 +62,19 @@ function Separator() {
 
 // ─── Single Item ─────────────────────────────────────────────────────────────
 
-function StrapBadge({ item }: { item: StrapItem }) {
+function StrapBadge({
+    item,
+    t,
+}: {
+    item: StrapItem;
+    t: (key: string) => string;
+}) {
     return (
         <span className="inline-flex items-center gap-2.5 shrink-0 whitespace-nowrap">
             {item.imageSrc ? (
                 <img
                     src={item.imageSrc}
-                    alt={item.imageAlt ?? item.label}
+                    alt={item.imageAlt ?? t(item.labelKey)}
                     className="h-6 w-auto object-contain opacity-60"
                 />
             ) : item.icon ? (
@@ -78,7 +85,7 @@ function StrapBadge({ item }: { item: StrapItem }) {
             ) : null}
 
             <span className="text-sm lg:text-base font-medium text-gray-400 tracking-wide">
-                {item.label}
+                {t(item.labelKey)}
             </span>
         </span>
     );
@@ -87,7 +94,7 @@ function StrapBadge({ item }: { item: StrapItem }) {
 // ─── Marquee Row ──────────────────────────────────────────────────────────────
 // Duplicates items to create seamless infinite loop
 
-function MarqueeRow() {
+function MarqueeRow({ t }: { t: (key: string) => string }) {
     // Duplicate 3× to ensure no gap at any screen width
     const items = [...STRAP_ITEMS, ...STRAP_ITEMS, ...STRAP_ITEMS];
 
@@ -98,7 +105,7 @@ function MarqueeRow() {
                     key={`${item.id}-${index}`}
                     className="inline-flex items-center"
                 >
-                    <StrapBadge item={item} />
+                    <StrapBadge item={item} t={t} />
                     <Separator />
                 </span>
             ))}
@@ -109,6 +116,7 @@ function MarqueeRow() {
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 function Strap() {
+    const { t } = useTranslation("landing");
     const { ref: strapRef, isVisible: strapVisible } = useScrollAnimation({
         threshold: 0.1,
     });
@@ -144,7 +152,7 @@ function Strap() {
                     strapVisible ? "opacity-100" : "opacity-0"
                 }`}
             >
-                <MarqueeRow />
+                <MarqueeRow t={t} />
             </div>
 
             {/* Keyframe animation injected via style tag */}

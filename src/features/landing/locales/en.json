@@ -16,6 +16,81 @@
         "title3": " Ideas.",
         "subtitle": "Helping kids learn coding skills through play and creativity."
     },
+    "about": {
+        "title": "About",
+        "titleHighlight": "Us",
+        "description": "{{highlight}}3C{{/highlight}} is the leading coding school for kids aged 6 to 18 in Egypt and the Middle East. Accredited by STEM.org and ISO certified, 3C has trained over 100,000 students across 22 countries. We teach real, text-based programming from day one using fun, intuitive, and gamified methods that make learning smooth and enjoyable.",
+        "cards": {
+            "funLearning": {
+                "title": "Fun & Interactive Learning",
+                "description": "Engaging activities that make coding feel like play"
+            },
+            "ageAppropriate": {
+                "title": "Age-Appropriate Programs",
+                "description": "Curriculum designed for every skill level and age"
+            },
+            "safeEnvironment": {
+                "title": "Safe Learning Environment",
+                "description": "Trusted instructors and secure online platform"
+            }
+        }
+    },
+    "stats": {
+        "happyParents": "Happy Parents",
+        "teachers": "Professional Teachers",
+        "experience": "Years Of Experience",
+        "families": "Families Prefer Us"
+    },
+    "why3C": {
+        "title": "Why Choose",
+        "titleHighlight": "3C?",
+        "subtitle": "We make learning to code exciting, interactive, and easy for young minds.",
+        "cards": {
+            "smallClass": {
+                "title": "Small Class Sizes",
+                "description": "Maximum 8 students per class for personalized attention"
+            },
+            "projectBased": {
+                "title": "Project-Based Learning",
+                "description": "Build real games, apps, and websites you can show off"
+            },
+            "industryStandard": {
+                "title": "Industry-Standard Tools",
+                "description": "Learn with professional coding platforms and languages"
+            },
+            "passionMentors": {
+                "title": "Passion-Driven Mentors",
+                "description": "Teachers who love coding and love teaching kids"
+            },
+            "certification": {
+                "title": "Certification & Portfolio",
+                "description": "Earn certificates and build a showcase of your work"
+            }
+        }
+    },
+    "ourLeaders": {
+        "title": "Meet our Tech",
+        "titleHighlight": "Leaders",
+        "subtitle": "Teaching kids how to think, create, and build with technology.",
+        "speechBubble": {
+            "line1": "3c your way",
+            "line2": "for coding"
+        },
+        "leaders": {
+            "alya": "Alya Ahmed",
+            "omar": "Omar Ali",
+            "zein": "Zein Ahmed",
+            "farida": "Farida Ali"
+        }
+    },
+    "strap": {
+        "iste": "ISTE Member",
+        "iso": "ISO 21001",
+        "codeorgPartner": "Code.org Partner",
+        "certifiedEducators": "Certified Educators Code.org Partner",
+        "stem": "STEM Accredited",
+        "ministry": "Ministry of Communications"
+    },
     "footer": {
         "ministryDesc": "Empowering the next generation with digital skills and knowledge for a better future.",
         "schoolDesc": "Leading coding education for children with innovative teaching methods and expert instructors.",
