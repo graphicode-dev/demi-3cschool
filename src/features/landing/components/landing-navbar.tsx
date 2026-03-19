@@ -18,7 +18,7 @@ import { paths } from "@/router";
 import { Icons } from "@/constants";
 
 const navLinks = [
-    { href: paths.site.home(), sectionId: "home", labelKey: "nav.home" },
+    { href: paths.site.home(), sectionId: "hero", labelKey: "nav.home" },
     {
         href: paths.site.about(),
         sectionId: "about-us",

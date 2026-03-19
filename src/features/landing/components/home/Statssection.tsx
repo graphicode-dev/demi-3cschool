@@ -2,6 +2,7 @@ import { Icons } from "@/constants";
 import { Images } from "@/constants/images";
 import ThemedText from "@/design-system/components/ThemedText";
 import { useTranslation } from "react-i18next";
+import { useScrollAnimation } from "../../hooks";
 
 interface StatItem {
     value: string;
@@ -26,42 +27,65 @@ const STATS: StatItem[] = [
 
 function StatsSection() {
     const { t } = useTranslation("landing");
+    const { ref: statsRef, isVisible: statsVisible } = useScrollAnimation({
+        threshold: 0.2,
+    });
 
     return (
-        <div
-            className="flex items-center justify-between w-full px-15 py-3.5 rounded-tr-[124px] rounded-bl-lg"
-            style={{
-                backgroundImage: `url(${Images.landing.about.statsBg})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-            }}
+        <section
+            ref={statsRef}
+            className={`relative w-full py-20 px-20 lg:py-30 z-50 transition-all duration-700 ${
+                statsVisible
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-8"
+            }`}
         >
-            {STATS.map((stat, index) => (
+            <div
+                className="flex items-center justify-between w-full px-15 py-3.5 rounded-tr-[124px] rounded-bl-lg"
+                style={{
+                    backgroundImage: `url(${Images.landing.about.statsBg})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                }}
+            >
                 <div
-                    className="flex items-center justify-evenly gap-5"
-                    key={index}
+                    className={`grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-16 transition-all duration-700 ${
+                        statsVisible
+                            ? "opacity-100 translate-y-0"
+                            : "opacity-0 translate-y-8"
+                    }`}
                 >
-                    <div className="flex flex-col items-center text-center">
-                        <ThemedText
-                            as="h2"
-                            weight="bold"
-                            color="primary"
-                            size="6xl"
+                    {STATS.map((stat, index) => (
+                        <div
+                            key={index}
+                            className={`flex flex-col items-center justify-center text-center transition-all duration-700 ${
+                                statsVisible
+                                    ? "opacity-100 scale-100"
+                                    : "opacity-0 scale-90"
+                            }`}
+                            style={{ transitionDelay: `${index * 100}ms` }}
                         >
-                            {stat.value}
-                        </ThemedText>
-                        <ThemedText as="p" className="text-gray-400" size="3xl">
-                            {stat.label}
-                        </ThemedText>
-                    </div>
-
-                    {index < STATS.length - 1 && (
-                        <Icons.Landing.About.SlashSeparator size={150} />
-                    )}
+                            <ThemedText
+                                as="h2"
+                                weight="bold"
+                                color="primary"
+                                size="6xl"
+                            >
+                                {stat.value}
+                            </ThemedText>
+                            <ThemedText
+                                as="p"
+                                className="text-gray-400"
+                                size="3xl"
+                            >
+                                {stat.label}
+                            </ThemedText>
+                        </div>
+                    ))}
                 </div>
-            ))}
-        </div>
+            </div>
+        </section>
     );
 }
 

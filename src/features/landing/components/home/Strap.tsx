@@ -1,4 +1,5 @@
 import { Icon } from "@iconify/react";
+import { useScrollAnimation } from "../../hooks";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -108,10 +109,17 @@ function MarqueeRow() {
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 function Strap() {
+    const { ref: strapRef, isVisible: strapVisible } = useScrollAnimation({
+        threshold: 0.1,
+    });
     return (
         <section
-            id="strap"
-            className="relative mt-20 w-full z-50 bg-[#dff1fb] border-y border-[#c5e4f5]/60 overflow-hidden"
+            ref={strapRef}
+            className={`relative mt-20 w-full z-50 bg-[#dff1fb] border-y border-[#c5e4f5]/60 overflow-hidden transition-all duration-700 ${
+                strapVisible
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-4"
+            }`}
             aria-label="Accreditations and partnerships"
         >
             {/* Fade masks on left and right edges */}
@@ -131,7 +139,11 @@ function Strap() {
             />
 
             {/* Scrolling track */}
-            <div className="flex items-center py-4 lg:py-5 select-none">
+            <div
+                className={`flex items-center py-4 lg:py-5 select-none transition-all duration-1000 ${
+                    strapVisible ? "opacity-100" : "opacity-0"
+                }`}
+            >
                 <MarqueeRow />
             </div>
 

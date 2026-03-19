@@ -271,7 +271,7 @@ function OurLeaders() {
             {/* ── Leaders + Road ── */}
             <div
                 ref={gridRef}
-                className="relative z-10 mx-auto px-6 lg:px-12"
+                className="relative z-10 mx-auto px-6 mt-20 lg:px-12"
                 style={{ maxWidth: 1200, minHeight: 380 }}
             >
                 {/* Winding road behind cards */}

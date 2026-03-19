@@ -1,6 +1,7 @@
 import { Images } from "@/constants/images";
 import ThemedText from "@/design-system/components/ThemedText";
 import { useTranslation } from "react-i18next";
+import { useScrollAnimation } from "../../hooks";
 import StatsSection from "./Statssection";
 
 /**
@@ -56,6 +57,10 @@ interface CardData {
 
 function AboutSection() {
     const { t } = useTranslation("landing");
+    const { ref: sectionRef, isVisible: sectionVisible } = useScrollAnimation();
+    const { ref: cardsRef, isVisible: cardsVisible } = useScrollAnimation({
+        threshold: 0.2,
+    });
 
     const cardsData: CardData[] = [
         {
@@ -78,8 +83,11 @@ function AboutSection() {
     return (
         <>
             <section
-                id="about"
-                className="relative w-full z-50"
+                ref={sectionRef}
+                id="about-us"
+                className={`relative w-full z-50 transition-opacity duration-700 ${
+                    sectionVisible ? "opacity-100" : "opacity-0"
+                }`}
                 style={{
                     paddingBottom: "62.5%",
                     backgroundImage: `url(${Images.landing.about.sectionBg})`,
@@ -139,7 +147,14 @@ function AboutSection() {
                     </div>
 
                     {/* Cards */}
-                    <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start sm:justify-center sm:gap-6 lg:gap-10">
+                    <div
+                        ref={cardsRef}
+                        className={`flex flex-col items-center gap-6 sm:flex-row sm:items-start sm:justify-center sm:gap-6 lg:gap-10 transition-all duration-700 ${
+                            cardsVisible
+                                ? "opacity-100 translate-y-0"
+                                : "opacity-0 translate-y-8"
+                        }`}
+                    >
                         {cardsData.map((card, i) => (
                             <div
                                 key={i}
@@ -148,7 +163,10 @@ function AboutSection() {
                                 sm:w-[260px] lg:w-[330px]
                                 shrink-0
                                 ${CARD_STAGGER_CLASSES[i]}
+                                transition-all duration-700
+                                ${cardsVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}
                             `}
+                                style={{ transitionDelay: `${i * 150}ms` }}
                             >
                                 <AboutCard card={card} />
                             </div>
