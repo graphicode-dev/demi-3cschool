@@ -130,7 +130,7 @@ function Why3C() {
     return (
         <section
             id="why-3c"
-            className="relative w-full min-h-screen py-20 px-20 lg:py-20 mt-20 z-50 bg-brand-50"
+            className="relative w-full py-20 px-20 pb-70 mt-20 z-50 bg-brand-50"
         >
             {/* Header */}
             <div className="relative flex flex-col items-center justify-center gap-2">
@@ -196,18 +196,23 @@ function Why3C() {
                     <img
                         src={Images.landing.whyChoose3c.banner}
                         alt="Kids that code"
-                        className="w-full h-full"
+                        className="w-full"
                     />
 
                     <img
                         src={Images.landing.whyChoose3c.keyboard}
                         alt="Keyboard"
-                        className="absolute -bottom-20 -left-20"
+                        className="absolute -bottom-30 -left-10 w-30"
                     />
                 </div>
 
+                <div ref={cardsRef} className="hidden lg:block lg:w-1/2" />
+
                 {/* Right – Staggered Cards */}
-                <div ref={cardsRef} className="w-full lg:w-[55%] flex flex-col">
+                <div
+                    ref={cardsRef}
+                    className="w-1/2 absolute top-50 right-50 flex flex-col"
+                >
                     {CARDS.map((card, index) => (
                         <div key={card.id}>
                             <Why3CCard
@@ -221,6 +226,16 @@ function Why3C() {
                         </div>
                     ))}
                 </div>
+            </div>
+
+            {/* Bottom Arch Circles */}
+            <div className="absolute -bottom-[12%] left-1/2 transform -translate-x-1/2 translate-y-[15%] rotate-180 w-full flex justify-center items-center overflow-hidden pointer-events-none z-50">
+                {[...Array(5)].map((_, index) => (
+                    <div
+                        key={index}
+                        className="w-100 h-100 bg-white rounded-full"
+                    />
+                ))}
             </div>
         </section>
     );
