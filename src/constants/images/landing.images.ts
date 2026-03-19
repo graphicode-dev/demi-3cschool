@@ -18,8 +18,12 @@ import cardOrange from "@/assets/images/landing/about/card-orange.png";
 import cardWhite from "@/assets/images/landing/about/card-white.png";
 import sectionBg from "@/assets/images/landing/about/section-bg.png";
 import statsBg from "@/assets/images/landing/about/stats-bg.png";
+import wordSplash from "@/assets/images/landing/word-splash.png";
+import kidsThatCode from "@/assets/images/landing/why-choose-3c/kids-that-code.png";
 
 export const LandingImages = {
+    wordSplash,
+    kidsThatCode,
     hero: {
         bg,
         coding,

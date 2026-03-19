@@ -1,8 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useScrollAnimation, scrollToSection } from "../hooks";
 import logo3C from "@/assets/images/landing/3c-white.png";
-import MCAR from "@/assets/images/landing/MCAR.png";
-import MCEN from "@/assets/images/landing/MCEN.png";
 import { Icon } from "@iconify/react";
 
 const quickLinkKeys = [
@@ -49,26 +47,6 @@ function LandingFooter() {
                 }`}
             >
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-16">
-                    {/* Ministry Column */}
-                    <div>
-                        {isRTL ? (
-                            <img
-                                src={MCAR}
-                                alt="Ministry of Communications"
-                                className="h-20 lg:h-24 object-contain mb-4 lg:mb-6"
-                            />
-                        ) : (
-                            <img
-                                src={MCEN}
-                                alt="Ministry of Communications"
-                                className="h-20 lg:h-24 object-contain mb-4 lg:mb-6"
-                            />
-                        )}
-                        <p className="text-white/80 text-base lg:text-[18px] lg:leading-[25px]">
-                            {t("footer.ministryDesc")}
-                        </p>
-                    </div>
-
                     {/* 3C Logo Column */}
                     <div>
                         <img
