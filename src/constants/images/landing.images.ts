@@ -20,10 +20,12 @@ import sectionBg from "@/assets/images/landing/about/section-bg.png";
 import statsBg from "@/assets/images/landing/about/stats-bg.png";
 import wordSplash from "@/assets/images/landing/word-splash.png";
 import kidsThatCode from "@/assets/images/landing/why-choose-3c/kids-that-code.png";
+import banner from "@/assets/images/landing/why-choose-3c/banner.png";
+import cursor from "@/assets/images/landing/why-choose-3c/cursor.png";
+import keyboard from "@/assets/images/landing/why-choose-3c/keyboard.png";
 
 export const LandingImages = {
     wordSplash,
-    kidsThatCode,
     hero: {
         bg,
         coding,
@@ -49,5 +51,11 @@ export const LandingImages = {
         cardWhite,
         sectionBg,
         statsBg,
+    },
+    whyChoose3c: {
+        banner,
+        cursor,
+        keyboard,
+        kidsThatCode,
     },
 };
