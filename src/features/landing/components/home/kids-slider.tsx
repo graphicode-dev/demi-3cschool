@@ -35,9 +35,11 @@ const N = DATA.length;
 // ─── Tunable constants ────────────────────────────────────────────────────────
 
 const CARD_W = 286; // px — card width
+const CARD_GAP = 24; // px — gap between cards
+const CARD_SPACING = CARD_W + CARD_GAP;
 const CARD_H = 444; // px — fixed card height
 const SPEED = 1; // px per rAF frame
-const STRIP_W = CARD_W * N;
+const STRIP_W = CARD_SPACING * N;
 
 // ─── Curve helpers ────────────────────────────────────────────────────────────
 
@@ -60,20 +62,19 @@ function calcCircularPosition(n: number, radius: number = 800) {
     const angle = (n * Math.PI) / 2; // -π/2 to +π/2
 
     // Calculate position on circle
-    const x = Math.sin(angle) * radius; // horizontal position
+    // Reduced horizontal spread to keep cards closer together
+    const x = Math.sin(angle) * radius * 0.15; // horizontal position
     const z = Math.cos(angle) * radius - radius; // depth position (0 at center)
 
     return { x, z };
 }
 
 /**
- * Calculate skew angle based on position for circular movement effect
- * Creates the illusion of circular path using skew transformation
+ * Calculate rotation angle based on position for true 3D cylinder effect
  */
-function calcSkew(n: number): number {
-    // Skew from -15° to +15° based on position
-    // Center = 0°, edges = ±15°
-    return 15 * n;
+function calcRotY(n: number): number {
+    const MAX_DEG = 45; // rotate up to 45 degrees at edges
+    return MAX_DEG * n;
 }
 
 // ─── KidsSlider ───────────────────────────────────────────────────────────────
@@ -111,7 +112,7 @@ function KidsSlider() {
     const copies = Math.ceil((vw + STRIP_W) / STRIP_W) + 1;
     const allCards = Array.from({ length: copies * N }, (_, idx) => ({
         dataIndex: idx % N,
-        baseX: idx * CARD_W,
+        baseX: idx * CARD_SPACING,
     }));
 
     const stageH = CARD_H;
@@ -125,6 +126,7 @@ function KidsSlider() {
                 // Perspective so rotateY has visible depth effect
                 perspective: "1200px",
                 perspectiveOrigin: "50% 100%",
+                transformStyle: "preserve-3d",
             }}
         >
             {/* Each card is absolutely positioned so we can apply
@@ -141,7 +143,8 @@ function KidsSlider() {
                 const n = norm(screenX, vw);
                 const h = CARD_H;
                 const position = calcCircularPosition(n);
-                const skew = calcSkew(n);
+                const rotY = calcRotY(n);
+                const zIndex = Math.round((1 - Math.abs(n)) * 100);
 
                 // Card left edge on screen
                 const cardLeft = baseX - offset;
@@ -154,9 +157,10 @@ function KidsSlider() {
                             bottom: 0,
                             left: `${cardLeft}px`,
                             width: `${CARD_W}px`,
+                            zIndex, // center cards always on top
                             transformOrigin: "center bottom",
-                            transform: `translateX(${position.x}px) translateZ(${position.z}px) skewY(${skew}deg)`,
-                            // Smooth position + skew as card moves
+                            transform: `translateX(${position.x}px) translateZ(${position.z}px) rotateY(${rotY}deg)`,
+                            // Smooth position + rotation as card moves
                             transition: "transform 0.05s linear",
                         }}
                     >
