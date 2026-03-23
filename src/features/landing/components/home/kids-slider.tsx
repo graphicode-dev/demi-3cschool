@@ -61,10 +61,12 @@ function calcCircularPosition(n: number, radius: number = 800) {
     // Convert normalized position to angle (-90° to +90°)
     const angle = (n * Math.PI) / 2; // -π/2 to +π/2
 
-    // Calculate position on circle
-    // Reduced horizontal spread to keep cards closer together
-    const x = Math.sin(angle) * radius * 0.15; // horizontal position
-    const z = Math.cos(angle) * radius - radius; // depth position (0 at center)
+    // Calculate position on circle (Concave effect)
+    // Let perspective handle entirely the visual separation without crushing cards together
+    const x = 0; // horizontal position (no manual offset since Z handles scaling natively)
+    // z becomes positive at edges to bring them closer to the viewer
+    const DEPTH = 250; // max depth coming forward
+    const z = (1 - Math.cos(angle)) * DEPTH; // depth position (0 at center, +DEPTH at edges)
 
     return { x, z };
 }
@@ -73,7 +75,7 @@ function calcCircularPosition(n: number, radius: number = 800) {
  * Calculate rotation angle based on position for true 3D cylinder effect
  */
 function calcRotY(n: number): number {
-    const MAX_DEG = 45; // rotate up to 45 degrees at edges
+    const MAX_DEG = -45; // rotate up to -45 degrees at edges for concave effect
     return MAX_DEG * n;
 }
 
@@ -122,7 +124,7 @@ function KidsSlider() {
             style={{
                 width: "100%",
                 height: `${stageH}px`,
-                overflow: "hidden",
+                overflow: "visible", // so cards coming closer to camera aren't cropped
                 // Perspective so rotateY has visible depth effect
                 perspective: "1200px",
                 perspectiveOrigin: "50% 100%",
@@ -144,7 +146,10 @@ function KidsSlider() {
                 const h = CARD_H;
                 const position = calcCircularPosition(n);
                 const rotY = calcRotY(n);
-                const zIndex = Math.round((1 - Math.abs(n)) * 100);
+                
+                // Edges have positive Z, so they are closer to the viewer.
+                // Higher zIndex for larger |n| ensures they render on top properly.
+                const zIndex = Math.round(Math.abs(n) * 100);
 
                 // Card left edge on screen
                 const cardLeft = baseX - offset;
@@ -157,7 +162,7 @@ function KidsSlider() {
                             bottom: 0,
                             left: `${cardLeft}px`,
                             width: `${CARD_W}px`,
-                            zIndex, // center cards always on top
+                            zIndex, // edge cards come forward, so they must be on top
                             transformOrigin: "center bottom",
                             transform: `translateX(${position.x}px) translateZ(${position.z}px) rotateY(${rotY}deg)`,
                             // Smooth position + rotation as card moves
