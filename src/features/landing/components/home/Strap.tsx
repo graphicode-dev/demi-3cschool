@@ -1,6 +1,6 @@
 import { Icon } from "@iconify/react";
 import { useScrollAnimation } from "../../hooks";
-import { useTranslation } from "react-i18next";
+import { useLanguage } from "@/shared/hooks";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -116,7 +116,7 @@ function MarqueeRow({ t }: { t: (key: string) => string }) {
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 function Strap() {
-    const { t } = useTranslation("landing");
+    const { t } = useLanguage("landing");
     const { ref: strapRef, isVisible: strapVisible } = useScrollAnimation({
         threshold: 0.1,
     });

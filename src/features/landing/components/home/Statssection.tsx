@@ -1,8 +1,7 @@
-import { Icons } from "@/constants";
 import { Images } from "@/constants/images";
 import ThemedText from "@/design-system/components/ThemedText";
-import { useTranslation } from "react-i18next";
 import { useScrollAnimation } from "../../hooks";
+import { useLanguage } from "@/shared/hooks";
 
 interface StatItem {
     value: string;
@@ -26,7 +25,7 @@ const STATS: StatItem[] = [
 ];
 
 function StatsSection() {
-    const { t } = useTranslation("landing");
+    const { t } = useLanguage("landing");
     const { ref: statsRef, isVisible: statsVisible } = useScrollAnimation({
         threshold: 0.2,
     });

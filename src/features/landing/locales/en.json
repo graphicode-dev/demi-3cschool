@@ -208,21 +208,25 @@
         "ministry": "Ministry of Communications"
     },
     "footer": {
-        "ministryDesc": "Empowering the next generation with digital skills and knowledge for a better future.",
-        "schoolDesc": "Leading coding education for children with innovative teaching methods and expert instructors.",
+        "schoolDesc": "Inspiring young minds to learn coding, build creative projects, and explore the world of technology in a fun and engaging way.",
         "quickLinks": "Quick Links",
-        "aboutInitiative": "About the Initiative",
-        "learningMethodology": "Learning Methodology",
-        "whoCanJoin": "Who Can Join",
-        "faq": "FAQ",
+        "connectWithUs": "Connect With Us",
+        "aboutInitiative": "About Us",
         "contactUs": "Contact Us",
         "privacyPolicy": "Privacy Policy",
         "termsOfService": "Terms of Service",
         "followUs": "Follow Us",
-        "copyright": "‎ {{year}} Ministry of Communications & 3C Coding School. All rights reserved.",
+        "copyright": "© {{year}} 3c Coding School. All rights reserved.",
         "accessibility": "Accessibility",
         "email": "info@3cschool.net",
         "phone": "+20 10 23168167",
-        "howItWorks": "How It Works"
+        "letsCode": "let's code together",
+        "stayInLoop": "Stay In The Loop C3",
+        "emailPlaceholder": "Email",
+        "giveCall": "give us a call",
+        "address": "171 El Tahrir, Ad Dawawin, Abdeen, Cairo Governorate 4280102, Egypt",
+        "designedBy": "designed with love to inspire the next generation of innovators",
+        "copyright1": "3c coding school.",
+        "copyright2": "all rights reserved."
     }
 }

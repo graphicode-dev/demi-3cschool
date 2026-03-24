@@ -1,6 +1,5 @@
 import { useState } from "react";
 import ThemedText from "@/design-system/components/ThemedText";
-import { Icons } from "@/constants";
 import { useLanguage } from "@/shared/hooks";
 import { useScrollAnimation } from "../../hooks";
 import { Images } from "@/constants/images";

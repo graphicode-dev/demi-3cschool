@@ -39,6 +39,8 @@ import featuredPlanBg from "@/assets/images/landing/plans/featured-plan-bg.png";
 import plansBg from "@/assets/images/landing/plans/plans-bg.png";
 import registerCard from "@/assets/images/landing/register/card.png";
 import registerStudents from "@/assets/images/landing/register/students.png";
+import exploringCode from "@/assets/images/landing/footer/exploring-code.png";
+import robot from "@/assets/images/landing/footer/robot.png";
 
 export const LandingImages = {
     wordSplash,
@@ -99,5 +101,9 @@ export const LandingImages = {
     register: {
         card: registerCard,
         students: registerStudents,
+    },
+    footer: {
+        exploringCode,
+        robot,
     },
 };

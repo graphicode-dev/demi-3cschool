@@ -1,8 +1,8 @@
 import { Images } from "@/constants/images";
 import ThemedText from "@/design-system/components/ThemedText";
-import { useTranslation } from "react-i18next";
 import { useScrollAnimation } from "../../hooks";
 import StatsSection from "./Statssection";
+import { useLanguage } from "@/shared/hooks";
 
 /**
  * AboutSection — Background Image Strategy
@@ -56,7 +56,7 @@ interface CardData {
 }
 
 function AboutSection() {
-    const { t } = useTranslation("landing");
+    const { t } = useLanguage("landing");
     const { ref: sectionRef, isVisible: sectionVisible } = useScrollAnimation();
     const { ref: cardsRef, isVisible: cardsVisible } = useScrollAnimation({
         threshold: 0.2,

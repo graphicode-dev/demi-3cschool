@@ -2,7 +2,6 @@ import { Icons } from "@/constants";
 import { Images } from "@/constants/images";
 import ThemedText from "@/design-system/components/ThemedText";
 import { useScrollAnimation } from "../../hooks";
-import { useTranslation } from "react-i18next";
 import { useLanguage } from "@/shared/hooks";
 
 interface CardData {

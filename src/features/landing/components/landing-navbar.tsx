@@ -8,7 +8,6 @@ import {
     LayoutDashboard,
     ChevronDown,
 } from "lucide-react";
-import { useTranslation } from "react-i18next";
 import { scrollToSection } from "../hooks";
 import LogoAr from "@/assets/images/logos/ArabicDark.png";
 import LogoEn from "@/assets/images/logos/EnglishDark.png";
@@ -16,6 +15,7 @@ import { authStore } from "@/auth";
 import { useLogout } from "@/features/auth/api";
 import { paths } from "@/router";
 import { Icons } from "@/constants";
+import { useLanguage } from "@/shared/hooks";
 
 const navLinks = [
     { href: paths.site.home(), sectionId: "hero", labelKey: "nav.home" },
@@ -42,7 +42,7 @@ const navLinks = [
 ];
 
 function LandingNavbar() {
-    const { t, i18n } = useTranslation("landing");
+    const { t, i18n } = useLanguage("landing");
     const { user, isAuthenticated } = authStore();
     const logout = useLogout();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
