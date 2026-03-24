@@ -1,5 +1,4 @@
 import { Play } from "lucide-react";
-import { useTranslation } from "react-i18next";
 import { useScrollAnimation } from "../../hooks";
 import ThemedText from "@/design-system/components/ThemedText";
 import { Icons } from "@/constants";

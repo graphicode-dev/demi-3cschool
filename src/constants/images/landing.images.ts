@@ -23,6 +23,17 @@ import kidsThatCode from "@/assets/images/landing/why-choose-3c/kids-that-code.p
 import banner from "@/assets/images/landing/why-choose-3c/banner.png";
 import cursor from "@/assets/images/landing/why-choose-3c/cursor.png";
 import keyboard from "@/assets/images/landing/why-choose-3c/keyboard.png";
+import standard1 from "@/assets/images/landing/tracks/standard-1.png";
+import standard2 from "@/assets/images/landing/tracks/standard-2.png";
+import standard3 from "@/assets/images/landing/tracks/standard-3.png";
+import standard4 from "@/assets/images/landing/tracks/standard-4.png";
+import professional1 from "@/assets/images/landing/tracks/pro-1.png";
+import professional2 from "@/assets/images/landing/tracks/pro-2.png";
+import professional3 from "@/assets/images/landing/tracks/pro-3.png";
+import professional4 from "@/assets/images/landing/tracks/pro-4.png";
+import tracksBg from "@/assets/images/landing/tracks/tracks-bg.png";
+import tracksRobotGlobe from "@/assets/images/landing/tracks/tracks-robot-globe.png";
+import tracksRobotHead from "@/assets/images/landing/tracks/tracks-robot-head.png";
 
 export const LandingImages = {
     wordSplash,
@@ -57,5 +68,22 @@ export const LandingImages = {
         cursor,
         keyboard,
         kidsThatCode,
+    },
+    tracks: {
+        bg: tracksBg,
+        robotGlobe: tracksRobotGlobe,
+        robotHead: tracksRobotHead,
+        standard: {
+            standard1,
+            standard2,
+            standard3,
+            standard4,
+        },
+        professional: {
+            professional1,
+            professional2,
+            professional3,
+            professional4,
+        },
     },
 };

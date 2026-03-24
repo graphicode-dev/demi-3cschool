@@ -46,7 +46,7 @@ function LandingNavbar() {
     const { user, isAuthenticated } = authStore();
     const logout = useLogout();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const [activeSection, setActiveSection] = useState("home");
+    const [activeSection, setActiveSection] = useState("hero");
     const [isScrolled, setIsScrolled] = useState(false);
     const [langMenuOpen, setLangMenuOpen] = useState(false);
     const [profileMenuOpen, setProfileMenuOpen] = useState(false);

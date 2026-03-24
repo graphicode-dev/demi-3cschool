@@ -16,6 +16,47 @@
         "title3": " Ideas.",
         "subtitle": "Helping kids learn coding skills through play and creativity."
     },
+    "tracks": {
+        "title1": "From First Code to Big ",
+        "titleHighlight": "Creations",
+        "subtitle": "Kids learn step by step while building games, apps, and exciting projects.",
+        "standardTrack": "Standard Track",
+        "professionalTrack": "Professional Track",
+        "cards": {
+            "scratch": {
+                "title": "Scratch & Block-Based",
+                "subtitle": "Play • Build • Think"
+            },
+            "machineLearning": {
+                "title": "Machine Learning for Kids",
+                "subtitle": "Explore • Discover • Create"
+            },
+            "introToWeb": {
+                "title": "Intro to Web (HTML & CSS)",
+                "subtitle": "Design • Style • Launch"
+            },
+            "python": {
+                "title": "Python Basics",
+                "subtitle": "Code • Debug • Solve"
+            },
+            "webDev": {
+                "title": "Web Development",
+                "subtitle": "Real projects • Advanced skills"
+            },
+            "mobileApps": {
+                "title": "Mobile Apps Development",
+                "subtitle": "Real projects • Advanced skills"
+            },
+            "gameDev": {
+                "title": "Game Development",
+                "subtitle": "Real projects • Advanced skills"
+            },
+            "ai": {
+                "title": "Artificial Intelligence",
+                "subtitle": "Real projects • Advanced skills"
+            }
+        }
+    },
     "about": {
         "title": "About",
         "titleHighlight": "Us",
