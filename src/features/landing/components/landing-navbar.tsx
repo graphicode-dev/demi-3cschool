@@ -25,18 +25,18 @@ const navLinks = [
         labelKey: "nav.aboutUs",
     },
     {
-        href: paths.site.howItWorks(),
+        href: paths.site.why3C(),
         sectionId: "why-3c",
         labelKey: "nav.why3C",
     },
     {
-        href: paths.site.faq(),
+        href: paths.site.accreditation(),
         sectionId: "accreditation",
         labelKey: "nav.accreditation",
     },
     {
-        href: paths.site.contact(),
-        sectionId: "our-packages",
+        href: paths.site.plans(),
+        sectionId: "plans",
         labelKey: "nav.ourPackages",
     },
 ];

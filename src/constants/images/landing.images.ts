@@ -41,6 +41,13 @@ import registerCard from "@/assets/images/landing/register/card.png";
 import registerStudents from "@/assets/images/landing/register/students.png";
 import exploringCode from "@/assets/images/landing/footer/exploring-code.png";
 import robot from "@/assets/images/landing/footer/robot.png";
+import certificateBg from "@/assets/images/landing/certificate/bg.png";
+import certificateBottomCorner from "@/assets/images/landing/certificate/bottom-corner.png";
+import certificateBottomWavyPattern from "@/assets/images/landing/certificate/bottom-wavy-pattern.png";
+import certificate from "@/assets/images/landing/certificate/certificate.png";
+import certificateCodingForKids from "@/assets/images/landing/certificate/coding-for-kids.png";
+import certificateCoding from "@/assets/images/landing/certificate/coding.png";
+import certificateTopCorner from "@/assets/images/landing/certificate/top-corner.png";
 
 export const LandingImages = {
     wordSplash,
@@ -105,5 +112,14 @@ export const LandingImages = {
     footer: {
         exploringCode,
         robot,
+    },
+    certificate: {
+        certificateBg,
+        certificateBottomCorner,
+        certificateBottomWavyPattern,
+        certificate,
+        certificateCodingForKids,
+        certificateCoding,
+        certificateTopCorner,
     },
 };

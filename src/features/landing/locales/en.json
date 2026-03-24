@@ -228,5 +228,10 @@
         "designedBy": "designed with love to inspire the next generation of innovators",
         "copyright1": "3c coding school.",
         "copyright2": "all rights reserved."
+    },
+    "certificate": {
+        "titleStart": "Every Student Earns A Professional",
+        "titleHighlight": "Certificate",
+        "subtitle": "celebrating their journey and success in coding."
     }
 }

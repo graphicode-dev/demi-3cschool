@@ -5,9 +5,9 @@ import { Images } from "@/constants/images";
 import { useLanguage } from "@/shared/hooks";
 
 const quickLinkKeys = [
-    { labelKey: "nav.home", fallback: "Home", href: "#home" },
-    { labelKey: "nav.aboutUs", fallback: "About Us", href: "#about" },
-    { labelKey: "nav.why3C", fallback: "Why 3C", href: "#why-choose-3c" },
+    { labelKey: "nav.home", fallback: "Home", href: "#hero" },
+    { labelKey: "nav.aboutUs", fallback: "About Us", href: "#about-us" },
+    { labelKey: "nav.why3C", fallback: "Why 3C", href: "#why-3c" },
     {
         labelKey: "nav.accreditation",
         fallback: "Accreditation",

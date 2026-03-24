@@ -15,18 +15,18 @@ import { registerFeaturePaths } from "@/router/paths.registry";
 
 export const sitePaths = {
     home: () => "/",
-    about: () => "/#about",
-    howItWorks: () => "/#how-it-works",
-    faq: () => "/#faq",
-    contact: () => "/#contact",
+    about: () => "/#about-us",
+    why3C: () => "/#why-3c",
+    accreditation: () => "/#accreditation",
+    plans: () => "/#plans",
 } as const;
 
 export const siteManagementPaths = registerFeaturePaths("site", {
     home: sitePaths.home,
     about: sitePaths.about,
-    howItWorks: sitePaths.howItWorks,
-    faq: sitePaths.faq,
-    contact: sitePaths.contact,
+    why3C: sitePaths.why3C,
+    accreditation: sitePaths.accreditation,
+    plans: sitePaths.plans,
 });
 
 export type SitePaths = typeof sitePaths;
