@@ -257,6 +257,9 @@ export default function Tracks() {
                     </div>
 
                     <div className={`grid grid-cols-1 lg:grid-cols-2 gap-y-16 lg:gap-y-landing-section-y lg:gap-x-16 mb-24 relative w-full transition-all duration-1000 delay-300 ${isStandardVisible ? 'opacity-100' : 'opacity-0'}`}>
+                        {/* Mobile Vertical Pipe */}
+                        <div className="lg:hidden absolute left-1/2 -translate-x-1/2 top-[5%] bottom-[5%] w-0 border-l-[3px] border-dashed border-brand-500 opacity-60 -z-10" />
+
                         <InnerBridge y={105} />
                         <IntraGridPipeStandard />
                         <InnerBridge y={412} />
@@ -290,6 +293,9 @@ export default function Tracks() {
                     </div>
 
                     <div className={`grid grid-cols-1 lg:grid-cols-2 gap-y-16 lg:gap-y-landing-section-y lg:gap-x-16 relative w-full transition-all duration-1000 delay-300 ${isProfessionalVisible ? 'opacity-100' : 'opacity-0'}`}>
+                        {/* Mobile Vertical Pipe */}
+                        <div className="lg:hidden absolute left-1/2 -translate-x-1/2 top-[5%] bottom-[5%] w-0 border-l-[3px] border-dashed border-brand-500 opacity-60 -z-10" />
+
                         <InnerBridge y={105} />
                         <IntraGridPipeProfessional />
                         <InnerBridge y={412} />

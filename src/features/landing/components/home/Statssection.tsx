@@ -49,7 +49,7 @@ function StatsSection() {
                 }}
             >
                 <div
-                    className={`w-full flex flex-wrap justify-between items-center transition-all duration-700 ${
+                    className={`w-full grid grid-cols-2 gap-y-6 lg:gap-y-0 lg:flex lg:flex-nowrap justify-between items-center transition-all duration-700 ${
                         statsVisible
                             ? "opacity-100 translate-y-0"
                             : "opacity-0 translate-y-8"
@@ -69,14 +69,13 @@ function StatsSection() {
                                 as="h2"
                                 weight="bold"
                                 color="primary"
-                                size="6xl"
+                                className="text-[32px] sm:text-[40px] md:text-5xl lg:text-6xl"
                             >
                                 {stat.value}
                             </ThemedText>
                             <ThemedText
                                 as="p"
-                                className="text-gray-400"
-                                size="3xl"
+                                className="text-gray-400 text-[14px] sm:text-[18px] md:text-2xl lg:text-3xl max-w-[120px] lg:max-w-none leading-snug"
                             >
                                 {t(stat.labelKey)}
                             </ThemedText>

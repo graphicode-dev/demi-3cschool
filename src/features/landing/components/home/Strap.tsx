@@ -84,7 +84,7 @@ function StrapBadge({
                 />
             ) : null}
 
-            <span className="text-sm lg:text-base font-medium text-gray-400 tracking-wide">
+            <span className="text-[18px] sm:text-[22px] lg:text-base font-bold lg:font-medium text-gray-500 lg:text-gray-400 tracking-wide">
                 {t(item.labelKey)}
             </span>
         </span>

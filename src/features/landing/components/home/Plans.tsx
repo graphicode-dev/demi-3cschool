@@ -271,7 +271,7 @@ export default function Plans() {
                             as="span"
                             variant="heading"
                             weight="semibold"
-                            className="text-[36px] md:text-[48px] leading-[normal] text-gray-700 capitalize"
+                            className="text-[32px] md:text-[48px] leading-[normal] text-gray-700 capitalize"
                         >
                             {t("plans.title")}
                         </ThemedText>
@@ -279,7 +279,7 @@ export default function Plans() {
                             as="span"
                             variant="heading"
                             weight="bold"
-                            className="text-[36px] md:text-[48px] leading-[normal] text-brand-500 capitalize"
+                            className="text-[32px] md:text-[48px] leading-[normal] text-brand-500 capitalize"
                         >
                             {t("plans.titleHighlight")}
                         </ThemedText>

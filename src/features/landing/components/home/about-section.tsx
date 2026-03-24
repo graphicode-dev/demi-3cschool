@@ -105,10 +105,10 @@ function AboutSection() {
                     />
                     {/* Heading */}
                     <div>
-                        <ThemedText size="5xl" weight="bold" variant="heading">
+                        <ThemedText className="text-[36px] md:text-5xl" weight="bold" variant="heading">
                             {t("about.title")}{" "}
                             <ThemedText
-                                size="5xl"
+                                className="text-[36px] md:text-5xl"
                                 weight="bold"
                                 color="primary"
                                 as="span"
@@ -118,9 +118,9 @@ function AboutSection() {
                         </ThemedText>
 
                         {/* Body paragraph */}
-                        <div className="mt-4 ps-0 sm:ps-8 lg:ps-20 mb-8 lg:mb-14">
+                        <div className="mt-2 sm:mt-4 ps-0 sm:ps-8 lg:ps-20 mb-8 lg:mb-14">
                             <div
-                                className="text-justify text-3xl"
+                                className="text-justify text-[16px] md:text-3xl leading-snug"
                                 style={{ color: "var(--secondary)" }}
                                 dangerouslySetInnerHTML={{
                                     __html: t("about.description", {
@@ -136,7 +136,7 @@ function AboutSection() {
                     {/* Cards */}
                     <div
                         ref={cardsRef}
-                        className={`flex flex-col items-center gap-6 sm:flex-row sm:items-start sm:justify-center sm:gap-6 lg:gap-10 transition-all duration-700 ${
+                        className={`flex w-full overflow-x-auto snap-x snap-mandatory no-scrollbar pb-6 gap-4 sm:overflow-visible sm:pb-0 sm:flex-row sm:items-start sm:justify-center sm:gap-6 lg:gap-10 transition-all duration-700 ${
                             cardsVisible
                                 ? "opacity-100 translate-y-0"
                                 : "opacity-0 translate-y-8"
@@ -146,9 +146,8 @@ function AboutSection() {
                             <div
                                 key={i}
                                 className={`
-                                w-full max-w-[330px]
+                                w-[85%] max-w-[300px] snap-center shrink-0
                                 sm:w-[260px] lg:w-[330px]
-                                shrink-0
                                 ${CARD_STAGGER_CLASSES[i]}
                                 transition-all duration-700
                                 ${cardsVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}
@@ -176,19 +175,19 @@ interface AboutCardProps {
 function AboutCard({ card }: AboutCardProps) {
     return (
         <div
-            className="w-full px-6 sm:px-8 lg:px-13 pt-5 lg:pt-6 pb-16 lg:pb-20"
+            className="w-full px-5 sm:px-8 lg:px-13 pt-5 lg:pt-6 pb-16 lg:pb-20"
             style={{
                 backgroundImage: `url(${card.image})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
+                backgroundSize: "contain",
+                backgroundPosition: "top center",
                 backgroundRepeat: "no-repeat",
-                aspectRatio: "330 / 280",
+                aspectRatio: "330 / 300",
             }}
         >
-            <ThemedText size="xl" weight="bold" variant="heading">
+            <ThemedText className="text-[20px] lg:text-xl leading-tight mb-2" weight="bold" variant="heading">
                 {card.title}
             </ThemedText>
-            <ThemedText size="xl" variant="body" font="segoe-arabic">
+            <ThemedText className="text-[14px] lg:text-xl leading-snug" variant="body" font="segoe-arabic">
                 {card.description}
             </ThemedText>
         </div>

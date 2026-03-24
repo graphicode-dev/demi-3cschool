@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { Images } from "@/constants/images";
 import { useLanguage } from "@/shared/hooks";
 import ThemedText from "@/design-system/components/ThemedText";
@@ -33,68 +32,72 @@ function HeroSection() {
                 } max-w-[80%] py-20`}
             >
                 {/* Tagline */}
-                <ThemedText weight="medium" size="2xl" color="primary" as="h3">
+                <ThemedText weight="medium" color="primary" as="h3" className="text-[16px] sm:text-[18px] md:text-2xl mb-2 lg:mb-0">
                     {t("hero.tagline")}
                 </ThemedText>
 
                 {/* Title */}
-                <ThemedText as="h1" size="6xl" weight="medium">
-                    {t("hero.title1")}
-                    <ThemedText
-                        as="span"
-                        size="6xl"
-                        color="primary"
-                        weight="bold"
-                    >
-                        {t("hero.titleCode")}
+                <div className="leading-[1.2] lg:leading-tight">
+                    <ThemedText as="h1" weight="medium" className="text-[32px] sm:text-[44px] md:text-[56px] xl:text-6xl inline">
+                        {t("hero.title1")}
+                        <ThemedText
+                            as="span"
+                            color="primary"
+                            weight="bold"
+                            className="text-[32px] sm:text-[44px] md:text-[56px] xl:text-6xl inline mx-1"
+                        >
+                            {t("hero.titleCode")}
+                        </ThemedText>
+                        <ThemedText as="span" weight="medium" className="text-[32px] sm:text-[44px] md:text-[56px] xl:text-6xl inline">
+                            {t("hero.title2")}
+                        </ThemedText>
                     </ThemedText>
-                    <ThemedText as="span" size="6xl" weight="medium">
-                        {t("hero.title2")}
-                    </ThemedText>
-                </ThemedText>
+                </div>
 
-                <ThemedText as="h1" size="6xl" color="primary" weight="bold">
-                    {t("hero.titleCreative")}
-                    <ThemedText
-                        as="span"
-                        size="6xl"
-                        className="text-black"
-                        weight="medium"
-                    >
-                        {t("hero.title3")}
+                <div className="leading-[1.2] lg:leading-tight mt-0 md:mt-2">
+                    <ThemedText as="h1" color="primary" weight="bold" className="text-[32px] sm:text-[44px] md:text-[56px] xl:text-6xl inline">
+                        {t("hero.titleCreative")}
+                        <ThemedText
+                            as="span"
+                            className="text-black text-[32px] sm:text-[44px] md:text-[56px] xl:text-6xl inline ml-2"
+                            weight="medium"
+                        >
+                            {t("hero.title3")}
+                        </ThemedText>
                     </ThemedText>
-                </ThemedText>
+                </div>
 
                 {/* Subtitle */}
-                <ThemedText
-                    weight="medium"
-                    size="2xl"
-                    color="secondary"
-                    className="mt-4"
-                >
-                    {t("hero.subtitle")}
-                </ThemedText>
+                {t("hero.subtitle") && (
+                    <ThemedText
+                        weight="medium"
+                        color="secondary"
+                        className="mt-4 lg:mt-6 text-[14px] sm:text-[16px] md:text-2xl"
+                    >
+                        {t("hero.subtitle")}
+                    </ThemedText>
+                )}
                 {/* Images */}
                 <>
                     <img
                         src={Images.landing.hero.coding}
-                        alt="Kid 1"
-                        className={`w-50 h-50 object-contain hidden lg:block absolute top-0 ${isRTL ? "-right-50" : "-left-50"}`}
+                        alt="Coding badge"
+                        className={`w-20 sm:w-28 lg:w-50 h-auto object-contain absolute opacity-90 lg:opacity-100 top-[-20px] lg:top-0 ${isRTL ? "-right-8 sm:-right-16 lg:-right-50" : "-left-8 sm:-left-16 lg:-left-50"}`}
                     />
                     <img
                         src={Images.landing.hero.leftCoding}
-                        alt="Kid 3"
-                        className={`w-50 h-50 object-contain hidden lg:block absolute bottom-0 ${isRTL ? "-right-50" : "-left-50"}`}
+                        alt="Code block snippet"
+                        className={`w-28 sm:w-36 lg:w-50 h-auto object-contain absolute opacity-90 lg:opacity-100 bottom-4 lg:bottom-0 ${isRTL ? "-right-12 sm:-right-24 lg:-right-50" : "-left-12 sm:-left-24 lg:-left-50"}`}
                     />
                     <img
                         src={Images.landing.hero.hello}
-                        alt="Kid 2"
-                        className={`w-50 h-50 object-contain hidden lg:block absolute bottom-0 ${isRTL ? "-left-50" : "-right-50"}`}
+                        alt="Hello sticker"
+                        className={`w-20 sm:w-28 lg:w-50 h-auto object-contain absolute opacity-90 lg:opacity-100 bottom-6 lg:bottom-0 ${isRTL ? "-left-6 sm:-left-16 lg:-left-50" : "-right-6 sm:-right-16 lg:-right-50"}`}
                     />
                     <img
                         src={Images.landing.hero.rightCoding}
-                        alt="Kid 3"
-                        className={`w-50 h-50 object-contain hidden lg:block absolute top-0 ${isRTL ? "-left-50" : "-right-50"}`}
+                        alt="Decoration"
+                        className={`w-16 sm:w-24 lg:w-50 h-auto object-contain absolute opacity-0 lg:opacity-100 top-10 lg:top-0 ${isRTL ? "-left-10 sm:-left-20 lg:-left-50" : "-right-10 sm:-right-20 lg:-right-50"}`}
                     />
                 </>
             </div>

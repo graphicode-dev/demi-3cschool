@@ -303,11 +303,11 @@ function OurLeaders() {
                 <SpeechBubble t={t} />
 
                 {/* 4 leader cards in a row */}
-                <div className="relative flex items-start justify-between gap-4 lg:gap-8 pt-8">
+                <div className="relative flex flex-row lg:items-start lg:justify-between overflow-x-auto snap-x snap-mandatory no-scrollbar pb-10 lg:pb-0 gap-6 lg:gap-8 pt-8">
                     {LEADERS.map((leader, index) => (
                         <div
                             key={leader.id}
-                            className="flex-1 flex justify-center"
+                            className="flex-[0_0_auto] w-[80%] sm:w-[280px] lg:flex-1 lg:w-auto flex justify-center snap-center shrink-0"
                         >
                             <LeaderCard
                                 leader={leader}

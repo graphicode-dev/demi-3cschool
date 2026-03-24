@@ -61,8 +61,10 @@ function Why3CCard({ card, index, isVisible, isRtl, t }: Why3CCardProps) {
         <div
             className={`
                 transition-all duration-500
-                w-[80%]
-                ${isEven ? (isRtl ? "mr-[20%] ml-0" : "ml-[20%]") : isRtl ? "mr-0" : "ml-0"}
+                w-[85vw] max-w-[340px] shrink-0 snap-center
+                lg:w-[80%] lg:shrink lg:max-w-none
+                ${isEven ? (isRtl ? "lg:mr-[20%] lg:ml-0" : "lg:ml-[20%]") : isRtl ? "lg:mr-0" : "lg:ml-0"}
+                mx-2 lg:mx-0
             `}
             style={{ transitionDelay: `${index * 80}ms` }}
         >
@@ -193,31 +195,33 @@ function Why3C() {
             </div>
 
             {/* Content */}
-            <div className="relative flex items-center justify-between gap-2">
+            <div className="relative flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-2 mt-8 lg:mt-0">
                 {/* Image */}
-                <div className="relative w-1/2">
+                <div className="relative w-full lg:w-1/2">
                     <img
                         src={Images.landing.whyChoose3c.banner}
                         alt="Kids that code"
-                        className="w-full"
+                        className="w-full relative z-20"
                     />
 
                     <img
                         src={Images.landing.whyChoose3c.keyboard}
                         alt="Keyboard"
-                        className="absolute -bottom-30 -left-10 w-30"
+                        className="hidden lg:block absolute -bottom-30 -left-10 w-30 z-30"
                     />
                 </div>
 
                 <div ref={cardsRef} className="hidden lg:block lg:w-1/2" />
 
-                {/* Right – Staggered Cards */}
+                {/* Right – Staggered Cards (Carousel on Mobile) */}
                 <div
                     ref={cardsRef}
-                    className={`w-1/2 absolute top-50  ${isRTL ? "left-50" : "right-50"} flex flex-col`}
+                    className={`w-screen -ml-[20px] sm:-ml-landing-section-x lg:ml-0 lg:w-1/2 lg:absolute lg:top-50 ${
+                        isRTL ? "lg:left-20" : "lg:right-20"
+                    } flex flex-row lg:flex-col overflow-x-auto snap-x snap-mandatory no-scrollbar pb-10 lg:pb-0 px-4 sm:px-landing-section-x lg:px-0`}
                 >
                     {CARDS.map((card, index) => (
-                        <div key={card.id}>
+                        <div key={card.id} className="flex shrink-0 lg:shrink flex-row lg:flex-col items-center">
                             <Why3CCard
                                 card={card}
                                 index={index}
@@ -227,7 +231,11 @@ function Why3C() {
                             />
 
                             {/* Orange dashed connector between cards */}
-                            {index < CARDS.length - 1 && <CardConnector />}
+                            {index < CARDS.length - 1 && (
+                                <div className="hidden lg:block">
+                                    <CardConnector />
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>

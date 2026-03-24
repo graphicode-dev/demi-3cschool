@@ -273,7 +273,7 @@ export default function Register() {
                             <div className="flex flex-col gap-3.5 w-full">
                                 <button
                                     type="submit"
-                                    className="w-full bg-brand-500 border-2 border-gray-700 text-brand-50 py-5 rounded-[52px] hover:bg-brand-600 transition-colors duration-300"
+                                    className="w-full bg-brand-500 border-2 border-brand-500 lg:border-gray-700 text-brand-50 py-4 lg:py-5 rounded-[52px] hover:bg-brand-600 transition-colors duration-300"
                                 >
                                     <ThemedText
                                         as="span"
@@ -287,7 +287,7 @@ export default function Register() {
                                     href="https://wa.me/201023168167"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="w-full flex items-center justify-center gap-3 border-2 border-brand-500 text-brand-500 py-5 rounded-[52px] hover:bg-brand-50 transition-colors duration-300"
+                                    className="w-full flex items-center justify-center gap-3 border-2 border-brand-500 text-brand-500 py-4 lg:py-5 rounded-[52px] hover:bg-brand-50 transition-colors duration-300"
                                 >
                                     <svg
                                         width="34"

@@ -87,7 +87,7 @@ function Certificate() {
                                     as="p"
                                     variant="heading"
                                     weight="semibold"
-                                    className="text-[36px] md:text-[48px] leading-[normal] text-gray-700 capitalize rtl:mb-5"
+                                    className="text-[32px] md:text-[48px] leading-[normal] text-gray-700 capitalize rtl:mb-5"
                                 >
                                     {t(
                                         "certificate.titleStart",
@@ -98,7 +98,7 @@ function Certificate() {
                                     as="p"
                                     variant="heading"
                                     weight="bold"
-                                    className="text-[36px] md:text-[48px] leading-[normal] text-brand-500 capitalize"
+                                    className="text-[32px] md:text-[48px] leading-[normal] text-brand-500 capitalize"
                                 >
                                     {t(
                                         "certificate.titleHighlight",
