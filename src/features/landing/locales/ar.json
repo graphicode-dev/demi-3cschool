@@ -97,6 +97,41 @@
             }
         }
     },
+    "register": {
+        "title": "ابدأ رحلتك في",
+        "titleHighlight": "البرمجة",
+        "subtitle": "سجل أونلاين ودع المتعة تبدأ!",
+        "submit": "إرسال",
+        "whatsapp": "ابدأ محادثة واتساب",
+        "imageAlt": "أطفال يتعلمون البرمجة معاً",
+        "banner": {
+            "line1": "طريقك",
+            "line2": "للبرمجة",
+            "line3": ""
+        },
+        "fields": {
+            "parentName": {
+                "label": "اسم ولي الأمر *",
+                "placeholder": "اسم ولي الأمر"
+            },
+            "studentAge": {
+                "label": "عمر الطالب *",
+                "placeholder": "عمر الطالب"
+            },
+            "parentPhone": {
+                "label": "هاتف ولي الأمر *",
+                "placeholder": "هاتف ولي الأمر"
+            },
+            "parentEmail": {
+                "label": "بريد ولي الأمر *",
+                "placeholder": "بريد ولي الأمر"
+            },
+            "message": {
+                "label": "رسالة (اختياري)",
+                "placeholder": "أي أسئلة أو متطلبات خاصة؟"
+            }
+        }
+    },
     "about": {
         "title": "من",
         "titleHighlight": "نحن",

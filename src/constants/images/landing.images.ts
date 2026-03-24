@@ -36,6 +36,9 @@ import tracksRobotGlobe from "@/assets/images/landing/tracks/tracks-robot-globe.
 import tracksRobotHead from "@/assets/images/landing/tracks/tracks-robot-head.png";
 import normalPlanBg from "@/assets/images/landing/plans/normal-plan-bg.png";
 import featuredPlanBg from "@/assets/images/landing/plans/featured-plan-bg.png";
+import plansBg from "@/assets/images/landing/plans/plans-bg.png";
+import registerCard from "@/assets/images/landing/register/card.png";
+import registerStudents from "@/assets/images/landing/register/students.png";
 
 export const LandingImages = {
     wordSplash,
@@ -88,8 +91,13 @@ export const LandingImages = {
             professional4,
         },
     },
-    plans:{
+    plans: {
+        bg: plansBg,
         normalPlanBg,
-        featuredPlanBg
-    }
+        featuredPlanBg,
+    },
+    register: {
+        card: registerCard,
+        students: registerStudents,
+    },
 };

@@ -241,7 +241,7 @@ export default function Plans() {
             <div className="absolute inset-0 bg-brand-50 -z-20" />
             <div className="absolute inset-0 opacity-[0.03] overflow-hidden -z-20 pointer-events-none">
                 <img
-                    src={Images.landing.tracks.bg}
+                    src={Images.landing.plans.bg}
                     className="absolute w-full h-[150%] object-cover top-[-25%] left-0"
                     alt=""
                 />

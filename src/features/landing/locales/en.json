@@ -97,6 +97,41 @@
             }
         }
     },
+    "register": {
+        "title": "Start Your Coding",
+        "titleHighlight": "Journey",
+        "subtitle": "register online and let the fun begin!",
+        "submit": "Submit",
+        "whatsapp": "Start WhatsApp Chat",
+        "imageAlt": "Kids learning to code together",
+        "banner": {
+            "line1": "your",
+            "line2": "way for",
+            "line3": "coding"
+        },
+        "fields": {
+            "parentName": {
+                "label": "Parent Name *",
+                "placeholder": "Parent Name"
+            },
+            "studentAge": {
+                "label": "Student Age *",
+                "placeholder": "Student Age"
+            },
+            "parentPhone": {
+                "label": "Parent Phone *",
+                "placeholder": "Parent Phone"
+            },
+            "parentEmail": {
+                "label": "Parent Email *",
+                "placeholder": "Parent Email"
+            },
+            "message": {
+                "label": "Message (Optional)",
+                "placeholder": "Any Questions Or Special Requirements?"
+            }
+        }
+    },
     "about": {
         "title": "About",
         "titleHighlight": "Us",
