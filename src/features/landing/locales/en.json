@@ -57,6 +57,46 @@
             }
         }
     },
+    "plans": {
+        "title": "Our",
+        "titleHighlight": "Plans",
+        "subtitle": "Flexible learning plans designed for every young coder.",
+        "registerNow": "REGISTER NOW",
+        "features": {
+            "liveOnline": "Live Online Session",
+            "assessment": "Assessment & Quizzes",
+            "certificate": "Compilation Certificate",
+            "guidance": "Technical Guidance",
+            "limitedGroup": "Limited Group",
+            "graduation": "Graduation Projects"
+        },
+        "cards": {
+            "quarter": {
+                "badge": "Quarter-Plan",
+                "duration": "3\\Month Plan",
+                "price": "2,950",
+                "originalPrice": "3,950",
+                "currency": "EI",
+                "completion": "1-Level Completion"
+            },
+            "semiAnnual": {
+                "badge": "Semi-Annual",
+                "duration": "3\\Month Plan",
+                "price": "2,950",
+                "originalPrice": "3,950",
+                "currency": "EI",
+                "completion": "2-Level Completion"
+            },
+            "annual": {
+                "badge": "Annual-Plan",
+                "duration": "3\\Month Plan",
+                "price": "2,950",
+                "originalPrice": "3,950",
+                "currency": "EI",
+                "completion": "3-Level Completion"
+            }
+        }
+    },
     "about": {
         "title": "About",
         "titleHighlight": "Us",

@@ -57,6 +57,46 @@
             }
         }
     },
+    "plans": {
+        "title": "باقاتنا",
+        "titleHighlight": "التعليمية",
+        "subtitle": "خطط تعليمية مرنة مصممة لكل مبرمج صغير.",
+        "registerNow": "سجل الآن",
+        "features": {
+            "liveOnline": "جلسة أونلاين مباشرة",
+            "assessment": "تقييمات واختبارات",
+            "certificate": "شهادة إتمام",
+            "guidance": "إرشاد تقني",
+            "limitedGroup": "مجموعة محدودة",
+            "graduation": "مشاريع تخرج"
+        },
+        "cards": {
+            "quarter": {
+                "badge": "الباقة الربع سنوية",
+                "duration": "3\\خطة شهرية",
+                "price": "2,950",
+                "originalPrice": "3,950",
+                "currency": "ج.م",
+                "completion": "إتمام مستوى واحد"
+            },
+            "semiAnnual": {
+                "badge": "نصف سنوية",
+                "duration": "3\\خطة شهرية",
+                "price": "2,950",
+                "originalPrice": "3,950",
+                "currency": "ج.م",
+                "completion": "إتمام مستويين"
+            },
+            "annual": {
+                "badge": "الباقة السنوية",
+                "duration": "3\\خطة شهرية",
+                "price": "2,950",
+                "originalPrice": "3,950",
+                "currency": "ج.م",
+                "completion": "إتمام 3 مستويات"
+            }
+        }
+    },
     "about": {
         "title": "من",
         "titleHighlight": "نحن",

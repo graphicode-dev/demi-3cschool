@@ -34,6 +34,8 @@ import professional4 from "@/assets/images/landing/tracks/pro-4.png";
 import tracksBg from "@/assets/images/landing/tracks/tracks-bg.png";
 import tracksRobotGlobe from "@/assets/images/landing/tracks/tracks-robot-globe.png";
 import tracksRobotHead from "@/assets/images/landing/tracks/tracks-robot-head.png";
+import normalPlanBg from "@/assets/images/landing/plans/normal-plan-bg.png";
+import featuredPlanBg from "@/assets/images/landing/plans/featured-plan-bg.png";
 
 export const LandingImages = {
     wordSplash,
@@ -86,4 +88,8 @@ export const LandingImages = {
             professional4,
         },
     },
+    plans:{
+        normalPlanBg,
+        featuredPlanBg
+    }
 };
