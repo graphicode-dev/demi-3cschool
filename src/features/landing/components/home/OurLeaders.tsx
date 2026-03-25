@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { Play } from "lucide-react";
 import { useScrollAnimation } from "../../hooks";
 import ThemedText from "@/design-system/components/ThemedText";
@@ -10,6 +11,7 @@ interface Leader {
     id: string;
     nameKey: string;
     imageSrc?: string;
+    videoSrc?: string;
     /** vertical offset from baseline — alternates high/low */
     yOffset: string;
     /** blob shape variant */
@@ -18,25 +20,35 @@ interface Leader {
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
+// Using sample MP4 logic for demonstration, allowing native playback
 const LEADERS: Leader[] = [
-    { id: "alya", nameKey: "ourLeaders.leaders.alya", yOffset: "0px", blob: 1 },
+    {
+        id: "alya",
+        nameKey: "ourLeaders.leaders.alya",
+        yOffset: "120px",
+        blob: 1,
+        videoSrc: "https://www.w3schools.com/html/mov_bbb.mp4",
+    },
     {
         id: "omar",
         nameKey: "ourLeaders.leaders.omar",
-        yOffset: "80px",
+        yOffset: "50px",
         blob: 2,
+        videoSrc: "https://www.w3schools.com/html/mov_bbb.mp4",
     },
     {
         id: "zein",
         nameKey: "ourLeaders.leaders.zein",
-        yOffset: "60px",
+        yOffset: "130px",
         blob: 3,
+        videoSrc: "https://www.w3schools.com/html/mov_bbb.mp4",
     },
     {
         id: "farida",
         nameKey: "ourLeaders.leaders.farida",
         yOffset: "0px",
         blob: 4,
+        videoSrc: "https://www.w3schools.com/html/mov_bbb.mp4",
     },
 ];
 
@@ -67,28 +79,24 @@ function BlobShape({ variant }: { variant: 1 | 2 | 3 | 4 }) {
 function WindingRoad() {
     return (
         <svg
-            className="absolute inset-0 w-full h-full"
-            viewBox="0 0 1200 380"
-            preserveAspectRatio="none"
-            aria-hidden="true"
-            style={{ zIndex: 0 }}
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1549 558"
+            fill="none"
+            className="w-full h-auto opacity-90"
+            preserveAspectRatio="xMidYMid meet"
         >
-            {/* Road base – thick blue stroke */}
             <path
-                d="M -20,180 C 80,180 120,130 200,140 C 280,150 310,200 380,210 C 440,218 480,170 560,160 C 640,150 670,220 750,230 C 820,238 860,175 940,165 C 1020,155 1060,200 1140,190 C 1180,185 1210,180 1240,175"
-                fill="none"
-                stroke="#5bc8e8"
-                strokeWidth="28"
-                strokeLinecap="round"
+                d="M18.8335 525.178C97.4274 382.446 332.547 116.884 487.362 340.046C496.675 395.192 443.301 574.231 335.35 528.615C227.398 483 319.899 264.852 556.487 367.791C813.321 479.539 891.74 449.997 965.885 306.77C1017.08 207.87 1001.15 -27.8839 840.501 35.7292C690.323 95.1976 872.236 319.289 1140.54 274.034C1430.5 225.126 1503.6 131.397 1533.81 101.292"
+                stroke="#24ADE3"
+                strokeWidth="43"
             />
-            {/* Dashed white center line */}
             <path
-                d="M -20,180 C 80,180 120,130 200,140 C 280,150 310,200 380,210 C 440,218 480,170 560,160 C 640,150 670,220 750,230 C 820,238 860,175 940,165 C 1020,155 1060,200 1140,190 C 1180,185 1210,180 1240,175"
-                fill="none"
-                stroke="white"
-                strokeWidth="3"
+                d="M18.8335 525.177C97.4274 382.446 332.547 116.883 487.362 340.046C496.675 395.192 443.301 574.231 335.35 528.615C227.398 483 319.899 264.852 556.487 367.791C813.321 479.539 891.74 449.997 965.885 306.77C1017.08 207.87 1002.03 -25.5985 840.501 35.729C683.866 95.1976 872.236 319.289 1140.54 274.034C1430.5 225.126 1503.6 131.397 1533.81 101.292"
+                stroke="#E9F7FC"
+                strokeWidth="5"
                 strokeLinecap="round"
-                strokeDasharray="18 14"
+                strokeLinejoin="round"
+                strokeDasharray="6 12 18 24"
             />
         </svg>
     );
@@ -97,7 +105,6 @@ function WindingRoad() {
 // ─── Background Pattern ───────────────────────────────────────────────────────
 
 function BackgroundPattern() {
-    // Faint tech/coding icon silhouettes
     const icons = [
         { x: 30, y: 60, r: 0, icon: "⌨" },
         { x: 120, y: 20, r: -15, icon: "🖥" },
@@ -108,7 +115,7 @@ function BackgroundPattern() {
     ];
 
     return (
-        <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
+        <div className="absolute inset-0 pointer-events-none overflow-hidden select-none max-lg:hidden">
             {icons.map((ic, i) => (
                 <span
                     key={i}
@@ -132,21 +139,20 @@ function BackgroundPattern() {
 function SpeechBubble({ t }: { t: (key: string) => string }) {
     return (
         <div
-            className="absolute z-20 pointer-events-none"
-            style={{ left: "23%", top: "2%" }}
+            className="absolute z-20 pointer-events-none transition-all duration-700 max-lg:left-[15%] max-lg:top-[2%]"
+            style={{ left: "14%", top: "0%" }}
         >
             <div
-                className="relative bg-white border-2 border-brand-400 rounded-[18px] px-5 py-3 text-center shadow-md"
+                className="relative bg-white border-2 border-[#5bc8e8] rounded-[18px] px-5 py-3 text-center shadow-md"
                 style={{ minWidth: 140 }}
             >
-                <p className="text-sm font-semibold text-gray-700 leading-snug">
+                <p className="text-[15px] max-lg:text-[13px] font-bold text-[#44769F] leading-snug">
                     {t("ourLeaders.speechBubble.line1")}
                     <br />
                     {t("ourLeaders.speechBubble.line2")}
                 </p>
-                {/* Tail pointing down-left */}
                 <svg
-                    className="absolute -bottom-4 left-6"
+                    className="absolute -bottom-[15px] left-6"
                     width="20"
                     height="16"
                     viewBox="0 0 20 16"
@@ -171,9 +177,31 @@ interface LeaderCardProps {
     index: number;
     isVisible: boolean;
     t: (key: string) => string;
+    isPlaying: boolean;
+    onPlay: () => void;
+    onPause: () => void;
 }
 
-function LeaderCard({ leader, index, isVisible, t }: LeaderCardProps) {
+function LeaderCard({
+    leader,
+    index,
+    isVisible,
+    t,
+    isPlaying,
+    onPlay,
+    onPause,
+}: LeaderCardProps) {
+    const videoRef = useRef<HTMLVideoElement>(null);
+
+    // Sync media playback state explicitly per user play command
+    useEffect(() => {
+        if (isPlaying && videoRef.current) {
+            videoRef.current.play().catch(() => {});
+        } else if (!isPlaying && videoRef.current) {
+            videoRef.current.pause();
+        }
+    }, [isPlaying]);
+
     return (
         <div
             className={`
@@ -183,51 +211,73 @@ function LeaderCard({ leader, index, isVisible, t }: LeaderCardProps) {
             `}
             style={{
                 transitionDelay: `${index * 120}ms`,
-                marginTop: leader.yOffset,
             }}
         >
-            {/* Blob + kid photo */}
-            <div className="relative" style={{ width: 220, height: 185 }}>
-                {/* Blob background */}
+            <div
+                className="relative w-[220px] h-[185px] lg:mt-[var(--y-offset)] max-lg:w-[260px] max-lg:h-[220px]"
+                style={
+                    {
+                        "--y-offset": leader.yOffset,
+                        marginTop: leader.yOffset,
+                    } as React.CSSProperties
+                }
+            >
                 <BlobShape variant={leader.blob} />
 
-                {/* Kid image — replace src with real asset */}
                 <div
                     className="absolute inset-0 flex items-end justify-center overflow-hidden"
                     style={{ borderRadius: "inherit" }}
                 >
+                    {/* Native Video Element */}
+                    {leader.videoSrc && (
+                        <video
+                            ref={videoRef}
+                            src={leader.videoSrc}
+                            playsInline
+                            loop
+                            muted // Playback rules depend on typical browser configurations without strict interaction requirement prior to sound playing, but muted enables flawless auto-testing
+                            onClick={isPlaying ? onPause : onPlay}
+                            className={`absolute inset-0 w-[80%] h-[80%] my-auto mx-auto object-cover rounded-[15px] transition-all duration-300 cursor-pointer ${isPlaying ? "opacity-100 z-10 scale-110 shadow-lg" : "opacity-0 -z-10"}`}
+                            onPlay={onPlay}
+                            onPause={onPause}
+                            onEnded={onPause}
+                        />
+                    )}
+
                     {leader.imageSrc ? (
                         <img
                             src={leader.imageSrc}
                             alt={t(leader.nameKey)}
-                            className="relative z-10 h-[95%] w-auto object-contain object-bottom"
+                            className={`relative z-10 h-[95%] w-auto object-contain object-bottom transition-opacity duration-300 ${isPlaying ? "opacity-0 pointer-events-none" : "opacity-100"}`}
                         />
                     ) : (
-                        // Placeholder silhouette
-                        <div className="relative z-10 w-28 h-36 bg-brand-300/30 rounded-t-full flex items-end justify-center">
-                            <div className="w-16 h-20 bg-brand-400/20 rounded-t-full" />
+                        <div
+                            className={`relative z-10 w-28 h-36 bg-[#e1e1e1]/30 rounded-t-full flex items-end justify-center transition-opacity duration-300 ${isPlaying ? "opacity-0 pointer-events-none" : "opacity-100"}`}
+                        >
+                            <div className="w-16 h-20 bg-[#a4a3a3]/20 rounded-t-full" />
                         </div>
                     )}
                 </div>
 
-                {/* Play button */}
-                <button
-                    aria-label={`Play ${t(leader.nameKey)}'s video`}
-                    className="
-                        absolute z-20 bottom-4 left-4
-                        w-11 h-11 rounded-full
-                        bg-white shadow-lg
-                        flex items-center justify-center
-                        hover:scale-110 transition-transform duration-200
-                        ring-2 ring-white/60
-                    "
-                >
-                    <Play className="w-4 h-4 text-brand-500 fill-brand-500 ml-0.5" />
-                </button>
+                {!isPlaying && (
+                    <button
+                        onClick={onPlay}
+                        aria-label={`Play ${t(leader.nameKey)}'s video`}
+                        className="
+                            absolute z-20 bottom-4 left-4 max-lg:bottom-6 max-lg:left-6
+                            w-11 h-11 max-lg:w-12 max-lg:h-12 rounded-full
+                            bg-white shadow-lg
+                            flex items-center justify-center
+                            hover:scale-110 transition-transform duration-200
+                            ring-2 ring-white/60
+                        "
+                    >
+                        <Play className="w-4 h-4 max-lg:w-5 max-lg:h-5 text-[#24ade3] fill-[#24ade3] ml-0.5" />
+                    </button>
+                )}
             </div>
 
-            {/* Name */}
-            <p className="mt-3 text-base font-semibold text-brand-500 tracking-wide">
+            <p className="mt-5 text-[16px] max-lg:pb-4 font-bold text-[#24ade3] tracking-wide max-lg:text-[15px] max-lg:mt-4">
                 {t(leader.nameKey)}
             </p>
         </div>
@@ -241,21 +291,80 @@ function OurLeaders() {
     const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation();
     const { ref: gridRef, isVisible: gridVisible } = useScrollAnimation();
 
+    const [playingVideoId, setPlayingVideoId] = useState<string | null>(null);
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const [activeIndex, setActiveIndex] = useState(0);
+
+    useEffect(() => {
+        const container = scrollContainerRef.current;
+        if (!container) return;
+
+        const handleScroll = () => {
+            const scrollAbs = Math.abs(container.scrollLeft);
+            const scrollWidth = container.scrollWidth - container.clientWidth;
+            if (scrollWidth <= 0) {
+                setActiveIndex(0);
+                return;
+            }
+            const progress = scrollAbs / scrollWidth;
+            const index = Math.min(
+                LEADERS.length - 1,
+                Math.max(0, Math.round(progress * (LEADERS.length - 1)))
+            );
+            setActiveIndex(index);
+        };
+
+        container.addEventListener("scroll", handleScroll);
+        handleScroll();
+
+        return () => container.removeEventListener("scroll", handleScroll);
+    }, [isRTL]);
+
+    const scrollToLeader = (index: number) => {
+        const container = scrollContainerRef.current;
+        if (!container) return;
+        const children = container.children;
+        // The embedded background SVG sits at children[0], so the leader cards begin dynamically at index + 1
+        const childNode = children[index + 1];
+        if (childNode) {
+            childNode.scrollIntoView({
+                behavior: "smooth",
+                block: "nearest",
+                inline: "center",
+            });
+        }
+    };
+
     return (
         <section
             id="our-leaders"
-            className="relative w-full py-16 lg:py-20 pb-16 z-50 bg-white overflow-hidden"
+            className="relative w-full py-16 lg:py-20 pb-16 z-50 bg-white overflow-hidden max-lg:bg-[#f6fdff]/40"
         >
             <BackgroundPattern />
 
             {/* ── Header ── */}
-            <div className="relative flex flex-col items-center justify-center gap-2">
+            <div
+                ref={headerRef}
+                className={`relative flex flex-col items-center justify-center gap-2 transition-all duration-700 delay-100 ${headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+            >
+                <div
+                    className={`hidden lg:flex absolute top-0 ${isRTL ? "-right-[10%]" : "-left-[18%]"}  translate-x-0 w-full justify-center`}
+                >
+                    <Icons.General.WavyStroke />
+                </div>
+
+                <div
+                    className={`lg:hidden absolute top-0 ${isRTL ? "-right-[25%]" : "-left-[20%]"}  translate-x-0 w-full flex justify-center`}
+                >
+                    <Icons.General.WavyStroke size={80} />
+                </div>
+
                 <ThemedText
                     size="6xl"
                     as="h1"
                     variant="heading"
-                    className="relative flex items-center justify-center gap-2 mb-5"
-                    weight="semibold"
+                    className="relative flex items-center justify-center gap-2 mb-5 font-bold text-[#111111] max-lg:text-[34px] flex-wrap max-lg:w-full tracking-tight"
+                    weight="bold"
                 >
                     {t("ourLeaders.title")}
                     <ThemedText
@@ -263,16 +372,12 @@ function OurLeaders() {
                         variant="heading"
                         as="span"
                         color="primary"
-                        weight="semibold"
+                        weight="bold"
+                        className="text-brand-500 max-lg:text-[34px] relative tracking-tight whitespace-nowrap"
                     >
                         {" "}
-                        {t("ourLeaders.titleHighlight")}
+                        {t("ourLeaders.titleHighlight")} {" ?"}
                     </ThemedText>
-                    <div
-                        className={`absolute top-0 ${isRTL ? "-right-[25%]" : "left-[13%]"}  -translate-x-1/2`}
-                    >
-                        <Icons.General.WavyStroke />
-                    </div>
                 </ThemedText>
 
                 <ThemedText
@@ -280,6 +385,7 @@ function OurLeaders() {
                     as="p"
                     variant="caption"
                     color="secondary"
+                    className="text-[#7a7a7a] max-w-xl text-center font-semibold max-lg:text-[17px] max-lg:px-6"
                 >
                     {t("ourLeaders.subtitle")}
                 </ThemedText>
@@ -288,34 +394,64 @@ function OurLeaders() {
             {/* ── Leaders + Road ── */}
             <div
                 ref={gridRef}
-                className="relative z-10 mx-auto px-6 mt-20 lg:px-12"
+                className="relative z-10 mx-auto px-6 mt-20 lg:px-12 max-lg:mt-12"
                 style={{ maxWidth: 1200, minHeight: 380 }}
             >
-                {/* Winding road behind cards */}
+                {/* Winding road behind cards (Desktop FIXED mode) */}
                 <div
-                    className="absolute inset-0 pointer-events-none"
+                    className="absolute inset-0 max-lg:hidden pointer-events-none max-lg:top-[20%] flex justify-center items-center w-full shadow-inner lg:min-w-[1200px]"
                     style={{ top: "30%", bottom: 0 }}
                 >
                     <WindingRoad />
                 </div>
 
-                {/* Speech bubble above 2nd kid */}
+                {/* Speech bubble */}
                 <SpeechBubble t={t} />
 
                 {/* 4 leader cards in a row */}
-                <div className="relative flex flex-row lg:items-start lg:justify-between overflow-x-auto snap-x snap-mandatory no-scrollbar pb-10 lg:pb-0 gap-6 lg:gap-8 pt-8">
+                <div
+                    ref={scrollContainerRef}
+                    className="relative flex flex-row lg:items-start lg:justify-between overflow-x-auto snap-x snap-mandatory no-scrollbar pb-10 lg:pb-0 gap-6 lg:gap-8 pt-8 max-lg:pt-20 max-lg:px-4"
+                >
+                    {/* Winding road embedded for Mobile Scroll-syncing natively. Absolutely docked into the left container padding edge scaling its width safely over child tracks */}
+                    <div 
+                        className="hidden max-lg:flex absolute top-[20%] pointer-events-none -z-10 items-start w-[360vw] sm:w-[1500px]"
+                        style={{ left: isRTL ? 'auto' : 0, right: isRTL ? 0 : 'auto' }}
+                    >
+                        <WindingRoad />
+                    </div>
+
                     {LEADERS.map((leader, index) => (
                         <div
                             key={leader.id}
-                            className="flex-[0_0_auto] w-[80%] sm:w-[280px] lg:flex-1 lg:w-auto flex justify-center snap-center shrink-0"
+                            className="flex-[0_0_auto] w-[85%] sm:w-[320px] lg:flex-1 lg:w-auto flex justify-center snap-center shrink-0"
                         >
                             <LeaderCard
                                 leader={leader}
                                 index={index}
                                 isVisible={gridVisible}
                                 t={t}
+                                isPlaying={playingVideoId === leader.id}
+                                onPlay={() => setPlayingVideoId(leader.id)}
+                                onPause={() =>
+                                    setPlayingVideoId((prev) =>
+                                        prev === leader.id ? null : prev
+                                    )
+                                }
                             />
                         </div>
+                    ))}
+                </div>
+
+                {/* Mobile pagination dots (Exclusive to mobile view) */}
+                <div className="flex lg:hidden justify-center items-center gap-3 mt-4 pb-4">
+                    {LEADERS.map((_, idx) => (
+                        <button
+                            key={idx}
+                            onClick={() => scrollToLeader(idx)}
+                            className={`rounded-full transition-all duration-300 ${activeIndex === idx ? "w-[10px] h-[10px] bg-[#24ade3]" : "w-[8px] h-[8px] bg-[#e1e1e1] hover:bg-[#c2c1c1]"}`}
+                            aria-label={`Go to leader ${idx + 1}`}
+                        />
                     ))}
                 </div>
             </div>

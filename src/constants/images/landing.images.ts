@@ -49,6 +49,7 @@ import certificate from "@/assets/images/landing/certificate/certificate.png";
 import certificateCodingForKids from "@/assets/images/landing/certificate/coding-for-kids.png";
 import certificateCoding from "@/assets/images/landing/certificate/coding.png";
 import certificateTopCorner from "@/assets/images/landing/certificate/top-corner.png";
+import road from "@/assets/images/landing/leaders/road.png";
 
 export const LandingImages = {
     wordSplash,
@@ -123,5 +124,8 @@ export const LandingImages = {
         certificateCodingForKids,
         certificateCoding,
         certificateTopCorner,
+    },
+    leaders: {
+        road,
     },
 };
