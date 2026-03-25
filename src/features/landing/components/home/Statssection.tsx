@@ -33,15 +33,16 @@ function StatsSection() {
     return (
         <section
             ref={statsRef}
-            className={`relative w-full py-20 px-20 lg:py-30 z-50 transition-all duration-700 ${
+            className={`relative w-full z-50 transition-all duration-700 ${
                 statsVisible
                     ? "opacity-100 translate-y-0"
                     : "opacity-0 translate-y-8"
             }`}
         >
             <div
-                className="flex items-center justify-between w-full px-15 py-3.5 rounded-tr-[124px] rounded-bl-lg"
+                className="relative w-full max-w-6xl mx-auto rounded-[32px] md:rounded-[40px] rounded-tl-[20px] rounded-br-[20px] rounded-tr-landing-button md:rounded-tr-[140px] rounded-bl-landing-button md:rounded-bl-[140px] px-6 py-16 md:px-16 md:py-24"
                 style={{
+                    backgroundColor: "#e9f7fc", // Fallback color closely matching design
                     backgroundImage: `url(${Images.landing.about.statsBg})`,
                     backgroundSize: "cover",
                     backgroundPosition: "center",
@@ -49,7 +50,7 @@ function StatsSection() {
                 }}
             >
                 <div
-                    className={`w-full grid grid-cols-2 gap-y-6 lg:gap-y-0 lg:flex lg:flex-nowrap justify-between items-center transition-all duration-700 ${
+                    className={`w-full relative grid grid-cols-2 gap-x-4 gap-y-16 sm:gap-y-24 max-w-4xl mx-auto justify-items-center items-center transition-all duration-700 ${
                         statsVisible
                             ? "opacity-100 translate-y-0"
                             : "opacity-0 translate-y-8"
@@ -58,7 +59,7 @@ function StatsSection() {
                     {STATS.map((stat, index) => (
                         <div
                             key={index}
-                            className={`flex flex-col items-center justify-center text-center transition-all duration-700 ${
+                            className={`flex flex-col items-center justify-start text-center w-full transition-all duration-700 ${
                                 statsVisible
                                     ? "opacity-100 scale-100"
                                     : "opacity-0 scale-90"
@@ -69,18 +70,23 @@ function StatsSection() {
                                 as="h2"
                                 weight="bold"
                                 color="primary"
-                                className="text-[32px] sm:text-[40px] md:text-5xl lg:text-6xl"
+                                className="text-[44px] sm:text-[56px] md:text-[64px] lg:text-[76px] leading-[1.1] mb-2 sm:mb-4 tracking-tight font-poppins"
                             >
                                 {stat.value}
                             </ThemedText>
                             <ThemedText
                                 as="p"
-                                className="text-gray-400 text-[14px] sm:text-[18px] md:text-2xl lg:text-3xl max-w-[120px] lg:max-w-none leading-snug"
+                                weight="medium"
+                                className="text-gray-500 text-[16px] sm:text-[20px] md:text-[24px] max-w-[140px] sm:max-w-[180px] leading-snug"
                             >
                                 {t(stat.labelKey)}
                             </ThemedText>
                         </div>
                     ))}
+                    
+                    {/* Centered Slanted Dividers for 2x2 Grid */}
+                    <div className="absolute top-[8%] sm:top-[12%] left-1/2 -translate-x-1/2 w-[3px] h-[60px] sm:h-landing-section-x bg-brand-500 rounded-full rotate-15 pointer-events-none opacity-90" />
+                    <div className="absolute bottom-[8%] sm:bottom-[12%] left-1/2 -translate-x-1/2 w-[3px] h-[60px] sm:h-landing-section-x bg-brand-500 rounded-full rotate-15 pointer-events-none opacity-90" />
                 </div>
             </div>
         </section>

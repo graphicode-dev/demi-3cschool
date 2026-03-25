@@ -34,12 +34,7 @@ const N = DATA.length;
 
 // ─── Tunable constants ────────────────────────────────────────────────────────
 
-const CARD_W = 286; // px — card width
-const CARD_GAP = 24; // px — gap between cards
-const CARD_SPACING = CARD_W + CARD_GAP;
-const CARD_H = 444; // px — fixed card height
 const SPEED = 1; // px per rAF frame
-const STRIP_W = CARD_SPACING * N;
 
 // ─── Curve helpers ────────────────────────────────────────────────────────────
 
@@ -89,7 +84,21 @@ function KidsSlider() {
     const rafRef = useRef<number | null>(null);
     const offRef = useRef(0);
 
-    // Responsive
+    // Responsive dynamic dimensions evaluation
+    const isMobile = vw < 768;
+    const isTablet = vw >= 768 && vw < 1024;
+
+    const CARD_W = isMobile ? 160 : isTablet ? 220 : 286;
+    const CARD_GAP = isMobile ? 12 : isTablet ? 18 : 24;
+    const CARD_SPACING = CARD_W + CARD_GAP;
+    const CARD_H = isMobile ? 260 : isTablet ? 340 : 444;
+    const STRIP_W = CARD_SPACING * N;
+
+    // Provide the active STRIP_W strictly safely down into the isolated animation cycle
+    const stripwRef = useRef(STRIP_W);
+    stripwRef.current = STRIP_W;
+
+    // Responsive bounds
     useEffect(() => {
         const onResize = () => setVw(window.innerWidth);
         window.addEventListener("resize", onResize);
@@ -100,7 +109,9 @@ function KidsSlider() {
     useEffect(() => {
         const tick = () => {
             offRef.current += SPEED;
-            if (offRef.current >= STRIP_W) offRef.current -= STRIP_W;
+            if (offRef.current >= stripwRef.current) {
+                offRef.current %= stripwRef.current;
+            }
             setOffset(offRef.current);
             rafRef.current = requestAnimationFrame(tick);
         };

@@ -1,4 +1,3 @@
-import { ArrowRight } from "lucide-react";
 import ThemedText from "@/design-system/components/ThemedText";
 import { Icons } from "@/constants";
 import { useLanguage } from "@/shared/hooks";
@@ -49,7 +48,6 @@ function PlanCard({
                 })`,
             }}
         >
-
             {/* Upper White/Light Section */}
             <div
                 className={`relative rounded-[32px] px-6 py-5 ${
@@ -111,7 +109,9 @@ function PlanCard({
             </div>
 
             {/* Features List */}
-            <div className={`relative flex flex-col gap-4 pt-5 pb-4 flex-1 ${isFeatured ? 'px-8' : 'px-6'}`}>
+            <div
+                className={`relative flex flex-col gap-4 pt-5 pb-4 flex-1 ${isFeatured ? "px-8" : "px-6"}`}
+            >
                 {plan.features.map((feature, i) => (
                     <div key={i} className="flex items-center gap-2.5">
                         <Icons.General.doubleCheck
@@ -133,7 +133,9 @@ function PlanCard({
             </div>
 
             {/* CTA Button */}
-            <div className={`relative pb-5 ${isFeatured ? 'px-8 mb-5' : 'px-6'}`}>
+            <div
+                className={`relative pb-5 ${isFeatured ? "px-8 mb-5" : "px-6"}`}
+            >
                 <Link
                     to={plan.href}
                     className={`flex items-center justify-between gap-2 min-w-30 px-1 ps-4 py-1 text-[18px] border border-black font-semibold rounded-full hover:bg-brand-600 transition-colors duration-300 ${
@@ -259,11 +261,18 @@ export default function Plans() {
                 <div className="relative inline-block z-10">
                     {/* Wavy Stroke */}
                     <div
-                        className={`absolute -top-5 ${
+                        className={`hidden lg:block absolute -top-5 ${
                             isRTL ? "right-[2%]" : "left-[2%]"
                         } -z-10`}
                     >
                         <Icons.General.WavyStroke />
+                    </div>
+                    <div
+                        className={`lg:hidden absolute top-0 ${
+                            isRTL ? "right-0" : "left-0"
+                        } -z-10`}
+                    >
+                        <Icons.General.WavyStroke size={80} />
                     </div>
 
                     <h2 className="relative flex flex-wrap items-baseline justify-center gap-x-3 m-0 z-10 drop-shadow-sm">

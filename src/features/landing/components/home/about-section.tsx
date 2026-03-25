@@ -100,8 +100,8 @@ function AboutSection() {
                 <div className="absolute inset-0 w-full h-full flex flex-col px-4 sm:px-10 lg:px-20 pt-16 lg:pt-20">
                     <img
                         src={Images.landing.about.coding2}
-                        alt=""
-                        className="w-1/5 object-cover self-end"
+                        alt="Coding Cloud"
+                        className="absolute top-4 right-0 sm:top-8 sm:-right-4 lg:top-12 lg:-right-8 w-[140px] sm:w-[180px] lg:w-[240px] object-contain pointer-events-none z-10"
                     />
                     {/* Heading */}
                     <div>
@@ -118,10 +118,10 @@ function AboutSection() {
                         </ThemedText>
 
                         {/* Body paragraph */}
-                        <div className="mt-2 sm:mt-4 ps-0 sm:ps-8 lg:ps-20 mb-8 lg:mb-14">
+                        <div className="mt-6 sm:mt-8 mb-10 lg:mb-16 w-full flex justify-center px-1 sm:px-8 lg:px-16 relative z-20">
                             <div
-                                className="text-justify text-[16px] md:text-3xl leading-snug"
-                                style={{ color: "var(--secondary)" }}
+                                className="text-center text-[14px] sm:text-[16px] md:text-2xl lg:text-3xl leading-relaxed capitalize w-full"
+                                style={{ color: "var(--color-landing-text-secondary, #666666)" }}
                                 dangerouslySetInnerHTML={{
                                     __html: t("about.description", {
                                         highlight:
@@ -158,10 +158,25 @@ function AboutSection() {
                             </div>
                         ))}
                     </div>
+
+                    {/* Bottom Left Boy & Sticker Decorations */}
+                    <div className="flex md:hidden absolute bottom-[-10px] sm:bottom-[-20px] lg:bottom-[-60px] left-[-10px] sm:left-[-20px] lg:left-0 z-30 pointer-events-none flex-col items-start translate-y-[20%] sm:translate-y-[15%]">
+                        <img 
+                            src={Images.landing.about.coding1}
+                            alt="Start Coding Sticker"
+                            className="w-landing-section-x sm:w-[110px] lg:w-[160px] object-contain ml-8 sm:ml-16 lg:ml-24 mb-[-10px] sm:mb-[-15px] lg:mb-[-25px] z-40 transform hover:scale-105 transition-transform"
+                        />
+                        <img 
+                            src={Images.landing.about.kid}
+                            alt="Kid with laptop"
+                            className="w-[180px] sm:w-[250px] lg:w-[380px] object-contain z-30 drop-shadow-md"
+                        />
+                    </div>
+
                 </div>
             </section>
 
-            <div className="px-20 pt-18">
+            <div className="px-4 sm:px-8 lg:px-20 pt-10 sm:pt-18 w-full max-w-7xl mx-auto overflow-hidden">
                 <StatsSection />
             </div>
         </>
@@ -175,7 +190,7 @@ interface AboutCardProps {
 function AboutCard({ card }: AboutCardProps) {
     return (
         <div
-            className="w-full px-5 sm:px-8 lg:px-13 pt-5 lg:pt-6 pb-16 lg:pb-20"
+            className="w-full px-5 sm:px-8 lg:px-12 pt-10 sm:pt-12 lg:pt-16 pb-16 lg:pb-20 flex flex-col items-center text-center"
             style={{
                 backgroundImage: `url(${card.image})`,
                 backgroundSize: "contain",
@@ -184,10 +199,10 @@ function AboutCard({ card }: AboutCardProps) {
                 aspectRatio: "330 / 300",
             }}
         >
-            <ThemedText className="text-[20px] lg:text-xl leading-tight mb-2" weight="bold" variant="heading">
+            <ThemedText className="text-[17px] sm:text-[20px] lg:text-[24px] leading-tight mb-3 sm:mb-4" weight="bold" variant="heading">
                 {card.title}
             </ThemedText>
-            <ThemedText className="text-[14px] lg:text-xl leading-snug" variant="body" font="segoe-arabic">
+            <ThemedText className="text-[13px] sm:text-[15px] lg:text-[18px] leading-relaxed text-landing-text-secondary" variant="body" font="segoe-arabic">
                 {card.description}
             </ThemedText>
         </div>

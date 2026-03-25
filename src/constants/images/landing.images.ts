@@ -41,6 +41,7 @@ import registerCard from "@/assets/images/landing/register/card.png";
 import registerStudents from "@/assets/images/landing/register/students.png";
 import exploringCode from "@/assets/images/landing/footer/exploring-code.png";
 import robot from "@/assets/images/landing/footer/robot.png";
+import robotSm from "@/assets/images/landing/footer/robot-sm.png";
 import certificateBg from "@/assets/images/landing/certificate/bg.png";
 import certificateBottomCorner from "@/assets/images/landing/certificate/bottom-corner.png";
 import certificateBottomWavyPattern from "@/assets/images/landing/certificate/bottom-wavy-pattern.png";
@@ -112,6 +113,7 @@ export const LandingImages = {
     footer: {
         exploringCode,
         robot,
+        robotSm,
     },
     certificate: {
         certificateBg,

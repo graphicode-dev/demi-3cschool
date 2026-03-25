@@ -119,12 +119,13 @@ function LandingNavbar() {
 
     return (
         <nav
-            className={`fixed top-0 left-0 right-0 z-100 w-full flex items-center justify-between px-4 sm:px-8 lg:px-16 py-4 lg:py-6 transition-all duration-300 ${
+            className={`fixed top-0 left-0 right-0 z-100 w-full transition-all duration-300 ${
                 isScrolled
                     ? "bg-white/95 backdrop-blur-md shadow-md"
                     : "bg-transparent"
             }`}
         >
+            <div className="flex items-center justify-between px-4 sm:px-8 lg:px-16 py-4 lg:py-6 w-full max-w-7xl mx-auto">
             {/* Logos */}
             <div className="flex items-center gap-6 lg:gap-12">
                 {isRTL ? (
@@ -316,15 +317,23 @@ function LandingNavbar() {
                 )}
             </button>
 
+            </div>
+
             {/* Mobile Menu */}
             <div
-                className={`absolute top-full left-0 right-0 h-dvh bg-[#e9f7fc] lg:hidden transition-all duration-400 overflow-y-auto ${
+                className={`absolute top-full left-0 right-0 h-[calc(100dvh-72px)] bg-[#e9f7fc] lg:hidden transition-all duration-400 overflow-x-hidden overflow-y-auto ${
                     mobileMenuOpen
-                        ? "opacity-100 visible translate-x-0"
-                        : "opacity-0 invisible -translate-x-full"
+                        ? "opacity-100 visible"
+                        : "opacity-0 invisible"
                 }`}
             >
-                <div className="flex flex-col p-8 sm:p-12 gap-6 min-h-full pb-32">
+                <div
+                    className={`flex flex-col p-8 sm:p-12 gap-6 min-h-full pb-32 transition-transform duration-400 ${
+                        mobileMenuOpen
+                            ? "translate-x-0"
+                            : "ltr:-translate-x-full rtl:translate-x-full"
+                    }`}
+                >
                     {navLinks.map((link, index) => (
                         <div key={link.sectionId} className="flex flex-col items-start gap-0.5">
                             <Link
@@ -365,7 +374,7 @@ function LandingNavbar() {
                             </button>
                         </div>
 
-                        {/* Authenticaton */}
+                        {/* Authentication */}
                         {isAuthenticated && user ? (
                             <div className="flex flex-col items-start gap-4">
                                 <Link
