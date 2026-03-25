@@ -67,8 +67,9 @@ export function PageHeader({
             data={[1]}
             count={1}
             type="header"
-            renderItem={() => (
+            renderItem={(_, index) => (
                 <header
+                    key={index}
                     className={`p-4 md:p-6 bg-white dark:bg-gray-800 ${className}`}
                     data-testid={testId}
                     aria-labelledby={headingId}
