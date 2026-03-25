@@ -1,21 +1,3 @@
-/**
- * Admin Feature - Route Module
- *
- * Defines routes for the admin feature.
- * Base path: /admin/*
- *
- * Consolidates ALL admin features:
- * - Overview (dashboard home)
- * - Learning (standard & professional)
- * - Groups Management
- * - Groups Analytics
- * - Programs
- * - Sales Subscription
- * - Tickets Management
- * - Settings
- * - Shared features (profile, chat, certificates, reports)
- */
-
 import type { FeatureRouteModule, RouteConfig } from "@/router/routes.types";
 import { adminSharedRoutes } from "@/features/dashboard/shared/navigation";
 import { ticketsManagementRoutes } from "../ticketsManagement/navigation";
@@ -32,6 +14,7 @@ import { settingsRoutes } from "../settings/navigation/routes";
 import { auditingRoutes } from "../auditing/navigation";
 import { acceptanceExamsRoutes } from "../acceptanceExams/navigation";
 import { managementRoutes } from "../systemManagements/navigation";
+import { salesSubscriptionRoutes } from "../sales_subscription/navigation/routes";
 
 // ============================================================================
 // Admin Shared Routes (profile, chat, certificates, reports)
@@ -83,6 +66,8 @@ export const adminRouteModule: FeatureRouteModule = {
             ...acceptanceExamsRoutes,
             // System Management
             ...managementRoutes,
+            // Sales Subscription
+            ...salesSubscriptionRoutes,
         ],
     },
 };

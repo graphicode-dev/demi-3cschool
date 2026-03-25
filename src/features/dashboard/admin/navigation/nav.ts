@@ -19,13 +19,13 @@ import { ticketsManagementNavItem } from "../ticketsManagement/navigation/nav";
 import { resourcesNavItem } from "../resources/navigation/nav";
 import { programsManagementNav } from "../programs/navigation";
 import { communityManagementNavItem } from "../communityManagement";
-import { groupsAnalyticsNav } from "../groupsAnalytics/navigation";
 import { groupsManagementNav } from "../groupsManagement/navigation";
 import gradesNav from "../learning/navigation";
 import { settingsNavItem } from "../settings/navigation/nav";
 import { auditingNavItem } from "../auditing/navigation";
 import { acceptanceExamsNav } from "../acceptanceExams/navigation/nav";
 import { managementNavItem } from "../systemManagements/navigation";
+import { salesSubscriptionNav } from "../sales_subscription";
 
 export const adminNav: FeatureNavModule = {
     featureId: "admin",
@@ -57,6 +57,8 @@ export const adminNav: FeatureNavModule = {
         auditingNavItem,
         // Acceptance Exams
         acceptanceExamsNav,
+        // Sales Subscription
+        salesSubscriptionNav,
     ],
 };
 

@@ -388,26 +388,26 @@ const Sidebar: React.FC = () => {
                                 isArabic ? (
                                     <img
                                         src={LogoArDark}
-                                        className="w-200 object-contain"
+                                        className="w-25 object-contain"
                                         alt="Logo"
                                     />
                                 ) : (
                                     <img
                                         src={LogoEnDark}
-                                        className="w-200 object-contain"
+                                        className="w-25 object-contain"
                                         alt="Logo"
                                     />
                                 )
                             ) : isArabic ? (
                                 <img
                                     src={LogoArLight}
-                                    className="w-200 object-contain"
+                                    className="w-25 object-contain"
                                     alt="Logo"
                                 />
                             ) : (
                                 <img
                                     src={LogoEnLight}
-                                    className="w-200 object-contain"
+                                    className="w-25 object-contain"
                                     alt="Logo"
                                 />
                             )}

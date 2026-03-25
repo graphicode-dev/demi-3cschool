@@ -235,9 +235,18 @@ export const useBreadcrumbs = (
                 map.set(match.pathname, handle.crumb);
                 // Also map by last non-dynamic segment for fallback matching
                 const segments = match.pathname.split("/").filter(Boolean);
-                const lastSegment = segments[segments.length - 1];
-                if (lastSegment && !isDynamicSegment(lastSegment)) {
-                    map.set(`segment:${lastSegment}`, handle.crumb);
+                let lastStaticSegment: string | undefined;
+                
+                // Find the last segment that is not dynamic
+                for (let i = segments.length - 1; i >= 0; i--) {
+                    if (!isDynamicSegment(segments[i])) {
+                        lastStaticSegment = segments[i];
+                        break;
+                    }
+                }
+                
+                if (lastStaticSegment) {
+                    map.set(`segment:${lastStaticSegment}`, handle.crumb);
                 }
             }
         }
