@@ -20,7 +20,11 @@ import sectionBg from "@/assets/images/landing/about/section-bg.png";
 import statsBg from "@/assets/images/landing/about/stats-bg.png";
 import wordSplash from "@/assets/images/landing/word-splash.png";
 import kidsThatCode from "@/assets/images/landing/why-choose-3c/kids-that-code.png";
-import banner from "@/assets/images/landing/why-choose-3c/banner.png";
+import banner1 from "@/assets/images/landing/why-choose-3c/banner1.png";
+import banner2 from "@/assets/images/landing/why-choose-3c/banner2.png";
+import banner3 from "@/assets/images/landing/why-choose-3c/banner3.png";
+import banner4 from "@/assets/images/landing/why-choose-3c/banner4.png";
+import banner5 from "@/assets/images/landing/why-choose-3c/banner5.png";
 import cursor from "@/assets/images/landing/why-choose-3c/cursor.png";
 import keyboard from "@/assets/images/landing/why-choose-3c/keyboard.png";
 import standard1 from "@/assets/images/landing/tracks/standard-1.png";
@@ -80,7 +84,11 @@ export const LandingImages = {
         statsBg,
     },
     whyChoose3c: {
-        banner,
+        banner1,
+        banner2,
+        banner3,
+        banner4,
+        banner5,
         cursor,
         keyboard,
         kidsThatCode,

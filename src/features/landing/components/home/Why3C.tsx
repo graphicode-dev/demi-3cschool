@@ -1,11 +1,11 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { Icons } from "@/constants";
 import { Images } from "@/constants/images";
 import ThemedText from "@/design-system/components/ThemedText";
 import { useScrollAnimation } from "../../hooks";
 import { useLanguage } from "@/shared/hooks";
 interface CardData {
-    id: string;
+    id: number;
     titleKey: string;
     descriptionKey: string;
     /** Whether this card is "prominent" (darker bg, index 0, 2, 4) */
@@ -15,31 +15,31 @@ interface CardData {
 // Card data based on Figma designs
 const CARDS: CardData[] = [
     {
-        id: "small-class",
+        id: 1,
         titleKey: "why3C.cards.smallClass.title",
         descriptionKey: "why3C.cards.smallClass.description",
         prominent: true,
     },
     {
-        id: "project-based",
+        id: 2,
         titleKey: "why3C.cards.projectBased.title",
         descriptionKey: "why3C.cards.projectBased.description",
         prominent: false,
     },
     {
-        id: "industry-standard",
+        id: 3,
         titleKey: "why3C.cards.industryStandard.title",
         descriptionKey: "why3C.cards.industryStandard.description",
         prominent: false,
     },
     {
-        id: "passion-mentors",
+        id: 4,
         titleKey: "why3C.cards.passionMentors.title",
         descriptionKey: "why3C.cards.passionMentors.description",
         prominent: false,
     },
     {
-        id: "certification",
+        id: 5,
         titleKey: "why3C.cards.certification.title",
         descriptionKey: "why3C.cards.certification.description",
         prominent: false,
@@ -52,9 +52,17 @@ interface Why3CCardProps {
     isVisible: boolean;
     isRtl: boolean;
     t: (key: string) => string;
+    onSelectBanner: (banner: number) => void;
 }
 
-function Why3CCard({ card, index, isVisible, isRtl, t }: Why3CCardProps) {
+function Why3CCard({
+    card,
+    index,
+    isVisible,
+    isRtl,
+    t,
+    onSelectBanner,
+}: Why3CCardProps) {
     const isEven = index % 2 === 0;
 
     return (
@@ -63,9 +71,10 @@ function Why3CCard({ card, index, isVisible, isRtl, t }: Why3CCardProps) {
                 transition-all duration-500
                 w-full lg:w-[80%] max-w-[280px] sm:max-w-[340px] lg:max-w-none shrink-0 snap-center lg:shrink lg:snap-align-none
                 ${isEven ? (isRtl ? "lg:mr-[20%] lg:ml-0" : "lg:ml-[20%]") : isRtl ? "lg:mr-0" : "lg:ml-0"}
-                mx-auto lg:mx-0
+                mx-auto lg:mx-0 cursor-pointer hover:scale-105 transition-all duration-300
             `}
             style={{ transitionDelay: `${index * 80}ms` }}
+            onClick={() => onSelectBanner(card.id)}
         >
             <div
                 className={`
@@ -144,6 +153,25 @@ function CardConnector() {
 function Why3C() {
     const { t, isRTL } = useLanguage("landing");
     const { ref: cardsRef, isVisible: cardsVisible } = useScrollAnimation();
+
+    const banners = [
+        { id: 1, img: Images.landing.whyChoose3c.banner1 },
+        { id: 2, img: Images.landing.whyChoose3c.banner2 },
+        { id: 3, img: Images.landing.whyChoose3c.banner3 },
+        { id: 4, img: Images.landing.whyChoose3c.banner4 },
+        { id: 5, img: Images.landing.whyChoose3c.banner5 },
+    ];
+
+    const [selectedBanner, setSelectedBanner] = useState<string>(
+        banners[0].img
+    );
+
+    const handleSelectBanner = useCallback((cardid: number) => {
+        const banner = banners.find((banner) => banner.id === cardid);
+        if (banner) {
+            setSelectedBanner(banner.img);
+        }
+    }, []);
 
     const carouselRef = useRef<HTMLDivElement>(null);
     const [activeIndex, setActiveIndex] = useState(0);
@@ -225,7 +253,7 @@ function Why3C() {
                     <div
                         className={`hidden lg:block absolute top-0 ${isRTL ? "-right-[25%]" : "left-[13%]"} -translate-x-1/2 pointer-events-none -z-10`}
                     >
-                        <Icons.General.WavyStroke/>
+                        <Icons.General.WavyStroke />
                     </div>
                     <div
                         className={`block lg:hidden absolute -bottom-12 ${isRTL ? "-right-[25%]" : "left-[13%]"} -translate-x-1/2 pointer-events-none -z-10`}
@@ -263,9 +291,9 @@ function Why3C() {
                 {/* Image */}
                 <div className="relative w-full max-w-[320px] sm:max-w-md lg:max-w-none lg:w-1/2 mx-auto lg:mx-0">
                     <img
-                        src={Images.landing.whyChoose3c.banner}
+                        src={selectedBanner}
                         alt="Kids that code"
-                        className="w-full relative z-50 object-contain drop-shadow-sm lg:drop-shadow-none"
+                        className="w-full relative z-50 aspect-[3/2] object-cover rounded-2xl drop-shadow-sm lg:drop-shadow-none"
                     />
 
                     <img
@@ -275,15 +303,13 @@ function Why3C() {
                     />
                 </div>
 
-                <div ref={cardsRef} className="hidden lg:block lg:w-1/2" />
-
                 {/* Right – Staggered Cards */}
                 <div
                     ref={cardsRef}
-                    className={`w-full lg:w-1/2 relative lg:absolute lg:top-50 ${isRTL ? "lg:left-50" : "lg:right-50"} flex flex-col items-center lg:items-stretch overflow-visible z-50`}
+                    className={`w-full lg:w-1/2 relative ${isRTL ? "lg:-mr-[8%]" : "lg:-ml-[8%]"} lg:mt-0 flex flex-col items-center lg:items-stretch overflow-visible z-50`}
                 >
                     {/* Mobile Carousel Wrapper */}
-                    <div 
+                    <div
                         ref={carouselRef}
                         onScroll={handleScroll}
                         className="w-screen lg:w-full lg:ml-0 flex flex-row lg:flex-col overflow-x-auto lg:overflow-visible snap-x snap-mandatory lg:snap-none no-scrollbar pb-6 lg:pb-0 scroll-smooth"
@@ -299,6 +325,9 @@ function Why3C() {
                                     isVisible={cardsVisible}
                                     isRtl={isRTL}
                                     t={t}
+                                    onSelectBanner={() =>
+                                        handleSelectBanner(card.id)
+                                    }
                                 />
 
                                 {/* Orange dashed connector between cards */}
@@ -318,8 +347,8 @@ function Why3C() {
                                 key={i}
                                 onClick={() => scrollTo(i)}
                                 className={`h-[8px] rounded-full drop-shadow-sm transition-all duration-300 ${
-                                    activeIndex === i 
-                                        ? "bg-brand-500 w-[14px] opacity-100" 
+                                    activeIndex === i
+                                        ? "bg-brand-500 w-[14px] opacity-100"
                                         : "bg-white opacity-70 w-[8px]"
                                 }`}
                                 aria-label={`Go to slide ${i + 1}`}
