@@ -287,13 +287,13 @@ function Why3C() {
             </div>
 
             {/* Content */}
-            <div className="relative flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-2 lg:mt-0">
+            <div className="relative flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-2 lg:mt-32">
                 {/* Image */}
                 <div className="relative w-full max-w-[320px] sm:max-w-md lg:max-w-none lg:w-1/2 mx-auto lg:mx-0">
                     <img
                         src={selectedBanner}
                         alt="Kids that code"
-                        className="w-full relative z-50 aspect-[3/2] object-cover rounded-2xl drop-shadow-sm lg:drop-shadow-none"
+                        className="w-full h-[300px] sm:h-[400px] lg:h-[550px] relative z-20 object-cover rounded-2xl drop-shadow-sm lg:drop-shadow-none transition-all duration-300"
                     />
 
                     <img
@@ -306,7 +306,7 @@ function Why3C() {
                 {/* Right – Staggered Cards */}
                 <div
                     ref={cardsRef}
-                    className={`w-full lg:w-1/2 relative ${isRTL ? "lg:-mr-[8%]" : "lg:-ml-[8%]"} lg:mt-0 flex flex-col items-center lg:items-stretch overflow-visible z-50`}
+                    className={`w-full lg:w-1/2 relative ${isRTL ? "lg:-mr-[8%]" : "lg:-ml-[8%]"} lg:mt-16 flex flex-col items-center lg:items-stretch overflow-visible z-50`}
                 >
                     {/* Mobile Carousel Wrapper */}
                     <div
