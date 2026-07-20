@@ -1,9 +1,3 @@
-/**
- * Distribution Feature - API Functions
- *
- * Raw API functions for distribution domain.
- */
-
 import { api } from "@/shared/api/client";
 import type {
     DistributionStats,
@@ -11,6 +5,11 @@ import type {
     DistributionData,
 } from "../types";
 import { ApiResponse } from "@/shared/api";
+import {
+    getMockDistributionStats,
+    getMockDistributionMethodConfig,
+    getMockDistributionData,
+} from "../mockData";
 
 const BASE_URL = "/tickets/distribution";
 
@@ -22,20 +21,7 @@ export const distributionApi = {
      * Get distribution statistics
      */
     getStats: async (signal?: AbortSignal): Promise<DistributionStats> => {
-        const response = await api.get<ApiResponse<DistributionStats>>(
-            `${BASE_URL}/stats`,
-            { signal }
-        );
-
-        if (response.error) {
-            throw response.error;
-        }
-
-        if (!response.data?.data) {
-            throw new Error("No data returned from server");
-        }
-
-        return response.data.data;
+        return getMockDistributionStats();
     },
 
     /**
@@ -44,40 +30,14 @@ export const distributionApi = {
     getMethodConfig: async (
         signal?: AbortSignal
     ): Promise<DistributionMethodConfig> => {
-        const response = await api.get<ApiResponse<DistributionMethodConfig>>(
-            `${BASE_URL}/method-config`,
-            { signal }
-        );
-
-        if (response.error) {
-            throw response.error;
-        }
-
-        if (!response.data?.data) {
-            throw new Error("No data returned from server");
-        }
-
-        return response.data.data;
+        return getMockDistributionMethodConfig();
     },
 
     /**
      * Get complete distribution data
      */
     getData: async (signal?: AbortSignal): Promise<DistributionData> => {
-        const response = await api.get<ApiResponse<DistributionData>>(
-            `${BASE_URL}`,
-            { signal }
-        );
-
-        if (response.error) {
-            throw response.error;
-        }
-
-        if (!response.data?.data) {
-            throw new Error("No data returned from server");
-        }
-
-        return response.data.data;
+        return getMockDistributionData();
     },
 
     /**
@@ -86,20 +46,9 @@ export const distributionApi = {
     toggleMethod: async (
         isActive: boolean
     ): Promise<DistributionMethodConfig> => {
-        const response = await api.patch<ApiResponse<DistributionMethodConfig>>(
-            `${BASE_URL}/method-config`,
-            { isActive }
-        );
-
-        if (response.error) {
-            throw response.error;
-        }
-
-        if (!response.data?.data) {
-            throw new Error("No data returned from server");
-        }
-
-        return response.data.data;
+        const config = getMockDistributionMethodConfig();
+        config.isActive = isActive;
+        return config;
     },
 };
 

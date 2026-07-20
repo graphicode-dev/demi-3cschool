@@ -14,12 +14,20 @@ import {
     User,
 } from "@/auth/auth.types";
 import { api, SingleResponse } from "@/shared/api";
+import { getMockUserByEmail, getMockUserByToken } from "./mockData/auth.mocks";
+import { tokenService } from "@/auth/tokenService";
 
 export const authApi = {
     /**
      * Login
      */
-    login: async (credentials?: LoginData): Promise<any> => {
+    login: async (credentials?: LoginData): Promise<SingleResponse<User>> => {
+        const mockUser = credentials?.email ? getMockUserByEmail(credentials.email) : null;
+        if (mockUser) {
+            return {
+                data: mockUser,
+            };
+        }
         const response = await api.post<SingleResponse<User>>(
             "/login",
             credentials
@@ -34,6 +42,12 @@ export const authApi = {
      * Login with magic link
      */
     loginWithMagicLink: async (data: LoginMagicLinkData) => {
+        const mockUser = data?.email ? getMockUserByEmail(data.email) : null;
+        if (mockUser) {
+            return {
+                data: mockUser,
+            };
+        }
         const response = await api.post<SingleResponse<User>>(
             "/magic/request",
             data
@@ -50,6 +64,12 @@ export const authApi = {
      * Verify magic link
      */
     verifyMagicLink: async (magicToken: string) => {
+        const mockUser = getMockUserByToken(magicToken);
+        if (mockUser) {
+            return {
+                data: mockUser,
+            };
+        }
         const response = await api.get<SingleResponse<User>>(
             `/login/magic/${magicToken}/verify`
         );
@@ -149,6 +169,13 @@ export const authApi = {
      * Get profile
      */
     profile: async () => {
+        const token = tokenService.getAccessToken();
+        const mockUser = token ? getMockUserByToken(token) : null;
+        if (mockUser) {
+            return {
+                data: mockUser,
+            };
+        }
         const response = await api.get<SingleResponse<User>>("/auth/profile");
         if (response.error) {
             throw new Error(response.error.message || "Failed to get profile");
@@ -249,6 +276,26 @@ export const authApi = {
      * Fetches all permissions assigned to the authenticated user
      */
     getPermissions: async (): Promise<SingleResponse<ApiPermission[]>> => {
+        const token = tokenService.getAccessToken();
+        const mockUser = token ? getMockUserByToken(token) : null;
+        if (mockUser) {
+            const apiPermissions: ApiPermission[] = (mockUser.permissions || []).map((permName, idx) => {
+                const parts = permName.split(".");
+                const group = parts[0] || "general";
+                const name = parts[1] || permName;
+                return {
+                    id: idx + 1,
+                    group,
+                    name: permName,
+                    caption: `${group} - ${name}`,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                };
+            });
+            return {
+                data: apiPermissions,
+            };
+        }
         const response =
             await api.get<SingleResponse<ApiPermission[]>>("/auth/permissions");
         if (response.error) {

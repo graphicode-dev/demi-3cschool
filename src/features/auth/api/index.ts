@@ -7,3 +7,5 @@
 export * from "./auth.api";
 export * from "./auth.queries";
 export * from "./auth.mutations";
+export * from "./mockData/auth.mocks";
+

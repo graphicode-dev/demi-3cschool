@@ -31,6 +31,23 @@ import {
     PaginatedData,
     PaginatedResponse,
 } from "@/shared/api";
+import {
+    getMockTicketsList,
+    getMockUnassignedTickets,
+    getMockTicketsStats,
+    getMockTicketById,
+    createMockTicket,
+    updateMockTicket,
+    deleteMockTicket,
+    assignMockTicket,
+    updateMockTicketStatus,
+    updateMockTicketPriority,
+    getMockMessages,
+    sendMockMessage,
+    getMockNotes,
+    addMockNote,
+    deleteMockNote,
+} from "../mockData";
 
 const BASE_URL = "/tickets";
 
@@ -123,59 +140,7 @@ export const ticketsApi = {
         filter?: TicketFilters,
         signal?: AbortSignal
     ): Promise<PaginatedData<TicketListItem>> => {
-        const { page, search } = params;
-
-        // Build query string parts manually to avoid encoding brackets
-        const queryParts: string[] = [];
-
-        // Only add page if it exists
-        if (page) {
-            queryParts.push(`page=${page}`);
-        }
-
-        // Only add search if it exists and is not empty
-        if (search && search.trim()) {
-            queryParts.push(`search=${encodeURIComponent(search.trim())}`);
-        }
-
-        // Add status filter if it's not "all"
-        if (filter?.status && filter.status !== "all") {
-            queryParts.push(`filter[status][operator]==`);
-            queryParts.push(`filter[status][value]=${filter.status}`);
-        }
-
-        // Add agent filter if it's not "all"
-        if (filter?.agentId && filter.agentId !== "all") {
-            queryParts.push(`filter[assignedAgentId][operator]==`);
-            queryParts.push(`filter[assignedAgentId][value]=${filter.agentId}`);
-        }
-
-        // Add block filter if it's not "all"
-        if (filter?.blockId && filter.blockId !== "all") {
-            queryParts.push(`filter[supportBlockId][operator]==`);
-            queryParts.push(`filter[supportBlockId][value]=${filter.blockId}`);
-        }
-
-        // Add priority filter if it's not "all"
-        if (filter?.priority && filter.priority !== "all") {
-            queryParts.push(`filter[priority][operator]==`);
-            queryParts.push(`filter[priority][value]=${filter.priority}`);
-        }
-
-        const url =
-            queryParts.length > 0
-                ? `${BASE_URL}?${queryParts.join("&")}`
-                : BASE_URL;
-
-        const response = await api.get<PaginatedResponse<TicketListItem>>(url, {
-            signal,
-        });
-
-        if (response.error) {
-            throw response.error;
-        }
-
-        return response.data!.data;
+        return getMockTicketsList(params, filter);
     },
 
     /**
@@ -186,28 +151,7 @@ export const ticketsApi = {
         page?: number,
         signal?: AbortSignal
     ): Promise<PaginatedTicketData> => {
-        const response = await api.get<
-            ApiResponse<{
-                perPage: number;
-                currentPage: number;
-                lastPage: number;
-                nextPageUrl: string | null;
-                items: RawTicket[];
-            }>
-        >(`${BASE_URL}/unassigned`, {
-            params: { page } as Record<string, unknown>,
-            signal,
-        });
-
-        if (response.error) {
-            throw response.error;
-        }
-
-        if (!response.data?.data) {
-            throw new Error("No data returned from server");
-        }
-
-        return transformPaginatedData(response.data.data);
+        return getMockUnassignedTickets(page);
     },
 
     /**
@@ -215,20 +159,7 @@ export const ticketsApi = {
      * GET /tickets/stats
      */
     getStats: async (signal?: AbortSignal): Promise<TicketsStats> => {
-        const response = await api.get<ApiResponse<TicketsStats>>(
-            `${BASE_URL}/stats`,
-            { signal }
-        );
-
-        if (response.error) {
-            throw response.error;
-        }
-
-        if (!response.data?.data) {
-            throw new Error("No data returned from server");
-        }
-
-        return response.data.data;
+        return getMockTicketsStats();
     },
 
     /**
@@ -239,20 +170,7 @@ export const ticketsApi = {
         id: string | number,
         signal?: AbortSignal
     ): Promise<Ticket> => {
-        const response = await api.get<ApiResponse<RawTicket>>(
-            `${BASE_URL}/${id}`,
-            { signal }
-        );
-
-        if (response.error) {
-            throw response.error;
-        }
-
-        if (!response.data?.data) {
-            throw new Error("No data returned from server");
-        }
-
-        return transformTicket(response.data.data);
+        return getMockTicketById(id);
     },
 
     /**
@@ -260,20 +178,7 @@ export const ticketsApi = {
      * POST /tickets
      */
     create: async (payload: CreateTicketPayload): Promise<Ticket> => {
-        const response = await api.post<ApiResponse<RawTicket>>(
-            BASE_URL,
-            payload
-        );
-
-        if (response.error) {
-            throw response.error;
-        }
-
-        if (!response.data?.data) {
-            throw new Error("No data returned from server");
-        }
-
-        return transformTicket(response.data.data);
+        return createMockTicket(payload);
     },
 
     /**
@@ -284,20 +189,7 @@ export const ticketsApi = {
         id: string | number,
         payload: UpdateTicketPayload
     ): Promise<Ticket> => {
-        const response = await api.put<ApiResponse<RawTicket>>(
-            `${BASE_URL}/${id}`,
-            payload
-        );
-
-        if (response.error) {
-            throw response.error;
-        }
-
-        if (!response.data?.data) {
-            throw new Error("No data returned from server");
-        }
-
-        return transformTicket(response.data.data);
+        return updateMockTicket(id, payload);
     },
 
     /**
@@ -305,13 +197,7 @@ export const ticketsApi = {
      * DELETE /tickets/:ticket
      */
     delete: async (id: string | number): Promise<void> => {
-        const response = await api.delete<ApiResponse<void>>(
-            `${BASE_URL}/${id}`
-        );
-
-        if (response.error) {
-            throw response.error;
-        }
+        return deleteMockTicket(id);
     },
 
     /**
@@ -322,20 +208,7 @@ export const ticketsApi = {
         id: string | number,
         payload: AssignTicketPayload
     ): Promise<Ticket> => {
-        const response = await api.post<ApiResponse<RawTicket>>(
-            `${BASE_URL}/${id}/assign`,
-            payload
-        );
-
-        if (response.error) {
-            throw response.error;
-        }
-
-        if (!response.data?.data) {
-            throw new Error("No data returned from server");
-        }
-
-        return transformTicket(response.data.data);
+        return assignMockTicket(id, payload);
     },
 
     /**
@@ -346,20 +219,7 @@ export const ticketsApi = {
         id: string | number,
         payload: UpdateTicketStatusPayload
     ): Promise<Ticket> => {
-        const response = await api.patch<ApiResponse<RawTicket>>(
-            `${BASE_URL}/${id}/status`,
-            payload
-        );
-
-        if (response.error) {
-            throw response.error;
-        }
-
-        if (!response.data?.data) {
-            throw new Error("No data returned from server");
-        }
-
-        return transformTicket(response.data.data);
+        return updateMockTicketStatus(id, payload);
     },
 
     /**
@@ -370,20 +230,7 @@ export const ticketsApi = {
         id: string | number,
         payload: UpdateTicketPriorityPayload
     ): Promise<Ticket> => {
-        const response = await api.patch<ApiResponse<RawTicket>>(
-            `${BASE_URL}/${id}/priority`,
-            payload
-        );
-
-        if (response.error) {
-            throw response.error;
-        }
-
-        if (!response.data?.data) {
-            throw new Error("No data returned from server");
-        }
-
-        return transformTicket(response.data.data);
+        return updateMockTicketPriority(id, payload);
     },
 
     /**
@@ -394,20 +241,7 @@ export const ticketsApi = {
         ticketId: string | number,
         signal?: AbortSignal
     ): Promise<TicketMessage[]> => {
-        const response = await api.get<ApiResponse<RawTicketMessage[]>>(
-            `${BASE_URL}/${ticketId}/messages`,
-            { signal }
-        );
-
-        if (response.error) {
-            throw response.error;
-        }
-
-        if (!response.data?.data) {
-            throw new Error("No data returned from server");
-        }
-
-        return response.data.data.map(transformMessage);
+        return getMockMessages(ticketId);
     },
 
     /**
@@ -417,20 +251,7 @@ export const ticketsApi = {
     sendMessage: async (
         payload: SendMessagePayload
     ): Promise<TicketMessage> => {
-        const response = await api.post<ApiResponse<RawTicketMessage>>(
-            `${BASE_URL}/${payload.ticketId}/messages`,
-            { message: payload.message }
-        );
-
-        if (response.error) {
-            throw response.error;
-        }
-
-        if (!response.data?.data) {
-            throw new Error("No data returned from server");
-        }
-
-        return transformMessage(response.data.data);
+        return sendMockMessage(payload);
     },
 
     /**
@@ -438,13 +259,7 @@ export const ticketsApi = {
      * POST /tickets/:ticket/messages/read
      */
     markMessagesRead: async (ticketId: string | number): Promise<void> => {
-        const response = await api.post<ApiResponse<void>>(
-            `${BASE_URL}/${ticketId}/messages/read`
-        );
-
-        if (response.error) {
-            throw response.error;
-        }
+        return Promise.resolve();
     },
 
     /**
@@ -455,20 +270,7 @@ export const ticketsApi = {
         ticketId: string | number,
         signal?: AbortSignal
     ): Promise<InternalNote[]> => {
-        const response = await api.get<ApiResponse<RawInternalNote[]>>(
-            `${BASE_URL}/${ticketId}/notes`,
-            { signal }
-        );
-
-        if (response.error) {
-            throw response.error;
-        }
-
-        if (!response.data?.data) {
-            throw new Error("No data returned from server");
-        }
-
-        return response.data.data.map(transformNote);
+        return getMockNotes(ticketId);
     },
 
     /**
@@ -476,20 +278,7 @@ export const ticketsApi = {
      * POST /tickets/:ticket/notes
      */
     addNote: async (payload: AddNotePayload): Promise<InternalNote> => {
-        const response = await api.post<ApiResponse<RawInternalNote>>(
-            `${BASE_URL}/${payload.ticketId}/notes`,
-            { note: payload.note }
-        );
-
-        if (response.error) {
-            throw response.error;
-        }
-
-        if (!response.data?.data) {
-            throw new Error("No data returned from server");
-        }
-
-        return transformNote(response.data.data);
+        return addMockNote(payload);
     },
 
     /**
@@ -497,13 +286,7 @@ export const ticketsApi = {
      * DELETE /tickets/:ticket/notes/:noteId
      */
     deleteNote: async (payload: DeleteNotePayload): Promise<void> => {
-        const response = await api.delete<ApiResponse<void>>(
-            `${BASE_URL}/${payload.ticketId}/notes/${payload.noteId}`
-        );
-
-        if (response.error) {
-            throw response.error;
-        }
+        return deleteMockNote(payload.ticketId, payload.noteId);
     },
 };
 

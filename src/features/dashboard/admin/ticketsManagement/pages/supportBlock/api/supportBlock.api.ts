@@ -1,19 +1,16 @@
-/**
- * Support Block Feature - API Functions
- *
- * Raw API functions for support block domain.
- */
-
-import { api } from "@/shared/api/client";
 import type {
     SupportBlock,
     SupportBlocksListResponse,
     CreateSupportBlockPayload,
     UpdateSupportBlockPayload,
-    ApiResponse,
 } from "../types";
-
-const BASE_URL = "/support-blocks";
+import {
+    getMockSupportBlocksList,
+    getMockSupportBlockById,
+    createMockSupportBlock,
+    updateMockSupportBlock,
+    deleteMockSupportBlock,
+} from "../mockData";
 
 /**
  * Support Block API functions
@@ -26,20 +23,7 @@ export const supportBlockApi = {
         page: number = 1,
         signal?: AbortSignal
     ): Promise<SupportBlocksListResponse> => {
-        const response = await api.get<ApiResponse<SupportBlocksListResponse>>(
-            `${BASE_URL}?page=${page}`,
-            { signal }
-        );
-
-        if (response.error) {
-            throw response.error;
-        }
-
-        if (!response.data?.data) {
-            throw new Error("No data returned from server");
-        }
-
-        return response.data.data;
+        return getMockSupportBlocksList(page);
     },
 
     /**
@@ -49,20 +33,7 @@ export const supportBlockApi = {
         id: number | string,
         signal?: AbortSignal
     ): Promise<SupportBlock> => {
-        const response = await api.get<ApiResponse<SupportBlock>>(
-            `${BASE_URL}/${id}`,
-            { signal }
-        );
-
-        if (response.error) {
-            throw response.error;
-        }
-
-        if (!response.data?.data) {
-            throw new Error("No data returned from server");
-        }
-
-        return response.data.data;
+        return getMockSupportBlockById(id);
     },
 
     /**
@@ -71,20 +42,8 @@ export const supportBlockApi = {
     create: async (
         payload: CreateSupportBlockPayload
     ): Promise<SupportBlocksListResponse> => {
-        const response = await api.post<ApiResponse<SupportBlocksListResponse>>(
-            BASE_URL,
-            payload
-        );
-
-        if (response.error) {
-            throw response.error;
-        }
-
-        if (!response.data?.data) {
-            throw new Error("No data returned from server");
-        }
-
-        return response.data.data;
+        createMockSupportBlock(payload);
+        return getMockSupportBlocksList(1);
     },
 
     /**
@@ -94,31 +53,14 @@ export const supportBlockApi = {
         id: number | string,
         payload: UpdateSupportBlockPayload
     ): Promise<SupportBlock> => {
-        const response = await api.patch<ApiResponse<SupportBlock>>(
-            `${BASE_URL}/${id}`,
-            payload
-        );
-
-        if (response.error) {
-            throw response.error;
-        }
-
-        if (!response.data?.data) {
-            throw new Error("No data returned from server");
-        }
-
-        return response.data.data;
+        return updateMockSupportBlock(id, payload);
     },
 
     /**
      * Delete a support block
      */
     delete: async (id: number | string): Promise<void> => {
-        const response = await api.delete(`${BASE_URL}/${id}`);
-
-        if (response.error) {
-            throw response.error;
-        }
+        return deleteMockSupportBlock(id);
     },
 };
 
